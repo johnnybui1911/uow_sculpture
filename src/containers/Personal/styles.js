@@ -1,0 +1,147 @@
+import { StyleSheet } from "react-native";
+import palette from "../../assets/palette";
+import { STATUS_BAR_HEIGHT } from "../../assets/dimension";
+
+const cardItem = {
+  justifyContent: "center",
+  width: "100%",
+  marginVertical: 12,
+  paddingHorizontal: 2
+};
+
+const cardDes = {
+  paddingVertical: 12,
+  backgroundColor: palette.backgroundColorWhite,
+  width: "85%",
+  height: 144,
+  borderRadius: 12,
+  elevation: 5
+};
+
+const imageContainer = {
+  position: "absolute",
+  backgroundColor: palette.backgroundColorWhite,
+  borderRadius: 12,
+  elevation: 5
+};
+
+const box = {
+  justifyContent: "center",
+  alignItems: "center",
+  height: 30,
+  backgroundColor: palette.secondaryColor,
+  borderRadius: 12,
+  minWidth: 60
+};
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: palette.backgroundColorWhite
+  },
+  headerContainer: {
+    marginTop: STATUS_BAR_HEIGHT,
+    alignItems: "center",
+    height: 53,
+    marginHorizontal: 24,
+    marginBottom: 18,
+    flexDirection: "row"
+  },
+  headerTitle: {
+    fontSize: 40,
+    color: palette.backgroundColorWhite,
+    fontFamily: "Montserrat-Medium"
+  },
+  flatList: {
+    width: "100%"
+  },
+  title: {
+    fontSize: 20,
+    color: palette.primaryColor,
+    fontFamily: "Montserrat-SemiBold"
+  },
+  titleButton: {
+    fontSize: 12,
+    color: palette.backgroundColorWhite,
+    fontFamily: "Montserrat-SemiBold",
+    textAlign: "center"
+  },
+  distance: {
+    fontSize: 14,
+    fontFamily: "Montserrat-SemiBold",
+    color: palette.primaryColorLight
+  },
+  description: {
+    fontSize: 14,
+    color: palette.secondaryTypographyColor,
+    fontFamily: "Montserrat-Medium"
+  },
+  description_cmt: {
+    fontSize: 12,
+    color: palette.primaryColor,
+    fontFamily: "Montserrat-Medium"
+  },
+  alt_description: {
+    fontSize: 14,
+    color: palette.primaryColorLight,
+    fontFamily: "Montserrat-Medium"
+  },
+  numberStyle: {
+    fontSize: 12,
+    color: palette.primaryColor,
+    fontFamily: "Montserrat-SemiBold",
+    paddingLeft: 5
+  },
+  cardItem,
+  cardDes,
+  cardDesLeft: {
+    ...cardDes,
+    paddingLeft: 83
+  },
+  cardDesRight: {
+    ...cardDes,
+    paddingLeft: 20,
+    paddingRight: 83
+  },
+  image: {
+    width: 120,
+    height: 120,
+    borderRadius: 12
+  },
+  imageContainer,
+  searchBox: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 24,
+    height: 44,
+    backgroundColor: palette.backgroundColorWhite,
+    elevation: 10,
+    borderRadius: 12
+  },
+  box,
+  button: {
+    flex: 1,
+    backgroundColor: palette.backgroundColorWhite,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    elevation: 2,
+    marginVertical: 10,
+    minHeight: 51
+  },
+  card: {
+    flex: 2,
+    padding: 24,
+    backgroundColor: palette.backgroundColorWhite,
+    borderRadius: 12,
+    elevation: 2,
+    minHeight: 126
+  },
+  contentBox: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between"
+  }
+});
