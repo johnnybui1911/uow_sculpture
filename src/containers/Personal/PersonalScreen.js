@@ -105,16 +105,11 @@ class PersonalScreen extends React.PureComponent {
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: 50,
-                backgroundColor: palette.primaryColor
+                backgroundColor: palette.primaryColor,
+                overflow: "hidden"
               }}
             >
-              <Image
-                source={images.profile}
-                style={{
-                  borderRadius: 50
-                }}
-                resizeMode="center"
-              />
+              <Image source={images.profile} style={{}} resizeMode="center" />
             </View>
             <View style={{ marginTop: 15 }}>
               <Text

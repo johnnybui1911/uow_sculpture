@@ -20,9 +20,16 @@ import {
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
 } from "../../assets/dimension";
+import images from "../../assets/images";
 import { icons } from "../../assets/icons";
 import MarkerView from "./MarkerView";
-import { LATITUDE, LONGITUDE, initialMarkers } from "../../library/maps";
+import {
+  LATITUDE,
+  LONGITUDE,
+  initialMarkers,
+  GOOGLE_MAPS_APIKEY
+} from "../../library/maps";
+import palette from "../../assets/palette";
 
 class MapScreen extends React.PureComponent {
   constructor(props) {
@@ -32,8 +39,8 @@ class MapScreen extends React.PureComponent {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
-        latitudeDelta: 0.0044,
-        longitudeDelta: 0.0026
+        latitudeDelta: 0.0066,
+        longitudeDelta: 0.004
       },
       markers: [],
       selected: false,
@@ -41,6 +48,8 @@ class MapScreen extends React.PureComponent {
       userLocation: null
     };
   }
+
+  subscribeLocation = null;
 
   componentDidMount = () => {
     this.setState({
@@ -60,6 +69,10 @@ class MapScreen extends React.PureComponent {
     }
   };
 
+  componentWillUnmount = () => {
+    this.subscribeLocation();
+  };
+
   _getLocationAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== "granted") {
@@ -68,9 +81,20 @@ class MapScreen extends React.PureComponent {
       });
     }
 
-    const userLocation = await Location.getCurrentPositionAsync({});
+    this.subscribeLocation = await Location.watchPositionAsync(
+      { enableHighAccuracy: true, timeInterval: 1, distanceInterval: 1 },
+      loc => {
+        if (loc.timestamp) {
+          this.setState({ userLocation: loc });
+        } else {
+          this.setState({ errorMessage: "Problems on update location" });
+        }
+      }
+    );
 
-    this.setState({ userLocation });
+    // const userLocation = await Location.getCurrentPositionAsync({});
+
+    // this.setState({ userLocation });
   };
 
   onRegionChange = region => {
@@ -93,39 +117,47 @@ class MapScreen extends React.PureComponent {
       const { latitude, longitude } = userLocation.coords;
       const coordinate = { latitude, longitude };
       return (
-        <Marker coordinate={coordinate} title="User Location">
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            {icons.user_location}
-          </View>
-        </Marker>
+        <Marker
+          coordinate={coordinate}
+          image={images.user_location}
+          title="User Location"
+        />
       );
     }
   };
 
-  // _renderDirection = async () => {
-  //   // const { userLocation } = this.state;
-  //   // if (userLocation) {
-  //   //   const { latitude, longitude } = userLocation.coords;
-  //   //   const origin = { latitude, longitude };
-  //   //   const destination = {
-  //   //     latitude: 21.00299,
-  //   //     longitude: 105.86681
-  //   //   };
-  //   //   const GOOGLE_MAPS_APIKEY = "AIzaSyAEdfI7vy4A0YTnXCOEZBQMRhFI2_cBV9c";
-  //   //   return (
-  //   //     <MapViewDirections
-  //   //       origin={origin}
-  //   //       destination={destination}
-  //   //       apikey={GOOGLE_MAPS_APIKEY}
-  //   //     />
-  //   //   );
-  //   // }
-  // };
+  _renderDirection = () => {
+    const { userLocation } = this.state;
+    if (userLocation) {
+      const { latitude, longitude } = userLocation.coords;
+      const origin = { latitude, longitude };
+      const destination = {
+        latitude: 21.00299,
+        longitude: 105.86681
+      };
+
+      return (
+        <MapViewDirections
+          origin={origin}
+          destination={destination}
+          apikey={GOOGLE_MAPS_APIKEY}
+          strokeWidth={4}
+          strokeColor={palette.primaryColor}
+          onStart={params => {
+            console.log(
+              `Started routing between "${params.origin}" and "${params.destination}"`
+            );
+          }}
+          onReady={result => {
+            console.log(`Distance: ${result.distance} km`);
+            console.log(`Duration: ${result.duration} min.`);
+
+            this.mapVi;
+          }}
+        />
+      );
+    }
+  };
 
   render() {
     const {
@@ -147,7 +179,7 @@ class MapScreen extends React.PureComponent {
             width: SCREEN_WIDTH
           }}
           // provider="google"
-          // mapType={Platform.OS === "android" ? "none" : "standard"}
+          // mapType={Platform.OS === "android" ? "standard" : "standard"}
           region={region}
           onRegionChange={this.onRegionChange}
           onPress={() => {
@@ -169,6 +201,7 @@ class MapScreen extends React.PureComponent {
               maximumZ={19}
             /> */}
           {this._renderUserLocation()}
+          {this._renderDirection()}
         </MapView>
         <View style={{ marginTop: STATUS_BAR_HEIGHT }}>
           <SearchBox

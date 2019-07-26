@@ -34,6 +34,17 @@ const box = {
   minWidth: 60
 };
 
+const shadowStyle = {
+  elevation: 2,
+  shadowColor: "#000000",
+  shadowOffset: {
+    width: 0,
+    height: 3
+  },
+  shadowRadius: 5,
+  shadowOpacity: 0.1
+};
+
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -116,8 +127,8 @@ export default StyleSheet.create({
     marginHorizontal: 24,
     height: 44,
     backgroundColor: palette.backgroundColorWhite,
-    elevation: 10,
-    borderRadius: 12
+    borderRadius: 12,
+    ...shadowStyle
   },
   box,
   button: {
@@ -127,17 +138,17 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
-    elevation: 2,
     marginVertical: 10,
-    minHeight: 51
+    minHeight: 51,
+    ...shadowStyle
   },
   card: {
     flex: 2,
     padding: 24,
     backgroundColor: palette.backgroundColorWhite,
     borderRadius: 12,
-    elevation: 2,
-    minHeight: 126
+    minHeight: 126,
+    ...shadowStyle
   },
   contentBox: {
     flex: 1,

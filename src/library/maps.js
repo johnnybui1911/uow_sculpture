@@ -16,3 +16,5 @@ export const initialMarkers = [
     }
   }
 ];
+
+export const GOOGLE_MAPS_APIKEY = "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs";

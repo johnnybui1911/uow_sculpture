@@ -75,10 +75,11 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 10,
     marginHorizontal: 24,
     height: 44,
     backgroundColor: palette.backgroundColorWhite,
-    elevation: 10,
+    elevation: 2,
     borderRadius: 12
   }
 });

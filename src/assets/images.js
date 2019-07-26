@@ -8,5 +8,6 @@ export default {
     require("./images/img5.jpg"),
     require("./images/img6.jpg")
   ],
-  profile: require("./images/profile.jpg")
+  profile: require("./images/profile.jpg"),
+  user_location: require("./images/user-location.png")
 };
