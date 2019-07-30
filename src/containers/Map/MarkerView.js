@@ -33,6 +33,7 @@ export default class MarkerView extends React.PureComponent {
           this.props._selectMarker();
           this.setState({ pressed: true });
         }}
+        // tracksViewChanges={false}
       >
         <View
           style={{

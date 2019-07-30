@@ -144,9 +144,9 @@ class MapScreen extends React.PureComponent {
           strokeWidth={4}
           strokeColor={palette.primaryColor}
           onStart={params => {
-            console.log(
-              `Started routing between "${params.origin}" and "${params.destination}"`
-            );
+            console.log(`Started routing between "${params.origin}" and "${
+                params.destination
+              }"`);
           }}
           onReady={result => {
             console.log(`Distance: ${result.distance} km`);
@@ -181,27 +181,25 @@ class MapScreen extends React.PureComponent {
           // provider="google"
           // mapType={Platform.OS === "android" ? "standard" : "standard"}
           region={region}
-          onRegionChange={this.onRegionChange}
+          // onRegionChange={this.onRegionChange}
           onPress={() => {
             this.setState({ selected: false });
           }}
         >
-          {markers.map(marker => {
-            return (
-              <MarkerView
-                key={marker.title}
-                marker={marker}
-                selected={selected}
-                _selectMarker={this._selectMarker}
-              />
-            );
-          })}
+          {markers.map(marker => (
+            <MarkerView
+              key={marker.title}
+              marker={marker}
+              selected={selected}
+              _selectMarker={this._selectMarker}
+            />
+          ))}
           {/* <UrlTile
               urlTemplate="http://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
               maximumZ={19}
             /> */}
           {this._renderUserLocation()}
-          {this._renderDirection()}
+          {/* {this._renderDirection()} */}
         </MapView>
         <View style={{ marginTop: STATUS_BAR_HEIGHT }}>
           <SearchBox
