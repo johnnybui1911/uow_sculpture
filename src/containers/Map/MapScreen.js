@@ -143,7 +143,7 @@ class MapScreen extends React.PureComponent {
         apikey={GOOGLE_MAPS_APIKEY}
         strokeWidth={2}
         strokeColor="hotpink"
-        style={{ zIndex: 999 }}
+        style={{ zIndex: 9 }}
         // onStart={params => {
         //   console.log(
         //     `Started routing between "${params.origin}" and "${
@@ -183,32 +183,35 @@ class MapScreen extends React.PureComponent {
           mapType="none"
           // provider="google"
           // mapType={Platform.OS === "android" ? "standard" : "standard"}
-          // region={region}
-          initialRegion={{
-            latitude: 37.3318456,
-            longitude: -122.0296002,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 1
-          }}
+          initialRegion={region}
+          showsCompass={false}
+          loadingEnabled
+          // initialRegion={{
+          //   latitude: 37.3318456,
+          //   longitude: -122.0296002,
+          //   latitudeDelta: 0.0922,
+          //   longitudeDelta: 1
+          // }}
           // onRegionChange={this.onRegionChange}
-          onPress={() => {
-            this.setState({ selected: false })
-          }}
+          // onPress={() => {
+          //   this.setState({ selected: false })
+          // }}
         >
-          {markers.map(marker => (
+          {/* {markers.map(marker => (
             <MarkerView
               key={marker.title}
               marker={marker}
               selected={selected}
               _selectMarker={this._selectMarker}
             />
-          ))}
+          ))} */}
+          {/* <Text>HELLO WORLD</Text> */}
           <UrlTile
-            urlTemplate="https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=ErAQmU7cLihbNuAt6p2s"
+            urlTemplate="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW53dyIsImEiOiJjanlyNmg4dDYwN3Z6M210a3E2ZmJoemprIn0.yDLDtTyLhPBSI_qnjes0kw"
             maximumZ={19}
           />
           {/* {this._renderUserLocation()} */}
-          {this._renderDirection()}
+          {/* {this._renderDirection()} */}
         </MapView>
         <View style={{ marginTop: STATUS_BAR_HEIGHT }}>
           <SearchBox
