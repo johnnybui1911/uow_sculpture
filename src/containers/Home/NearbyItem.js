@@ -1,56 +1,60 @@
-import React from "react";
+import React from 'react'
 import {
   View,
   Text,
   Image,
   TouchableWithoutFeedback,
-  Dimensions
-} from "react-native";
-import styles from "./styles";
-import { icons } from "../../assets/icons";
-import images from "../../assets/images";
+  Dimensions,
+} from 'react-native'
+import styles from './styles'
+import { icons } from '../../assets/icons'
+import images from '../../assets/images'
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window')
 // default width 327
-const padding = 12;
+const PADDING = 12
 
 const NearbyItem = props => {
-  const { item, index, navigation } = props;
+  const { item, navigation } = props
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("Detail", { item })}
+      onPress={() => navigation.navigate('Detail', { item })}
     >
       <View
         style={{
-          width: width - padding * 2,
+          width: width - PADDING * 2,
           height: 378,
-          marginHorizontal: padding,
-          paddingHorizontal: padding
+          marginHorizontal: PADDING,
+          paddingHorizontal: PADDING,
         }}
       >
         <Image
           source={images.sculptures[item.photoURL]}
           resizeMode="cover"
           style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: 12
+            width: '100%',
+            height: '100%',
+            borderRadius: 12,
           }}
         />
         <View
           style={{
-            position: "absolute",
-            marginHorizontal: 24,
+            position: 'absolute',
             top: 290,
-            flexDirection: "row"
+            flexDirection: 'row',
+            marginLeft: PADDING * 2, // trash fix, to be continued
           }}
         >
-          <View style={{ flex: 1, justifyContent: "space-evenly" }}>
+          <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
             <Text style={styles.title}>{item.distance} m</Text>
             <Text style={styles.title}>{item.name}</Text>
           </View>
           <View
-            style={{ alignItems: "center", justifyContent: "space-evenly" }}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              paddingTop: 2, //make heart little bit center
+            }}
           >
             <Text style={styles.like}>{icons.like}</Text>
             <Text style={styles.like}>100</Text>
@@ -58,7 +62,7 @@ const NearbyItem = props => {
         </View>
       </View>
     </TouchableWithoutFeedback>
-  );
-};
+  )
+}
 
-export default NearbyItem;
+export default NearbyItem

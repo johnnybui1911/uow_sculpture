@@ -1,29 +1,27 @@
-import React from "react";
-import { View, Text } from "react-native";
-import Divider from "../../components/Divider/Divider";
-import { icons } from "../../assets/icons";
-import styles from "./styles";
+import React from 'react'
+import { View, Text } from 'react-native'
+import Divider from '../../components/Divider/Divider'
+import { icons } from '../../assets/icons'
+import styles from './styles'
 
 export default function TitleCard(props) {
-  const { item } = props;
+  const { item } = props
   return (
-    <View
-      style={[styles.card, { borderTopLeftRadius: 0, borderTopRightRadius: 0 }]}
-    >
+    <View style={[styles.card]}>
       <Text style={styles.distance}>{item.distance} m</Text>
       <Text style={styles.title}>{item.name}</Text>
       <Divider />
       <View
         style={{
           flex: 1,
-          alignItems: "flex-end",
-          flexDirection: "row"
+          alignItems: 'flex-end',
+          flexDirection: 'row',
         }}
       >
         <View
           style={{
-            flexDirection: "row",
-            marginRight: 20
+            flexDirection: 'row',
+            marginRight: 20,
           }}
         >
           {icons.like_fill}
@@ -31,7 +29,7 @@ export default function TitleCard(props) {
         </View>
         <View
           style={{
-            flexDirection: "row"
+            flexDirection: 'row',
           }}
         >
           {icons.comment}
@@ -39,5 +37,5 @@ export default function TitleCard(props) {
         </View>
       </View>
     </View>
-  );
+  )
 }

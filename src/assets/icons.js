@@ -1,16 +1,26 @@
 /* eslint-disable import/prefer-default-export */
-import React from "react";
-import { Image, View } from "react-native";
-import { createIconSetFromIcoMoon, FontAwesome } from "@expo/vector-icons";
-import palette from "./palette";
-import icoMoonConfig from "./selection.json";
+import React from 'react'
+import { Image, View } from 'react-native'
+import { createIconSetFromIcoMoon, FontAwesome } from '@expo/vector-icons'
+import palette from './palette'
+import icoMoonConfig from './selection.json'
 
-export const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, "Font-Name");
+export const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'Font-Name')
 
 export const icons = {
-  user_location: <Image source={require("./images/user-location.png")} />,
-  chosen_marker: <Image source={require("./images/chosen-marker.png")} />,
-  marker: <Image source={require("./images/maps-and-flags.png")} />,
+  user_location: <Image source={require('./images/user-location.png')} />,
+  chosen_marker: (
+    <Image
+      source={require('./images/chosen-marker.png')}
+      style={{ width: 38, height: 38 }}
+    />
+  ),
+  marker: (
+    <Image
+      source={require('./images/maps-and-flags.png')}
+      style={{ width: 28, height: 28 }}
+    />
+  ),
   fullName: (
     <CustomIcon name="user" size={24} color={palette.primaryColorLight} />
   ),
@@ -26,7 +36,7 @@ export const icons = {
       color={palette.backgroundColorWhite}
     />
   ),
-  google: <Image source={require("./images/google.png")} />,
+  google: <Image source={require('./images/google.png')} />,
   logo: <CustomIcon name="logo" size={120} color={palette.secondaryColor} />,
   up_arrow: (
     <FontAwesome
@@ -54,5 +64,5 @@ export const icons = {
   ),
   comment: (
     <CustomIcon name="comment-o" size={16} color={palette.primaryColorLight} />
-  )
-};
+  ),
+}
