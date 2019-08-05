@@ -70,7 +70,7 @@ class CommentScreen extends React.PureComponent {
       >
         <View style={[]}>
           <Image
-            source={images.sculptures[index]}
+            source={images.sculptures[item.photoURL]}
             style={{ width: 60, height: 60, borderRadius: 4 }}
           />
         </View>

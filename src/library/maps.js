@@ -1,20 +1,20 @@
-export const LATITUDE = -34.4054039
-export const LONGITUDE = 150.87843
+export const LATITUDE = -34.4054039;
+export const LONGITUDE = 150.87843;
 export const initialMarkers = [
   {
-    title: 'Winged Figure',
+    name: "Winged Figure",
     coordinate: {
-      latitude: 21.00299,
-      longitude: 105.86681
+      latitude: -34.4043,
+      longitude: 150.87936
     }
   },
   {
-    title: 'Midnight',
+    name: "Midnight",
     coordinate: {
-      latitude: 21.00296,
-      longitude: 105.86573
+      latitude: -34.40485,
+      longitude: 150.87897
     }
   }
-]
+];
 
-export const GOOGLE_MAPS_APIKEY = 'AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs'
+export const GOOGLE_MAPS_APIKEY = "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs";

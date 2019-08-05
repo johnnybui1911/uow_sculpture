@@ -14,19 +14,56 @@ export const localData = [
         "Main campus, on UOW land on the western side of  Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and  Northfields Avenue",
       creditLine:
         "Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988"
+    },
+    photoURL: 1,
+    coordinate: {
+      latitude: -34.4054039,
+      longitude: 150.87843
     }
   },
   {
     id: 2,
     name: "Midnight",
     distance: 300,
-    des: "Western side of the Ring Road accross from ..."
+    des: "Western side of the Ring Road accross from ...",
+    features: {
+      date: "1988-1989",
+      maker: "Bert Flugelman",
+      material: "Stainless steel"
+    },
+    description: {
+      location:
+        "Main campus, on UOW land on the western side of  Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and  Northfields Avenue",
+      creditLine:
+        "Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988"
+    },
+    photoURL: 2,
+    coordinate: {
+      latitude: -34.4043,
+      longitude: 150.87936
+    }
   },
   {
     id: 3,
     name: "Mount Keira",
     distance: 200,
-    des: "White Cedar Courtyard near Buildings 35 and 14"
+    des: "White Cedar Courtyard near Buildings 35 and 14",
+    features: {
+      date: "1988-1989",
+      maker: "Bert Flugelman",
+      material: "Stainless steel"
+    },
+    description: {
+      location:
+        "Main campus, on UOW land on the western side of  Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and  Northfields Avenue",
+      creditLine:
+        "Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988"
+    },
+    photoURL: 3,
+    coordinate: {
+      latitude: -34.40485,
+      longitude: 150.87897
+    }
   }
   // {
   //   id: 4,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   SafeAreaView,
   Text,
@@ -6,36 +6,35 @@ import {
   ScrollView,
   ActivityIndicator,
   Platform
-} from 'react-native'
-import MapView, { UrlTile, Marker } from 'react-native-maps'
-import MapViewDirections from 'react-native-maps-directions'
-import Constants from 'expo-constants'
-import * as Location from 'expo-location'
-import * as Permissions from 'expo-permissions'
-import styles from './styles'
-import HeaderBar from '../../components/Header/HeaderBar'
-import SearchBox from '../../components/SearchButton/SearchBox'
+} from "react-native";
+import MapView, { UrlTile, Marker } from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
+import Constants from "expo-constants";
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
+import styles from "./styles";
+import SearchBox from "../../components/SearchButton/SearchBox";
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
-} from '../../assets/dimension'
-import images from '../../assets/images'
-import { icons } from '../../assets/icons'
-import MarkerView from './MarkerView'
+} from "../../assets/dimension";
+import images from "../../assets/images";
+import { icons } from "../../assets/icons";
 import {
   LATITUDE,
   LONGITUDE,
   initialMarkers,
   GOOGLE_MAPS_APIKEY
-} from '../../library/maps'
-import palette from '../../assets/palette'
+} from "../../library/maps";
+import palette from "../../assets/palette";
+import MarkerView from "./MarkerView";
 
 class MapScreen extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      searchText: '',
+      searchText: "",
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -44,87 +43,83 @@ class MapScreen extends React.PureComponent {
       },
       markers: [],
       selected: false,
-      errorMessage: '',
+      errorMessage: "",
       userLocation: null
-    }
+    };
   }
 
-  subscribeLocation = null
+  subscribeLocation = null;
 
   componentDidMount = () => {
     this.setState({
       markers: initialMarkers
-    })
-  }
+    });
+  };
 
   componentWillMount = () => {
-    const { errorMessage } = this.state
-    if (Platform.OS === 'android' && !Constants.isDevice) {
+    const { errorMessage } = this.state;
+    if (Platform.OS === "android" && !Constants.isDevice) {
       this.setState({
         errorMessage:
-          'Oops, this will not work on Sketch in an Android emulator. Try it on your device!'
-      })
+          "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
+      });
     } else {
-      this._getLocationAsync()
+      this._getLocationAsync();
     }
-  }
+  };
 
   componentWillUnmount = () => {
-    this.subscribeLocation()
-  }
+    this.subscribeLocation();
+  };
 
   _getLocationAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION)
-    if (status !== 'granted') {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "granted") {
       this.setState({
-        errorMessage: 'Permission to access location was denied'
-      })
+        errorMessage: "Permission to access location was denied"
+      });
     }
 
     this.subscribeLocation = await Location.watchPositionAsync(
       { enableHighAccuracy: true, timeInterval: 1, distanceInterval: 1 },
       loc => {
         if (loc.timestamp) {
-          this.setState({ userLocation: loc })
+          this.setState({ userLocation: loc });
         } else {
-          this.setState({ errorMessage: 'Problems on update location' })
+          this.setState({ errorMessage: "Problems on update location" });
         }
       }
-    )
+    );
 
     // const userLocation = await Location.getCurrentPositionAsync({});
 
     // this.setState({ userLocation });
-  }
-
-  onRegionChange = region => {
-    this.setState({ region })
-  }
+  };
 
   _handleSearch = event => {
-    const { text } = event.nativeEvent
-    this.setState({ searchText: text.trim() })
-  }
+    const { text } = event.nativeEvent;
+    this.setState({ searchText: text.trim() });
+  };
 
   _selectMarker = () => {
-    this.setState({ selected: true })
-  }
+    this.setState({ selected: true });
+  };
 
   _renderUserLocation = () => {
-    const { errorMessage, userLocation } = this.state
+    const { errorMessage, userLocation } = this.state;
 
     if (userLocation) {
-      const { latitude, longitude } = userLocation.coords
-      const coordinate = { latitude, longitude }
+      const { latitude, longitude } = userLocation.coords;
+      const coordinate = { latitude, longitude };
       return (
         <Marker
           coordinate={coordinate}
           image={images.user_location}
           title="User Location"
         />
-      )
+      );
     }
-  }
+  };
 
   _renderDirection = () => {
     // const { userLocation } = this.state
@@ -158,8 +153,8 @@ class MapScreen extends React.PureComponent {
         //   this.mapVi
         // }}
       />
-    )
-  }
+    );
+  };
 
   render() {
     const {
@@ -169,46 +164,38 @@ class MapScreen extends React.PureComponent {
       selected,
       userLocation,
       errorMessage
-    } = this.state
+    } = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
         <MapView
           style={{
             flex: 1,
-            position: 'absolute',
+            position: "absolute",
             height: SCREEN_HEIGHT,
             width: SCREEN_WIDTH
           }}
           mapType="none"
-          // provider="google"
-          // mapType={Platform.OS === "android" ? "standard" : "standard"}
           initialRegion={region}
           showsCompass={false}
           loadingEnabled
-          // initialRegion={{
-          //   latitude: 37.3318456,
-          //   longitude: -122.0296002,
-          //   latitudeDelta: 0.0922,
-          //   longitudeDelta: 1
-          // }}
-          // onRegionChange={this.onRegionChange}
           // onPress={() => {
           //   this.setState({ selected: false })
           // }}
         >
-          {/* {markers.map(marker => (
+          {markers.map(marker => (
             <MarkerView
-              key={marker.title}
+              key={marker.name}
               marker={marker}
               selected={selected}
               _selectMarker={this._selectMarker}
             />
-          ))} */}
+          ))}
           {/* <Text>HELLO WORLD</Text> */}
           <UrlTile
             urlTemplate="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW53dyIsImEiOiJjanlyNmg4dDYwN3Z6M210a3E2ZmJoemprIn0.yDLDtTyLhPBSI_qnjes0kw"
             maximumZ={19}
+            zIndex={-1}
           />
           {/* {this._renderUserLocation()} */}
           {/* {this._renderDirection()} */}
@@ -220,9 +207,9 @@ class MapScreen extends React.PureComponent {
           />
         </View>
       </SafeAreaView>
-    )
+    );
     // }
   }
 }
 
-export default MapScreen
+export default MapScreen;

@@ -15,24 +15,26 @@ export default class MarkerView extends React.PureComponent {
   _renderChosenIcon = () => {
     const { selected } = this.props;
     const { pressed } = this.state;
-    if (selected && pressed) {
-      console.log(pressed, selected);
+    if (selected) {
+      // && pressed
+      // console.log(pressed, selected);
       return icons.chosen_marker;
     }
     return icons.marker;
   };
 
   render() {
-    const { marker } = this.props;
+    const { marker, key } = this.props;
     return (
       <Marker
-        key={marker.title}
+        zIndex={1}
+        key={key}
         coordinate={marker.coordinate}
-        title={marker.title}
-        onPress={() => {
-          this.props._selectMarker();
-          this.setState({ pressed: true });
-        }}
+        title={marker.name}
+        // onPress={() => {
+        //   this.props._selectMarker();
+        //   this.setState({ pressed: true });
+        // }}
         // tracksViewChanges={false}
       >
         <View
@@ -42,7 +44,7 @@ export default class MarkerView extends React.PureComponent {
           }}
         >
           {this._renderChosenIcon()}
-          <Text style={styles.markerTitle}>{marker.title}</Text>
+          <Text style={styles.markerTitle}>{marker.name}</Text>
         </View>
       </Marker>
     );

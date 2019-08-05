@@ -26,13 +26,17 @@ class CollectionScreen extends React.PureComponent {
     this.setState({ data: localData, loading: false });
   };
 
+  _navigateToDetail = item => {
+    this.props.navigation.navigate("Detail", { item });
+  };
+
   _handleSearch = event => {
     const { text } = event.nativeEvent;
     this.setState({ searchText: text.trim() });
   };
 
   _renderItem = ({ item }) => {
-    return <CardItem item={item} />;
+    return <CardItem item={item} _navigateToDetail={this._navigateToDetail} />;
   };
 
   _renderList = () => {

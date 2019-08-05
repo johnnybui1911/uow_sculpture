@@ -8,6 +8,7 @@ export default function DescriptionCard(props) {
   return (
     <View style={styles.card}>
       <Text style={[styles.title, { fontSize: 20 }]}>Description</Text>
+      <Divider />
       <View>
         <Text style={[styles.title, { fontSize: 14, paddingBottom: 20 }]}>
           Location General Notes

@@ -20,10 +20,10 @@ class HomeScreen extends React.PureComponent {
     this.setState({ data: localData });
   };
 
-  _navigateToDetail = () => {
-    console.log("navigate");
-    this.props.navigation.navigate("Detail");
-  };
+  // _navigateToDetail = () => {
+  //   console.log("navigate");
+  //   this.props.navigation.navigate("Detail");
+  // };
 
   _renderNearbyItem = ({ item, index }) => {
     const { navigation } = this.props;
@@ -41,8 +41,8 @@ class HomeScreen extends React.PureComponent {
     const { data } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <HeaderBar headerName="Home" />
         <ScrollView>
+          <HeaderBar headerName="Home" />
           <View style={styles.nearbyList}>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
             <NearbyList data={data} _renderItem={this._renderNearbyItem} />

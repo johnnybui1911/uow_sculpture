@@ -6,7 +6,9 @@ import images from "../../assets/images";
 const PopularItem = props => {
   const { item, index, navigation } = props;
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("Detail")}>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("Detail", { item })}
+    >
       <View
         style={{
           marginLeft: index === 0 ? 24 : 0,
@@ -14,7 +16,7 @@ const PopularItem = props => {
         }}
       >
         <Image
-          source={images.sculptures[index]}
+          source={images.sculptures[item.photoURL]}
           style={{
             width: 135,
             height: 186,

@@ -14,7 +14,8 @@ const cardDes = {
   width: "85%",
   height: 144,
   borderRadius: 12,
-  elevation: 5
+  elevation: 5,
+  paddingRight: 10
 };
 
 const imageContainer = {
@@ -44,7 +45,7 @@ export default StyleSheet.create({
     color: palette.primaryColorLight
   },
   description: {
-    fontSize: 14,
+    fontSize: 12,
     color: palette.secondaryTypographyColor,
     fontFamily: "Montserrat-Medium"
   },

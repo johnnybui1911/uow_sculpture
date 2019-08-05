@@ -60,7 +60,7 @@ const CardItem = props => {
           item.id % 2 !== 0 ? { left: 0 } : { right: 0 }
         ]}
       >
-        <Image source={images.sculptures[item.id - 1]} style={styles.image} />
+        <Image source={images.sculptures[item.photoURL]} style={styles.image} />
       </View>
     </View>
   );

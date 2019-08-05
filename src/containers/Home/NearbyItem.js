@@ -17,7 +17,9 @@ const padding = 12;
 const NearbyItem = props => {
   const { item, index, navigation } = props;
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("Detail")}>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("Detail", { item })}
+    >
       <View
         style={{
           width: width - padding * 2,
@@ -27,7 +29,7 @@ const NearbyItem = props => {
         }}
       >
         <Image
-          source={images.sculptures[index]}
+          source={images.sculptures[item.photoURL]}
           resizeMode="cover"
           style={{
             width: "100%",

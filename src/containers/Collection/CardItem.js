@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import images from "../../assets/images";
 import { icons } from "../../assets/icons";
 import styles from "./styles";
 
 const CardItem = props => {
-  const { item } = props;
+  const { item, _navigateToDetail } = props;
   return (
     <View
       style={{
@@ -60,7 +60,12 @@ const CardItem = props => {
           item.id % 2 !== 0 ? { left: 0 } : { right: 0 }
         ]}
       >
-        <Image source={images.sculptures[item.id - 1]} style={styles.image} />
+        <TouchableOpacity onPress={() => _navigateToDetail(item)}>
+          <Image
+            source={images.sculptures[item.photoURL]}
+            style={styles.image}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );

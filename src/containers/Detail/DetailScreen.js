@@ -1,5 +1,12 @@
 import React from "react";
-import { SafeAreaView, Text, View, ScrollView, Image } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity
+} from "react-native";
 import { localData } from "../../library/localData";
 import images from "../../assets/images";
 import styles from "./styles";
@@ -14,9 +21,9 @@ const localItem = localData[0];
 class DetailScreen extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      item: localItem
-    };
+    // this.state = {
+    //   item: localItem
+    // };
   }
 
   //   componentDidMount = () => {
@@ -24,13 +31,13 @@ class DetailScreen extends React.PureComponent {
   //   };
 
   render() {
-    const { item } = this.state;
+    const item = this.props.navigation.getParam("item", localData[0]);
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.mainImage}>
             <Image
-              source={images.sculptures[0]}
+              source={images.sculptures[item.photoURL]}
               resizeMode="cover"
               style={{
                 width: "100%",
@@ -39,18 +46,31 @@ class DetailScreen extends React.PureComponent {
                 borderBottomLeftRadius: 12
               }}
             />
-            <CustomIcon
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                // marginHorizontal: 24,
+                top: 56 - 24,
+                // backgroundColor: "yellow",
+                padding: 24,
+                borderRadius: 50
+              }}
+              onPress={() => this.props.navigation.goBack()}
+            >
+              <CustomIcon name="back" size={24} color="#fff" />
+            </TouchableOpacity>
+            {/* <CustomIcon
               onPress={() => this.props.navigation.goBack()}
               style={{ position: "absolute", marginHorizontal: 24, top: 56 }}
               name="back"
               size={24}
               color="#fff"
-            />
+            /> */}
             <View
               style={{
                 position: "absolute",
                 marginHorizontal: 24,
-                top: 290
+                bottom: 7
               }}
             >
               <Text style={styles.visitorsText}>100 visitors</Text>

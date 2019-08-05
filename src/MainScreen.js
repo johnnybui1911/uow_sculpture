@@ -7,13 +7,13 @@ import {
   PanResponder,
   SafeAreaView
 } from "react-native";
-import { TabContainer } from "./TabNavigator";
 import IntroScreen from "./containers/Introduction/IntroScreen";
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
 } from "./assets/dimension";
+import { AppContainer } from "./navigations/AppStack";
 
 // TODO: just swipe up, not swipe down
 class MainScreen extends React.PureComponent {
@@ -56,7 +56,8 @@ class MainScreen extends React.PureComponent {
             width: SCREEN_WIDTH
           }}
         >
-          <TabContainer />
+          <AppContainer />
+          {/* <TabContainer /> */}
         </View>
         {/* <Animated.View
           style={{

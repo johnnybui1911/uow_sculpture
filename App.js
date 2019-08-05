@@ -5,7 +5,6 @@ import Constants from "expo-constants";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import MainScreen from "./src/MainScreen";
-import { TabContainer } from "./src/TabNavigator";
 
 export default class App extends React.PureComponent {
   state = {
