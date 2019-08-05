@@ -1,30 +1,32 @@
-import React from 'react';
+import React from 'react'
 import {
   Platform,
   StatusBar,
   View,
   Animated,
   PanResponder,
-  SafeAreaView
-} from 'react-native';
-import IntroScreen from './containers/Introduction/IntroScreen';
+  SafeAreaView,
+  Text
+} from 'react-native'
+import IntroScreen from './containers/Introduction/IntroScreen'
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
-} from './assets/dimension';
-import { AppContainer } from './navigations/AppStack';
+} from './assets/dimension'
+import { AppContainer } from './navigations/AppStack'
+import Constants from 'expo-constants'
 
 // TODO: just swipe up, not swipe down
 class MainScreen extends React.PureComponent {
   constructor(props) {
-    super(props);
-    this.position = new Animated.ValueXY();
+    super(props)
+    this.position = new Animated.ValueXY()
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
         if (gestureState.dy < 0) {
-          this.position.setValue({ x: 0, y: gestureState.dy });
+          this.position.setValue({ x: 0, y: gestureState.dy })
         }
       },
       onPanResponderRelease: (evt, gestureState) => {
@@ -35,29 +37,29 @@ class MainScreen extends React.PureComponent {
           Animated.timing(this.position, {
             toValue: { x: 0, y: -SCREEN_HEIGHT },
             duration: 400
-          }).start();
+          }).start()
           // animate position value top (y) into "-SCREEN_HEIGHT" -> make disappear
         } else {
           Animated.spring(this.position, {
             toValue: { x: 0, y: 0 }
-          }).start();
+          }).start()
         }
       }
-    });
+    })
   }
 
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        {/* <StatusBar
-          backgroundColor="#949496"
+        <StatusBar
           barStyle="light-content"
+          backgroundColor="rgba(0,0,0,0.4)"
           translucent
-        /> */}
+        />
         <AppContainer />
       </SafeAreaView>
-    );
+    )
   }
 }
 
-export default MainScreen;
+export default MainScreen
