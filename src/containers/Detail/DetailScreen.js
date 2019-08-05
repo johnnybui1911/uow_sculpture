@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
 import { localData } from '../../library/localData'
 import images from '../../assets/images'
 import styles from './styles'
@@ -15,7 +16,6 @@ import FeatureCard from './FeatureCard'
 import DescriptionCard from './DescriptionCard'
 import MapCard from './MapCard'
 import { CustomIcon } from '../../assets/icons'
-import { LinearGradient } from 'expo-linear-gradient'
 import { SCREEN_WIDTH } from '../../assets/dimension'
 
 const localItem = localData[0]

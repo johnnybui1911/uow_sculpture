@@ -6,6 +6,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Platform,
+  StyleSheet,
 } from 'react-native'
 import MapView, { UrlTile, Marker } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
@@ -13,6 +14,7 @@ import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import styles from './styles'
+import HeaderBar from '../../components/Header/HeaderBar'
 import SearchBox from '../../components/SearchButton/SearchBox'
 import {
   SCREEN_HEIGHT,
@@ -215,7 +217,6 @@ class MapScreen extends React.PureComponent {
         </View>
       </SafeAreaView>
     )
-    // }
   }
 }
 

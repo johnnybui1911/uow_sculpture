@@ -28,6 +28,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "androidStatusBar": {},
     "updates": {
       "fallbackToCacheTimeout": 0
     },
