@@ -1,8 +1,8 @@
-import React from "react";
-import { Text, View } from "react-native";
-import { Marker } from "react-native-maps";
-import { icons } from "../../assets/icons";
-import styles from "./styles";
+import React from 'react';
+import { Text, View } from 'react-native';
+import { Marker } from 'react-native-maps';
+import { icons } from '../../assets/icons';
+import styles from './styles';
 
 export default class MarkerView extends React.PureComponent {
   constructor(props) {
@@ -24,11 +24,10 @@ export default class MarkerView extends React.PureComponent {
   };
 
   render() {
-    const { marker, key } = this.props;
+    const { marker } = this.props;
     return (
       <Marker
         zIndex={1}
-        key={key}
         coordinate={marker.coordinate}
         title={marker.name}
         // onPress={() => {
@@ -39,8 +38,8 @@ export default class MarkerView extends React.PureComponent {
       >
         <View
           style={{
-            justifyContent: "center",
-            alignItems: "center"
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
           {this._renderChosenIcon()}

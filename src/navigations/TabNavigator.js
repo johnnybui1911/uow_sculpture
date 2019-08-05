@@ -1,11 +1,11 @@
-import { createBottomTabNavigator, createAppContainer } from "react-navigation";
-import CollectionScreen from "../containers/Collection/CollectionScreen";
-import MapScreen from "../containers/Map/MapScreen";
-import AuthScreen from "../containers/Auth/AuthScreen";
-import CustomBottomTab from "../components/BottomTabBar/CustomBottomTab";
-import HomeStack from "../navigations/HomeStack";
-import PersonalScreen from "../containers/Personal/PersonalScreen";
-import HomeScreen from "../containers/Home/HomeScreen";
+import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import CollectionScreen from '../containers/Collection/CollectionScreen';
+import MapScreen from '../containers/Map/MapScreen';
+import AuthScreen from '../containers/Auth/AuthScreen';
+import CustomBottomTab from '../components/BottomTabBar/CustomBottomTab';
+import HomeStack from '../navigations/HomeStack';
+import PersonalScreen from '../containers/Personal/PersonalScreen';
+import HomeScreen from '../containers/Home/HomeScreen';
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -23,8 +23,8 @@ const TabNavigator = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "Collection",
-    tabBarPosition: "bottom",
+    initialRouteName: 'Home',
+    // tabBarPosition: 'bottom',
     tabBarComponent: CustomBottomTab,
     animationEnabled: true
   }

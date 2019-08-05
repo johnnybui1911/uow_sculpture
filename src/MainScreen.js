@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Platform,
   StatusBar,
@@ -6,14 +6,14 @@ import {
   Animated,
   PanResponder,
   SafeAreaView
-} from "react-native";
-import IntroScreen from "./containers/Introduction/IntroScreen";
+} from 'react-native';
+import IntroScreen from './containers/Introduction/IntroScreen';
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
-} from "./assets/dimension";
-import { AppContainer } from "./navigations/AppStack";
+} from './assets/dimension';
+import { AppContainer } from './navigations/AppStack';
 
 // TODO: just swipe up, not swipe down
 class MainScreen extends React.PureComponent {
@@ -49,25 +49,12 @@ class MainScreen extends React.PureComponent {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <View
-          style={{
-            position: "absolute",
-            height: SCREEN_HEIGHT,
-            width: SCREEN_WIDTH
-          }}
-        >
-          <AppContainer />
-          {/* <TabContainer /> */}
-        </View>
-        {/* <Animated.View
-          style={{
-            left: this.position.x,
-            top: this.position.y
-          }}
-          {...this._panResponder.panHandlers}
-        >
-          <IntroScreen />
-        </Animated.View> */}
+        {/* <StatusBar
+          backgroundColor="#949496"
+          barStyle="light-content"
+          translucent
+        /> */}
+        <AppContainer />
       </SafeAreaView>
     );
   }

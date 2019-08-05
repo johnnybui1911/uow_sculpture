@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   TouchableWithoutFeedback,
   Text,
   StyleSheet,
   Dimensions
-} from "react-native";
-import { CustomIcon } from "../../assets/icons";
-import palette from "../../assets/palette";
+} from 'react-native';
+import { CustomIcon } from '../../assets/icons';
+import palette from '../../assets/palette';
 
-const iconTab = ["home", "map", "list", "personal"];
+const iconTab = ['home', 'map', 'list', 'personal'];
 
 const CustomBottomTab = props => {
   const { navigation } = props;
@@ -20,8 +20,8 @@ const CustomBottomTab = props => {
         borderTopWidth: 0.5,
         borderTopColor: palette.backgroundColorGrey,
         height: 50,
-        width: Dimensions.get("window").width,
-        flexDirection: "row"
+        width: Dimensions.get('window').width,
+        flexDirection: 'row'
       }}
     >
       {routes &&
@@ -34,10 +34,10 @@ const CustomBottomTab = props => {
             >
               <View
                 style={{
-                  width: "25%",
+                  width: '25%',
                   minHeight: 50,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor:
                     navigation.state.index === index
                       ? palette.backgroundTabColor

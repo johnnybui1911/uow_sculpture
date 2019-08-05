@@ -1,40 +1,42 @@
-import React from "react";
+import React from 'react';
 import {
   SafeAreaView,
   Text,
   View,
   ScrollView,
   ActivityIndicator,
-  Platform
-} from "react-native";
-import MapView, { UrlTile, Marker } from "react-native-maps";
-import MapViewDirections from "react-native-maps-directions";
-import Constants from "expo-constants";
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-import styles from "./styles";
-import SearchBox from "../../components/SearchButton/SearchBox";
+  Platform,
+  StyleSheet
+} from 'react-native';
+import MapView, { UrlTile, Marker } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import Constants from 'expo-constants';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import styles from './styles';
+import HeaderBar from '../../components/Header/HeaderBar';
+import SearchBox from '../../components/SearchButton/SearchBox';
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
-} from "../../assets/dimension";
-import images from "../../assets/images";
-import { icons } from "../../assets/icons";
+} from '../../assets/dimension';
+import images from '../../assets/images';
+import { icons } from '../../assets/icons';
 import {
   LATITUDE,
   LONGITUDE,
   initialMarkers,
   GOOGLE_MAPS_APIKEY
-} from "../../library/maps";
-import palette from "../../assets/palette";
-import MarkerView from "./MarkerView";
+} from '../../library/maps';
+import palette from '../../assets/palette';
+import MarkerView from './MarkerView';
 
 class MapScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: "",
+      searchText: '',
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -43,7 +45,7 @@ class MapScreen extends React.PureComponent {
       },
       markers: [],
       selected: false,
-      errorMessage: "",
+      errorMessage: '',
       userLocation: null
     };
   }
@@ -58,10 +60,10 @@ class MapScreen extends React.PureComponent {
 
   componentWillMount = () => {
     const { errorMessage } = this.state;
-    if (Platform.OS === "android" && !Constants.isDevice) {
+    if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
         errorMessage:
-          "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
+          'Oops, this will not work on Sketch in an Android emulator. Try it on your device!'
       });
     } else {
       this._getLocationAsync();
@@ -74,9 +76,9 @@ class MapScreen extends React.PureComponent {
 
   _getLocationAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== "granted") {
+    if (status !== 'granted') {
       this.setState({
-        errorMessage: "Permission to access location was denied"
+        errorMessage: 'Permission to access location was denied'
       });
     }
 
@@ -86,7 +88,7 @@ class MapScreen extends React.PureComponent {
         if (loc.timestamp) {
           this.setState({ userLocation: loc });
         } else {
-          this.setState({ errorMessage: "Problems on update location" });
+          this.setState({ errorMessage: 'Problems on update location' });
         }
       }
     );
@@ -171,17 +173,21 @@ class MapScreen extends React.PureComponent {
         <MapView
           style={{
             flex: 1,
-            position: "absolute",
+            position: 'absolute',
             height: SCREEN_HEIGHT,
             width: SCREEN_WIDTH
           }}
           mapType="none"
           initialRegion={region}
           showsCompass={false}
-          loadingEnabled
-          // onPress={() => {
-          //   this.setState({ selected: false })
+          rotateEnabled={false}
+          // initialRegion={{
+          //   latitude: 37.3318456,
+          //   longitude: -122.0296002,
+          //   latitudeDelta: 0.0922,
+          //   longitudeDelta: 1
           // }}
+          // onRegionChange={this.onRegionChange}
         >
           {markers.map(marker => (
             <MarkerView
@@ -191,7 +197,6 @@ class MapScreen extends React.PureComponent {
               _selectMarker={this._selectMarker}
             />
           ))}
-          {/* <Text>HELLO WORLD</Text> */}
           <UrlTile
             urlTemplate="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW53dyIsImEiOiJjanlyNmg4dDYwN3Z6M210a3E2ZmJoemprIn0.yDLDtTyLhPBSI_qnjes0kw"
             maximumZ={19}
@@ -200,7 +205,11 @@ class MapScreen extends React.PureComponent {
           {/* {this._renderUserLocation()} */}
           {/* {this._renderDirection()} */}
         </MapView>
-        <View style={{ marginTop: STATUS_BAR_HEIGHT }}>
+        <View
+          style={{
+            marginTop: STATUS_BAR_HEIGHT
+          }}
+        >
           <SearchBox
             _handleSearch={this._handleSearch}
             searchText={searchText}
@@ -208,7 +217,6 @@ class MapScreen extends React.PureComponent {
         </View>
       </SafeAreaView>
     );
-    // }
   }
 }
 
