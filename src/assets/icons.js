@@ -8,13 +8,11 @@ import icoMoonConfig from './selection.json'
 export const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'Font-Name')
 
 export const icons = {
-  user_location: <Image source={require('./images/user-location.png')} />,
-  chosen_marker: (
-    <Image
-      source={require('./images/chosen-marker.png')}
-      style={{ width: 38, height: 38 }}
-    />
+  my_location: (
+    <CustomIcon name="near-me" size={24} color={palette.primaryColorLight} />
   ),
+  user_location: <Image source={require('./images/user-location.png')} />,
+  chosen_marker: <Image source={require('./images/chosen-marker.png')} />,
   marker: (
     <Image
       source={require('./images/maps-and-flags.png')}
@@ -38,6 +36,14 @@ export const icons = {
   ),
   google: <Image source={require('./images/google.png')} />,
   logo: <CustomIcon name="logo" size={120} color={palette.secondaryColor} />,
+  one_dot: (
+    <FontAwesome
+      name="circle"
+      size={5}
+      color={palette.secondaryTypographyColor}
+      style={{ paddingHorizontal: 6 }}
+    />
+  ),
   up_arrow: (
     <FontAwesome
       name="chevron-up"
@@ -64,5 +70,5 @@ export const icons = {
   ),
   comment: (
     <CustomIcon name="comment-o" size={16} color={palette.primaryColorLight} />
-  ),
+  )
 }

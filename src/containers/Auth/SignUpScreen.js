@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Text,
   View,
@@ -6,30 +6,30 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput
-} from "react-native";
-import styles from "./styles";
-import palette from "../../assets/palette";
-import { icons } from "../../assets/icons";
+} from 'react-native'
+import styles from './styles'
+import palette from '../../assets/palette'
+import { icons } from '../../assets/icons'
 
 class SignUpScreen extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    };
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
   }
   render() {
     return (
       <ScrollView>
-        <View style={{ flex: 1, justifyContent: "center" }}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
           <View
             style={{
               flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               marginVertical: 30
             }}
           >
@@ -37,8 +37,8 @@ class SignUpScreen extends React.Component {
               style={{
                 height: 100,
                 width: 100,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 borderRadius: 50,
                 backgroundColor: palette.primaryColor
               }}
@@ -51,7 +51,7 @@ class SignUpScreen extends React.Component {
               </Text>
             </View>
           </View>
-          <View style={{ flex: 2, alignItems: "center" }}>
+          <View style={{ flex: 2, alignItems: 'center' }}>
             <View style={styles.inputBox}>
               <View style={{ padding: 20 }}>{icons.fullName}</View>
               <TextInput
@@ -97,7 +97,7 @@ class SignUpScreen extends React.Component {
                 styles.box,
                 {
                   marginTop: 10,
-                  alignItems: "center",
+                  alignItems: 'center',
                   backgroundColor: palette.primaryColorLight
                 }
               ]}
@@ -116,8 +116,8 @@ class SignUpScreen extends React.Component {
           </View>
         </View>
       </ScrollView>
-    );
+    )
   }
 }
 
-export default SignUpScreen;
+export default SignUpScreen

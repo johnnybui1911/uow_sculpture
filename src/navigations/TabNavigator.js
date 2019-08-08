@@ -9,23 +9,23 @@ import HomeScreen from '../containers/Home/HomeScreen'
 const TabNavigator = createBottomTabNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: HomeScreen
     },
     Map: {
-      screen: MapScreen,
+      screen: MapScreen
     },
     Collection: {
-      screen: CollectionScreen,
+      screen: CollectionScreen
     },
     Profile: {
-      screen: PersonalScreen,
-    },
+      screen: PersonalScreen
+    }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Map',
     tabBarPosition: 'bottom',
     tabBarComponent: CustomBottomTab,
-    animationEnabled: true,
+    animationEnabled: true
   }
 )
 

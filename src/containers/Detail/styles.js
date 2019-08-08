@@ -8,16 +8,16 @@ const shadowStyle = {
   shadowColor: '#000000',
   shadowOffset: {
     width: 0,
-    height: 3,
+    height: 3
   },
   shadowRadius: 5,
-  shadowOpacity: 0.1,
+  shadowOpacity: 0.1
 }
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.backgroundColorGrey,
+    backgroundColor: palette.backgroundColorGrey
   },
   mainImage: {
     flex: 1,
@@ -25,13 +25,13 @@ export default StyleSheet.create({
     zIndex: 2,
     borderBottomRightRadius: 12,
     borderBottomLeftRadius: 12,
-    ...shadowStyle,
+    ...shadowStyle
   },
   imageItem: {
     width: width,
     height: height * 0.4,
     borderBottomRightRadius: 12,
-    borderBottomLeftRadius: 12,
+    borderBottomLeftRadius: 12
   },
   detailContainer: { zIndex: 1, flex: 3, flexDirection: 'column-reverse' },
   card: {
@@ -43,44 +43,44 @@ export default StyleSheet.create({
     marginTop: -10,
     borderWidth: 0.5,
     borderColor: palette.secondaryTypographyColor,
-    ...shadowStyle,
+    ...shadowStyle
   },
   contentBox: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   title: {
     fontSize: 36,
     color: palette.primaryColor,
-    fontFamily: 'Montserrat-SemiBold',
+    fontFamily: 'Montserrat-SemiBold'
   },
   distance: {
     fontSize: 20,
-    fontFamily: 'Montserrat-SemiBold',
-    color: palette.primaryColorLight,
+    fontFamily: 'Montserrat-Bold',
+    color: palette.primaryColorLight
   },
   alt_description: {
     fontSize: 14,
     color: palette.primaryColorLight,
-    fontFamily: 'Montserrat-Medium',
+    fontFamily: 'Montserrat-Medium'
   },
   description: {
     fontSize: 14,
     color: palette.secondaryTypographyColor,
-    fontFamily: 'Montserrat-Medium',
+    fontFamily: 'Montserrat-Medium'
   },
   numberStyle: {
     fontSize: 12,
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold',
-    paddingLeft: 5,
+    paddingLeft: 5
   },
   visitorsText: {
     opacity: 0.75,
     fontSize: 12,
     color: palette.backgroundColorWhite,
-    fontFamily: 'Montserrat-SemiBold',
+    fontFamily: 'Montserrat-SemiBold'
   },
   overlayImage: {
     position: 'absolute',
@@ -91,7 +91,7 @@ export default StyleSheet.create({
     width: '100%',
     borderBottomRightRadius: 12,
     borderBottomLeftRadius: 12,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   button: {
     flex: 1,
@@ -102,12 +102,12 @@ export default StyleSheet.create({
     borderRadius: 12,
     marginVertical: 10,
     minHeight: 51,
-    ...shadowStyle,
+    ...shadowStyle
   },
   titleButton: {
     fontSize: 16,
     fontFamily: 'Montserrat-SemiBold',
     color: palette.backgroundColorWhite,
-    textAlign: 'center',
-  },
+    textAlign: 'center'
+  }
 })
