@@ -1,106 +1,107 @@
-import { StyleSheet } from "react-native";
-import palette from "../../assets/palette";
-import { STATUS_BAR_HEIGHT } from "../../assets/dimension";
-
-const cardItem = {
-  justifyContent: "center",
-  width: "100%",
-  marginVertical: 12,
-  paddingHorizontal: 2
-};
-
-const cardDes = {
-  paddingVertical: 12,
-  backgroundColor: palette.backgroundColorWhite,
-  width: "85%",
-  height: 144,
-  borderRadius: 12,
-  elevation: 5
-};
-
-const imageContainer = {
-  position: "absolute",
-  backgroundColor: palette.backgroundColorWhite,
-  borderRadius: 12,
-  elevation: 5
-};
-
-const box = {
-  justifyContent: "center",
-  alignItems: "center",
-  height: 30,
-  backgroundColor: palette.secondaryColor,
-  borderRadius: 12,
-  minWidth: 60
-};
+import { StyleSheet } from 'react-native'
+import palette from '../../assets/palette'
+import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
 
 const shadowStyle = {
-  elevation: 2,
-  shadowColor: "#000000",
+  elevation: 4,
+  shadowColor: '#000000',
   shadowOffset: {
     width: 0,
     height: 3
   },
   shadowRadius: 5,
   shadowOpacity: 0.1
-};
+}
+
+const cardItem = {
+  justifyContent: 'center',
+  width: '100%',
+  marginVertical: 12,
+  paddingHorizontal: 2
+}
+
+const cardDes = {
+  paddingVertical: 12,
+  backgroundColor: palette.backgroundColorWhite,
+  width: '85%',
+  height: 144,
+  borderRadius: 12,
+  ...shadowStyle
+}
+
+const imageContainer = {
+  position: 'absolute',
+  backgroundColor: palette.backgroundColorWhite,
+  borderRadius: 12,
+  elevation: 5
+}
+
+const box = {
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: 30,
+  backgroundColor: palette.secondaryColor,
+  borderRadius: 12,
+  minWidth: 60
+}
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: palette.backgroundColorWhite
   },
+  profileFixedContainer: { height: 400, backgroundColor: palette.primaryColor },
   headerContainer: {
-    marginTop: STATUS_BAR_HEIGHT,
-    alignItems: "center",
+    marginTop: STATUS_BAR_HEIGHT * 2,
+    alignItems: 'center',
     height: 53,
     marginHorizontal: 24,
     marginBottom: 18,
-    flexDirection: "row"
+    flexDirection: 'row'
   },
   headerTitle: {
     fontSize: 40,
     color: palette.backgroundColorWhite,
-    fontFamily: "Montserrat-Medium"
+    fontFamily: 'Montserrat-Medium'
   },
   flatList: {
-    width: "100%"
+    width: '100%'
   },
   title: {
     fontSize: 20,
     color: palette.primaryColor,
-    fontFamily: "Montserrat-SemiBold"
+    fontFamily: 'Montserrat-SemiBold'
   },
   titleButton: {
     fontSize: 12,
     color: palette.backgroundColorWhite,
-    fontFamily: "Montserrat-SemiBold",
-    textAlign: "center"
+    fontFamily: 'Montserrat-SemiBold',
+    textAlign: 'center'
   },
   distance: {
     fontSize: 14,
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: 'Montserrat-SemiBold',
     color: palette.primaryColorLight
   },
   description: {
     fontSize: 14,
     color: palette.secondaryTypographyColor,
-    fontFamily: "Montserrat-Medium"
+    fontFamily: 'Montserrat-Medium'
   },
   description_cmt: {
     fontSize: 12,
     color: palette.primaryColor,
-    fontFamily: "Montserrat-Medium"
+    fontFamily: 'Montserrat-Medium'
   },
   alt_description: {
     fontSize: 14,
     color: palette.primaryColorLight,
-    fontFamily: "Montserrat-Medium"
+    fontFamily: 'Montserrat-Medium'
   },
   numberStyle: {
     fontSize: 12,
     color: palette.primaryColor,
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: 'Montserrat-SemiBold',
     paddingLeft: 5
   },
   cardItem,
@@ -121,9 +122,9 @@ export default StyleSheet.create({
   },
   imageContainer,
   searchBox: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginHorizontal: 24,
     height: 44,
     backgroundColor: palette.backgroundColorWhite,
@@ -134,9 +135,9 @@ export default StyleSheet.create({
   button: {
     flex: 1,
     backgroundColor: palette.backgroundColorWhite,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 12,
     marginVertical: 10,
     minHeight: 51,
@@ -152,7 +153,7 @@ export default StyleSheet.create({
   },
   contentBox: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between"
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
-});
+})

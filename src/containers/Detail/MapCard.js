@@ -4,13 +4,14 @@ import Divider from '../../components/Divider/Divider'
 import styles from './styles'
 import MapView, { UrlTile, Marker } from 'react-native-maps'
 import MarkerView from '../Map/MarkerView'
+import images from '../../assets/images'
 
 export default function MapCard(props) {
   const { item, _navigateToMap } = props
   const region = {
     ...item.coordinate,
     latitudeDelta: 0.0066,
-    longitudeDelta: 0.004,
+    longitudeDelta: 0.004
   }
   return (
     <View style={styles.card}>
@@ -28,10 +29,10 @@ export default function MapCard(props) {
           maximumZ={19}
           zIndex={-1}
         />
-        <MarkerView
-          marker={item}
-          selected={true}
-          // _selectMarker={this._selectMarker}
+        <Marker
+          zIndex={1}
+          coordinate={item.coordinate}
+          image={images.chosen_marker}
         />
         {/* <Marker coordinate={item.coordinate} title={item.title} zIndex={1} /> */}
       </MapView>

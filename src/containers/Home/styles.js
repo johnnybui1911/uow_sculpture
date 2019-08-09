@@ -24,7 +24,7 @@ export default StyleSheet.create({
     fontSize: 26,
     color: palette.backgroundColorWhite,
     textShadowColor: '#474747',
-    textShadowOffset: { width: 1, height: 3 },
+    textShadowOffset: { width: 0.5, height: 3 },
     textShadowRadius: 5,
     fontFamily: 'Montserrat-SemiBold'
   },
@@ -32,7 +32,7 @@ export default StyleSheet.create({
     fontSize: 16,
     color: palette.backgroundColorWhite,
     textShadowColor: '#474747',
-    textShadowOffset: { width: 1, height: 3 },
+    textShadowOffset: { width: 0.5, height: 3 },
     textShadowRadius: 5,
     fontFamily: 'Montserrat-SemiBold'
   },

@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   TouchableWithoutFeedback,
-  Dimensions,
+  Dimensions
 } from 'react-native'
 import styles from './styles'
 import { icons } from '../../assets/icons'
@@ -25,7 +25,7 @@ const NearbyItem = props => {
           width: width - PADDING * 2,
           height: 378,
           marginHorizontal: PADDING,
-          paddingHorizontal: PADDING,
+          paddingHorizontal: PADDING
         }}
       >
         <Image
@@ -34,7 +34,7 @@ const NearbyItem = props => {
           style={{
             width: '100%',
             height: '100%',
-            borderRadius: 12,
+            borderRadius: 12
           }}
         />
         <View
@@ -42,22 +42,27 @@ const NearbyItem = props => {
             position: 'absolute',
             top: 290,
             flexDirection: 'row',
-            marginLeft: PADDING * 2, // trash fix, to be continued
+            marginLeft: PADDING * 2 // trash fix, to be continued
           }}
         >
-          <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'space-between'
+              // backgroundColor: 'red'
+            }}
+          >
             <Text style={styles.title}>{item.distance} m</Text>
             <Text style={styles.title}>{item.name}</Text>
           </View>
           <View
             style={{
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              paddingTop: 2, //make heart little bit center
+              // backgroundColor: 'yellow',
+              alignItems: 'center'
             }}
           >
-            <Text style={styles.like}>{icons.like}</Text>
-            <Text style={styles.like}>100</Text>
+            <Text style={[{ marginTop: 18 }]}>{icons.like}</Text>
+            <Text style={[styles.like, { marginTop: 10 }]}>100</Text>
           </View>
         </View>
       </View>

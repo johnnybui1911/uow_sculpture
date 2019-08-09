@@ -1,55 +1,49 @@
 /* eslint-disable react/prefer-stateless-function */
-import React from "react";
-import {
-  SafeAreaView,
-  Text,
-  View,
-  TouchableOpacity,
-  Image
-} from "react-native";
+import React from 'react'
+import { SafeAreaView, Text, View, TouchableOpacity, Image } from 'react-native'
 import {
   createMaterialTopTabNavigator,
   createAppContainer
-} from "react-navigation";
-import styles from "./styles";
-import palette from "../../assets/palette";
-import LikeScreen from "./LikeScreen";
-import images from "../../assets/images";
-import AboutScreen from "./AboutScreen";
-import ProfileBox from "./ProfileBox";
-import CommentScreen from "./CommentScreen";
+} from 'react-navigation'
+import styles from './styles'
+import palette from '../../assets/palette'
+import LikeScreen from './LikeScreen'
+import images from '../../assets/images'
+import AboutScreen from './AboutScreen'
+import ProfileBox from './ProfileBox'
+import CommentScreen from './CommentScreen'
 
 const PersonalTab = createMaterialTopTabNavigator(
   {
     Like: {
       screen: LikeScreen,
       navigationOptions: () => ({
-        title: "LIKES"
+        title: 'LIKES'
       })
     },
     Comment: {
       screen: CommentScreen,
       navigationOptions: () => ({
-        title: "COMMENTS"
+        title: 'COMMENTS'
       })
     },
     About: {
       screen: AboutScreen,
       navigationOptions: () => ({
-        title: "ABOUT"
+        title: 'ABOUT'
       })
     }
   },
   {
-    initialRouteName: "Like",
+    initialRouteName: 'Like',
     animationEnabled: true,
     tabBarOptions: {
       style: {
-        justifyContent: "center",
+        justifyContent: 'center',
         backgroundColor: palette.backgroundColorWhite
       },
       labelStyle: {
-        fontFamily: "Montserrat-SemiBold",
+        fontFamily: 'Montserrat-SemiBold',
         fontSize: 14
       },
       activeTintColor: palette.primaryColor,
@@ -57,31 +51,31 @@ const PersonalTab = createMaterialTopTabNavigator(
       indicatorStyle: { backgroundColor: palette.primaryColorLight, height: 3 }
     }
   }
-);
+)
 
-const PersonalContainer = createAppContainer(PersonalTab);
+const PersonalContainer = createAppContainer(PersonalTab)
 
 class PersonalScreen extends React.PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       user: {
-        username: "Cristiano Ronaldo",
-        email: "cristiano@gmail.com",
-        joinDate: new Date("October 13, 2014"),
+        username: 'Cristiano Ronaldo',
+        email: 'cristiano@gmail.com',
+        joinDate: new Date('October 13, 2014'),
         likes: 3,
         comments: 4,
         visited: 3
       }
-    };
+    }
   }
 
   render() {
-    const { user } = this.state;
+    const { user } = this.state
 
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1, backgroundColor: palette.primaryColor }}>
+        <View style={styles.profileFixedContainer}>
           <View style={styles.headerContainer}>
             <View style={{ flex: 1 }}>
               <Text style={styles.headerTitle}>Profile</Text>
@@ -93,8 +87,8 @@ class PersonalScreen extends React.PureComponent {
           <View
             style={{
               flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               marginVertical: 15
             }}
           >
@@ -102,11 +96,11 @@ class PersonalScreen extends React.PureComponent {
               style={{
                 height: 100,
                 width: 100,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 borderRadius: 50,
                 backgroundColor: palette.primaryColor,
-                overflow: "hidden"
+                overflow: 'hidden'
               }}
             >
               <Image source={images.profile} style={{}} resizeMode="center" />
@@ -134,8 +128,8 @@ class PersonalScreen extends React.PureComponent {
           <PersonalContainer />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 }
 
-export default PersonalScreen;
+export default PersonalScreen

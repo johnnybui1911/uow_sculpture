@@ -1,9 +1,9 @@
-import React from "react";
-import { View, TextInput } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import { icons } from "../../assets/icons";
-import styles from "./styles";
-import palette from "../../assets/palette";
+import React from 'react'
+import { View, TextInput, TouchableWithoutFeedback } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons'
+import { icons } from '../../assets/icons'
+import styles from './styles'
+import palette from '../../assets/palette'
 
 const SearchBox = props => (
   <View style={styles.searchBox}>
@@ -22,13 +22,23 @@ const SearchBox = props => (
         paddingVertical: 10,
         paddingBottom: 10,
         paddingLeft: 0,
-        width: "100%",
-        fontFamily: "Montserrat-Medium",
+        width: '100%',
+        fontFamily: 'Montserrat-Medium',
         fontSize: 14
       }}
     />
-    {icons.micro}
+    {props.markerSelected ? (
+      <TouchableWithoutFeedback
+        onPress={() => {
+          props._onMarkerUnPressed()
+        }}
+      >
+        {icons.close}
+      </TouchableWithoutFeedback>
+    ) : (
+      icons.micro
+    )}
   </View>
-);
+)
 
-export default SearchBox;
+export default SearchBox

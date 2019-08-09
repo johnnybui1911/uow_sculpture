@@ -5,6 +5,7 @@ import MapViewDirections from 'react-native-maps-directions'
 import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
+import { connect } from 'react-redux'
 import styles from './styles'
 import SearchBox from '../../components/SearchButton/SearchBox'
 import {
@@ -13,23 +14,28 @@ import {
   STATUS_BAR_HEIGHT
 } from '../../assets/dimension'
 import {
-  initialMarkers,
   GOOGLE_MAPS_APIKEY,
   URL_TEMPLATE,
-  INITIAL_REGION
+  LATITUDE_DELTA,
+  LONGITUDE_DELTA
 } from '../../library/maps'
 import images from '../../assets/images'
 import MarkerView from './MarkerView'
 import MiniView from './MiniView'
+import { localData } from '../../library/localData'
+import {
+  setInitMarkers,
+  selectMarker,
+  unselectMarker
+} from '../../redux/actions/markerActions'
+import ButtonMyLocation from '../../components/ButtonMyLocation/ButtonMyLocation'
 
 class MapScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       searchText: '',
-      region: INITIAL_REGION,
-      markers: [],
-      selected_marker: false,
+      region: null,
       errorMessage: '',
       userCoordinate: null
     }
@@ -48,9 +54,7 @@ class MapScreen extends React.PureComponent {
   }
 
   componentDidMount = () => {
-    this.setState({
-      markers: initialMarkers
-    })
+    this.props.init_marker(localData)
   }
 
   componentWillUnmount = () => {
@@ -75,26 +79,32 @@ class MapScreen extends React.PureComponent {
       },
       loc => {
         if (loc.timestamp) {
-          const { userCoordinate, region } = this.state
+          const { userCoordinate } = this.state
           const { latitude, longitude } = loc.coords
           const newCoordinate = {
             latitude,
             longitude
           }
           if (!userCoordinate) {
-            this.setState({
-              userCoordinate: new AnimatedRegion({
-                latitude: latitude,
-                longitude: longitude,
-                latitudeDelta: 0,
-                longitudeDelta: 0
-              }),
-              region: {
-                ...region,
-                latitude,
-                longitude
-              }
-            })
+            const userRegion = {
+              latitude,
+              longitude,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA
+            }
+
+            this.setState(
+              {
+                userCoordinate: new AnimatedRegion({
+                  latitude: latitude,
+                  longitude: longitude,
+                  latitudeDelta: 0,
+                  longitudeDelta: 0
+                }),
+                region: userRegion
+              },
+              () => this.map.animateToRegion(userRegion)
+            )
           } else {
             userCoordinate.timing(newCoordinate).start()
           }
@@ -104,6 +114,11 @@ class MapScreen extends React.PureComponent {
       }
     )
   }
+
+  _navigateToDetail = item => {
+    this.props.navigation.navigate('Detail', { item })
+  }
+
   _renderUserLocation = () => {
     const { errorMessage, userCoordinate } = this.state
     if (userCoordinate) {
@@ -119,35 +134,64 @@ class MapScreen extends React.PureComponent {
     }
   }
 
-  _handleOnPressedMarker = (latitude, longitude) => {
-    //center map to selected marker
-    this.setState(prevState => ({
-      region: { ...prevState.region, latitude, longitude }
-    }))
-  }
-
-  _selectMarker = () => {
-    this.setState({ selected_marker: true })
-  }
-
-  _unSelectMarker = () => {
-    this.setState({ selected_marker: false })
-  }
-
   _renderMarker = () => {
-    const { markers, selected_marker } = this.state
+    const { markerState } = this.props
+    if (markerState.markers.length > 0) {
+      const { markers, selected } = markerState
+      return (
+        <React.Fragment>
+          {markers.map(marker => (
+            <MarkerView
+              key={marker.id}
+              marker={marker}
+              pressed={marker.pressed}
+              selected={selected}
+              _onMarkerPressed={this._onMarkerPressed}
+            />
+          ))}
+        </React.Fragment>
+      )
+    }
+  }
+
+  _renderMiniView = () => {
+    const { selected_id } = this.props.markerState
+    if (selected_id) {
+      const selected_marker = localData.find(data => data.id === selected_id)
+      return (
+        <MiniView
+          marker={selected_marker}
+          _centerUserLocation={this._centerUserLocation}
+          _navigateToDetail={this._navigateToDetail}
+        />
+      )
+    }
+
     return (
-      <React.Fragment>
-        {markers.map(marker => (
-          <MarkerView
-            key={marker.name}
-            marker={marker}
-            selected_marker={selected_marker}
-            _handleOnPressedMarker={this._handleOnPressedMarker}
-          />
-        ))}
-      </React.Fragment>
+      <View
+        style={[
+          styles.mini_view_container,
+          { alignItems: 'flex-end', paddingHorizontal: 24, paddingBottom: 12 }
+        ]}
+      >
+        <ButtonMyLocation _centerUserLocation={this._centerUserLocation} />
+      </View>
     )
+  }
+
+  _centerUserLocation = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION)
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied'
+      })
+    }
+
+    const loc = await Location.getCurrentPositionAsync({})
+    const { latitude, longitude } = loc.coords
+    const { region } = this.state
+    const userRegion = { ...region, latitude, longitude }
+    this.map.animateToRegion(userRegion)
   }
 
   _renderDirection = () => {
@@ -189,45 +233,81 @@ class MapScreen extends React.PureComponent {
     const { text } = event.nativeEvent
     this.setState({ searchText: text.trim() })
   }
+  _onMarkerPressed = (markerID, markerName) => {
+    this.props.handleSelectMarker(markerID)
+    this.setState({ searchText: markerName.trim() })
+  }
+
+  _onMarkerUnPressed = () => {
+    this.props.handleUnselectMarker()
+    this.setState({ searchText: '' })
+  }
 
   render() {
     const { searchText, region, errorMessage } = this.state
+    const { selected } = this.props.markerState
 
-    return (
-      <SafeAreaView style={styles.container}>
-        <MapView
-          style={{
-            flex: 1,
-            position: 'absolute',
-            height: SCREEN_HEIGHT,
-            width: SCREEN_WIDTH
-          }}
-          mapType="none"
-          region={region}
-          showsCompass={false}
-          rotateEnabled={false}
-          onMarkerPress={this._selectMarker}
-          onPress={this._unSelectMarker}
-        >
-          <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
-          {this._renderMarker()}
-          {this._renderUserLocation()}
-          {/* {this._renderDirection()} */}
-        </MapView>
-        <View
-          style={{
-            marginTop: STATUS_BAR_HEIGHT
-          }}
-        >
-          <SearchBox
-            _handleSearch={this._handleSearch}
-            searchText={searchText}
-          />
-        </View>
-        <MiniView />
-      </SafeAreaView>
-    )
+    if (region) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <MapView
+            style={{
+              flex: 1,
+              position: 'absolute',
+              height: SCREEN_HEIGHT,
+              width: SCREEN_WIDTH
+            }}
+            mapType="none"
+            ref={ref => {
+              this.map = ref
+            }}
+            initialRegion={region}
+            showsCompass={false}
+            rotateEnabled={false}
+          >
+            <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
+            {this._renderMarker()}
+            {this._renderUserLocation()}
+            {/* {this._renderDirection()} */}
+          </MapView>
+          <View
+            style={{
+              marginTop: STATUS_BAR_HEIGHT
+            }}
+          >
+            <SearchBox
+              _handleSearch={this._handleSearch}
+              searchText={searchText}
+              markerSelected={selected}
+              _onMarkerUnPressed={this._onMarkerUnPressed}
+            />
+          </View>
+          {this._renderMiniView()}
+        </SafeAreaView>
+      )
+    }
+
+    return null
   }
 }
 
-export default MapScreen
+const mapStateToProps = getState => ({
+  markerState: getState.markerReducer
+})
+
+const mapDispatchToProps = dispatch => ({
+  init_marker: markers => {
+    dispatch(setInitMarkers(markers))
+  },
+  handleSelectMarker: markerID => {
+    dispatch(selectMarker(markerID))
+  },
+  handleUnselectMarker: () => {
+    dispatch(unselectMarker())
+  }
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MapScreen)

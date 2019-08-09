@@ -69,11 +69,13 @@ class MainScreen extends React.PureComponent {
         >
           <IntroScreen />
         </Animated.View> */}
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="rgba(0,0,0,0.4)"
-          translucent
-        />
+        {Platform.OS === 'android' ? (
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="rgba(0,0,0,0.2)"
+            translucent
+          />
+        ) : null}
         <AppContainer />
       </SafeAreaView>
     )

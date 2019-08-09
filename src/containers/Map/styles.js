@@ -108,5 +108,11 @@ export default StyleSheet.create({
     fontSize: 14,
     color: palette.secondaryTypographyColor,
     fontFamily: 'Montserrat-Medium'
+  },
+  unselected_marker: {
+    width: 12,
+    height: 12,
+    borderRadius: 100,
+    backgroundColor: palette.secondaryColor
   }
 })

@@ -1,19 +1,31 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, Image } from 'react-native'
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  TouchableWithoutFeedback
+} from 'react-native'
 import styles from './styles'
 import images from '../../assets/images'
 import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
 import Divider from '../../components/Divider/Divider'
+import ButtonMyLocation from '../../components/ButtonMyLocation/ButtonMyLocation'
 
-export default props => {
+export default ({ marker, _centerUserLocation, _navigateToDetail }) => {
   return (
     <View style={styles.mini_view_container}>
       <View style={styles.transparent_container}>
-        <View style={styles.mini_image_container}>
-          <Image source={images.sculptures[1]} style={styles.image} />
-        </View>
-        <View style={styles.button_my_location}>{icons.my_location}</View>
+        <TouchableWithoutFeedback onPress={() => _navigateToDetail(marker)}>
+          <View style={styles.mini_image_container}>
+            <Image
+              source={images.sculptures[marker.photoURL]}
+              style={styles.image}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+        <ButtonMyLocation _centerUserLocation={_centerUserLocation} />
       </View>
       <View style={styles.description_container}>
         <View style={{ alignItems: 'center' }}>
@@ -27,14 +39,14 @@ export default props => {
           />
         </View>
         <Text style={styles.distance}>500 m</Text>
-        <Text style={styles.title}>Winged Figure</Text>
+        <Text style={styles.title}>{marker.name}</Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center'
           }}
         >
-          <Text style={styles.description}>Western side of Robsons Road</Text>
+          <Text style={styles.description}>{marker.des}</Text>
           {icons.one_dot}
           <Text style={styles.description}>5 min</Text>
         </View>

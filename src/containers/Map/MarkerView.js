@@ -1,51 +1,37 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { Marker } from 'react-native-maps'
-import { icons } from '../../assets/icons'
-import styles from './styles'
+import { connect } from 'react-redux'
 import images from '../../assets/images'
+import styles from './styles'
 
-export default class MarkerView extends React.PureComponent {
+class MarkerView extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      pressed: false
-    }
-  }
-
-  _onMarkerPress = e => {
-    const {
-      coordinate: { latitude, longitude }
-    } = e.nativeEvent
-
-    this.setState(
-      prevState => ({ pressed: !prevState.pressed }),
-      () => this.props._handleOnPressedMarker(latitude, longitude)
-    )
-  }
-
-  _renderChosenIcon = () => {
-    const { pressed } = this.state
-    const { selected_marker } = this.props
-    if (selected_marker && pressed) {
-      return icons.chosen_marker
-    }
-    return icons.marker
   }
 
   render() {
-    const { pressed } = this.state
-    const { marker, selected_marker } = this.props
+    const { marker, pressed, selected } = this.props
+    if (selected && !pressed) {
+      return (
+        <Marker
+          zIndex={1}
+          coordinate={marker.coordinate}
+          onPress={() => this.props._onMarkerPressed(marker.id, marker.name)}
+        >
+          <View style={styles.unselected_marker} />
+        </Marker>
+      )
+    }
     return (
       <Marker
         zIndex={1}
         coordinate={marker.coordinate}
-        title={marker.name}
-        onPress={e => this._onMarkerPress(e)}
-        image={
-          selected_marker && pressed ? images.chosen_marker : images.marker
-        }
+        onPress={() => this.props._onMarkerPressed(marker.id, marker.name)}
+        image={pressed ? images.chosen_marker : images.marker}
       />
     )
   }
 }
+
+export default MarkerView

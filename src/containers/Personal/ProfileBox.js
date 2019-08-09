@@ -1,15 +1,15 @@
-import React from "react";
-import { View, Text } from "react-native";
-import palette from "../../assets/palette";
-import styles from "./styles";
-import VerticalDivider from "./VerticalDivider";
+import React from 'react'
+import { View, Text } from 'react-native'
+import palette from '../../assets/palette'
+import styles from './styles'
+import VerticalDivider from './VerticalDivider'
 
 const ProfileBox = ({ likes, comments, visited }) => {
   return (
     <View
       style={{
         flex: 1,
-        justifyContent: "center"
+        justifyContent: 'center'
       }}
     >
       <View
@@ -17,9 +17,9 @@ const ProfileBox = ({ likes, comments, visited }) => {
           flex: 1,
           maxHeight: 68,
           backgroundColor: palette.backgroundColorWhite,
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
           marginHorizontal: 16,
           borderRadius: 12
         }}
@@ -27,7 +27,7 @@ const ProfileBox = ({ likes, comments, visited }) => {
         <View
           style={{
             flex: 1,
-            alignItems: "center"
+            alignItems: 'center'
           }}
         >
           <Text style={[styles.title, { color: palette.primaryColorLight }]}>
@@ -46,7 +46,7 @@ const ProfileBox = ({ likes, comments, visited }) => {
         <View
           style={{
             flex: 1,
-            alignItems: "center"
+            alignItems: 'center'
           }}
         >
           <Text style={[styles.title, { color: palette.primaryColorLight }]}>
@@ -65,7 +65,7 @@ const ProfileBox = ({ likes, comments, visited }) => {
         <View
           style={{
             flex: 1,
-            alignItems: "center"
+            alignItems: 'center'
           }}
         >
           <Text style={[styles.title, { color: palette.primaryColorLight }]}>
@@ -82,7 +82,7 @@ const ProfileBox = ({ likes, comments, visited }) => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default ProfileBox;
+export default ProfileBox

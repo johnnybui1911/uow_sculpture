@@ -8,6 +8,14 @@ import icoMoonConfig from './selection.json'
 export const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'Font-Name')
 
 export const icons = {
+  close: (
+    <CustomIcon
+      name="close"
+      size={20}
+      color={palette.primaryColorLight}
+      style={{ padding: 10 }}
+    />
+  ),
   my_location: (
     <CustomIcon name="near-me" size={24} color={palette.primaryColorLight} />
   ),

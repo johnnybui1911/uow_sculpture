@@ -12,23 +12,6 @@ export const INITIAL_REGION = {
   longitudeDelta: LONGITUDE_DELTA
 }
 
-export const initialMarkers = [
-  {
-    name: 'Winged Figure',
-    coordinate: {
-      latitude: -34.4043,
-      longitude: 150.87936
-    }
-  },
-  {
-    name: 'Midnight',
-    coordinate: {
-      latitude: -34.40485,
-      longitude: 150.87897
-    }
-  }
-]
-
 export const GOOGLE_MAPS_APIKEY = 'AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs'
 export const URL_TEMPLATE =
   'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW53dyIsImEiOiJjanlyNmg4dDYwN3Z6M210a3E2ZmJoemprIn0.yDLDtTyLhPBSI_qnjes0kw'
