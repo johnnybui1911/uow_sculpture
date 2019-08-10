@@ -64,11 +64,17 @@ export const icons = {
       name="micro"
       size={20}
       color={palette.primaryColorLight}
-      style={{ padding: 10 }}
+      style={{ padding: 10, elevation: 4 }}
     />
   ),
   like: (
     <CustomIcon name="heart-o" size={16} color={palette.backgroundColorWhite} />
+  ),
+  like_fill_white: (
+    <CustomIcon name="heart-f" size={16} color={palette.backgroundColorWhite} />
+  ),
+  like_fill_popup: (
+    <CustomIcon name="heart-f" size={80} color={palette.backgroundColorWhite} />
   ),
   like_outline: (
     <CustomIcon name="heart-o" size={16} color={palette.primaryColorLight} />

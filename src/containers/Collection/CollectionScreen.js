@@ -1,51 +1,46 @@
-import React from "react";
-import {
-  SafeAreaView,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Button
-} from "react-native";
-import styles from "./styles";
-import HeaderBar from "../../components/Header/HeaderBar";
-import { localData } from "../../library/localData";
-import CardItem from "./CardItem";
-import SearchBox from "../../components/SearchButton/SearchBox";
+import React from 'react'
+import { SafeAreaView, View, FlatList, ActivityIndicator } from 'react-native'
+import LottieView from 'lottie-react-native'
+import styles from './styles'
+import HeaderBar from '../../components/Header/HeaderBar'
+import { localData } from '../../library/localData'
+import CardItem from './CardItem'
+import SearchBox from '../../components/SearchButton/SearchBox'
 
 class CollectionScreen extends React.PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: [],
       loading: true,
-      searchText: ""
-    };
+      searchText: ''
+    }
   }
 
   componentDidMount = () => {
-    this.setState({ data: localData, loading: false });
-  };
+    this.setState({ data: localData, loading: false })
+  }
 
   _navigateToDetail = item => {
-    this.props.navigation.navigate("Detail", { item });
-  };
+    this.props.navigation.navigate('Detail', { item })
+  }
 
   _handleSearch = event => {
-    const { text } = event.nativeEvent;
-    this.setState({ searchText: text.trim() });
-  };
+    const { text } = event.nativeEvent
+    this.setState({ searchText: text.trim() })
+  }
 
   _renderItem = ({ item }) => {
-    return <CardItem item={item} _navigateToDetail={this._navigateToDetail} />;
-  };
+    return <CardItem item={item} _navigateToDetail={this._navigateToDetail} />
+  }
 
   _renderList = () => {
-    const { searchText } = this.state;
-    let { data } = this.state;
-    if (searchText !== "") {
+    const { searchText } = this.state
+    let { data } = this.state
+    if (searchText !== '') {
       data = data.filter(
         item => item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
-      );
+      )
     }
     return (
       <FlatList
@@ -55,11 +50,11 @@ class CollectionScreen extends React.PureComponent {
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
       />
-    );
-  };
+    )
+  }
 
   render() {
-    const { searchText, loading } = this.state;
+    const { searchText, loading } = this.state
     return (
       <SafeAreaView style={styles.container}>
         {loading ? (
@@ -84,8 +79,8 @@ class CollectionScreen extends React.PureComponent {
           </View>
         )}
       </SafeAreaView>
-    );
+    )
   }
 }
 
-export default CollectionScreen;
+export default CollectionScreen

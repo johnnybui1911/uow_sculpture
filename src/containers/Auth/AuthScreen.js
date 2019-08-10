@@ -1,49 +1,41 @@
 /* eslint-disable react/prefer-stateless-function */
-import React from "react";
-import {
-  SafeAreaView,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-  TouchableOpacity,
-  TextInput
-} from "react-native";
+import React from 'react'
+import { SafeAreaView, View } from 'react-native'
 import {
   createMaterialTopTabNavigator,
   createAppContainer
-} from "react-navigation";
-import styles from "./styles";
-import palette from "../../assets/palette";
-import { icons } from "../../assets/icons";
-import SignInScreen from "./SignInScreen";
-import SignUpScreen from "./SignUpScreen";
+} from 'react-navigation'
+import styles from './styles'
+import palette from '../../assets/palette'
+import { icons } from '../../assets/icons'
+import SignInScreen from './SignInScreen'
+import SignUpScreen from './SignUpScreen'
 
 const AuthTab = createMaterialTopTabNavigator(
   {
     SignIn: {
       screen: SignInScreen,
       navigationOptions: () => ({
-        title: "SIGN IN"
+        title: 'SIGN IN'
       })
     },
     SignUp: {
       screen: SignUpScreen,
       navigationOptions: () => ({
-        title: "SIGN UP"
+        title: 'SIGN UP'
       })
     }
   },
   {
-    initialRouteName: "SignIn",
+    initialRouteName: 'SignIn',
     animationEnabled: true,
     tabBarOptions: {
       style: {
-        justifyContent: "center",
+        justifyContent: 'center',
         backgroundColor: palette.backgroundColorWhite
       },
       labelStyle: {
-        fontFamily: "Montserrat-SemiBold",
+        fontFamily: 'Montserrat-SemiBold',
         fontSize: 14
       },
       activeTintColor: palette.primaryColor,
@@ -51,13 +43,13 @@ const AuthTab = createMaterialTopTabNavigator(
       indicatorStyle: { backgroundColor: palette.primaryColorLight, height: 3 }
     }
   }
-);
+)
 
-const AuthContainer = createAppContainer(AuthTab);
+const AuthContainer = createAppContainer(AuthTab)
 
 class AuthScreen extends React.PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
@@ -67,8 +59,8 @@ class AuthScreen extends React.PureComponent {
           <View
             style={{
               flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               paddingRight: 40
             }}
           >
@@ -81,8 +73,8 @@ class AuthScreen extends React.PureComponent {
           <AuthContainer />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 }
 
-export default AuthScreen;
+export default AuthScreen

@@ -5,7 +5,7 @@ import {
   View,
   ScrollView,
   Image,
-  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { localData } from '../../library/localData'
@@ -51,17 +51,20 @@ class DetailScreen extends React.PureComponent {
                 style={styles.imageItem}
               />
             </ScrollView>
-            <TouchableOpacity
-              style={{
-                position: 'absolute',
-                top: 56 - 24,
-                padding: 24,
-                borderRadius: 50,
-              }}
+            <TouchableWithoutFeedback
               onPress={() => this.props.navigation.goBack()}
             >
-              <CustomIcon name="back" size={24} color="#fff" />
-            </TouchableOpacity>
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 56 - 24,
+                  padding: 24,
+                  borderRadius: 50
+                }}
+              >
+                <CustomIcon name="back" size={24} color="#fff" />
+              </View>
+            </TouchableWithoutFeedback>
             <LinearGradient
               colors={['rgba(0,0,0,0)', 'rgba(0, 0, 0, 1)']}
               style={styles.overlayImage}

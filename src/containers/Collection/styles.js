@@ -1,29 +1,29 @@
-import { StyleSheet } from "react-native";
-import palette from "../../assets/palette";
+import { StyleSheet } from 'react-native'
+import palette from '../../assets/palette'
 
 const cardItem = {
-  justifyContent: "center",
-  width: "100%",
+  justifyContent: 'center',
+  width: '100%',
   marginVertical: 12,
   paddingHorizontal: 2
-};
+}
 
 const cardDes = {
   paddingVertical: 12,
   backgroundColor: palette.backgroundColorWhite,
-  width: "85%",
+  width: '85%',
   height: 144,
   borderRadius: 12,
   elevation: 5,
   paddingRight: 10
-};
+}
 
 const imageContainer = {
-  position: "absolute",
+  position: 'absolute',
   backgroundColor: palette.backgroundColorWhite,
   borderRadius: 12,
   elevation: 5
-};
+}
 
 export default StyleSheet.create({
   container: {
@@ -32,28 +32,28 @@ export default StyleSheet.create({
   },
   flatList: {
     marginTop: 9,
-    width: "100%"
+    width: '100%'
   },
   title: {
     fontSize: 20,
     color: palette.primaryColor,
-    fontFamily: "Montserrat-SemiBold"
+    fontFamily: 'Montserrat-SemiBold'
   },
   distance: {
     fontSize: 14,
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: 'Montserrat-SemiBold',
     color: palette.primaryColorLight
   },
   description: {
     fontSize: 12,
     color: palette.secondaryTypographyColor,
-    fontFamily: "Montserrat-Medium"
+    fontFamily: 'Montserrat-Medium'
   },
   numberStyle: {
     fontSize: 12,
     color: palette.primaryColor,
-    fontFamily: "Montserrat-SemiBold",
-    paddingLeft: 5
+    fontFamily: 'Montserrat-SemiBold',
+    paddingLeft: 3
   },
   cardItem,
   cardDes,
@@ -73,13 +73,13 @@ export default StyleSheet.create({
   },
   imageContainer,
   searchBox: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginHorizontal: 24,
     height: 44,
     backgroundColor: palette.backgroundColorWhite,
     elevation: 10,
     borderRadius: 12
   }
-});
+})
