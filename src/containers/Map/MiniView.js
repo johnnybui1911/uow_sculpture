@@ -13,7 +13,12 @@ import palette from '../../assets/palette'
 import Divider from '../../components/Divider/Divider'
 import ButtonMyLocation from '../../components/ButtonMyLocation/ButtonMyLocation'
 
-export default ({ marker, _centerUserLocation, _navigateToDetail }) => {
+export default ({
+  marker,
+  _centerUserLocation,
+  _navigateToDetail,
+  children
+}) => {
   return (
     <View style={styles.mini_view_container}>
       <View style={styles.transparent_container}>
@@ -25,7 +30,8 @@ export default ({ marker, _centerUserLocation, _navigateToDetail }) => {
             />
           </View>
         </TouchableWithoutFeedback>
-        <ButtonMyLocation _centerUserLocation={_centerUserLocation} />
+        {children}
+        {/* <ButtonMyLocation _centerUserLocation={_centerUserLocation} /> */}
       </View>
       <View style={styles.description_container}>
         <View style={{ alignItems: 'center' }}>

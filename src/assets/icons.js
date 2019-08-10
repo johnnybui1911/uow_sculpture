@@ -1,7 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 import React from 'react'
 import { Image, View } from 'react-native'
-import { createIconSetFromIcoMoon, FontAwesome } from '@expo/vector-icons'
+import {
+  createIconSetFromIcoMoon,
+  FontAwesome,
+  AntDesign
+} from '@expo/vector-icons'
 import palette from './palette'
 import icoMoonConfig from './selection.json'
 
@@ -15,6 +19,9 @@ export const icons = {
       color={palette.primaryColorLight}
       style={{ padding: 10 }}
     />
+  ),
+  my_location_f: (
+    <CustomIcon name="near-me-f" size={24} color={palette.primaryColorLight} />
   ),
   my_location: (
     <CustomIcon name="near-me" size={24} color={palette.primaryColorLight} />
@@ -74,7 +81,7 @@ export const icons = {
     <CustomIcon name="heart-f" size={16} color={palette.backgroundColorWhite} />
   ),
   like_fill_popup: (
-    <CustomIcon name="heart-f" size={80} color={palette.backgroundColorWhite} />
+    <AntDesign name="heart" color={palette.backgroundColorWhite} size={60} />
   ),
   like_outline: (
     <CustomIcon name="heart-o" size={16} color={palette.primaryColorLight} />

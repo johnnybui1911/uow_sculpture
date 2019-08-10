@@ -6,15 +6,15 @@ import TabNavigator from './TabNavigator'
 const AppStack = createStackNavigator(
   {
     MainTab: {
-      screen: TabNavigator,
+      screen: TabNavigator
     },
     Detail: {
-      screen: DetailScreen,
-    },
+      screen: DetailScreen
+    }
   },
   {
-    initialRouteName: 'MainTab',
-    headerMode: 'none',
+    initialRouteName: 'Detail',
+    headerMode: 'none'
   }
 )
 

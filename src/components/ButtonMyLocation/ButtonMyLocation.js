@@ -6,7 +6,9 @@ import styles from './styles'
 export default props => {
   return (
     <TouchableWithoutFeedback onPress={props._centerUserLocation}>
-      <View style={styles.button_my_location}>{icons.my_location}</View>
+      <View style={styles.button_my_location}>
+        {props.centered ? icons.my_location_f : icons.my_location}
+      </View>
     </TouchableWithoutFeedback>
   )
 }

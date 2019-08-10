@@ -6,8 +6,9 @@ import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { connect } from 'react-redux'
+import numeral from 'numeral'
 import styles from './styles'
-import SearchBox from '../../components/SearchButton/SearchBox'
+import images from '../../assets/images'
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
@@ -19,16 +20,20 @@ import {
   LATITUDE_DELTA,
   LONGITUDE_DELTA
 } from '../../library/maps'
-import images from '../../assets/images'
-import MarkerView from './MarkerView'
-import MiniView from './MiniView'
-import { localData } from '../../library/localData'
 import {
   setInitMarkers,
   selectMarker,
   unselectMarker
 } from '../../redux/actions/markerActions'
 import ButtonMyLocation from '../../components/ButtonMyLocation/ButtonMyLocation'
+import SearchBox from '../../components/SearchButton/SearchBox'
+import MarkerView from './MarkerView'
+import MiniView from './MiniView'
+import { localData } from '../../library/localData'
+
+function formatNumber(number) {
+  return numeral(number).format('0[.]00000')
+}
 
 class MapScreen extends React.PureComponent {
   constructor(props) {
@@ -37,7 +42,8 @@ class MapScreen extends React.PureComponent {
       searchText: '',
       region: null,
       errorMessage: '',
-      userCoordinate: null
+      userCoordinate: null,
+      centered: false
     }
   }
 
@@ -101,7 +107,8 @@ class MapScreen extends React.PureComponent {
                   latitudeDelta: 0,
                   longitudeDelta: 0
                 }),
-                region: userRegion
+                region: userRegion,
+                centered: true
               },
               () => this.map.animateToRegion(userRegion)
             )
@@ -113,6 +120,44 @@ class MapScreen extends React.PureComponent {
         }
       }
     )
+  }
+
+  _centerUserLocation = async () => {
+    const { centered } = this.state
+    if (!centered) {
+      const { status } = await Permissions.askAsync(Permissions.LOCATION)
+      if (status !== 'granted') {
+        this.setState({
+          errorMessage: 'Permission to access location was denied'
+        })
+      }
+      const loc = await Location.getCurrentPositionAsync({})
+      const { latitude, longitude } = loc.coords
+      const { region } = this.state
+      const userRegion = { ...region, latitude, longitude }
+      this.map.animateToRegion(userRegion)
+      this.setState({ centered: true })
+    }
+  }
+
+  _handleRegionChangeComplete = async region => {
+    const { centered } = this.state
+    if (centered) {
+      const { status } = await Permissions.askAsync(Permissions.LOCATION)
+      if (status !== 'granted') {
+        this.setState({
+          errorMessage: 'Permission to access location was denied'
+        })
+      }
+      const loc = await Location.getCurrentPositionAsync({})
+      const { latitude, longitude } = loc.coords
+      if (
+        formatNumber(latitude) !== formatNumber(region.latitude) ||
+        formatNumber(longitude) !== formatNumber(region.longitude)
+      ) {
+        this.setState({ centered: false })
+      }
+    }
   }
 
   _navigateToDetail = item => {
@@ -163,7 +208,12 @@ class MapScreen extends React.PureComponent {
           marker={selected_marker}
           _centerUserLocation={this._centerUserLocation}
           _navigateToDetail={this._navigateToDetail}
-        />
+        >
+          <ButtonMyLocation
+            centered={this.state.centered}
+            _centerUserLocation={this._centerUserLocation}
+          />
+        </MiniView>
       )
     }
 
@@ -174,36 +224,15 @@ class MapScreen extends React.PureComponent {
           { alignItems: 'flex-end', paddingHorizontal: 24, paddingBottom: 12 }
         ]}
       >
-        <ButtonMyLocation _centerUserLocation={this._centerUserLocation} />
+        <ButtonMyLocation
+          centered={this.state.centered}
+          _centerUserLocation={this._centerUserLocation}
+        />
       </View>
     )
   }
 
-  _centerUserLocation = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION)
-    if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied'
-      })
-    }
-
-    const loc = await Location.getCurrentPositionAsync({})
-    const { latitude, longitude } = loc.coords
-    const { region } = this.state
-    const userRegion = { ...region, latitude, longitude }
-    this.map.animateToRegion(userRegion)
-  }
-
   _renderDirection = () => {
-    // const { userLocation } = this.state
-    // if (userLocation) {
-    //   const { latitude, longitude } = userLocation.coords
-    //   const origin = { latitude, longitude }
-    //   const destination = {
-    //     latitude: 21.00299,
-    //     longitude: 105.86681
-    //   }
-
     return (
       <MapViewDirections
         origin={{ latitude: 37.3318456, longitude: -122.0296002 }}
@@ -261,6 +290,9 @@ class MapScreen extends React.PureComponent {
             ref={ref => {
               this.map = ref
             }}
+            onRegionChangeComplete={region =>
+              this._handleRegionChangeComplete(region)
+            }
             initialRegion={region}
             showsCompass={false}
             rotateEnabled={false}

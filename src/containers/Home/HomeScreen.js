@@ -12,7 +12,7 @@ class HomeScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      data: [],
+      data: []
     }
   }
 
@@ -43,7 +43,7 @@ class HomeScreen extends React.PureComponent {
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <HeaderBar headerName="Home" />
-          <View style={styles.nearbyList}>
+          <View>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
             <NearbyList data={data} _renderItem={this._renderNearbyItem} />
           </View>

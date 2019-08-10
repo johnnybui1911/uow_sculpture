@@ -1,5 +1,6 @@
 import React from 'react'
 import { FlatList } from 'react-native'
+import styles from './styles'
 
 const NearbyList = props => {
   const { data, _renderItem } = props
@@ -9,9 +10,6 @@ const NearbyList = props => {
       data={data}
       keyExtractor={(item, index) => item.id.toString()}
       renderItem={_renderItem}
-      contentContainerStyle={{
-        marginTop: 9,
-      }}
       showsHorizontalScrollIndicator={false}
       pagingEnabled
       snapToAlignment="center"

@@ -19,21 +19,36 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: palette.backgroundColorGrey
   },
-  mainImage: {
-    flex: 1,
-    height: height * 0.4,
-    zIndex: 2,
-    borderBottomRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    ...shadowStyle
+  overlayImage: {
+    position: 'absolute',
+    paddingHorizontal: 24,
+    paddingVertical: 7,
+    bottom: 0,
+    height: 60,
+    width: '100%',
+    // borderBottomRightRadius: 12,
+    // borderBottomLeftRadius: 12,
+    justifyContent: 'flex-end'
+  },
+  headerImage: {
+    // borderBottomRightRadius: 12,
+    // borderBottomLeftRadius: 12,
+    // backgroundColor: palette.backgroundColorWhite,
+    // ...shadowStyle,
+    // elevation: 10
   },
   imageItem: {
     width: width,
     height: height * 0.4,
-    borderBottomRightRadius: 12,
-    borderBottomLeftRadius: 12
+    zIndex: 2
+    // borderBottomRightRadius: 12
+    // borderBottomLeftRadius: 12
   },
-  detailContainer: { zIndex: 1, flex: 3, flexDirection: 'column-reverse' },
+  detailContainer: {
+    zIndex: 1,
+    flex: 3,
+    flexDirection: 'column-reverse'
+  },
   card: {
     flex: 1,
     padding: 24,
@@ -41,9 +56,13 @@ export default StyleSheet.create({
     borderBottomRightRadius: 12,
     borderBottomLeftRadius: 12,
     marginTop: -10,
-    borderWidth: 0.5,
-    borderColor: palette.secondaryTypographyColor,
-    ...shadowStyle
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.1
   },
   contentBox: {
     flex: 1,
@@ -81,17 +100,6 @@ export default StyleSheet.create({
     fontSize: 12,
     color: palette.backgroundColorWhite,
     fontFamily: 'Montserrat-SemiBold'
-  },
-  overlayImage: {
-    position: 'absolute',
-    paddingHorizontal: 24,
-    paddingVertical: 7,
-    bottom: 0,
-    height: 60,
-    width: '100%',
-    borderBottomRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    justifyContent: 'flex-end'
   },
   button: {
     flex: 1,

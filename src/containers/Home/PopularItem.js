@@ -1,43 +1,36 @@
-import React from "react";
-import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
-import styles from "./styles";
-import images from "../../assets/images";
+import React from 'react'
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native'
+import styles from './styles'
+import images from '../../assets/images'
+import palette from '../../assets/palette'
 
 const PopularItem = props => {
-  const { item, index, navigation } = props;
+  const { item, index, navigation } = props
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("Detail", { item })}
+      onPress={() => navigation.navigate('Detail', { item })}
     >
       <View
         style={{
           marginLeft: index === 0 ? 24 : 0,
-          marginRight: 12
+          marginRight: 12,
+          backgroundColor: palette.backgroundColorGrey,
+          borderRadius: 12,
+          elevation: 4
         }}
       >
         <Image
           source={images.sculptures[item.photoURL]}
-          style={{
-            width: 135,
-            height: 186,
-            borderRadius: 12
-          }}
+          style={styles.imagePopularItem}
         />
-        <View
-          style={{
-            position: "absolute",
-            marginHorizontal: 10,
-            top: 158,
-            flexDirection: "row"
-          }}
-        >
-          <View style={{ flex: 1, justifyContent: "space-evenly" }}>
+        <View style={styles.popularItemDetail}>
+          <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
             <Text style={styles.secondaryTitle}>{item.name}</Text>
           </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
-  );
-};
+  )
+}
 
-export default PopularItem;
+export default PopularItem

@@ -1,13 +1,15 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableWithoutFeedback } from 'react-native'
 import Divider from '../../components/Divider/Divider'
 import { icons } from '../../assets/icons'
 import styles from './styles'
+import LikeButton from '../Collection/LikeButton'
 
 export default function TitleCard(props) {
-  const { item } = props
+  const { item, elevation } = props
+  const cardStyle = [styles.card, { elevation, marginTop: 0 }]
   return (
-    <View style={[styles.card]}>
+    <View style={cardStyle}>
       <Text style={styles.distance}>{item.distance} m</Text>
       <Text style={styles.title}>{item.name}</Text>
       <Divider />
@@ -15,24 +17,30 @@ export default function TitleCard(props) {
         style={{
           flex: 1,
           alignItems: 'flex-end',
-          flexDirection: 'row',
+          flexDirection: 'row'
         }}
       >
         <View
           style={{
             flexDirection: 'row',
             marginRight: 20,
+            alignItems: 'center',
+            marginLeft: -5
           }}
         >
-          {icons.like_fill}
+          <LikeButton />
           <Text style={styles.numberStyle}>100</Text>
         </View>
         <View
           style={{
             flexDirection: 'row',
+            alignItems: 'center',
+            marginLeft: -5
           }}
         >
-          {icons.comment}
+          <TouchableWithoutFeedback>
+            <View style={{ padding: 5 }}>{icons.comment}</View>
+          </TouchableWithoutFeedback>
           <Text style={styles.numberStyle}>2</Text>
         </View>
       </View>

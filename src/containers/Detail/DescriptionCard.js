@@ -1,12 +1,13 @@
-import React from "react";
-import { View, Text } from "react-native";
-import Divider from "../../components/Divider/Divider";
-import styles from "./styles";
+import React from 'react'
+import { View, Text } from 'react-native'
+import Divider from '../../components/Divider/Divider'
+import styles from './styles'
 
 export default function DescriptionCard(props) {
-  const { item } = props;
+  const { item, elevation } = props
+  const cardStyle = [styles.card, { elevation }]
   return (
-    <View style={styles.card}>
+    <View style={cardStyle}>
       <Text style={[styles.title, { fontSize: 20 }]}>Description</Text>
       <Divider />
       <View>
@@ -23,5 +24,5 @@ export default function DescriptionCard(props) {
         <Text style={styles.description}>{item.description.creditLine}</Text>
       </View>
     </View>
-  );
+  )
 }
