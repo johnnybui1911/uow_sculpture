@@ -20,6 +20,14 @@ export const icons = {
       style={{ padding: 10 }}
     />
   ),
+  close_w: (
+    <CustomIcon
+      name="close"
+      size={20}
+      color={palette.backgroundColorWhite}
+      style={{ padding: 10 }}
+    />
+  ),
   my_location_f: (
     <CustomIcon name="near-me-f" size={24} color={palette.primaryColorLight} />
   ),

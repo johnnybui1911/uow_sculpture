@@ -11,15 +11,18 @@ class MarkerView extends React.PureComponent {
   }
 
   render() {
-    const { marker, pressed, selected } = this.props
-    if (selected && !pressed) {
+    const { marker, selectedMarker } = this.props
+    if (selectedMarker) {
       return (
         <Marker
           zIndex={1}
           coordinate={marker.coordinate}
           onPress={() => this.props._onMarkerPressed(marker.id, marker.name)}
+          image={marker.id === selectedMarker.id ? images.chosen_marker : null}
         >
-          <View style={styles.unselected_marker} />
+          {marker.id !== selectedMarker.id ? (
+            <View style={styles.unselected_marker} />
+          ) : null}
         </Marker>
       )
     }
@@ -28,10 +31,14 @@ class MarkerView extends React.PureComponent {
         zIndex={1}
         coordinate={marker.coordinate}
         onPress={() => this.props._onMarkerPressed(marker.id, marker.name)}
-        image={pressed ? images.chosen_marker : images.marker}
+        image={images.marker}
       />
     )
   }
 }
 
-export default MarkerView
+const mapStateToProps = getState => ({
+  selectedMarker: getState.markerReducer.selectedMarker
+})
+
+export default connect(mapStateToProps)(MarkerView)

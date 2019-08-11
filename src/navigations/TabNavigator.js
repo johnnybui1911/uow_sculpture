@@ -5,6 +5,7 @@ import AuthScreen from '../containers/Auth/AuthScreen'
 import CustomBottomTab from '../components/BottomTabBar/CustomBottomTab'
 import PersonalScreen from '../containers/Personal/PersonalScreen'
 import HomeScreen from '../containers/Home/HomeScreen'
+import ProfileContainer from './ProfileContainer'
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -18,11 +19,11 @@ const TabNavigator = createBottomTabNavigator(
       screen: CollectionScreen
     },
     Profile: {
-      screen: PersonalScreen
+      screen: ProfileContainer
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Profile',
     tabBarPosition: 'bottom',
     tabBarComponent: CustomBottomTab,
     animationEnabled: true

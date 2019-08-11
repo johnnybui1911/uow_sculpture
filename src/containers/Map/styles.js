@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import { SCREEN_WIDTH } from '../../assets/dimension'
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../assets/dimension'
 
 const shadowStyle = {
   elevation: 4,
@@ -18,9 +18,11 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: palette.backgroundColorGrey
   },
-  flatList: {
-    marginTop: 9,
-    width: '100%'
+  mapStyle: {
+    flex: 1,
+    position: 'absolute',
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH
   },
   title: {
     fontSize: 36,

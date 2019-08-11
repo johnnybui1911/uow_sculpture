@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Text,
   View,
@@ -6,32 +6,37 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput
-} from "react-native";
-import styles from "./styles";
-import palette from "../../assets/palette";
-import { icons } from "../../assets/icons";
+} from 'react-native'
+import { connect } from 'react-redux'
+import styles from './styles'
+import palette from '../../assets/palette'
+import { icons } from '../../assets/icons'
+import { thunkSignIn } from '../../redux/actions/authActions'
 
 class SignInScreen extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      email: "",
-      password: ""
-    };
+      email: '',
+      password: ''
+    }
   }
   render() {
     return (
       <ScrollView>
-        <View style={{ flex: 1, justifyContent: "space-between" }}>
+        <View style={{ flex: 1, justifyContent: 'space-between' }}>
           <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
           >
             <View style={{ marginVertical: 20 }}>
               <Text style={styles.title}>Sign in with</Text>
             </View>
-            <TouchableOpacity style={styles.box}>
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => this.props.handleAuthorize({ username: 'Name' })}
+            >
               <View style={{ flex: 1, padding: 20 }}>{icons.google}</View>
-              <View style={{ position: "absolute" }}>
+              <View style={{ position: 'absolute' }}>
                 <Text style={styles.titleButton}>GOOGLE</Text>
               </View>
             </TouchableOpacity>
@@ -39,7 +44,7 @@ class SignInScreen extends React.Component {
               style={[styles.box, { backgroundColor: palette.facebookColor }]}
             >
               <View style={{ flex: 1, padding: 20 }}>{icons.facebook}</View>
-              <View style={{ position: "absolute" }}>
+              <View style={{ position: 'absolute' }}>
                 <Text
                   style={[
                     styles.titleButton,
@@ -54,14 +59,14 @@ class SignInScreen extends React.Component {
           <View style={styles.middleSeparator}>
             <View
               style={{
-                justifyContent: "center"
+                justifyContent: 'center'
               }}
             >
               <View style={styles.lineSeparator} />
             </View>
             <View
               style={{
-                justifyContent: "center"
+                justifyContent: 'center'
               }}
             >
               <Text
@@ -79,16 +84,16 @@ class SignInScreen extends React.Component {
 
             <View
               style={{
-                justifyContent: "center"
+                justifyContent: 'center'
               }}
             >
               <View style={styles.lineSeparator} />
             </View>
           </View>
           <View
-            style={{ flex: 2, alignItems: "center", justifyContent: "center" }}
+            style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}
           >
-            <View style={styles.box}>
+            <View style={styles.inputBox}>
               <View style={{ padding: 20 }}>{icons.mail}</View>
               <TextInput
                 value={this.state.email}
@@ -97,7 +102,7 @@ class SignInScreen extends React.Component {
                 style={styles.input}
               />
             </View>
-            <View style={[styles.box]}>
+            <View style={[styles.inputBox]}>
               <View style={{ padding: 20 }}>{icons.lock}</View>
               <TextInput
                 value={this.state.password}
@@ -116,7 +121,7 @@ class SignInScreen extends React.Component {
               style={[
                 styles.box,
                 {
-                  alignItems: "center",
+                  alignItems: 'center',
                   backgroundColor: palette.primaryColorLight
                 }
               ]}
@@ -135,8 +140,17 @@ class SignInScreen extends React.Component {
           </View>
         </View>
       </ScrollView>
-    );
+    )
   }
 }
 
-export default SignInScreen;
+const mapDispatchToProps = dispatch => ({
+  handleAuthorize: userAuth => {
+    dispatch(thunkSignIn(userAuth))
+  }
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignInScreen)

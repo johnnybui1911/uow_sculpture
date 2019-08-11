@@ -6,12 +6,14 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
-  ScrollView,
+  ScrollView
 } from 'react-native'
+import { connect } from 'react-redux'
 import FeatureCard from './FeatureCard'
 import styles from './styles'
 import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
+import { signInRejected } from '../../redux/actions/authActions'
 
 const AboutScreen = props => {
   const username = props.username || 'Cristiano Ronaldo'
@@ -24,7 +26,7 @@ const AboutScreen = props => {
           flex: 1,
           backgroundColor: palette.backgroundColorWhite,
           padding: 24,
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
       >
         <FeatureCard email={email} joinDate={joinDate} />
@@ -37,7 +39,7 @@ const AboutScreen = props => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={[styles.button]}>
+        <TouchableOpacity style={[styles.button]} onPress={props.handleSignOut}>
           <View style={{ flex: 1 }}>
             <Text
               style={[
@@ -45,8 +47,8 @@ const AboutScreen = props => {
                 {
                   color: palette.primaryColorLight,
                   fontSize: 16,
-                  textAlign: 'center',
-                },
+                  textAlign: 'center'
+                }
               ]}
             >
               SIGN OUT
@@ -58,4 +60,13 @@ const AboutScreen = props => {
   )
 }
 
-export default AboutScreen
+const mapDispatchToProps = dispatch => ({
+  handleSignOut: () => {
+    dispatch(signInRejected())
+  }
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AboutScreen)

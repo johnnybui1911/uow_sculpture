@@ -1,14 +1,12 @@
 import {
   MARKER_SELECTED,
   MARKER_UNSELECTED,
-  MAP_SELECTED,
   INIT_MARKERS
 } from '../../assets/actionTypes'
 
 const initialState = {
   markers: [],
-  selected: false,
-  selected_id: null
+  selectedMarker: null
 }
 
 const markerReducer = (state = initialState, action) => {
@@ -21,24 +19,13 @@ const markerReducer = (state = initialState, action) => {
       const { markerID } = action
       const { markers } = state
 
-      markers.map(marker => {
-        if (marker.id !== markerID) {
-          marker.pressed = false
-        } else {
-          marker.pressed = true
-        }
-      })
+      const selectedMarker = markers.find(marker => marker.id === markerID)
 
-      return { ...state, markers, selected: true, selected_id: markerID }
+      return { ...state, selectedMarker }
     }
 
     case MARKER_UNSELECTED: {
-      const { markers } = state
-      markers.map(marker => {
-        marker.pressed = false
-      })
-
-      return { ...state, markers, selected: false, selected_id: null }
+      return { ...state, selectedMarker: null }
     }
 
     default:

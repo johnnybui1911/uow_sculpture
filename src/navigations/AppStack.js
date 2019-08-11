@@ -1,4 +1,3 @@
-import React from 'react'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import DetailScreen from '../containers/Detail/DetailScreen'
 import TabNavigator from './TabNavigator'
@@ -13,7 +12,7 @@ const AppStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'MainTab',
+    initialRouteName: 'Detail',
     headerMode: 'none'
   }
 )

@@ -5,12 +5,8 @@ import {
 } from '../../assets/actionTypes'
 
 export const setInitMarkers = data => {
-  const markers = data.map(marker => {
-    const { id, name, coordinate } = marker
-    return { id, name, coordinate, pressed: false }
-  })
   //   console.log(markers)
-  return { type: INIT_MARKERS, payload: markers }
+  return { type: INIT_MARKERS, payload: data }
 }
 
 export const selectMarker = markerID => {

@@ -13,7 +13,8 @@ class CollectionScreen extends React.PureComponent {
     this.state = {
       data: [],
       loading: true,
-      searchText: ''
+      searchText: '',
+      closed: false
     }
   }
 
@@ -26,8 +27,15 @@ class CollectionScreen extends React.PureComponent {
   }
 
   _handleSearch = event => {
-    const { text } = event.nativeEvent
-    this.setState({ searchText: text.trim() })
+    const { closed } = this.state
+    if (!closed) {
+      const { text } = event.nativeEvent
+      this.setState({ searchText: text.trim(), closed: false })
+    }
+  }
+
+  _onClosePressed = () => {
+    this.setState({ searchText: '', closed: true })
   }
 
   _renderItem = ({ item }) => {
@@ -67,6 +75,7 @@ class CollectionScreen extends React.PureComponent {
             <SearchBox
               _handleSearch={this._handleSearch}
               searchText={searchText}
+              _onClosePressed={this._onClosePressed}
             />
             <View
               style={{

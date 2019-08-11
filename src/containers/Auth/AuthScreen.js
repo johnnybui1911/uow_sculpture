@@ -55,7 +55,7 @@ class AuthScreen extends React.PureComponent {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{ flex: 2, backgroundColor: palette.primaryColor }}>
+        <View style={styles.header}>
           <View
             style={{
               flex: 1,

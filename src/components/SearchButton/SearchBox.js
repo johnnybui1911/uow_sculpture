@@ -1,11 +1,12 @@
 import React from 'react'
 import { View, TextInput, TouchableWithoutFeedback } from 'react-native'
+import { connect } from 'react-redux'
 import { FontAwesome } from '@expo/vector-icons'
 import { icons } from '../../assets/icons'
 import styles from './styles'
 import palette from '../../assets/palette'
 
-const SearchBox = props => (
+const SearchBox = ({ searchText, _handleSearch, _onClosePressed }) => (
   <View style={styles.searchBox}>
     <FontAwesome
       style={{ padding: 10 }}
@@ -14,8 +15,10 @@ const SearchBox = props => (
       color={palette.primaryColorLight}
     />
     <TextInput
-      value={props.searchText}
-      onChange={e => props._handleSearch(e)}
+      value={searchText}
+      onChange={e => {
+        _handleSearch(e)
+      }}
       placeholder="Enter keywords..."
       style={{
         flex: 1,
@@ -27,10 +30,10 @@ const SearchBox = props => (
         fontSize: 14
       }}
     />
-    {props.markerSelected ? (
+    {searchText ? (
       <TouchableWithoutFeedback
         onPress={() => {
-          props._onMarkerUnPressed()
+          _onClosePressed()
         }}
       >
         {icons.close}

@@ -19,6 +19,13 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: palette.backgroundColorGrey
   },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: 5,
+    zIndex: 1
+  },
   overlayImage: {
     position: 'absolute',
     paddingHorizontal: 24,

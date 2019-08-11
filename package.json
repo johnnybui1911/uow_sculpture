@@ -21,6 +21,7 @@
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-image-zoom-viewer": "^2.2.26",
     "react-native-maps": "^0.24.2",
     "react-native-maps-directions": "^1.7.0",
     "react-native-shadow": "^1.2.2",
