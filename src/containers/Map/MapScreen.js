@@ -179,6 +179,7 @@ class MapScreen extends React.PureComponent {
           }}
           coordinate={userCoordinate}
           image={images.user_location}
+          onPress={this._centerUserLocation}
         />
       )
     }

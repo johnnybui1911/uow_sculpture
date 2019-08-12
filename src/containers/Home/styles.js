@@ -12,9 +12,10 @@ const shadowStyle = {
   shadowOpacity: 0.1
 }
 
-const WIDTH = Dimensions.get('window').width
-const HEIGHT = 378
+const WIDTH = Math.floor(Dimensions.get('window').width)
 const PADDING = 12
+const IMAGE_WIDTH = WIDTH - PADDING * 2
+const IMAGE_HEIGHT = IMAGE_WIDTH * 1.15
 
 export default StyleSheet.create({
   container: {
@@ -23,8 +24,8 @@ export default StyleSheet.create({
   },
   nearbyItemStyle: {
     // root container
-    width: WIDTH - PADDING * 2,
-    height: HEIGHT,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
     padding: PADDING,
     margin: PADDING,
     backgroundColor: palette.backgroundColorGrey,

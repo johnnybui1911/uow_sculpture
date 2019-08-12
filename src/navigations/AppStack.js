@@ -12,7 +12,7 @@ const AppStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Detail',
+    initialRouteName: 'MainTab',
     headerMode: 'none'
   }
 )

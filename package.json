@@ -25,6 +25,7 @@
     "react-native-maps": "^0.24.2",
     "react-native-maps-directions": "^1.7.0",
     "react-native-shadow": "^1.2.2",
+    "react-native-swiper": "^1.6.0-nightly.3",
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.1",
     "react-redux": "^7.1.0",

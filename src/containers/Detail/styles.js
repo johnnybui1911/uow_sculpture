@@ -14,6 +14,14 @@ const shadowStyle = {
   shadowOpacity: 0.1
 }
 
+const dot = {
+  backgroundColor: 'rgba(185,185,185,.2)',
+  width: 5,
+  height: 5,
+  borderRadius: 10,
+  margin: 3
+}
+
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -23,7 +31,7 @@ export default StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    padding: 5,
+    padding: 24,
     zIndex: 1
   },
   overlayImage: {
@@ -35,7 +43,8 @@ export default StyleSheet.create({
     width: '100%',
     // borderBottomRightRadius: 12,
     // borderBottomLeftRadius: 12,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    zIndex: 10
   },
   headerImage: {
     // borderBottomRightRadius: 12,
@@ -52,8 +61,6 @@ export default StyleSheet.create({
     // borderBottomLeftRadius: 12
   },
   detailContainer: {
-    zIndex: 1,
-    flex: 3,
     flexDirection: 'column-reverse'
   },
   card: {
@@ -62,7 +69,7 @@ export default StyleSheet.create({
     backgroundColor: palette.backgroundColorWhite,
     borderBottomRightRadius: 12,
     borderBottomLeftRadius: 12,
-    marginTop: -10,
+    marginTop: -5,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
@@ -124,5 +131,18 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     color: palette.backgroundColorWhite,
     textAlign: 'center'
+  },
+  activeDot: {
+    ...dot,
+    backgroundColor: palette.backgroundColorWhite
+  },
+  dot,
+  blackFullscreen: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#000000'
   }
 })

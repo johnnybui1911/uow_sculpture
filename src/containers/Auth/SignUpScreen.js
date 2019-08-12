@@ -33,7 +33,7 @@ class SignUpScreen extends React.Component {
               marginVertical: 30
             }}
           >
-            <View
+            {/* <View
               style={{
                 height: 100,
                 width: 100,
@@ -42,9 +42,9 @@ class SignUpScreen extends React.Component {
                 borderRadius: 50,
                 backgroundColor: palette.primaryColor
               }}
-            >
-              {icons.camera}
-            </View>
+            > */}
+            {icons.camera}
+            {/* </View> */}
             <View style={{ marginTop: 10 }}>
               <Text style={[styles.title, { fontSize: 14 }]}>
                 Upload Profile Picture

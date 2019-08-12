@@ -1,23 +1,15 @@
 import React from 'react'
-import {
-  View,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Image,
-  Text,
-  Modal,
-  Dimensions,
-  StatusBar,
-  Platform
-} from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
-import ImageViewer from 'react-native-image-zoom-viewer'
-import { CustomIcon, icons } from '../../assets/icons'
+import { View, TouchableWithoutFeedback, Image, Text } from 'react-native'
+import Swiper from 'react-native-swiper'
+import { CustomIcon } from '../../assets/icons'
 import styles from './styles'
 import images from '../../assets/images'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
+import ImageViewerModal from './ImageViewerModal'
+import ImageOverlay from '../../components/ImageOverlay.js/ImageOverlay'
+import BackButton from '../../components/BackButton/BackButton'
 
-const localImages = [1, 2, 3]
+const localImages = [1, 2, 3, 4]
 
 const imageSlide = localImages.map(index => {
   return {
@@ -31,34 +23,52 @@ const imageSlide = localImages.map(index => {
   }
 })
 
+const activeDot = <View style={activeDot} />
+
 class Header extends React.PureComponent {
   state = {
-    modalVisible: false
+    modalVisible: false,
+    currentIndex: 0
+  }
+
+  swiper = null
+
+  _onMomentumScrollEnd = (e, state, context) => {
+    this.setState({ currentIndex: state.index })
   }
 
   setModalVisible = visible => {
     this.setState({ modalVisible: visible })
   }
+
+  setCurrentIndex = targetIndex => {
+    const crrIndex = this.swiper.state.index
+    const offset = targetIndex - crrIndex // offset to scroll to current index
+    this.swiper.scrollBy(offset)
+  }
+
+  _goBack = () => {
+    this.props.navigation.goBack()
+  }
+
   render() {
+    const { modalVisible, currentIndex } = this.state
     return (
       <View style={styles.headerImage}>
-        <Modal visible={this.state.modalVisible} transparent>
-          <ImageViewer
-            renderHeader={() => (
-              <TouchableWithoutFeedback
-                onPress={() => this.setModalVisible(false)}
-              >
-                <View style={styles.closeButton}>{icons.close_w}</View>
-              </TouchableWithoutFeedback>
-            )}
-            enableImageZoom
-            imageUrls={imageSlide}
-          />
-        </Modal>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
+        <ImageViewerModal
+          modalVisible={modalVisible}
+          imageSlide={imageSlide}
+          setModalVisible={this.setModalVisible}
+          currentIndex={currentIndex}
+          setCurrentIndex={this.setCurrentIndex}
+        />
+        <Swiper
+          height="100%"
+          activeDotColor="#fff"
+          dotColor="rgba(185,185,185,.2)"
+          paginationStyle={{ bottom: 7 }}
+          ref={component => (this.swiper = component)}
+          onMomentumScrollEnd={this._onMomentumScrollEnd}
         >
           {localImages.map(index => {
             return (
@@ -72,33 +82,18 @@ class Header extends React.PureComponent {
                     resizeMode="cover"
                     style={styles.imageItem}
                   />
+                  <ImageOverlay />
                 </View>
               </TouchableWithoutFeedback>
             )
           })}
-        </ScrollView>
-        <TouchableWithoutFeedback
-          onPress={() => this.props.navigation.goBack()}
-        >
-          <View
-            style={{
-              position: 'absolute',
-              top: 56 - 24,
-              padding: 24,
-              borderRadius: 50
-            }}
-          >
-            <CustomIcon name="back" size={24} color="#fff" />
-          </View>
-        </TouchableWithoutFeedback>
-        <LinearGradient
-          colors={['rgba(0,0,0,0)', 'rgba(0, 0, 0, 1)']}
-          style={styles.overlayImage}
-        >
+        </Swiper>
+        <View style={styles.overlayImage}>
           <View>
             <Text style={styles.visitorsText}>100 visitors</Text>
           </View>
-        </LinearGradient>
+        </View>
+        <BackButton _goBack={this._goBack} />
       </View>
     )
   }

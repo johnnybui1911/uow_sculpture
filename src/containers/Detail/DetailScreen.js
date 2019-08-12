@@ -33,7 +33,7 @@ class DetailScreen extends React.PureComponent {
             <DescriptionCard item={item} elevation={3} />
             <FeatureCard item={item} elevation={4} />
             <TitleCard item={item} elevation={5} />
-            <Header />
+            <Header navigation={this.props.navigation} />
           </View>
         </ScrollView>
       </SafeAreaView>

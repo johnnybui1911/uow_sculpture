@@ -23,7 +23,7 @@ const TabNavigator = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'Profile',
+    initialRouteName: 'Map',
     tabBarPosition: 'bottom',
     tabBarComponent: CustomBottomTab,
     animationEnabled: true
