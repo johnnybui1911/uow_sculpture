@@ -11,8 +11,14 @@ import images from '../../assets/images'
 import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
 import Divider from '../../components/Divider/Divider'
+import SwipeButton from '../../components/SwipeButton/SwipeButton'
 
-export default ({ marker, _navigateToDetail, children }) => {
+export default ({
+  marker,
+  _navigateToDetail,
+  children,
+  _handleShowDirection
+}) => {
   return (
     <View style={styles.mini_view_container}>
       <View style={styles.transparent_container}>
@@ -27,16 +33,7 @@ export default ({ marker, _navigateToDetail, children }) => {
         {children}
       </View>
       <View style={styles.description_container}>
-        <View style={{ alignItems: 'center' }}>
-          <View
-            style={{
-              height: 3,
-              backgroundColor: palette.secondaryTypographyColor,
-              width: 32,
-              borderRadius: 12
-            }}
-          />
-        </View>
+        <SwipeButton />
         <Text style={styles.distance}>500 m</Text>
         <Text style={styles.title}>{marker.name}</Text>
         <View
@@ -45,8 +42,8 @@ export default ({ marker, _navigateToDetail, children }) => {
             alignItems: 'center'
           }}
         >
-          <Text style={styles.description}>{marker.des}</Text>
-          {icons.one_dot}
+          {/* <Text style={styles.description}>{marker.des}</Text>
+          {icons.one_dot} */}
           <Text style={styles.description}>5 min</Text>
         </View>
         <Divider />
@@ -75,7 +72,10 @@ export default ({ marker, _navigateToDetail, children }) => {
             <Text style={styles.numberStyle}>2</Text>
           </View>
         </View>
-        <TouchableOpacity style={[styles.button]}>
+        <TouchableOpacity
+          style={[styles.button]}
+          onPress={() => _handleShowDirection(true)}
+        >
           <View style={{ flex: 1 }}>
             <Text style={[styles.titleButton]}>GO THERE</Text>
           </View>

@@ -39,7 +39,16 @@ const AboutScreen = props => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={[styles.button]} onPress={props.handleSignOut}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              borderWidth: 1,
+              borderColor: palette.primaryColorLight
+            }
+          ]}
+          onPress={props.handleSignOut}
+        >
           <View style={{ flex: 1 }}>
             <Text
               style={[

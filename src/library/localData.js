@@ -25,7 +25,7 @@ export const localData = [
     id: 2,
     name: 'Midnight',
     distance: 300,
-    des: 'Western side of the Ring Road accross from ...',
+    des: 'Western side of the Ring Road accross from',
     features: {
       date: '1988-1989',
       maker: 'Bert Flugelman',

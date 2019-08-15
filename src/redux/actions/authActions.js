@@ -1,7 +1,7 @@
-import { SIGN_IN_REJECTED, SIGN_IN_SUCCESFULL } from '../../assets/actionTypes'
+import { SIGN_IN_REJECTED, SIGN_IN_SUCCESSFULL } from '../../assets/actionTypes'
 
 export const signInSuccesful = userAuth => {
-  return { type: SIGN_IN_SUCCESFULL, payload: { user: userAuth } }
+  return { type: SIGN_IN_SUCCESSFULL, payload: { user: userAuth } }
 }
 
 export const signInRejected = () => {

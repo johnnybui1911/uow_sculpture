@@ -8,14 +8,16 @@ import {
   SafeAreaView,
   Text
 } from 'react-native'
-import IntroScreen from './containers/Introduction/IntroScreen'
+import Constants from 'expo-constants'
+import { connect } from 'react-redux'
+import { syncLocationThunk } from './redux/actions/locationActions'
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
 } from './assets/dimension'
 import { AppContainer } from './navigations/AppStack'
-import Constants from 'expo-constants'
+import IntroScreen from './containers/Introduction/IntroScreen'
 
 // TODO: just swipe up, not swipe down
 class MainScreen extends React.PureComponent {
@@ -46,6 +48,10 @@ class MainScreen extends React.PureComponent {
         }
       }
     })
+  }
+
+  componentWillMount = () => {
+    this.props.syncLocationThunk()
   }
 
   render() {
@@ -82,4 +88,11 @@ class MainScreen extends React.PureComponent {
   }
 }
 
-export default MainScreen
+const mapDispatchToProps = {
+  syncLocationThunk
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(MainScreen)

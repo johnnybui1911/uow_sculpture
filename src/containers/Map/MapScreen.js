@@ -9,29 +9,23 @@ import { connect } from 'react-redux'
 import numeral from 'numeral'
 import styles from './styles'
 import images from '../../assets/images'
+import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import {
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT
-} from '../../assets/dimension'
-import {
-  GOOGLE_MAPS_APIKEY,
-  URL_TEMPLATE,
   LATITUDE_DELTA,
-  LONGITUDE_DELTA
+  LONGITUDE_DELTA,
+  URL_TEMPLATE
 } from '../../library/maps'
 import {
   setInitMarkers,
   selectMarker,
   unselectMarker
 } from '../../redux/actions/markerActions'
-import ButtonMyLocation from '../../components/ButtonMyLocation/ButtonMyLocation'
 import SearchBox from '../../components/SearchButton/SearchBox'
-import MarkerView from './MarkerView'
-import MiniView from './MiniView'
 import { localData } from '../../library/localData'
 import Footer from './Footer'
 import MarkersContainer from './MarkersContainer'
+import Direction from './Direction'
+import Header from './Header'
 
 function formatNumber(number) {
   return numeral(number).format('0[.]00000')
@@ -45,19 +39,31 @@ function compareCoordinate(coor1, coor2) {
 }
 
 class MapScreen extends React.PureComponent {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      tabBarVisible: navigation.getParam('showTab', true)
+    }
+  }
+
   constructor(props) {
     super(props)
     this.state = {
+      region: {
+        latitude: -34.4114455,
+        longitude: 150.8939863,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      },
+      steps: [],
+      showSteps: false,
+      centered: false,
+      showDirection: false,
       searchText: '',
-      region: null,
-      errorMessage: '',
-      userCoordinate: null,
-      centered: false
+      errorMessage: ''
     }
   }
 
   componentWillMount = () => {
-    const { errorMessage } = this.state
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
         errorMessage:
@@ -75,6 +81,8 @@ class MapScreen extends React.PureComponent {
   componentWillUnmount = () => {
     this.subscribeLocation()
   }
+
+  userCoordinate = null
 
   subscribeLocation = null
 
@@ -94,35 +102,32 @@ class MapScreen extends React.PureComponent {
       },
       loc => {
         if (loc.timestamp) {
-          const { userCoordinate } = this.state
           const { latitude, longitude } = loc.coords
-          const newCoordinate = {
-            latitude,
-            longitude
-          }
-          if (!userCoordinate) {
+          if (!this.userCoordinate) {
+            this.userCoordinate = new AnimatedRegion({
+              latitude: latitude,
+              longitude: longitude,
+              latitudeDelta: 0,
+              longitudeDelta: 0
+            })
             const userRegion = {
               latitude,
               longitude,
               latitudeDelta: LATITUDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA
             }
-
             this.setState(
               {
-                userCoordinate: new AnimatedRegion({
-                  latitude: latitude,
-                  longitude: longitude,
-                  latitudeDelta: 0,
-                  longitudeDelta: 0
-                }),
                 region: userRegion,
                 centered: true
               },
               () => this.map.animateToRegion(userRegion)
             )
           } else {
-            userCoordinate.timing(newCoordinate).start()
+            const duration = 500
+            this.userCoordinate
+              .timing({ latitude, longitude, duration })
+              .start()
           }
         } else {
           this.setState({ errorMessage: 'Problems on update location' })
@@ -131,36 +136,28 @@ class MapScreen extends React.PureComponent {
     )
   }
 
-  _centerUserLocation = async () => {
+  _centerUserLocation = () => {
     const { centered } = this.state
     if (!centered) {
-      const { status } = await Permissions.askAsync(Permissions.LOCATION)
-      if (status !== 'granted') {
-        this.setState({
-          errorMessage: 'Permission to access location was denied'
-        })
-      }
-      const loc = await Location.getCurrentPositionAsync({})
-      const { latitude, longitude } = loc.coords
       const { region } = this.state
-      const userRegion = { ...region, latitude, longitude }
-      this.map.animateToRegion(userRegion)
-      this.setState({ centered: true })
+      if (this.userCoordinate) {
+        const loc = this.userCoordinate.__getValue()
+        const { latitude, longitude } = loc
+        const userRegion = { ...region, latitude, longitude }
+        this.map.animateToRegion(userRegion)
+        this.setState({ centered: true })
+      }
     }
   }
 
-  _handleRegionChangeComplete = async region => {
+  _handleRegionChangeComplete = region => {
     const { centered } = this.state
     if (centered) {
-      const { status } = await Permissions.askAsync(Permissions.LOCATION)
-      if (status !== 'granted') {
-        this.setState({
-          errorMessage: 'Permission to access location was denied'
-        })
-      }
-      const loc = await Location.getCurrentPositionAsync({})
-      if (!compareCoordinate(loc.coords, region)) {
-        this.setState({ centered: false })
+      if (this.userCoordinate) {
+        const loc = this.userCoordinate.__getValue()
+        if (!compareCoordinate(loc, region)) {
+          this.setState({ centered: false })
+        }
       }
     }
   }
@@ -170,14 +167,13 @@ class MapScreen extends React.PureComponent {
   }
 
   _renderUserLocation = () => {
-    const { userCoordinate } = this.state
-    if (userCoordinate) {
+    if (this.userCoordinate) {
       return (
         <Marker.Animated
           ref={marker => {
             this.marker = marker
           }}
-          coordinate={userCoordinate}
+          coordinate={this.userCoordinate}
           image={images.user_location}
           onPress={this._centerUserLocation}
         />
@@ -190,49 +186,54 @@ class MapScreen extends React.PureComponent {
     this.setState({ searchText: text.trim() })
   }
   _onMarkerPressed = (markerID, markerName) => {
+    if (this.props.navigation.getParam('showTab', true)) {
+      this.props.navigation.setParams({ showTab: false })
+    }
     this.props.handleSelectMarker(markerID)
     this.setState({ searchText: markerName.trim() })
   }
 
   _onClosePressed = () => {
+    this.props.navigation.setParams({ showTab: true })
     this.props.handleUnselectMarker()
-    this.setState({ searchText: '' })
+    this.setState({ searchText: '', showDirection: false })
   }
 
-  _renderDirection = () => {
-    return (
-      <MapViewDirections
-        origin={{ latitude: 37.3318456, longitude: -122.0296002 }}
-        destination={{ latitude: 37.771707, longitude: -122.4053769 }}
-        apikey={GOOGLE_MAPS_APIKEY}
-        strokeWidth={2}
-        strokeColor="hotpink"
-        style={{ zIndex: 9 }}
-        // onStart={params => {
-        //   console.log(
-        //     `Started routing between "${params.origin}" and "${
-        //       params.destination
-        //     }"`
-        //   )
-        // }}
-        // onReady={result => {
-        //   console.log(`Distance: ${result.distance} km`)
-        //   console.log(`Duration: ${result.duration} min.`)
+  _handleShowDirection = showDirection => {
+    this.setState({ showDirection })
+  }
 
-        //   this.mapVi
-        // }}
-      />
-    )
+  _getSteps = steps => {
+    this.setState({ steps })
+  }
+
+  _handleShowStep = showSteps => {
+    this.setState({ showSteps })
   }
 
   render() {
-    const { searchText, region, errorMessage, centered } = this.state
+    const {
+      searchText,
+      region,
+      showDirection,
+      centered,
+      steps,
+      showSteps
+    } = this.state
     if (region) {
       return (
         <SafeAreaView style={styles.container}>
+          <Header
+            showSteps={showSteps}
+            searchText={searchText}
+            showDirection={showDirection}
+            _handleSearch={this._handleSearch}
+            _onClosePressed={this._onClosePressed}
+            _handleShowDirection={this._handleShowDirection}
+          />
           <MapView
             style={styles.mapStyle}
-            mapType="none"
+            // mapType="none"
             ref={ref => {
               this.map = ref
             }}
@@ -246,23 +247,21 @@ class MapScreen extends React.PureComponent {
             <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
             <MarkersContainer _onMarkerPressed={this._onMarkerPressed} />
             {this._renderUserLocation()}
-            {/* {this._renderDirection()} */}
-          </MapView>
-          <View
-            style={{
-              marginTop: STATUS_BAR_HEIGHT
-            }}
-          >
-            <SearchBox
-              _handleSearch={this._handleSearch}
-              searchText={searchText}
-              _onClosePressed={this._onClosePressed}
+            <Direction
+              userCoordinate={this.userCoordinate}
+              showDirection={showDirection}
+              _getSteps={this._getSteps}
             />
-          </View>
+          </MapView>
           <Footer
+            showSteps={showSteps}
+            steps={steps}
             centered={centered}
+            showDirection={showDirection}
+            _handleShowStep={this._handleShowStep}
             _navigateToDetail={this._navigateToDetail}
             _centerUserLocation={this._centerUserLocation}
+            _handleShowDirection={this._handleShowDirection}
           />
         </SafeAreaView>
       )
@@ -284,7 +283,11 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
+const mapStateToProps = getState => ({
+  selectedMarker: getState.markerReducer.selectedMarker
+})
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(MapScreen)

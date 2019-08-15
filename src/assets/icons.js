@@ -33,7 +33,37 @@ const styles = StyleSheet.create({
 export const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'Font-Name')
 
 export const icons = {
+  marker_fill: (
+    <CustomIcon name="marker-s" size={24} color={palette.primaryColorLight} />
+  ),
+  marker_fill_red: (
+    <CustomIcon name="marker-s" size={24} color={palette.secondaryColor} />
+  ),
+  head_forward: (
+    <CustomIcon
+      name="up-straight"
+      size={24}
+      color={palette.primaryColorLight}
+    />
+  ),
+  turn_left: (
+    <CustomIcon name="turn-left" size={24} color={palette.primaryColorLight} />
+  ),
+  turn_right: (
+    <CustomIcon name="turn-right" size={24} color={palette.primaryColorLight} />
+  ),
+  walking: (
+    <CustomIcon
+      name="pedestrian-walking"
+      size={15}
+      color={palette.primaryColorLight}
+    />
+  ),
+  exchange: (
+    <CustomIcon name="exchange-arrows" size={24} color={palette.primaryColor} />
+  ),
   back: <CustomIcon name="back" size={24} color="#fff" />,
+  back_blue: <CustomIcon name="back" size={24} color={palette.primaryColor} />,
   close: (
     <CustomIcon
       name="close"
@@ -63,6 +93,7 @@ export const icons = {
     <CustomIcon name="near-me" size={24} color={palette.primaryColorLight} />
   ),
   user_location: <Image source={require('./images/user-location.png')} />,
+  user_location_sm: <Image source={require('./images/user-location-sm.png')} />,
   chosen_marker: (
     <View
       style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}
@@ -83,6 +114,7 @@ export const icons = {
       </View>
     </View>
   ),
+  marker_sm: <Image source={require('./images/marker-sm.png')} />,
   fullName: (
     <CustomIcon name="user" size={24} color={palette.primaryColorLight} />
   ),
@@ -122,6 +154,21 @@ export const icons = {
       color={palette.secondaryTypographyColor}
       style={{ paddingHorizontal: 6 }}
     />
+  ),
+  vertical_dots: (
+    <View>
+      {[1, 2, 3].map(index => {
+        return (
+          <FontAwesome
+            key={index}
+            name="circle"
+            size={3}
+            color={palette.primaryColor}
+            style={{ marginVertical: 1.5 }}
+          />
+        )
+      })}
+    </View>
   ),
   up_arrow: (
     <FontAwesome

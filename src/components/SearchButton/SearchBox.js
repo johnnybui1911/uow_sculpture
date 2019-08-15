@@ -31,11 +31,7 @@ const SearchBox = ({ searchText, _handleSearch, _onClosePressed }) => (
       }}
     />
     {searchText ? (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          _onClosePressed()
-        }}
-      >
+      <TouchableWithoutFeedback onPress={_onClosePressed}>
         {icons.close}
       </TouchableWithoutFeedback>
     ) : (

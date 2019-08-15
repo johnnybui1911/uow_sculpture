@@ -57,7 +57,7 @@ export default StyleSheet.create({
   box: { ...inputBox, ...shadowStyle },
   inputBox: {
     ...inputBox,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: palette.secondaryTypographyColor
   },
   input: {

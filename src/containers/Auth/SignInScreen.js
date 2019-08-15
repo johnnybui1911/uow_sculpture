@@ -12,6 +12,7 @@ import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import { thunkSignIn } from '../../redux/actions/authActions'
+import MidDivider from '../../components/MidDivider/MidDivider'
 
 class SignInScreen extends React.Component {
   constructor(props) {
@@ -56,40 +57,7 @@ class SignInScreen extends React.Component {
               </View>
             </TouchableOpacity>
           </View>
-          <View style={styles.middleSeparator}>
-            <View
-              style={{
-                justifyContent: 'center'
-              }}
-            >
-              <View style={styles.lineSeparator} />
-            </View>
-            <View
-              style={{
-                justifyContent: 'center'
-              }}
-            >
-              <Text
-                style={[
-                  styles.title,
-                  {
-                    fontSize: 14,
-                    color: palette.secondaryTypographyStrongColor
-                  }
-                ]}
-              >
-                or
-              </Text>
-            </View>
-
-            <View
-              style={{
-                justifyContent: 'center'
-              }}
-            >
-              <View style={styles.lineSeparator} />
-            </View>
-          </View>
+          <MidDivider />
           <View
             style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}
           >

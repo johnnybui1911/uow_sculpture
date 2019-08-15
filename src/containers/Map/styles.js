@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../assets/dimension'
+import {
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
+  STATUS_BAR_HEIGHT
+} from '../../assets/dimension'
 
 const shadowStyle = {
   elevation: 4,
@@ -11,6 +15,18 @@ const shadowStyle = {
   },
   shadowRadius: 5,
   shadowOpacity: 0.1
+}
+
+const inputBox = {
+  marginVertical: 4,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginLeft: 8,
+  height: 36,
+  // maxWidth: 272,
+  backgroundColor: palette.backgroundColorWhite,
+  borderRadius: 6
 }
 
 export default StyleSheet.create({
@@ -29,10 +45,37 @@ export default StyleSheet.create({
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold'
   },
+  title_sm: {
+    fontSize: 12,
+    color: palette.primaryColorLight,
+    fontFamily: 'Montserrat-SemiBold',
+    textAlign: 'center',
+    marginLeft: 3
+  },
+  title_step: {
+    fontSize: 16,
+    color: palette.primaryColor,
+    fontFamily: 'Montserrat-Medium'
+  },
+  meter_step: {
+    fontSize: 14,
+    color: palette.primaryColorLight,
+    fontFamily: 'Montserrat-Medium'
+  },
   distance: {
     fontSize: 20,
     fontFamily: 'Montserrat-Bold',
     color: palette.primaryColorLight
+  },
+  distance_grey: {
+    fontSize: 20,
+    fontFamily: 'Montserrat-Medium',
+    color: palette.secondaryTypographyColor
+  },
+  minuteStyle: {
+    fontSize: 20,
+    fontFamily: 'Montserrat-SemiBold',
+    color: palette.primaryColor
   },
   numberStyle: {
     fontSize: 12,
@@ -89,6 +132,16 @@ export default StyleSheet.create({
     ...shadowStyle,
     elevation: 10
   },
+  description_container_sm: {
+    flex: 1,
+    paddingHorizontal: 24,
+    backgroundColor: palette.backgroundColorWhite,
+    paddingVertical: 12,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    ...shadowStyle,
+    elevation: 9
+  },
   button: {
     flex: 1,
     backgroundColor: palette.primaryColorLight,
@@ -97,13 +150,32 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 10,
-    minHeight: 51,
+    height: 51,
+    ...shadowStyle
+  },
+  secondary_button: {
+    flex: 1,
+    backgroundColor: palette.backgroundColorWhite,
+    borderWidth: 1,
+    borderColor: palette.primaryColorLight,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    marginVertical: 10,
+    height: 51,
     ...shadowStyle
   },
   titleButton: {
     fontSize: 16,
     fontFamily: 'Montserrat-SemiBold',
     color: palette.backgroundColorWhite,
+    textAlign: 'center'
+  },
+  secondaryTitleButton: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: palette.primaryColorLight,
     textAlign: 'center'
   },
   description: {
@@ -116,5 +188,86 @@ export default StyleSheet.create({
     height: 12,
     borderRadius: 100,
     backgroundColor: palette.secondaryColor
+  },
+
+  inputBox: {
+    ...inputBox,
+    borderWidth: 0.5,
+    borderColor: palette.secondaryTypographyColor
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    width: '100%',
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 14,
+    color: palette.primaryColor
+  },
+  walkingBox: {
+    backgroundColor: 'rgba(89, 152, 255, 0.15)',
+    height: 25,
+    width: 96,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: 12
+  },
+  stepBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginTop: 24
+  },
+  stepBoxDetail: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 10,
+    marginTop: 24
+  },
+  stepTitleStyle: { marginLeft: 30, flex: 1 },
+  divider: {
+    height: 1,
+    backgroundColor: '#EBEBEB',
+    width: '100%',
+    marginTop: 24
+  },
+  dividerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 14
+  },
+  stepsContainer: {
+    flex: 1,
+    paddingHorizontal: 24,
+    backgroundColor: palette.backgroundColorWhite,
+    paddingVertical: 12,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    ...shadowStyle,
+    minHeight: 142 + 16, //fix later,
+    maxHeight: SCREEN_HEIGHT - 44,
+    elevation: 9
+  },
+  showStepButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    paddingHorizontal: 24,
+    zIndex: 9,
+    elevation: 9
+  },
+  topBorderStep: {
+    height: 1,
+    backgroundColor: '#EBEBEB',
+    width: SCREEN_WIDTH,
+    left: -24,
+    top: 0,
+    position: 'absolute',
+    zIndex: 100
   }
 })
