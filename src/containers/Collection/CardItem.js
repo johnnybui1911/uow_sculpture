@@ -18,7 +18,7 @@ const CardItem = props => {
         style={item.id % 2 !== 0 ? styles.cardDesLeft : styles.cardDesRight}
       >
         <View style={{}}>
-          <Text style={styles.distance}>{item.distance} m</Text>
+          <Text style={styles.distance}>{item.distance}</Text>
           <Text style={styles.title}>{item.name}</Text>
         </View>
         <View

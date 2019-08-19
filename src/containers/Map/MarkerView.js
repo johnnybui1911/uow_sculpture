@@ -16,7 +16,7 @@ class MarkerView extends React.PureComponent {
     if (selectedMarker) {
       return (
         <Marker
-          zIndex={1}
+          style={{ zIndex: 1 }}
           coordinate={marker.coordinate}
           onPress={() => this.props._onMarkerPressed(marker.id, marker.name)}
           // image={marker.id === selectedMarker.id ? images.chosen_marker : null}

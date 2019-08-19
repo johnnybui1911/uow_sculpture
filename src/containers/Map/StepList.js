@@ -13,22 +13,22 @@ export default ({ steps }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.stepBox}>
-          <View style={{ height: '100%' }}>{icons.marker_fill}</View>
+          <View style={styles.stepViewIconStyle}>{icons.marker_fill}</View>
           <View style={styles.stepTitleStyle}>
             <Text style={styles.title_step}>Your location</Text>
             <View style={styles.divider} />
           </View>
         </View>
-        {steps
-          .filter((step, index) => index < 4)
-          .map((step, index) => {
-            return <StepBox key={index} step={step} />
-          })}
+        {steps.map((step, index) => {
+          return <StepBox key={index} step={step} />
+        })}
         <View style={styles.stepBox}>
-          <View style={{ height: '100%' }}>{icons.marker_fill_red}</View>
+          <View style={styles.stepViewIconStyle}>{icons.marker_fill_red}</View>
           <View style={styles.stepTitleStyle}>
             <Text style={styles.title_step}>Winged Figure</Text>
-            <Text style={styles.title_step}>Western side of Robsons Road</Text>
+            <Text style={styles.meter_step_red}>
+              Western side of Robsons Road
+            </Text>
           </View>
         </View>
       </ScrollView>

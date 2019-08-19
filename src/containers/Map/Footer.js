@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import React from 'react'
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import MiniView from './MiniView'
 import ButtonMyLocation from '../../components/ButtonMyLocation/ButtonMyLocation'
@@ -69,9 +69,19 @@ class Footer extends React.PureComponent {
             </View>
             <View style={styles.stepsContainer}>
               <SwipeButton />
-              <View style={{ flexDirection: 'row', marginVertical: 24 }}>
-                <Text style={styles.minuteStyle}>5 min</Text>
-                <Text style={styles.distance_grey}>{` (200 m)`}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginVertical: 24,
+                  marginLeft: 24
+                }}
+              >
+                <Text style={styles.minuteStyle}>
+                  {selectedMarker.duration} min
+                </Text>
+                <Text style={styles.distance_grey}>
+                  {` (${selectedMarker.distance})`}
+                </Text>
               </View>
               {showSteps && <StepList steps={steps} />}
             </View>

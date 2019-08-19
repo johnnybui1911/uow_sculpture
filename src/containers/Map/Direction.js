@@ -1,14 +1,15 @@
 import React from 'react'
 import MapViewDirections from 'react-native-maps-directions'
 import { connect } from 'react-redux'
-import haversine from 'haversine-distance'
 import { GOOGLE_MAPS_APIKEY } from '../../library/maps'
 
 const Direction = ({
+  _fitToCoordinate,
   userCoordinate,
   selectedMarker,
   showDirection,
-  _getSteps
+  _getSteps,
+  _handleDirectionState
 }) => {
   if (userCoordinate && selectedMarker && showDirection) {
     const userLocation = userCoordinate.__getValue()
@@ -22,17 +23,15 @@ const Direction = ({
         destination={selectedMarker.coordinate}
         apikey={GOOGLE_MAPS_APIKEY}
         mode="WALKING"
-        strokeWidth={4}
+        strokeWidth={6}
         strokeColor="#0047BB"
         style={{ zIndex: 9 }}
-        onStart={params => {
-          console.log(
-            `Started routing between "${params.origin}" and "${params.destination}"`
-          )
-        }}
         onReady={result => {
-          console.log(`Distance: ${result.distance} km`)
-          console.log(`Duration: ${result.duration} min.`)
+          // const distance =
+          //   result.distance > 1000
+          //     ? (result.distance / 1000).toFixed(1) + ' km'
+          //     : result.distance + ' m'
+          _fitToCoordinate(result.coordinates)
           _getSteps(result.steps)
         }}
       />

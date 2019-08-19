@@ -1,9 +1,9 @@
 import React from 'react'
 import { SafeAreaView, View, FlatList, ActivityIndicator } from 'react-native'
+import { connect } from 'react-redux'
 import LottieView from 'lottie-react-native'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
-import { localData } from '../../library/localData'
 import CardItem from './CardItem'
 import SearchBox from '../../components/SearchButton/SearchBox'
 
@@ -11,7 +11,6 @@ class CollectionScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      data: [],
       loading: true,
       searchText: '',
       closed: false
@@ -19,7 +18,7 @@ class CollectionScreen extends React.PureComponent {
   }
 
   componentDidMount = () => {
-    this.setState({ data: localData, loading: false })
+    this.setState({ loading: false })
   }
 
   _navigateToDetail = item => {
@@ -44,7 +43,7 @@ class CollectionScreen extends React.PureComponent {
 
   _renderList = () => {
     const { searchText } = this.state
-    let { data } = this.state
+    let data = this.props.markers
     if (searchText !== '') {
       data = data.filter(
         item => item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
@@ -92,4 +91,8 @@ class CollectionScreen extends React.PureComponent {
   }
 }
 
-export default CollectionScreen
+const mapStateToProps = getState => ({
+  markers: getState.markerReducer.markers
+})
+
+export default connect(mapStateToProps)(CollectionScreen)

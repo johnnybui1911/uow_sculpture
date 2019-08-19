@@ -1,5 +1,6 @@
 import React from 'react'
 import { SafeAreaView, Text, View, ScrollView, Button } from 'react-native'
+import { connect } from 'react-redux'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
 import NearbyList from './NearbyList'
@@ -11,13 +12,6 @@ import PopularItem from './PopularItem'
 class HomeScreen extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      data: []
-    }
-  }
-
-  componentDidMount = () => {
-    this.setState({ data: localData })
   }
 
   // _navigateToDetail = () => {
@@ -38,7 +32,7 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
-    const { data } = this.state
+    const data = this.props.markers
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -57,4 +51,8 @@ class HomeScreen extends React.PureComponent {
   }
 }
 
-export default HomeScreen
+const mapStateToProps = getState => ({
+  markers: getState.markerReducer.markers
+})
+
+export default connect(mapStateToProps)(HomeScreen)

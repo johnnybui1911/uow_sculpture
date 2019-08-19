@@ -1,15 +1,20 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import * as Font from 'expo-font'
+import { Notifications } from 'expo'
 import MainScreen from './src/MainScreen'
 import stores from './src/redux/stores'
+import { registerForPushNotificationsAsync } from './src/library/Notification'
 
 export default class App extends React.PureComponent {
   state = {
-    fontLoaded: false
+    fontLoaded: false,
+    notification: {}
   }
 
   componentDidMount = async () => {
+    await registerForPushNotificationsAsync()
+
     await Font.loadAsync({
       'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
       'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
@@ -17,7 +22,16 @@ export default class App extends React.PureComponent {
       'Font-Name': require('./assets/icons/icomoon.ttf')
     })
 
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification
+    )
+
     this.setState({ fontLoaded: true })
+  }
+
+  _handleNotification = notification => {
+    this.setState({ notification })
+    // console.log('notification', notification)
   }
 
   render() {

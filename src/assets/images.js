@@ -11,5 +11,6 @@ export default {
   profile: require('./images/profile.jpg'),
   user_location: require('./images/user-location.png'),
   chosen_marker: require('./images/chosen-marker.png'),
-  marker: require('./images/marker.png')
+  marker: require('./images/marker.png'),
+  trophy: require('./images/trophy.png')
 }

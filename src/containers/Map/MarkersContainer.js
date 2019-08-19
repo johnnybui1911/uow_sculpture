@@ -16,6 +16,7 @@ const MarkersContainer = ({ markers, _onMarkerPressed }) => {
       </React.Fragment>
     )
   }
+  return null
 }
 
 const mapStateToProps = getState => ({

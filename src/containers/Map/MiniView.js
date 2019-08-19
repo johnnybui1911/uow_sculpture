@@ -34,7 +34,7 @@ export default ({
       </View>
       <View style={styles.description_container}>
         <SwipeButton />
-        <Text style={styles.distance}>500 m</Text>
+        <Text style={styles.distance}>{marker.distance}</Text>
         <Text style={styles.title}>{marker.name}</Text>
         <View
           style={{
@@ -44,7 +44,7 @@ export default ({
         >
           {/* <Text style={styles.description}>{marker.des}</Text>
           {icons.one_dot} */}
-          <Text style={styles.description}>5 min</Text>
+          <Text style={styles.description}>{marker.duration} min</Text>
         </View>
         <Divider />
         <View

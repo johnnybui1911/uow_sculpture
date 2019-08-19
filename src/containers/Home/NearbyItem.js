@@ -4,17 +4,11 @@ import {
   Text,
   Image,
   TouchableWithoutFeedback,
-  Dimensions,
   Animated
 } from 'react-native'
 import styles from './styles'
 import { icons } from '../../assets/icons'
 import images from '../../assets/images'
-import DoubleTap from '../../components/DoubleTap/DoubleTap'
-
-const { width } = Dimensions.get('window')
-// default width 327
-const PADDING = 12
 
 class NearbyItem extends React.PureComponent {
   constructor(props) {
@@ -91,7 +85,7 @@ class NearbyItem extends React.PureComponent {
                   justifyContent: 'space-between'
                 }}
               >
-                <Text style={styles.title}>{item.distance} m</Text>
+                <Text style={styles.title}>{item.distance}</Text>
                 <Text style={styles.title}>{item.name}</Text>
               </View>
               <View

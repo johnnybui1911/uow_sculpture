@@ -1,7 +1,8 @@
 import {
   MARKER_SELECTED,
   MARKER_UNSELECTED,
-  INIT_MARKERS
+  INIT_MARKERS,
+  FETCH_DATA_REJECTED
 } from '../../assets/actionTypes'
 
 const initialState = {
@@ -9,9 +10,17 @@ const initialState = {
   selectedMarker: null
 }
 
+// FIXME:
 const markerReducer = (state = initialState, action) => {
   switch (action.type) {
     case INIT_MARKERS: {
+      // let { selectedMarker } = state
+      // if (selectedMarker) {
+      //   selectedMarker = action.payload.find(
+      //     marker => marker.id === selectedMarker.id
+      //   )
+      //   return { ...state, markers: action.payload, selectedMarker }
+      // }
       return { ...state, markers: action.payload }
     }
 
@@ -26,6 +35,10 @@ const markerReducer = (state = initialState, action) => {
 
     case MARKER_UNSELECTED: {
       return { ...state, selectedMarker: null }
+    }
+
+    case FETCH_DATA_REJECTED: {
+      return { ...state }
     }
 
     default:

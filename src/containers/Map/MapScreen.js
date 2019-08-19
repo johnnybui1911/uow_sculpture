@@ -1,31 +1,43 @@
 import React from 'react'
-import { SafeAreaView, View, Platform } from 'react-native'
+import {
+  SafeAreaView,
+  View,
+  Platform,
+  Button,
+  Text,
+  TouchableOpacity
+} from 'react-native'
 import MapView, { UrlTile, Marker, AnimatedRegion } from 'react-native-maps'
-import MapViewDirections from 'react-native-maps-directions'
+import Modal from 'react-native-modal'
 import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { connect } from 'react-redux'
 import numeral from 'numeral'
+import haversine from 'haversine-distance'
 import styles from './styles'
 import images from '../../assets/images'
-import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import {
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
-  URL_TEMPLATE
+  URL_TEMPLATE,
+  LATITUDE,
+  LONGITUDE,
+  USER_LATITUDE,
+  USER_LONGITUDE,
+  DEFAULT_PADDING
 } from '../../library/maps'
 import {
   setInitMarkers,
   selectMarker,
   unselectMarker
 } from '../../redux/actions/markerActions'
-import SearchBox from '../../components/SearchButton/SearchBox'
-import { localData } from '../../library/localData'
 import Footer from './Footer'
 import MarkersContainer from './MarkersContainer'
 import Direction from './Direction'
-import Header from './Header'
+import Header from './HeaderMap/Header'
+import { icons } from '../../assets/icons'
+import palette from '../../assets/palette'
 
 function formatNumber(number) {
   return numeral(number).format('0[.]00000')
@@ -36,6 +48,10 @@ function compareCoordinate(coor1, coor2) {
     formatNumber(coor1.latitude) === formatNumber(coor2.latitude) &&
     formatNumber(coor1.longitude) === formatNumber(coor2.longitude)
   )
+}
+
+const calcDistance = (latLng1, latLng2) => {
+  return Math.floor(haversine(latLng1, latLng2)) || 0
 }
 
 class MapScreen extends React.PureComponent {
@@ -49,17 +65,26 @@ class MapScreen extends React.PureComponent {
     super(props)
     this.state = {
       region: {
-        latitude: -34.4114455,
-        longitude: 150.8939863,
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
+      },
+      direction: {
+        startCoordinate: null,
+        endCoordinate: null,
+        distance: 0,
+        duration: 0
       },
       steps: [],
       showSteps: false,
       centered: false,
       showDirection: false,
       searchText: '',
-      errorMessage: ''
+      errorMessage: '',
+
+      // modalState
+      isModalVisible: false
     }
   }
 
@@ -70,19 +95,20 @@ class MapScreen extends React.PureComponent {
           'Oops, this will not work on Sketch in an Android emulator. Try it on your device!'
       })
     } else {
-      this._getLocationAsync()
+      // this._getLocationAsync()
     }
   }
 
-  componentDidMount = () => {
-    this.props.init_marker(localData)
-  }
-
   componentWillUnmount = () => {
-    this.subscribeLocation()
+    // this.subscribeLocation()
   }
 
-  userCoordinate = null
+  userCoordinate = new AnimatedRegion({
+    latitude: USER_LATITUDE,
+    longitude: USER_LONGITUDE,
+    latitudeDelta: 0,
+    longitudeDelta: 0
+  })
 
   subscribeLocation = null
 
@@ -136,6 +162,20 @@ class MapScreen extends React.PureComponent {
     )
   }
 
+  _resetUI = () => {
+    this.setState({
+      steps: [],
+      showSteps: false,
+      centered: false,
+      showDirection: false,
+      searchText: '',
+      isModalVisible: false
+    })
+
+    this._centerUserLocation()
+    this._onClosePressed()
+  }
+
   _centerUserLocation = () => {
     const { centered } = this.state
     if (!centered) {
@@ -173,13 +213,61 @@ class MapScreen extends React.PureComponent {
           ref={marker => {
             this.marker = marker
           }}
+          style={{ zIndex: 2 }}
+          anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
           image={images.user_location}
           onPress={this._centerUserLocation}
+          draggable
+          onDragEnd={e => {
+            this.userCoordinate.setValue({
+              ...e.nativeEvent.coordinate,
+              latitudeDelta: 0,
+              longitudeDelta: 0
+            })
+            if (this.props.selectedMarker) {
+              const distance = calcDistance(
+                e.nativeEvent.coordinate,
+                this.props.selectedMarker.coordinate
+              )
+
+              if (distance <= 20) {
+                this._sendPushNotification()
+                this.setState({ isModalVisible: true })
+              }
+            }
+          }}
         />
       )
     }
   }
+
+  // TODO:
+  // sendPushNotification
+  _sendPushNotification = async () => {
+    const message = {
+      to: 'ExponentPushToken[UANbFvBygFNv7XECWDJHPN]',
+      sound: 'default',
+      title: 'Congratulation',
+      body: 'You have finished your trip !!!',
+      _displayInForeground: true
+    }
+
+    const response = await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(message)
+    })
+
+    // const data = response._bodyInit
+    // console.log(`Status & Response ID-> ${data}`)
+  }
+
+  /////////////////////
 
   _handleSearch = event => {
     const { text } = event.nativeEvent
@@ -211,6 +299,13 @@ class MapScreen extends React.PureComponent {
     this.setState({ showSteps })
   }
 
+  _fitToCoordinate = coordinates => {
+    this.map.fitToCoordinates(coordinates, {
+      edgePadding: DEFAULT_PADDING,
+      animated: true
+    })
+  }
+
   render() {
     const {
       searchText,
@@ -233,7 +328,6 @@ class MapScreen extends React.PureComponent {
           />
           <MapView
             style={styles.mapStyle}
-            // mapType="none"
             ref={ref => {
               this.map = ref
             }}
@@ -242,15 +336,16 @@ class MapScreen extends React.PureComponent {
             }
             initialRegion={region}
             showsCompass={false}
-            rotateEnabled={false}
           >
             <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
-            <MarkersContainer _onMarkerPressed={this._onMarkerPressed} />
             {this._renderUserLocation()}
+            <MarkersContainer _onMarkerPressed={this._onMarkerPressed} />
             <Direction
               userCoordinate={this.userCoordinate}
               showDirection={showDirection}
               _getSteps={this._getSteps}
+              _handleDirectionState={this._handleDirectionState}
+              _fitToCoordinate={this._fitToCoordinate}
             />
           </MapView>
           <Footer
@@ -263,6 +358,57 @@ class MapScreen extends React.PureComponent {
             _centerUserLocation={this._centerUserLocation}
             _handleShowDirection={this._handleShowDirection}
           />
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationIn="zoomInDown"
+            animationInTiming={1000}
+            onSwipeComplete={() => this._resetUI()}
+            swipeDirection={['up', 'left', 'right', 'down']}
+            onBackdropPress={() => this._resetUI()}
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+          >
+            <View
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 26,
+                height: 200,
+                width: 240,
+                justifyContent: 'center',
+                alignItems: 'center',
+                elevation: 10
+              }}
+            >
+              <View style={{ position: 'absolute', top: -55 }}>
+                {icons.trophy}
+              </View>
+              <View
+                style={{
+                  marginTop: 30,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Text style={[styles.title, { fontSize: 20 }]}>
+                  Congratulation
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={{
+                  height: 44,
+                  borderRadius: 26,
+                  width: 140,
+                  backgroundColor: palette.primaryColorLight,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 30,
+                  zIndex: 10
+                }}
+                onPress={() => this._resetUI()}
+              >
+                <Text style={styles.titleButton}>PROCEED</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
         </SafeAreaView>
       )
     }
@@ -272,9 +418,6 @@ class MapScreen extends React.PureComponent {
 }
 
 const mapDispatchToProps = dispatch => ({
-  init_marker: markers => {
-    dispatch(setInitMarkers(markers))
-  },
   handleSelectMarker: markerID => {
     dispatch(selectMarker(markerID))
   },

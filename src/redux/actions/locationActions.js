@@ -4,6 +4,8 @@ import {
   SYNC_LOCATION_SUCCESSFULL,
   SYNC_LOCATION_REJECTED
 } from '../../assets/actionTypes'
+import { fetchDataThunk } from './markerActions'
+import { localData } from '../../library/localData'
 
 export const syncLocationSuccessful = userCoordinate => {
   return { type: SYNC_LOCATION_SUCCESSFULL, userCoordinate }
@@ -23,6 +25,7 @@ export const syncLocationThunk = () => {
         if (loc.timestamp) {
           const { latitude, longitude } = loc.coords
           dispatch(syncLocationSuccessful({ latitude, longitude }))
+          dispatch(fetchDataThunk(localData, loc.coords))
         }
       })
     }

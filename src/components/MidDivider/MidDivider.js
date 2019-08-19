@@ -13,8 +13,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: SCREEN_HEIGHT <= 812 ? 10 : 30,
-    marginBottom: SCREEN_HEIGHT <= 812 ? 20 : 40,
+    marginVertical: 20,
+    // marginTop: SCREEN_HEIGHT <= 812 ? 10 : 30,
+    // marginBottom: SCREEN_HEIGHT <= 812 ? 20 : 40,
     height: 10
   },
   title: {

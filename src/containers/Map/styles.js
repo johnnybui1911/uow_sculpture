@@ -17,18 +17,6 @@ const shadowStyle = {
   shadowOpacity: 0.1
 }
 
-const inputBox = {
-  marginVertical: 4,
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginLeft: 8,
-  height: 36,
-  // maxWidth: 272,
-  backgroundColor: palette.backgroundColorWhite,
-  borderRadius: 6
-}
-
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -53,12 +41,18 @@ export default StyleSheet.create({
     marginLeft: 3
   },
   title_step: {
-    fontSize: 16,
+    fontSize: 14,
     color: palette.primaryColor,
+    fontFamily: 'Montserrat-Medium',
+    paddingRight: 24
+  },
+  meter_step_red: {
+    fontSize: 10,
+    color: palette.secondaryColor,
     fontFamily: 'Montserrat-Medium'
   },
   meter_step: {
-    fontSize: 14,
+    fontSize: 10,
     color: palette.primaryColorLight,
     fontFamily: 'Montserrat-Medium'
   },
@@ -189,16 +183,22 @@ export default StyleSheet.create({
     borderRadius: 100,
     backgroundColor: palette.secondaryColor
   },
-
   inputBox: {
-    ...inputBox,
+    marginVertical: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
+    height: 36,
+    // maxWidth: 272,
+    backgroundColor: palette.backgroundColorWhite,
+    borderRadius: 6,
     borderWidth: 0.5,
     borderColor: palette.secondaryTypographyColor
   },
   input: {
     flex: 1,
     paddingVertical: 10,
-    paddingBottom: 10,
     paddingLeft: 10,
     width: '100%',
     fontFamily: 'Montserrat-Medium',
@@ -217,7 +217,7 @@ export default StyleSheet.create({
   stepBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 20,
+    // marginHorizontal: 10, //20
     marginTop: 24
   },
   stepBoxDetail: {
@@ -227,7 +227,14 @@ export default StyleSheet.create({
     height: 10,
     marginTop: 24
   },
-  stepTitleStyle: { marginLeft: 30, flex: 1 },
+  stepTitleStyle: { flex: 1 },
+  stepViewIconStyle: {
+    height: '100%',
+    width: 50,
+    alignItems: 'center',
+    marginLeft: 24,
+    marginRight: 24
+  },
   divider: {
     height: 1,
     backgroundColor: '#EBEBEB',
@@ -241,7 +248,7 @@ export default StyleSheet.create({
   },
   stepsContainer: {
     flex: 1,
-    paddingHorizontal: 24,
+    // paddingHorizontal: 24,
     backgroundColor: palette.backgroundColorWhite,
     paddingVertical: 12,
     borderTopLeftRadius: 12,
@@ -265,9 +272,8 @@ export default StyleSheet.create({
     height: 1,
     backgroundColor: '#EBEBEB',
     width: SCREEN_WIDTH,
-    left: -24,
     top: 0,
-    position: 'absolute',
-    zIndex: 100
+    position: 'absolute'
+    // zIndex: 100
   }
 })

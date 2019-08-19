@@ -42,7 +42,10 @@ class SignInScreen extends React.Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.box, { backgroundColor: palette.facebookColor }]}
+              style={[
+                styles.box,
+                { backgroundColor: palette.facebookColor, marginBottom: 0 }
+              ]}
             >
               <View style={{ flex: 1, padding: 20 }}>{icons.facebook}</View>
               <View style={{ position: 'absolute' }}>

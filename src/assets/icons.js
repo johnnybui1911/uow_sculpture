@@ -8,6 +8,7 @@ import {
 } from '@expo/vector-icons'
 import palette from './palette'
 import icoMoonConfig from './selection.json'
+import images from './images'
 
 const styles = StyleSheet.create({
   oval_large_style: {
@@ -32,13 +33,16 @@ const styles = StyleSheet.create({
 
 export const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'Font-Name')
 
+export const DirectionIcon = maneuver => (
+  <CustomIcon
+    name={maneuver ? maneuver : 'straight'}
+    size={20}
+    color={palette.primaryColorLight}
+  />
+)
+
 export const icons = {
-  marker_fill: (
-    <CustomIcon name="marker-s" size={24} color={palette.primaryColorLight} />
-  ),
-  marker_fill_red: (
-    <CustomIcon name="marker-s" size={24} color={palette.secondaryColor} />
-  ),
+  trophy: <Image source={images.trophy} />,
   head_forward: (
     <CustomIcon
       name="up-straight"
@@ -51,6 +55,12 @@ export const icons = {
   ),
   turn_right: (
     <CustomIcon name="turn-right" size={24} color={palette.primaryColorLight} />
+  ),
+  marker_fill: (
+    <CustomIcon name="marker-s" size={24} color={palette.primaryColorLight} />
+  ),
+  marker_fill_red: (
+    <CustomIcon name="marker-s" size={24} color={palette.secondaryColor} />
   ),
   walking: (
     <CustomIcon
