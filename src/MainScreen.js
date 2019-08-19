@@ -50,7 +50,11 @@ class MainScreen extends React.PureComponent {
     })
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
+    this.props.syncLocationThunk()
+  }
+
+  componentDidUpdate = () => {
     this.props.syncLocationThunk()
   }
 

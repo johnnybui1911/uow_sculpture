@@ -9,7 +9,6 @@ import {
 import styles from './styles'
 import images from '../../assets/images'
 import { icons } from '../../assets/icons'
-import palette from '../../assets/palette'
 import Divider from '../../components/Divider/Divider'
 import SwipeButton from '../../components/SwipeButton/SwipeButton'
 

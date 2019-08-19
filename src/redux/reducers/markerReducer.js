@@ -10,17 +10,14 @@ const initialState = {
   selectedMarker: null
 }
 
-// FIXME:
 const markerReducer = (state = initialState, action) => {
   switch (action.type) {
     case INIT_MARKERS: {
-      // let { selectedMarker } = state
-      // if (selectedMarker) {
-      //   selectedMarker = action.payload.find(
-      //     marker => marker.id === selectedMarker.id
-      //   )
-      //   return { ...state, markers: action.payload, selectedMarker }
-      // }
+      if (state.selectedMarker) {
+        state.selectedMarker = action.payload.find(
+          marker => marker.id === state.selectedMarker.id
+        )
+      }
       return { ...state, markers: action.payload }
     }
 

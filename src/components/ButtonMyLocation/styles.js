@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
 
 const shadowStyle = {
-  elevation: 4,
+  elevation: 12,
   shadowColor: '#000000',
   shadowOffset: {
     width: 0,
@@ -20,6 +20,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 50,
     backgroundColor: palette.backgroundColorWhite,
+    zIndex: 20,
     ...shadowStyle
   }
 })

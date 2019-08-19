@@ -2,7 +2,6 @@ import React from 'react'
 import { View } from 'react-native'
 import { Marker } from 'react-native-maps'
 import { connect } from 'react-redux'
-import images from '../../assets/images'
 import styles from './styles'
 import { icons } from '../../assets/icons'
 
@@ -19,7 +18,6 @@ class MarkerView extends React.PureComponent {
           style={{ zIndex: 1 }}
           coordinate={marker.coordinate}
           onPress={() => this.props._onMarkerPressed(marker.id, marker.name)}
-          // image={marker.id === selectedMarker.id ? images.chosen_marker : null}
         >
           {marker.id !== selectedMarker.id ? (
             <View style={styles.unselected_marker} />

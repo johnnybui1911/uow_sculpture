@@ -28,11 +28,10 @@ class Footer extends React.PureComponent {
           <View style={[styles.mini_view_container]}>
             <View
               style={[
-                styles.mini_view_container,
+                styles.transparent_container,
                 {
-                  alignItems: 'flex-end',
-                  paddingHorizontal: 24,
-                  paddingBottom: 12
+                  justifyContent: 'flex-end',
+                  display: showSteps ? 'none' : 'flex'
                 }
               ]}
             >

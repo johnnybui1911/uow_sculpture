@@ -27,10 +27,6 @@ const Direction = ({
         strokeColor="#0047BB"
         style={{ zIndex: 9 }}
         onReady={result => {
-          // const distance =
-          //   result.distance > 1000
-          //     ? (result.distance / 1000).toFixed(1) + ' km'
-          //     : result.distance + ' m'
           _fitToCoordinate(result.coordinates)
           _getSteps(result.steps)
         }}

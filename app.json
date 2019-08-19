@@ -9,6 +9,9 @@
       "supportsTablet": true,
       "config": {
         "googleMapsApiKey": "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs"
+      },
+      "infoPlist": {
+        "UIBackgroundModes": ["location", "fetch"]
       }
     },
     "android": {

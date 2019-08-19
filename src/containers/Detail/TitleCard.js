@@ -10,7 +10,7 @@ export default function TitleCard(props) {
   const cardStyle = [styles.card, { elevation, marginTop: 0 }]
   return (
     <View style={cardStyle}>
-      <Text style={styles.distance}>{item.distance} m</Text>
+      <Text style={styles.distance}>{item.distance}</Text>
       <Text style={styles.title}>{item.name}</Text>
       <Divider />
       <View

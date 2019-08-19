@@ -5,6 +5,8 @@ import { Notifications } from 'expo'
 import MainScreen from './src/MainScreen'
 import stores from './src/redux/stores'
 import { registerForPushNotificationsAsync } from './src/library/Notification'
+import syncLocationBackground from './src/containers/Map/Background/syncLocationBackground'
+import geofencingRegion from './src/containers/Map/Background/geofencingRegion'
 
 export default class App extends React.PureComponent {
   state = {
@@ -14,6 +16,8 @@ export default class App extends React.PureComponent {
 
   componentDidMount = async () => {
     await registerForPushNotificationsAsync()
+    await syncLocationBackground()
+    await geofencingRegion()
 
     await Font.loadAsync({
       'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),

@@ -255,7 +255,7 @@ export default StyleSheet.create({
     borderTopRightRadius: 12,
     ...shadowStyle,
     minHeight: 142 + 16, //fix later,
-    maxHeight: SCREEN_HEIGHT - 44,
+    maxHeight: SCREEN_HEIGHT - STATUS_BAR_HEIGHT, //44
     elevation: 9
   },
   showStepButton: {

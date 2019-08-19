@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions'
+import { storeData } from './asyncStorage'
 
 export const registerForPushNotificationsAsync = async () => {
   const { status: existingStatus } = await Permissions.getAsync(
@@ -16,5 +17,6 @@ export const registerForPushNotificationsAsync = async () => {
     return
   }
   const token = await Notifications.getExpoPushTokenAsync()
+  storeData('token', token)
   // console.log(token)
 }
