@@ -19,6 +19,7 @@ export default async () => {
     }
   }
 
+  console.log('Start sync location background')
   await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, {
     accuracy: Location.Accuracy.High,
     timeInterval: 1,

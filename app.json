@@ -20,7 +20,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs"
         }
-      }
+      },
+      "googleServicesFile": "./google-services.json"
     },
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",

@@ -1,5 +1,6 @@
 import React from 'react'
-import { SafeAreaView, Text, View, ScrollView, Button } from 'react-native'
+import { SafeAreaView, Text, View, ScrollView } from 'react-native'
+import { Notifications } from 'expo'
 import { connect } from 'react-redux'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
@@ -14,10 +15,26 @@ class HomeScreen extends React.PureComponent {
     super(props)
   }
 
-  // _navigateToDetail = () => {
-  //   console.log("navigate");
-  //   this.props.navigation.navigate("Detail");
-  // };
+  componentDidMount = async () => {
+    this._notificationSubscription = await Notifications.addListener(
+      this._handleNotification
+    )
+  }
+
+  _handleNotification = notification => {
+    if (notification.origin === 'selected' && notification.data.screen) {
+      this._navigateToDetail(
+        localData.find(item => item.id === notification.data.id)
+      )
+    }
+    console.log('Notification selected and navigated to Detail')
+    console.log(notification)
+    console.log(notification.data)
+  }
+
+  _navigateToDetail = item => {
+    this.props.navigation.navigate('Detail', { item })
+  }
 
   _renderNearbyItem = ({ item, index }) => {
     const { navigation } = this.props

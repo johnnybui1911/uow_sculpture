@@ -4,11 +4,13 @@ import {
   View,
   Platform,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated,
+  Alert
 } from 'react-native'
 import MapView, { UrlTile, Marker, AnimatedRegion } from 'react-native-maps'
+import LottieView from 'lottie-react-native'
 import Modal from 'react-native-modal'
-import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { connect } from 'react-redux'
@@ -43,6 +45,8 @@ import {
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
 } from '../../assets/dimension'
+import { _sendPushNotification } from '../../library/notificationTask'
+import animations from '../../assets/animations'
 
 function formatNumber(number) {
   return numeral(number).format('0[.]00000')
@@ -90,24 +94,16 @@ class MapScreen extends React.PureComponent {
     }
   }
 
-  componentWillMount = () => {
-    if (Platform.OS === 'android' && !Constants.isDevice) {
-      this.setState({
-        errorMessage:
-          'Oops, this will not work on Sketch in an Android emulator. Try it on your device!'
-      })
-    } else {
-      // this._getLocationAsync()
-    }
-  }
-
   componentDidMount = () => {
-    this.props.fetchDataThunk(this.userCoordinate.__getValue())
+    // this._getLocationAsync()
   }
 
   componentWillUnmount = () => {
-    // this.subscribeLocation()
+    this.subscribeLocation()
+    this.animation.reset()
   }
+
+  progressAnimation = new Animated.Value(0)
 
   userCoordinate = new AnimatedRegion({
     latitude: USER_LATITUDE,
@@ -117,6 +113,13 @@ class MapScreen extends React.PureComponent {
   })
 
   subscribeLocation = null
+
+  _animateCeleb = () => {
+    Animated.timing(this.progressAnimation, {
+      toValue: 1,
+      duration: 5000
+    }).start()
+  }
 
   _getLocationAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION)
@@ -128,7 +131,7 @@ class MapScreen extends React.PureComponent {
 
     this.subscribeLocation = await Location.watchPositionAsync(
       {
-        accuracy: Location.Accuracy.High,
+        accuracy: Location.Accuracy.Highest,
         timeInterval: 1,
         distanceInterval: 10
       },
@@ -160,10 +163,35 @@ class MapScreen extends React.PureComponent {
             this.userCoordinate
               .timing({ latitude, longitude, duration })
               .start()
+
+            if (this.props.selectedMarker.coordinate) {
+              const userLocation = { latitude, longitude }
+              if (this.props.selectedMarker) {
+                const distance = calcDistance(
+                  userLocation,
+                  this.props.selectedMarker.coordinate
+                )
+                if (distance <= 10) {
+                  _sendPushNotification({
+                    title: 'Congratulation',
+                    body: 'You have finished your trip !!!',
+                    data: {
+                      screen: 'Detail',
+                      id: this.props.selectedMarker.id
+                    }
+                  })
+                  this._animateCeleb()
+                  this.setState({ isModalVisible: true })
+                }
+              }
+            }
+
+            this.props.fetchDataThunk({ latitude, longitude })
           }
         } else {
           this.setState({ errorMessage: 'Problems on update location' })
         }
+        // console.log('Start sync location foreground')
       }
     )
   }
@@ -210,6 +238,7 @@ class MapScreen extends React.PureComponent {
 
   _navigateToDetail = item => {
     this.props.navigation.navigate('Detail', { item })
+    this._resetUI()
   }
 
   _renderUserLocation = () => {
@@ -222,7 +251,7 @@ class MapScreen extends React.PureComponent {
           style={{ zIndex: 2 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
-          image={images.user_location}
+          // image={images.user_location}
           onPress={this._centerUserLocation}
           draggable
           onDragEnd={e => {
@@ -249,47 +278,37 @@ class MapScreen extends React.PureComponent {
               )
 
               if (distance <= 20) {
-                this._sendPushNotification()
+                _sendPushNotification({
+                  title: 'Congratulation',
+                  body: 'You have finished your trip !!!',
+                  data: {
+                    screen: 'Detail',
+                    id: this.props.selectedMarker.id
+                  }
+                })
+                this._animateCeleb()
                 this.setState({ isModalVisible: true })
               }
             }
           }}
-        />
+        >
+          <View style={{ padding: 35 }}>
+            {icons.user_location}
+            <LottieView
+              style={{
+                zIndex: -1,
+                elevation: 0
+                // transform: [{ scale: 1.1 }]
+              }}
+              source={animations.beacon}
+              autoPlay
+              loop
+            />
+          </View>
+        </Marker.Animated>
       )
     }
   }
-
-  // TODO:
-  // sendPushNotification
-  _sendPushNotification = () => {
-    getData('token')
-      .then(async token => {
-        console.log(token)
-        const message = {
-          to: token,
-          sound: 'default',
-          title: 'Congratulation',
-          body: 'You have finished your trip !!!',
-          _displayInForeground: true
-        }
-
-        await fetch('https://exp.host/--/api/v2/push/send', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Accept-encoding': 'gzip, deflate',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(message)
-        })
-      })
-      .catch(e => console.log(e))
-
-    // const data = response._bodyInit
-    // console.log(`Status & Response ID-> ${data}`)
-  }
-
-  /////////////////////
 
   _handleSearch = event => {
     const { text } = event.nativeEvent
@@ -370,6 +389,7 @@ class MapScreen extends React.PureComponent {
           )}
           <MapView
             style={styles.mapStyle}
+            mapType={Platform.OS === 'android' ? 'none' : 'standard'}
             ref={ref => {
               this.map = ref
             }}
@@ -381,7 +401,9 @@ class MapScreen extends React.PureComponent {
             showsCompass={false}
             moveOnMarkerPress={false}
           >
-            <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
+            {Platform.OS === 'android' && (
+              <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
+            )}
             {this._renderUserLocation()}
             <MarkersContainer _onMarkerPressed={this._onMarkerPressed} />
             <Direction
@@ -413,7 +435,7 @@ class MapScreen extends React.PureComponent {
               right: 0,
               backgroundColor: '#000000',
               zIndex: 100,
-              opacity: 0.5,
+              opacity: 0.7,
               display: this.state.isModalVisible ? 'flex' : 'none'
             }}
           />
@@ -424,10 +446,26 @@ class MapScreen extends React.PureComponent {
             onSwipeComplete={() => this._resetUI()}
             swipeDirection={['up', 'left', 'right', 'down']}
             onBackdropPress={() => this._resetUI()}
-            style={{ justifyContent: 'center', alignItems: 'center' }}
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
           >
+            <LottieView
+              ref={animation => {
+                this.animation = animation
+              }}
+              style={{
+                zIndex: 1000,
+                elevation: 20,
+                transform: [{ scale: (1.1, 1.4) }]
+              }}
+              source={animations.confetti}
+              progress={this.progressAnimation}
+            />
             <View
               style={{
+                zIndex: 900,
                 backgroundColor: '#fff',
                 borderRadius: 26,
                 height: 200,
@@ -462,7 +500,9 @@ class MapScreen extends React.PureComponent {
                   marginTop: 30,
                   zIndex: 10
                 }}
-                onPress={() => this._resetUI()}
+                onPress={() => {
+                  this._navigateToDetail(this.props.selectedMarker)
+                }}
               >
                 <Text style={styles.titleButton}>PROCEED</Text>
               </TouchableOpacity>

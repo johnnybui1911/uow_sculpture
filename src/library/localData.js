@@ -64,13 +64,29 @@ export const localData = [
       latitude: -34.4055,
       longitude: 150.87484
     }
+  },
+  {
+    id: 4,
+    name: 'Torso 1',
+    distance: 100,
+    des: 'Western side of Robsons Road',
+    features: {
+      date: '1988-1989',
+      maker: 'Bert Flugelman',
+      material: 'Stainless steel'
+    },
+    description: {
+      location:
+        'Main campus, on UOW land on the western side of  Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and  Northfields Avenue',
+      creditLine:
+        'Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988'
+    },
+    photoURL: 4,
+    coordinate: {
+      latitude: -34.411626,
+      longitude: 150.893934
+    }
   }
-  // {
-  //   id: 4,
-  //   name: "Torso 1",
-  //   distance: 100,
-  //   des: "Western side of Robsons Road"
-  // },
   // {
   //   id: 51,
   //   name: "Winged Figure",

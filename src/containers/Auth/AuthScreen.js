@@ -5,11 +5,13 @@ import {
   createMaterialTopTabNavigator,
   createAppContainer
 } from 'react-navigation'
+import LottieView from 'lottie-react-native'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import SignInScreen from './SignInScreen'
 import SignUpScreen from './SignUpScreen'
+import animations from '../../assets/animations'
 
 const AuthTab = createMaterialTopTabNavigator(
   {
@@ -67,6 +69,18 @@ class AuthScreen extends React.PureComponent {
             {icons.logo}
           </View>
         </View>
+        {/* <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 9
+          }}
+        >
+          <LottieView source={animations.done} loop autoPlay />
+        </View> */}
         <View
           style={{ flex: 5, backgroundColor: palette.backgroundColorWhite }}
         >

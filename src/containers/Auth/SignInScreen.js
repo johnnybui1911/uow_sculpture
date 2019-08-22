@@ -13,7 +13,6 @@ import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import { thunkSignIn } from '../../redux/actions/authActions'
 import MidDivider from '../../components/MidDivider/MidDivider'
-
 class SignInScreen extends React.Component {
   constructor(props) {
     super(props)

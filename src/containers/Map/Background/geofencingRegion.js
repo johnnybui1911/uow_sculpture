@@ -3,7 +3,6 @@ import * as Permissions from 'expo-permissions'
 import { Platform } from 'react-native'
 import { GEOFENCING_TASK } from './TaskManager'
 import { localData } from '../../../library/localData'
-import { USER_LATITUDE } from '../../../library/maps'
 
 export default async () => {
   const {
@@ -23,8 +22,13 @@ export default async () => {
 
   const regionArray = localData.map(marker => {
     const { coordinate } = marker
-    return { ...coordinate, radius: 10 }
+    return {
+      ...coordinate,
+      radius: 5
+    }
   })
 
   await Location.startGeofencingAsync(GEOFENCING_TASK, regionArray)
+
+  console.log('Start geofencing')
 }
