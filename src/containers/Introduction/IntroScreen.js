@@ -1,9 +1,9 @@
-import React from "react";
-import { Text, View } from "react-native";
-import styles from "./styles";
-import palette from "../../assets/palette";
-import { icons, CustomIcon } from "../../assets/icons";
-import { SCREEN_HEIGHT } from "../../assets/dimension";
+import React from 'react'
+import { Text, View } from 'react-native'
+import styles from './styles'
+import palette from '../../assets/palette'
+import { icons, CustomIcon } from '../../assets/icons'
+import { SCREEN_HEIGHT } from '../../assets/dimension'
 
 const IntroScreen = () => (
   <View style={styles.container}>
@@ -18,8 +18,8 @@ const IntroScreen = () => (
     </View>
     <View
       style={{
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
     >
       <Text style={styles.title}>WELCOME TO</Text>
@@ -29,7 +29,7 @@ const IntroScreen = () => (
       style={{
         marginTop: SCREEN_HEIGHT / 20,
         marginBottom: SCREEN_HEIGHT / 20,
-        alignItems: "center"
+        alignItems: 'center'
       }}
     >
       <Text style={styles.description}>
@@ -40,12 +40,12 @@ const IntroScreen = () => (
     <View
       style={{
         flex: 1,
-        justifyContent: "flex-end"
+        justifyContent: 'flex-end'
       }}
     >
       <CustomIcon
         name="back"
-        style={{ transform: [{ rotate: "90deg" }] }}
+        style={{ transform: [{ rotate: '90deg' }] }}
         size={40}
         color={palette.backgroundColorWhite}
       />
@@ -54,13 +54,13 @@ const IntroScreen = () => (
       style={[
         styles.description,
         {
-          fontFamily: "Montserrat-SemiBold"
+          fontFamily: 'Montserrat-SemiBold'
         }
       ]}
     >
       Swipe up to get started
     </Text>
   </View>
-);
+)
 
-export default IntroScreen;
+export default IntroScreen

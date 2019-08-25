@@ -68,7 +68,7 @@ class NearbyItem extends React.PureComponent {
     const { item, navigation } = this.props
     return (
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('Detail', { item })}
+        onPress={() => navigation.navigate('Detail', { id: item.id })}
       >
         <View style={styles.nearbyItemStyle}>
           <View style={styles.imageNearbyContainer}>

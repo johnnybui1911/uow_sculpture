@@ -16,7 +16,7 @@ export const thunkSignIn = userAuth => {
     if (userAuth) {
       setTimeout(() => {
         dispatch(signInSuccesful(userAuth))
-      }, 3000)
+      }, 0)
     } else {
       dispatch(signInRejected())
     }

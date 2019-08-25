@@ -6,6 +6,8 @@ import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
 import CardItem from './CardItem'
 import SearchBox from '../../components/SearchButton/SearchBox'
+import { Notifications } from 'expo'
+import { _handleNotification } from '../../library/notificationTask'
 
 class CollectionScreen extends React.PureComponent {
   constructor(props) {
@@ -16,13 +18,15 @@ class CollectionScreen extends React.PureComponent {
       closed: false
     }
   }
-
   componentDidMount = () => {
+    this._notificationSubscription = Notifications.addListener(notification =>
+      _handleNotification(notification, this.props.navigation)
+    )
     this.setState({ loading: false })
   }
 
   _navigateToDetail = item => {
-    this.props.navigation.navigate('Detail', { item })
+    this.props.navigation.navigate('Detail', { id: item.id })
   }
 
   _handleSearch = event => {
@@ -79,7 +83,7 @@ class CollectionScreen extends React.PureComponent {
             <View
               style={{
                 flex: 1,
-                marginHorizontal: 24
+                paddingHorizontal: 24
               }}
             >
               {this._renderList()}

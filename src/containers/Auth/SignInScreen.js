@@ -13,6 +13,8 @@ import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import { thunkSignIn } from '../../redux/actions/authActions'
 import MidDivider from '../../components/MidDivider/MidDivider'
+import { FIXED_HEIGHT_AUTH } from '../../assets/dimension'
+
 class SignInScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -24,29 +26,37 @@ class SignInScreen extends React.Component {
   render() {
     return (
       <ScrollView>
-        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <View
+          style={{
+            flex: 1
+          }}
+        >
           <View
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              marginVertical: 10
+            }}
           >
-            <View style={{ marginVertical: 20 }}>
+            <View style={{}}>
               <Text style={styles.title}>Sign in with</Text>
             </View>
             <TouchableOpacity
-              style={styles.box}
-              onPress={() => this.props.handleAuthorize({ username: 'Name' })}
+              style={[styles.box, { marginVertical: 10 }]}
+              onPress={() => {
+                this.props.handleAuthorize({ username: 'Name' })
+                this.props.navigation.navigate('Personal')
+              }}
             >
-              <View style={{ flex: 1, padding: 20 }}>{icons.google}</View>
+              <View style={{ flex: 1 }}>{icons.google}</View>
               <View style={{ position: 'absolute' }}>
                 <Text style={styles.titleButton}>GOOGLE</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.box,
-                { backgroundColor: palette.facebookColor, marginBottom: 0 }
-              ]}
+              style={[styles.box, { backgroundColor: palette.facebookColor }]}
             >
-              <View style={{ flex: 1, padding: 20 }}>{icons.facebook}</View>
+              <View style={{ flex: 1 }}>{icons.facebook}</View>
               <View style={{ position: 'absolute' }}>
                 <Text
                   style={[
@@ -61,10 +71,15 @@ class SignInScreen extends React.Component {
           </View>
           <MidDivider />
           <View
-            style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginVertical: 10
+            }}
           >
             <View style={styles.inputBox}>
-              <View style={{ padding: 20 }}>{icons.mail}</View>
+              <View>{icons.mail}</View>
               <TextInput
                 value={this.state.email}
                 onChangeText={email => this.setState({ email })}
@@ -72,8 +87,8 @@ class SignInScreen extends React.Component {
                 style={styles.input}
               />
             </View>
-            <View style={[styles.inputBox]}>
-              <View style={{ padding: 20 }}>{icons.lock}</View>
+            <View style={[styles.inputBox, { marginTop: 10 }]}>
+              <View>{icons.lock}</View>
               <TextInput
                 value={this.state.password}
                 onChangeText={password => this.setState({ password })}
@@ -82,7 +97,7 @@ class SignInScreen extends React.Component {
                 secureTextEntry
               />
             </View>
-            <View style={{ marginTop: 10, marginBottom: 20 }}>
+            <View style={{ marginVertical: 20 }}>
               <Text style={[styles.title, { fontSize: 14 }]}>
                 Dont't remember your password?
               </Text>

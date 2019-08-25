@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import { STATUS_BAR_HEIGHT, MIN_TABVIEW_HEIGHT } from '../../assets/dimension'
 
 const shadowStyle = {
   elevation: 4,
@@ -58,6 +58,11 @@ export default StyleSheet.create({
     marginHorizontal: 24,
     marginBottom: 18,
     flexDirection: 'row'
+  },
+  tabViewStyle: {
+    flex: 1,
+    minHeight: MIN_TABVIEW_HEIGHT,
+    backgroundColor: palette.backgroundColorWhite
   },
   headerTitle: {
     fontSize: 40,
@@ -133,22 +138,20 @@ export default StyleSheet.create({
   },
   box,
   button: {
-    flex: 1,
     backgroundColor: palette.backgroundColorWhite,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 10,
-    minHeight: 51,
+    height: 51,
     ...shadowStyle
   },
   card: {
-    flex: 2,
     padding: 24,
     backgroundColor: palette.backgroundColorWhite,
     borderRadius: 12,
-    minHeight: 126,
+    height: 126,
     ...shadowStyle
   },
   contentBox: {

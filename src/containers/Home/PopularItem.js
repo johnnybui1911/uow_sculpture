@@ -8,7 +8,7 @@ const PopularItem = props => {
   const { item, index, navigation } = props
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate('Detail', { item })}
+      onPress={() => navigation.navigate('Detail', { id: item.id })}
     >
       <View
         style={{

@@ -5,38 +5,39 @@ import {
   FlatList,
   Image,
   Text,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native'
 import moment from 'moment'
 import styles from './styles'
 import images from '../../assets/images'
 import DividerLight from '../../components/Divider/DividerLight'
+import { MIN_TABVIEW_HEIGHT } from '../../assets/dimension'
 
 const localComments = [
   {
     text: 'Hello',
     submitDate: new Date(2019, 5, 24, 10, 33, 30),
-    photoURL: 1,
+    photoURL: 1
   },
   {
     text:
       'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
     submitDate: new Date(2019, 5, 29, 10, 33, 30),
-    photoURL: 2,
+    photoURL: 2
   },
   {
     text:
       'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
     submitDate: new Date(2019, 5, 29, 10, 33, 30),
-    photoURL: 3,
+    photoURL: 3
   },
   {
     text:
       'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
     submitDate: new Date(2019, 5, 29, 10, 33, 30),
-    photoURL: 4,
+    photoURL: 4
   },
-  { text: 'Hello', submitDate: new Date(), photoURL: 1 },
+  { text: 'Hello', submitDate: new Date(), photoURL: 1 }
 ]
 
 class CommentScreen extends React.PureComponent {
@@ -45,7 +46,7 @@ class CommentScreen extends React.PureComponent {
     this.state = {
       comments: [],
       loading: true,
-      refreshing: false,
+      refreshing: false
     }
   }
 
@@ -61,7 +62,7 @@ class CommentScreen extends React.PureComponent {
     this.setState({
       comments: localComments,
       refreshing: false,
-      loading: false,
+      loading: false
     })
   }
 
@@ -72,7 +73,7 @@ class CommentScreen extends React.PureComponent {
         style={{
           flex: 1,
           flexDirection: 'row',
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
       >
         <View style={[]}>
@@ -85,7 +86,7 @@ class CommentScreen extends React.PureComponent {
           style={{
             flex: 1,
             justifyContent: 'center',
-            paddingLeft: 12,
+            paddingLeft: 12
           }}
         >
           <Text style={[styles.title, { fontSize: 16, marginBottom: 3 }]}>
@@ -122,34 +123,18 @@ class CommentScreen extends React.PureComponent {
   _handleRefresh = () => {
     this.setState(
       {
-        refreshing: true,
+        refreshing: true
       },
       () =>
         this.setState({
-          refreshing: false,
+          refreshing: false
         })
     )
   }
 
   render() {
     const { loading } = this.state
-    return (
-      <SafeAreaView style={styles.container}>
-        {loading ? (
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <ActivityIndicator size="large" />
-          </View>
-        ) : (
-          <View
-            style={{
-              flex: 1,
-            }}
-          >
-            {this._renderList()}
-          </View>
-        )}
-      </SafeAreaView>
-    )
+    return <View style={{ flex: 1 }}>{this._renderList()}</View>
   }
 }
 

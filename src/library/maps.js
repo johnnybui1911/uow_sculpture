@@ -24,6 +24,6 @@ export const INITIAL_REGION = {
 
 export const GOOGLE_MAPS_APIKEY = 'AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs'
 export const URL_TEMPLATE =
-  'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW53dyIsImEiOiJjanlyNmg4dDYwN3Z6M210a3E2ZmJoemprIn0.yDLDtTyLhPBSI_qnjes0kw'
+  'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW53dyIsImEiOiJjanlyNmg4dDYwN3Z6M210a3E2ZmJoemprIn0.yDLDtTyLhPBSI_qnjes0kw'
 export const DISTANCE_MATRIX_API =
   'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&language=en&mode=walking'

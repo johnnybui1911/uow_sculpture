@@ -1,27 +1,27 @@
-import React from "react";
-import { SafeAreaView, View, FlatList } from "react-native";
-import styles from "./styles";
-import { localData } from "../../library/localData";
-import CardItem from "./CardItem";
+import React from 'react'
+import { SafeAreaView, View, FlatList } from 'react-native'
+import styles from './styles'
+import { localData } from '../../library/localData'
+import CardItem from './CardItem'
 
 class LikeScreen extends React.PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: []
-    };
+    }
   }
 
   componentDidMount = () => {
-    this.setState({ data: localData });
-  };
+    this.setState({ data: localData })
+  }
 
   _renderItem = ({ item }) => {
-    return <CardItem item={item} />;
-  };
+    return <CardItem item={item} />
+  }
 
   _renderList = () => {
-    const { data } = this.state;
+    const { data } = this.state
     return (
       <FlatList
         data={data}
@@ -31,22 +31,12 @@ class LikeScreen extends React.PureComponent {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 12 }}
       />
-    );
-  };
+    )
+  }
 
   render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            flex: 1
-          }}
-        >
-          {this._renderList()}
-        </View>
-      </SafeAreaView>
-    );
+    return <View style={{ flex: 1 }}>{this._renderList()}</View>
   }
 }
 
-export default LikeScreen;
+export default LikeScreen

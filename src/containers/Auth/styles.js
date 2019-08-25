@@ -17,12 +17,12 @@ const shadowStyle = {
 }
 
 const inputBox = {
-  marginBottom: 10,
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
   marginHorizontal: 24,
   height: 51,
+  paddingHorizontal: 15,
   backgroundColor: palette.backgroundColorWhite,
   borderRadius: 12
 }
@@ -64,7 +64,7 @@ export default StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     paddingBottom: 10,
-    paddingLeft: 0,
+    paddingLeft: 15,
     width: '100%',
     fontFamily: 'Montserrat-Medium',
     fontSize: 14,

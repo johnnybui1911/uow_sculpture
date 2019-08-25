@@ -13,6 +13,7 @@ import LottieView from 'lottie-react-native'
 import Modal from 'react-native-modal'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
+import { Notifications } from 'expo'
 import { connect } from 'react-redux'
 import numeral from 'numeral'
 import haversine from 'haversine-distance'
@@ -45,7 +46,10 @@ import {
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT
 } from '../../assets/dimension'
-import { _sendPushNotification } from '../../library/notificationTask'
+import {
+  _sendLocalNotification,
+  _handleNotification
+} from '../../library/notificationTask'
 import animations from '../../assets/animations'
 
 function formatNumber(number) {
@@ -95,6 +99,9 @@ class MapScreen extends React.PureComponent {
   }
 
   componentDidMount = () => {
+    this._notificationSubscription = Notifications.addListener(notification =>
+      _handleNotification(notification, this.props.navigation, this._resetUI)
+    )
     // this._getLocationAsync()
   }
 
@@ -115,6 +122,7 @@ class MapScreen extends React.PureComponent {
   subscribeLocation = null
 
   _animateCeleb = () => {
+    this.progressAnimation.setValue(0)
     Animated.timing(this.progressAnimation, {
       toValue: 1,
       duration: 5000
@@ -237,7 +245,7 @@ class MapScreen extends React.PureComponent {
   }
 
   _navigateToDetail = item => {
-    this.props.navigation.navigate('Detail', { item })
+    this.props.navigation.navigate('Detail', { id: item.id })
     this._resetUI()
   }
 
@@ -278,16 +286,18 @@ class MapScreen extends React.PureComponent {
               )
 
               if (distance <= 20) {
-                _sendPushNotification({
+                const message = {
                   title: 'Congratulation',
                   body: 'You have finished your trip !!!',
                   data: {
                     screen: 'Detail',
                     id: this.props.selectedMarker.id
                   }
-                })
+                }
                 this._animateCeleb()
                 this.setState({ isModalVisible: true })
+                _sendLocalNotification(message)
+                // _sendPushNotification(message)
               }
             }
           }}
@@ -390,6 +400,7 @@ class MapScreen extends React.PureComponent {
           <MapView
             style={styles.mapStyle}
             mapType={Platform.OS === 'android' ? 'none' : 'standard'}
+            provider={Platform.OS === 'ios' ? 'google' : null}
             ref={ref => {
               this.map = ref
             }}

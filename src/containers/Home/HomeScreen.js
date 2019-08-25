@@ -2,38 +2,33 @@ import React from 'react'
 import { SafeAreaView, Text, View, ScrollView } from 'react-native'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
+import {
+  Placeholder,
+  PlaceholderMedia,
+  PlaceholderLine,
+  Fade
+} from 'rn-placeholder'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
 import NearbyList from './NearbyList'
 import PopularList from './PopularList'
-import { localData } from '../../library/localData'
 import NearbyItem from './NearbyItem'
 import PopularItem from './PopularItem'
+import { _handleNotification } from '../../library/notificationTask'
 
 class HomeScreen extends React.PureComponent {
-  constructor(props) {
-    super(props)
+  state = {
+    isLoading: false
   }
 
-  componentDidMount = async () => {
-    this._notificationSubscription = await Notifications.addListener(
-      this._handleNotification
+  componentDidMount = () => {
+    this._notificationSubscription = Notifications.addListener(notification =>
+      _handleNotification(notification, this.props.navigation)
     )
   }
 
-  _handleNotification = notification => {
-    if (notification.origin === 'selected' && notification.data.screen) {
-      this._navigateToDetail(
-        localData.find(item => item.id === notification.data.id)
-      )
-    }
-    console.log('Notification selected and navigated to Detail')
-    console.log(notification)
-    console.log(notification.data)
-  }
-
   _navigateToDetail = item => {
-    this.props.navigation.navigate('Detail', { item })
+    this.props.navigation.navigate('Detail', { id: item.id })
   }
 
   _renderNearbyItem = ({ item, index }) => {
@@ -49,6 +44,7 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
+    const { isLoading } = this.state
     const data = this.props.markers
     return (
       <SafeAreaView style={styles.container}>
@@ -56,7 +52,15 @@ class HomeScreen extends React.PureComponent {
           <HeaderBar headerName="Home" />
           <View>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
-            <NearbyList data={data} _renderItem={this._renderNearbyItem} />
+            {isLoading ? (
+              <View style={styles.nearbyItemStyle}>
+                <Placeholder Animation={Fade}>
+                  <PlaceholderMedia size="100%" />
+                </Placeholder>
+              </View>
+            ) : (
+              <NearbyList data={data} _renderItem={this._renderNearbyItem} />
+            )}
           </View>
           <View style={[styles.popularList]}>
             <Text style={styles.listTitle}>Popular Sculptures</Text>

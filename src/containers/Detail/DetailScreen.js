@@ -1,5 +1,6 @@
 import React from 'react'
 import { SafeAreaView, View, ScrollView } from 'react-native'
+import { Notifications } from 'expo'
 import { localData } from '../../library/localData'
 import styles from './styles'
 import TitleCard from './TitleCard'
@@ -7,12 +8,19 @@ import FeatureCard from './FeatureCard'
 import DescriptionCard from './DescriptionCard'
 import MapCard from './MapCard'
 import Header from './Header'
+import { _handleNotification } from '../../library/notificationTask'
 
-const localItem = localData[0]
+// const localItem = localData[0]
 
 class DetailScreen extends React.PureComponent {
   constructor(props) {
     super(props)
+  }
+
+  componentDidMount = () => {
+    this._notificationSubscription = Notifications.addListener(notification =>
+      _handleNotification(notification, this.props.navigation)
+    )
   }
 
   _navigateToMap = () => {
@@ -20,7 +28,8 @@ class DetailScreen extends React.PureComponent {
   }
 
   render() {
-    const item = this.props.navigation.getParam('item', localItem)
+    const id = this.props.navigation.getParam('id', 0)
+    const item = localData[id]
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>

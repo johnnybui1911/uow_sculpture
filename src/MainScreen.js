@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Text
 } from 'react-native'
+import Modal from 'react-native-modal'
 import Constants from 'expo-constants'
 import { connect } from 'react-redux'
 import { syncLocationThunk } from './redux/actions/locationActions'
@@ -18,11 +19,15 @@ import {
 } from './assets/dimension'
 import { AppContainer } from './navigations/AppStack'
 import IntroScreen from './containers/Introduction/IntroScreen'
+import palette from './assets/palette'
 
 // TODO: just swipe up, not swipe down
 class MainScreen extends React.PureComponent {
   constructor(props) {
     super(props)
+    this.state = {
+      isModalVisible: true
+    }
     this.position = new Animated.ValueXY()
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gestureState) => true,
@@ -87,6 +92,40 @@ class MainScreen extends React.PureComponent {
           />
         ) : null}
         <AppContainer />
+        <View
+          style={{
+            position: 'absolute',
+            height: STATUS_BAR_HEIGHT,
+            top: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: palette.primaryColor,
+            zIndex: 100,
+            opacity: this.state.isModalVisible ? 1 : 0
+          }}
+        />
+        <Modal
+          isVisible={this.state.isModalVisible}
+          animationIn="slideInDown"
+          animationInTiming={1000}
+          onSwipeComplete={() => this.setState({ isModalVisible: false })}
+          swipeDirection="up"
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <View
+            style={{
+              height: SCREEN_HEIGHT,
+              width: SCREEN_WIDTH,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <IntroScreen />
+          </View>
+        </Modal>
       </SafeAreaView>
     )
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../assets/dimension'
+import { SCREEN_WIDTH } from '../../assets/dimension'
 
 const styles = StyleSheet.create({
   lineSeparator: {

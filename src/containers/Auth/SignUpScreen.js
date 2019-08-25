@@ -10,6 +10,7 @@ import {
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
+import { FIXED_HEIGHT_AUTH } from '../../assets/dimension'
 
 class SignUpScreen extends React.Component {
   constructor(props) {
@@ -24,36 +25,29 @@ class SignUpScreen extends React.Component {
   render() {
     return (
       <ScrollView>
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View
+          style={{
+            flex: 1
+          }}
+        >
           <View
             style={{
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              marginVertical: 30
+              marginTop: 10
             }}
           >
-            {/* <View
-              style={{
-                height: 100,
-                width: 100,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 50,
-                backgroundColor: palette.primaryColor
-              }}
-            > */}
             {icons.camera}
-            {/* </View> */}
-            <View style={{ marginTop: 10 }}>
-              <Text style={[styles.title, { fontSize: 14 }]}>
-                Upload Profile Picture
-              </Text>
-            </View>
           </View>
-          <View style={{ flex: 2, alignItems: 'center' }}>
-            <View style={styles.inputBox}>
-              <View style={{ padding: 20 }}>{icons.fullName}</View>
+          <View style={{ marginVertical: 15 }}>
+            <Text style={[styles.title, { fontSize: 14 }]}>
+              Upload Profile Picture
+            </Text>
+          </View>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <View style={[styles.inputBox]}>
+              <View>{icons.fullName}</View>
               <TextInput
                 value={this.state.username}
                 onChangeText={username => this.setState({ username })}
@@ -61,8 +55,8 @@ class SignUpScreen extends React.Component {
                 style={styles.input}
               />
             </View>
-            <View style={styles.inputBox}>
-              <View style={{ padding: 20 }}>{icons.mail}</View>
+            <View style={[styles.inputBox, { marginTop: 10 }]}>
+              <View>{icons.mail}</View>
               <TextInput
                 value={this.state.email}
                 onChangeText={email => this.setState({ email })}
@@ -70,8 +64,8 @@ class SignUpScreen extends React.Component {
                 style={styles.input}
               />
             </View>
-            <View style={[styles.inputBox]}>
-              <View style={{ padding: 20 }}>{icons.lock}</View>
+            <View style={[styles.inputBox, { marginTop: 10 }]}>
+              <View>{icons.lock}</View>
               <TextInput
                 value={this.state.password}
                 onChangeText={password => this.setState({ password })}
@@ -80,8 +74,8 @@ class SignUpScreen extends React.Component {
                 secureTextEntry
               />
             </View>
-            <View style={[styles.inputBox]}>
-              <View style={{ padding: 20 }}>{icons.lock}</View>
+            <View style={[styles.inputBox, { marginTop: 10 }]}>
+              <View>{icons.lock}</View>
               <TextInput
                 value={this.state.confirmPassword}
                 onChangeText={confirmPassword =>
@@ -96,7 +90,8 @@ class SignUpScreen extends React.Component {
               style={[
                 styles.box,
                 {
-                  marginTop: 10,
+                  marginTop: 15,
+                  marginBottom: 10,
                   alignItems: 'center',
                   backgroundColor: palette.primaryColorLight
                 }
