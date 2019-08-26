@@ -1,4 +1,8 @@
+import axios from 'axios'
+import qs from 'qs'
 import { SIGN_IN_REJECTED, SIGN_IN_SUCCESSFULL } from '../../assets/actionTypes'
+import { getData, storeData } from '../../library/asyncStorage'
+import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 
 export const signInSuccesful = userAuth => {
   return { type: SIGN_IN_SUCCESSFULL, payload: { user: userAuth } }
@@ -8,21 +12,37 @@ export const signInRejected = () => {
   return { type: SIGN_IN_REJECTED }
 }
 
-export const thunkSignIn = userAuth => {
-  return dispatch => {
-    //   auth.onAuthStateChanged(async userAuth => {
-    //     if (userAuth) {
-    //   await
-    if (userAuth) {
-      setTimeout(() => {
-        dispatch(signInSuccesful(userAuth))
-      }, 0)
+export const thunkSignIn = () => {
+  return async dispatch => {
+    const auth = await getData('auth')
+    if (auth) {
+      // send GET to back end to fetch user data
+      dispatch(signInSuccesful())
     } else {
       dispatch(signInRejected())
     }
-    //     } else {
-    //       await dispatch(signInRejected());
-    //     }
-    //   });
   }
+}
+
+export const refreshNewToken = async () => {
+  const auth = await getData('auth')
+  const { token, refresh_token, expires_in } = JSON.parse(auth)
+
+  const response = await axios({
+    method: 'POST',
+    url: `${AUTH0_DOMAIN}/oauth/token`,
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify({
+      grant_type: 'refresh_token',
+      client_id: AUTH0_CLIENT_ID,
+      refresh_token: refresh_token
+    })
+  })
+
+  const new_auth = {
+    token: response.data.access_token,
+    refresh_token,
+    expires_in: response.data.expires_in
+  }
+  await storeData('auth', JSON.stringify(new_auth))
 }

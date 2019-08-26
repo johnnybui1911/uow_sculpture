@@ -18,3 +18,11 @@ export const getData = async storageKey => {
     return Promise.reject(e)
   }
 }
+
+export const clearData = async storageKey => {
+  try {
+    await AsyncStorage.removeItem(storageKey)
+  } catch (e) {
+    console.log(e)
+  }
+}

@@ -3,21 +3,27 @@ import {
   Text,
   View,
   ScrollView,
-  ActivityIndicator,
   TouchableOpacity,
   TextInput
 } from 'react-native'
 import { AuthSession } from 'expo'
 import { connect } from 'react-redux'
-import toQueryString from 'to-querystring'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import { thunkSignIn } from '../../redux/actions/authActions'
 import MidDivider from '../../components/MidDivider/MidDivider'
+import { storeData } from '../../library/asyncStorage'
+import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 
-const AUTH0_DOMAIN = 'https://dev-t5oe7-d3.au.auth0.com'
-const AUTH0_CLIENT_ID = 'kUKlrPhDkRIBsuPOL4c52uiZxN1N6eKK'
+function toQueryString(params) {
+  return Object.entries(params)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join('&')
+}
 
 class SignInScreen extends React.Component {
   state = {
@@ -26,32 +32,30 @@ class SignInScreen extends React.Component {
   }
 
   _loginWithAuth0 = async () => {
-    // this.props.handleAuthorize({ username: 'Name' })
-    // this.props.navigation.navigate('Personal')
-
     const redirectUrl = AuthSession.getRedirectUrl()
+    //`${Constants.linkingUri}`
 
-    let authUrl =
-      `${AUTH0_DOMAIN}/authorize?` +
-      toQueryString({
-        client_id: AUTH0_CLIENT_ID,
-        response_type: 'token',
-        scope: 'openid profile email',
-        redirect_uri: redirectUrl
-      })
+    const queryParams = toQueryString({
+      client_id: AUTH0_CLIENT_ID,
+      redirect_uri: redirectUrl,
+      response_type: 'token',
+      scope: 'openid email offline_access '
+    })
 
-    console.log(`Redirect URL (add this to Auth0): ${redirectUrl}`)
-    console.log(`AuthURL is:  ${authUrl}`)
+    const authUrl = `${AUTH0_DOMAIN}/authorize?` + queryParams
+    // console.log(`Redirect URL (add this to Auth0): ${redirectUrl}`)
+    // console.log(`AuthURL is:  ${authUrl}`)
 
-    const result = await AuthSession.startAsync({
+    const response = await AuthSession.startAsync({
       authUrl: authUrl
     })
 
-    if (result.type === 'success') {
-      console.log(result)
-      let token = result.params.access_token
-      // this.props.setToken(token)
-      // AuthSession.dismiss()
+    if (response.type === 'success') {
+      // console.log(response)
+      const { refresh_token, expires_in, token } = response.params
+      const auth = { token, refresh_token, expires_in }
+      await storeData('auth', JSON.stringify(auth))
+      this.props.thunkSignIn()
       this.props.navigation.navigate('Personal')
     }
   }
@@ -160,8 +164,8 @@ class SignInScreen extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  handleAuthorize: userAuth => {
-    dispatch(thunkSignIn(userAuth))
+  thunkSignIn: () => {
+    dispatch(thunkSignIn())
   }
 })
 
