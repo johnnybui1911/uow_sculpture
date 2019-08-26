@@ -92,7 +92,7 @@ class MainScreen extends React.PureComponent {
           />
         ) : null}
         <AppContainer />
-        <View
+        {/* <View
           style={{
             position: 'absolute',
             height: STATUS_BAR_HEIGHT,
@@ -125,7 +125,7 @@ class MainScreen extends React.PureComponent {
           >
             <IntroScreen />
           </View>
-        </Modal>
+        </Modal> */}
       </SafeAreaView>
     )
   }
