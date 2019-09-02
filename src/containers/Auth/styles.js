@@ -33,7 +33,7 @@ export default StyleSheet.create({
   },
   header: { height: HEADER_HEIGHT, backgroundColor: palette.primaryColor },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold',
     textAlign: 'center'
@@ -44,14 +44,9 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     textAlign: 'center'
   },
-  distance: {
-    fontSize: 14,
-    fontFamily: 'Montserrat-SemiBold',
-    color: palette.primaryColorLight
-  },
   description: {
-    fontSize: 14,
-    color: palette.secondaryTypographyColor,
+    fontSize: 16,
+    color: palette.primaryColor,
     fontFamily: 'Montserrat-Medium'
   },
   box: { ...inputBox, ...shadowStyle },

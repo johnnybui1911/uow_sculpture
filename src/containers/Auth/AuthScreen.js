@@ -1,67 +1,39 @@
 import React from 'react'
-import { SafeAreaView, View, Animated, ScrollView } from 'react-native'
-import Constants from 'expo-constants'
-import {
-  createMaterialTopTabNavigator,
-  createAppContainer
-} from 'react-navigation'
+import { SafeAreaView, View, Animated } from 'react-native'
 import { TabView, TabBar } from 'react-native-tab-view'
-import LottieView from 'lottie-react-native'
+import Svg, { Ellipse } from 'react-native-svg'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import SignInScreen from './SignInScreen'
 import SignUpScreen from './SignUpScreen'
-import animations from '../../assets/animations'
 import { SCREEN_WIDTH } from '../../assets/dimension'
 
 const HEADER_HEIGHT = 209
 const TAB_BAR_HEIGHT = 44
 const SCROLLABLE_HEIGHT = HEADER_HEIGHT
 
-// export const AuthTab = createMaterialTopTabNavigator(
-//   {
-//     SignIn: {
-//       screen: SignInScreen,
-//       navigationOptions: () => ({
-//         title: 'SIGN IN'
-//       })
-//     },
-//     SignUp: {
-//       screen: SignUpScreen,
-//       navigationOptions: () => ({
-//         title: 'SIGN UP'
-//       })
-//     }
-//   },
-//   {
-//     initialRouteName: 'SignIn',
-//     animationEnabled: true,
-//     tabBarOptions: {
-//       style: {
-//         justifyContent: 'center',
-//         backgroundColor: palette.backgroundColorWhite
-//       },
-//       labelStyle: {
-//         fontFamily: 'Montserrat-SemiBold',
-//         fontSize: 14
-//       },
-//       activeTintColor: palette.primaryColor,
-//       inactiveTintColor: palette.secondaryTypographyColor,
-//       indicatorStyle: { backgroundColor: palette.primaryColorLight, height: 3 }
-//     }
-//   }
-// )
-
-// const AuthContainer = createAppContainer(AuthTab)
-
 export const AuthHeader = () => (
   <View style={styles.header}>
+    <Svg
+      style={{ position: 'absolute', top: 0 }}
+      height={1000}
+      width={SCREEN_WIDTH}
+    >
+      <Ellipse
+        cx={SCREEN_WIDTH / 2 + 5}
+        cy={100}
+        rx={SCREEN_WIDTH}
+        ry={200}
+        fill={palette.primaryColor}
+      />
+    </Svg>
     <View
       style={{
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: 80,
         paddingRight: 40
       }}
     >
@@ -198,19 +170,18 @@ class AuthScreen extends React.PureComponent {
   render() {
     return (
       <SafeAreaView
-        style={[
-          styles.container,
-          { backgroundColor: palette.backgroundColorWhite }
-        ]}
+        style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
       >
-        <TabView
+        <AuthHeader />
+        <SignInScreen navigation={this.props.navigation} />
+        {/* <TabView
           style={{ flex: 1 }}
           navigationState={this.state}
           renderTabBar={this._renderHeader}
           renderScene={this._renderSence}
           onIndexChange={index => this.setState({ index })}
           initialLayout={initialLayout}
-        />
+        /> */}
       </SafeAreaView>
     )
   }

@@ -22,6 +22,9 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: palette.backgroundColorGrey
   },
+  nearbyView: {
+    minHeight: IMAGE_HEIGHT + PADDING * 2
+  },
   nearbyItemStyle: {
     // root container
     width: IMAGE_WIDTH,

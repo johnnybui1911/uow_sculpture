@@ -49,7 +49,9 @@ class Header extends React.PureComponent {
             <MidDivider>
               <View style={styles.walkingBox}>
                 {icons.walking}
-                <Text style={styles.title_sm}>5 min</Text>
+                <Text style={styles.title_sm}>
+                  {selectedMarker.duration} min
+                </Text>
               </View>
             </MidDivider>
           </View>

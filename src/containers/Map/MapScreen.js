@@ -103,6 +103,7 @@ class MapScreen extends React.PureComponent {
       _handleNotification(notification, this.props.navigation, this._resetUI)
     )
     this._getLocationAsync()
+    this._animateLoop()
   }
 
   componentWillUnmount = () => {
@@ -129,6 +130,20 @@ class MapScreen extends React.PureComponent {
       toValue: 1,
       duration: 5000
     }).start()
+  }
+
+  loopAnimate = new Animated.Value(0)
+
+  _animateLoop = () => {
+    Animated.sequence([
+      Animated.timing(this.loopAnimate, {
+        toValue: 1,
+        duration: 8000
+      })
+    ]).start(() => {
+      this.loopAnimate.setValue(0)
+      this._animateLoop()
+    })
   }
 
   _getLocationAsync = async () => {
@@ -174,7 +189,7 @@ class MapScreen extends React.PureComponent {
               .timing({ latitude, longitude, duration })
               .start()
 
-            if (this.props.selectedMarker.coordinate) {
+            if (this.props.selectedMarker) {
               const userLocation = { latitude, longitude }
               if (this.props.selectedMarker) {
                 const distance = calcDistance(
@@ -263,46 +278,46 @@ class MapScreen extends React.PureComponent {
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
           onPress={this._centerUserLocation}
-          // draggable
-          // onDragEnd={e => {
-          //   const userLocation = e.nativeEvent.coordinate
+          draggable
+          onDragEnd={e => {
+            const userLocation = e.nativeEvent.coordinate
 
-          //   const travelDistance = calcDistance(
-          //     userLocation,
-          //     this.userCoordinate.__getValue()
-          //   )
+            const travelDistance = calcDistance(
+              userLocation,
+              this.userCoordinate.__getValue()
+            )
 
-          //   this.userCoordinate.setValue({
-          //     ...userLocation,
-          //     latitudeDelta: 0,
-          //     longitudeDelta: 0
-          //   })
+            this.userCoordinate.setValue({
+              ...userLocation,
+              latitudeDelta: 0,
+              longitudeDelta: 0
+            })
 
-          //   travelDistance >= 10 && this.props.fetchDataThunk(userLocation) // each 10m, sync position again to fecth data
-          //   // .then(res => console.log(res))
+            travelDistance >= 10 && this.props.fetchDataThunk(userLocation) // each 10m, sync position again to fecth data
+            // .then(res => console.log(res))
 
-          //   if (this.props.selectedMarker) {
-          //     const distance = calcDistance(
-          //       e.nativeEvent.coordinate,
-          //       this.props.selectedMarker.coordinate
-          //     )
+            if (this.props.selectedMarker) {
+              const distance = calcDistance(
+                e.nativeEvent.coordinate,
+                this.props.selectedMarker.coordinate
+              )
 
-          //     if (distance <= 20) {
-          //       const message = {
-          //         title: 'Congratulation',
-          //         body: 'You have finished your trip !!!',
-          //         data: {
-          //           screen: 'Detail',
-          //           id: this.props.selectedMarker.id
-          //         }
-          //       }
-          //       this._animateCeleb()
-          //       this.setState({ isModalVisible: true })
-          //       _sendLocalNotification(message)
-          //       // _sendPushNotification(message)
-          //     }
-          //   }
-          // }}
+              if (distance <= 20) {
+                const message = {
+                  title: 'Congratulation',
+                  body: 'You have finished your trip !!!',
+                  data: {
+                    screen: 'Detail',
+                    id: this.props.selectedMarker.id
+                  }
+                }
+                this._animateCeleb()
+                this.setState({ isModalVisible: true })
+                _sendLocalNotification(message)
+                // _sendPushNotification(message)
+              }
+            }
+          }}
         >
           <View style={{ padding: 35 }}>
             {icons.user_location}
@@ -311,9 +326,10 @@ class MapScreen extends React.PureComponent {
                 zIndex: -1,
                 elevation: 0
               }}
+              progress={this.loopAnimate}
               source={animations.beacon}
-              autoPlay
-              loop
+              // autoPlay
+              // loop
             />
           </View>
         </Marker.Animated>
@@ -468,7 +484,7 @@ class MapScreen extends React.PureComponent {
                 this.animation = animation
               }}
               style={{
-                zIndex: 1000,
+                zIndex: 99,
                 elevation: 20,
                 transform: [{ scale: (1.1, 1.4) }]
               }}
@@ -510,7 +526,7 @@ class MapScreen extends React.PureComponent {
                   justifyContent: 'center',
                   alignItems: 'center',
                   marginTop: 30,
-                  zIndex: 10
+                  zIndex: 100
                 }}
                 onPress={() => {
                   this._navigateToDetail(this.props.selectedMarker)

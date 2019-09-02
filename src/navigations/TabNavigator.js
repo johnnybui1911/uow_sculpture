@@ -1,9 +1,7 @@
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import CollectionScreen from '../containers/Collection/CollectionScreen'
 import MapScreen from '../containers/Map/MapScreen'
-import AuthScreen from '../containers/Auth/AuthScreen'
 import CustomBottomTab from '../components/BottomTabBar/CustomBottomTab'
-import PersonalScreen from '../containers/Personal/PersonalScreen'
 import HomeScreen from '../containers/Home/HomeScreen'
 import ProfileContainer from './ProfileContainer'
 

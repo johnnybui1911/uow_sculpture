@@ -52,8 +52,8 @@ class SignInScreen extends React.Component {
 
     if (response.type === 'success') {
       // console.log(response)
-      const { refresh_token, expires_in, token } = response.params
-      const auth = { token, refresh_token, expires_in }
+      const { refresh_token, expires_in, access_token } = response.params
+      const auth = { token: access_token, refresh_token, expires_in }
       await storeData('auth', JSON.stringify(auth))
       this.props.signInSuccesful()
       this.props.navigation.navigate('Personal')
@@ -62,103 +62,70 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView>
+      <View style={{ flex: 1, justifyContent: 'center', marginTop: 80 }}>
         <View
           style={{
-            flex: 1
+            marginVertical: 30,
+            alignItems: 'center'
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              marginVertical: 10
-            }}
-          >
-            <View style={{}}>
-              <Text style={styles.title}>Sign in with</Text>
-            </View>
-            <TouchableOpacity
-              style={[styles.box, { marginVertical: 10 }]}
-              onPress={this._loginWithAuth0}
-            >
-              <View style={{ flex: 1 }}>{icons.google}</View>
-              <View style={{ position: 'absolute' }}>
-                <Text style={styles.titleButton}>GOOGLE</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.box, { backgroundColor: palette.facebookColor }]}
-            >
-              <View style={{ flex: 1 }}>{icons.facebook}</View>
-              <View style={{ position: 'absolute' }}>
-                <Text
-                  style={[
-                    styles.titleButton,
-                    { color: palette.backgroundColorWhite }
-                  ]}
-                >
-                  FACEBOOK
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <MidDivider />
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginVertical: 10
-            }}
-          >
-            <View style={styles.inputBox}>
-              <View>{icons.mail}</View>
-              <TextInput
-                value={this.state.email}
-                onChangeText={email => this.setState({ email })}
-                placeholder="Email"
-                style={styles.input}
-              />
-            </View>
-            <View style={[styles.inputBox, { marginTop: 10 }]}>
-              <View>{icons.lock}</View>
-              <TextInput
-                value={this.state.password}
-                onChangeText={password => this.setState({ password })}
-                placeholder="Password"
-                style={styles.input}
-                secureTextEntry
-              />
-            </View>
-            <View style={{ marginVertical: 20 }}>
-              <Text style={[styles.title, { fontSize: 14 }]}>
-                Dont't remember your password?
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={[
-                styles.box,
-                {
-                  alignItems: 'center',
-                  backgroundColor: palette.primaryColorLight
-                }
-              ]}
-            >
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={[
-                    styles.titleButton,
-                    { color: palette.backgroundColorWhite }
-                  ]}
-                >
-                  SIGN IN
-                </Text>
-              </View>
-            </TouchableOpacity>
+          <View style={{ textAlign: 'center' }}>
+            <Text style={styles.title}>Welcome</Text>
+            <Text style={styles.description}>
+              Sign in to access your account
+            </Text>
           </View>
         </View>
-      </ScrollView>
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity
+            style={[
+              styles.box,
+              {
+                alignItems: 'center',
+                backgroundColor: palette.primaryColorLight,
+                marginBottom: 10
+              }
+            ]}
+            onPress={this._loginWithAuth0}
+          >
+            <View style={{ flex: 1 }}>
+              <Text
+                style={[
+                  styles.titleButton,
+                  { color: palette.backgroundColorWhite }
+                ]}
+              >
+                SIGN IN
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.box,
+              {
+                borderWidth: 1,
+                borderColor: palette.primaryColorLight
+              }
+            ]}
+            onPress={this._loginWithAuth0}
+          >
+            <View style={{ flex: 1 }}>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color: palette.primaryColorLight,
+                    fontSize: 16,
+                    textAlign: 'center'
+                  }
+                ]}
+              >
+                SIGN OUT
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
     )
   }
 }

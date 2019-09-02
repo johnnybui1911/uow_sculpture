@@ -50,7 +50,7 @@ class HomeScreen extends React.PureComponent {
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <HeaderBar headerName="Home" />
-          <View>
+          <View style={styles.nearbyView}>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
             {isLoading ? (
               <View style={styles.nearbyItemStyle}>

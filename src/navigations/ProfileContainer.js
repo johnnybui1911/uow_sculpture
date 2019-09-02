@@ -7,14 +7,16 @@ import PersonalScreen from '../containers/Personal/PersonalScreen'
 import AuthScreen from '../containers/Auth/AuthScreen'
 import { refreshNewToken } from '../redux/actions/authActions'
 import animations from '../assets/animations'
+import { getData } from '../library/asyncStorage'
 
 class AuthLoadingScreen extends React.PureComponent {
   componentDidMount = () => {
     this._bootstrapAsync()
   }
 
-  _bootstrapAsync = () => {
-    this.props.navigation.navigate(this.props.loggedIn ? 'Personal' : 'Auth')
+  _bootstrapAsync = async () => {
+    const auth = await getData('auth')
+    this.props.navigation.navigate(auth ? 'Personal' : 'Auth')
   }
 
   render() {
