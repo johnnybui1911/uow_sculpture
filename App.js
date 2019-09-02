@@ -25,7 +25,7 @@ export default class App extends React.PureComponent {
     // )
     // await syncLocationBackground()
     // await geofencingRegion()
-    await registerForPushNotificationsAsync()
+    // await registerForPushNotificationsAsync()
     // stop background sync when open app
     // const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
     //   BACKGROUND_LOCATION_TASK

@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
-import { thunkSignIn } from '../../redux/actions/authActions'
+import { thunkSignIn, signInSuccesful } from '../../redux/actions/authActions'
 import MidDivider from '../../components/MidDivider/MidDivider'
 import { storeData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
@@ -55,7 +55,7 @@ class SignInScreen extends React.Component {
       const { refresh_token, expires_in, token } = response.params
       const auth = { token, refresh_token, expires_in }
       await storeData('auth', JSON.stringify(auth))
-      this.props.thunkSignIn()
+      this.props.signInSuccesful()
       this.props.navigation.navigate('Personal')
     }
   }
@@ -166,6 +166,9 @@ class SignInScreen extends React.Component {
 const mapDispatchToProps = dispatch => ({
   thunkSignIn: () => {
     dispatch(thunkSignIn())
+  },
+  signInSuccesful: () => {
+    signInSuccesful()
   }
 })
 

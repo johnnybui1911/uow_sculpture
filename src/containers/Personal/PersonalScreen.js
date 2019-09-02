@@ -16,11 +16,11 @@ import images from '../../assets/images'
 import AboutScreen from './AboutScreen'
 import ProfileBox from './ProfileBox'
 import CommentScreen from './CommentScreen'
-import { SCREEN_WIDTH } from '../../assets/dimension'
+import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 
 const HEADER_HEIGHT = 400
 const TAB_BAR_HEIGHT = 44
-const SCROLLABLE_HEIGHT = HEADER_HEIGHT
+const SCROLLABLE_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT // FIX LATER
 
 const initialLayout = {
   height: 0,

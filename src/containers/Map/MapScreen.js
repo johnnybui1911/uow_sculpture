@@ -102,7 +102,7 @@ class MapScreen extends React.PureComponent {
     this._notificationSubscription = Notifications.addListener(notification =>
       _handleNotification(notification, this.props.navigation, this._resetUI)
     )
-    // this._getLocationAsync()
+    this._getLocationAsync()
   }
 
   componentWillUnmount = () => {
@@ -110,16 +110,18 @@ class MapScreen extends React.PureComponent {
     this.animation.reset()
   }
 
-  progressAnimation = new Animated.Value(0)
+  userCoordinate = null
 
-  userCoordinate = new AnimatedRegion({
-    latitude: USER_LATITUDE,
-    longitude: USER_LONGITUDE,
-    latitudeDelta: 0,
-    longitudeDelta: 0
-  })
+  // new AnimatedRegion({
+  //   latitude: USER_LATITUDE,
+  //   longitude: USER_LONGITUDE,
+  //   latitudeDelta: 0,
+  //   longitudeDelta: 0
+  // })
 
   subscribeLocation = null
+
+  progressAnimation = new Animated.Value(0)
 
   _animateCeleb = () => {
     this.progressAnimation.setValue(0)
@@ -180,16 +182,17 @@ class MapScreen extends React.PureComponent {
                   this.props.selectedMarker.coordinate
                 )
                 if (distance <= 10) {
-                  _sendPushNotification({
+                  const message = {
                     title: 'Congratulation',
                     body: 'You have finished your trip !!!',
                     data: {
                       screen: 'Detail',
                       id: this.props.selectedMarker.id
                     }
-                  })
+                  }
                   this._animateCeleb()
                   this.setState({ isModalVisible: true })
+                  _sendLocalNotification(message)
                 }
               }
             }
@@ -259,48 +262,47 @@ class MapScreen extends React.PureComponent {
           style={{ zIndex: 2 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
-          // image={images.user_location}
           onPress={this._centerUserLocation}
-          draggable
-          onDragEnd={e => {
-            const userLocation = e.nativeEvent.coordinate
+          // draggable
+          // onDragEnd={e => {
+          //   const userLocation = e.nativeEvent.coordinate
 
-            const travelDistance = calcDistance(
-              userLocation,
-              this.userCoordinate.__getValue()
-            )
+          //   const travelDistance = calcDistance(
+          //     userLocation,
+          //     this.userCoordinate.__getValue()
+          //   )
 
-            this.userCoordinate.setValue({
-              ...userLocation,
-              latitudeDelta: 0,
-              longitudeDelta: 0
-            })
+          //   this.userCoordinate.setValue({
+          //     ...userLocation,
+          //     latitudeDelta: 0,
+          //     longitudeDelta: 0
+          //   })
 
-            travelDistance >= 10 && this.props.fetchDataThunk(userLocation) // each 10m, sync position again to fecth data
-            // .then(res => console.log(res))
+          //   travelDistance >= 10 && this.props.fetchDataThunk(userLocation) // each 10m, sync position again to fecth data
+          //   // .then(res => console.log(res))
 
-            if (this.props.selectedMarker) {
-              const distance = calcDistance(
-                e.nativeEvent.coordinate,
-                this.props.selectedMarker.coordinate
-              )
+          //   if (this.props.selectedMarker) {
+          //     const distance = calcDistance(
+          //       e.nativeEvent.coordinate,
+          //       this.props.selectedMarker.coordinate
+          //     )
 
-              if (distance <= 20) {
-                const message = {
-                  title: 'Congratulation',
-                  body: 'You have finished your trip !!!',
-                  data: {
-                    screen: 'Detail',
-                    id: this.props.selectedMarker.id
-                  }
-                }
-                this._animateCeleb()
-                this.setState({ isModalVisible: true })
-                _sendLocalNotification(message)
-                // _sendPushNotification(message)
-              }
-            }
-          }}
+          //     if (distance <= 20) {
+          //       const message = {
+          //         title: 'Congratulation',
+          //         body: 'You have finished your trip !!!',
+          //         data: {
+          //           screen: 'Detail',
+          //           id: this.props.selectedMarker.id
+          //         }
+          //       }
+          //       this._animateCeleb()
+          //       this.setState({ isModalVisible: true })
+          //       _sendLocalNotification(message)
+          //       // _sendPushNotification(message)
+          //     }
+          //   }
+          // }}
         >
           <View style={{ padding: 35 }}>
             {icons.user_location}
@@ -308,7 +310,6 @@ class MapScreen extends React.PureComponent {
               style={{
                 zIndex: -1,
                 elevation: 0
-                // transform: [{ scale: 1.1 }]
               }}
               source={animations.beacon}
               autoPlay

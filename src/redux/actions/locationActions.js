@@ -20,13 +20,28 @@ export const syncLocationThunk = () => {
     if (status !== 'granted') {
       dispatch(syncLocationRejected())
     } else {
-      await Location.getCurrentPositionAsync({}).then(loc => {
-        if (loc.timestamp) {
-          const { latitude, longitude } = loc.coords
-          dispatch(syncLocationSuccessful({ latitude, longitude }))
-          dispatch(fetchDataThunk(loc.coords))
+      await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.Highest,
+          timeInterval: 1,
+          distanceInterval: 10
+        },
+        loc => {
+          if (loc.timestamp) {
+            const { latitude, longitude } = loc.coords
+            dispatch(syncLocationSuccessful({ latitude, longitude }))
+            dispatch(fetchDataThunk(loc.coords))
+          }
         }
-      })
+      )
+
+      // await Location.getCurrentPositionAsync({}).then(loc => {
+      //   if (loc.timestamp) {
+      //     const { latitude, longitude } = loc.coords
+      //     dispatch(syncLocationSuccessful({ latitude, longitude }))
+      //     dispatch(fetchDataThunk(loc.coords))
+      //   }
+      // })
     }
   }
 }

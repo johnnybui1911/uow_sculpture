@@ -11,7 +11,7 @@ import {
 import Modal from 'react-native-modal'
 import Constants from 'expo-constants'
 import { connect } from 'react-redux'
-import { syncLocationThunk } from './redux/actions/locationActions'
+import { syncLocationThunk, thunkSignIn } from './redux/actions'
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
@@ -57,10 +57,7 @@ class MainScreen extends React.PureComponent {
 
   componentDidMount = () => {
     this.props.syncLocationThunk()
-  }
-
-  componentDidUpdate = () => {
-    this.props.syncLocationThunk()
+    this.props.thunkSignIn()
   }
 
   render() {
@@ -87,7 +84,7 @@ class MainScreen extends React.PureComponent {
         {Platform.OS === 'android' ? (
           <StatusBar
             barStyle="light-content"
-            backgroundColor="rgba(0,0,0,0.2)"
+            backgroundColor="rgba(0,0,0,0.8)"
             translucent
           />
         ) : null}
@@ -132,7 +129,8 @@ class MainScreen extends React.PureComponent {
 }
 
 const mapDispatchToProps = {
-  syncLocationThunk
+  syncLocationThunk,
+  thunkSignIn
 }
 
 export default connect(
