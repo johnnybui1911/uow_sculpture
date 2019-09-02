@@ -1,5 +1,11 @@
 # UOW Sculpture
-UOW Sculptures app - providing information and map locations of sculptures in University Of Wollongong 
+UOW Sculptures app - providing information and map locations of sculptures in University Of Wollongong
+
+__Core features__
+* Viewing and searching the sculptures, their detailed information, and location
+* Integrated map (Open Street Map)
+* Social features including signing in by Facebook, Google
+* Sending notifications when the user visits the sculpture and showing the navigation path.
 
 ## Getting started
 
