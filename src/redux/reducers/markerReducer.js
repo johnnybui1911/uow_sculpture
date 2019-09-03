@@ -1,24 +1,37 @@
 import {
   MARKER_SELECTED,
   MARKER_UNSELECTED,
-  INIT_MARKERS,
-  FETCH_DATA_REJECTED
+  FETCH_DATA_SUCCESSFUL,
+  FETCH_DATA_REJECTED,
+  FETCH_DATA_PENDING
 } from '../../assets/actionTypes'
 
 const initialState = {
   markers: [],
-  selectedMarker: null
+  selectedMarker: null,
+  isLoading: true
 }
 
 const markerReducer = (state = initialState, action) => {
   switch (action.type) {
-    case INIT_MARKERS: {
+    case FETCH_DATA_SUCCESSFUL: {
+      const { data, isLoading } = action.payload
       if (state.selectedMarker) {
-        state.selectedMarker = action.payload.find(
+        state.selectedMarker = data.find(
           marker => marker.id === state.selectedMarker.id
         )
       }
-      return { ...state, markers: action.payload }
+      return { ...state, isLoading, markers: data }
+    }
+
+    case FETCH_DATA_REJECTED: {
+      const { isLoading } = action.payload
+      return { ...state, isLoading }
+    }
+
+    case FETCH_DATA_PENDING: {
+      const { isLoading } = action.payload
+      return { ...state, isLoading }
     }
 
     case MARKER_SELECTED: {
@@ -33,11 +46,6 @@ const markerReducer = (state = initialState, action) => {
     case MARKER_UNSELECTED: {
       return { ...state, selectedMarker: null }
     }
-
-    case FETCH_DATA_REJECTED: {
-      return { ...state }
-    }
-
     default:
       return state
   }

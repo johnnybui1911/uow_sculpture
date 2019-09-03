@@ -20,17 +20,7 @@ export default function TitleCard(props) {
           flexDirection: 'row'
         }}
       >
-        <View
-          style={{
-            flexDirection: 'row',
-            marginRight: 20,
-            alignItems: 'center',
-            marginLeft: -5
-          }}
-        >
-          <LikeButton />
-          <Text style={styles.numberStyle}>100</Text>
-        </View>
+        <LikeButton />
         <View
           style={{
             flexDirection: 'row',

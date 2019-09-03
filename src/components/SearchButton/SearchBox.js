@@ -6,14 +6,24 @@ import { icons } from '../../assets/icons'
 import styles from './styles'
 import palette from '../../assets/palette'
 
-const SearchBox = ({ searchText, _handleSearch, _onClosePressed }) => (
-  <View style={styles.searchBox}>
-    <FontAwesome
-      style={{ padding: 10 }}
-      name="search"
-      size={20}
-      color={palette.primaryColorLight}
-    />
+const SearchBox = ({
+  flat = false,
+  searchText,
+  _handleSearch,
+  _onClosePressed,
+  children
+}) => (
+  <View style={flat ? styles.searchBoxFlat : styles.searchBox}>
+    {flat ? (
+      children
+    ) : (
+      <FontAwesome
+        style={{ padding: 10 }}
+        name="search"
+        size={20}
+        color={palette.primaryColorLight}
+      />
+    )}
     <TextInput
       value={searchText}
       onChange={e => {
@@ -27,8 +37,10 @@ const SearchBox = ({ searchText, _handleSearch, _onClosePressed }) => (
         paddingLeft: 0,
         width: '100%',
         fontFamily: 'Montserrat-Medium',
-        fontSize: 14
+        fontSize: 16,
+        color: palette.primaryColor
       }}
+      placeholderTextColor={palette.secondaryTypographyColor}
     />
     {searchText ? (
       <TouchableWithoutFeedback onPress={_onClosePressed}>

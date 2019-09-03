@@ -1,5 +1,6 @@
 import React from 'react'
 import { SafeAreaView, View, ScrollView } from 'react-native'
+import { connect } from 'react-redux'
 import { Notifications } from 'expo'
 import { localData } from '../../library/localData'
 import styles from './styles'
@@ -29,7 +30,7 @@ class DetailScreen extends React.PureComponent {
 
   render() {
     const id = this.props.navigation.getParam('id', 0)
-    const item = localData[id]
+    const item = this.props.markers.find(item => item.id === id)
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -50,4 +51,8 @@ class DetailScreen extends React.PureComponent {
   }
 }
 
-export default DetailScreen
+const mapStateToProps = getState => ({
+  markers: getState.markerReducer.markers
+})
+
+export default connect(mapStateToProps)(DetailScreen)

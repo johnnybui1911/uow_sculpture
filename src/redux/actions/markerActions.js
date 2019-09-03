@@ -1,9 +1,10 @@
 import numeral from 'numeral'
 import {
-  INIT_MARKERS,
+  FETCH_DATA_SUCCESSFUL,
   MARKER_SELECTED,
   MARKER_UNSELECTED,
-  FETCH_DATA_REJECTED
+  FETCH_DATA_REJECTED,
+  FETCH_DATA_PENDING
 } from '../../assets/actionTypes'
 import { localData } from '../../library/localData'
 import { DISTANCE_MATRIX_API, GOOGLE_MAPS_APIKEY } from '../../library/maps'
@@ -22,14 +23,18 @@ import { DISTANCE_MATRIX_API, GOOGLE_MAPS_APIKEY } from '../../library/maps'
 //     .catch(() => {
 //       return Promise.reject()
 //     })
-// }
+// }\
 
-export const setInitMarkers = data => {
-  return { type: INIT_MARKERS, payload: data }
+export const fetchDataPending = () => {
+  return { type: FETCH_DATA_PENDING, payload: { isLoading: true } }
+}
+
+export const fetchDataSuccessful = data => {
+  return { type: FETCH_DATA_SUCCESSFUL, payload: { data, isLoading: false } }
 }
 
 export const fetchDataRejected = () => {
-  return { type: FETCH_DATA_REJECTED }
+  return { type: FETCH_DATA_REJECTED, payload: { isLoading: false } }
 }
 
 export const selectMarker = markerID => {
@@ -43,6 +48,7 @@ export const unselectMarker = () => {
 export const fetchDataThunk = userCoordinate => {
   return dispatch => {
     return new Promise((resolve, reject) => {
+      dispatch(fetchDataPending())
       const data = localData
       let destinations = ''
       data.forEach(marker => {
@@ -71,7 +77,7 @@ export const fetchDataThunk = userCoordinate => {
             return newData
           })
           .then(newData => {
-            dispatch(setInitMarkers(newData))
+            dispatch(fetchDataSuccessful(newData))
             resolve({ isDataLoading: false })
           })
           .catch(error => {

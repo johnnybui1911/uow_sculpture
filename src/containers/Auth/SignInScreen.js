@@ -120,7 +120,7 @@ class SignInScreen extends React.Component {
                   }
                 ]}
               >
-                SIGN OUT
+                SIGN UP
               </Text>
             </View>
           </TouchableOpacity>

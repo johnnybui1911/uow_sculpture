@@ -1,28 +1,36 @@
 import React from 'react'
-import { SafeAreaView, View, FlatList, ActivityIndicator } from 'react-native'
+import {
+  SafeAreaView,
+  View,
+  FlatList,
+  Text,
+  TouchableWithoutFeedback
+} from 'react-native'
 import { connect } from 'react-redux'
 import LottieView from 'lottie-react-native'
+import { Notifications } from 'expo'
+import { FontAwesome } from '@expo/vector-icons'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
 import CardItem from './CardItem'
 import SearchBox from '../../components/SearchButton/SearchBox'
-import { Notifications } from 'expo'
 import { _handleNotification } from '../../library/notificationTask'
+import { icons } from '../../assets/icons'
+import palette from '../../assets/palette'
 
 class CollectionScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      loading: true,
       searchText: '',
-      closed: false
+      closed: false,
+      refreshing: false
     }
   }
   componentDidMount = () => {
     this._notificationSubscription = Notifications.addListener(notification =>
       _handleNotification(notification, this.props.navigation)
     )
-    this.setState({ loading: false })
   }
 
   _navigateToDetail = item => {
@@ -41,12 +49,55 @@ class CollectionScreen extends React.PureComponent {
     this.setState({ searchText: '', closed: true })
   }
 
-  _renderItem = ({ item }) => {
-    return <CardItem item={item} _navigateToDetail={this._navigateToDetail} />
+  _renderItem = ({ item, index }) => {
+    return (
+      <CardItem
+        item={item}
+        index={index}
+        _navigateToDetail={this._navigateToDetail}
+      />
+    )
+  }
+
+  _handleRefresh = () => {
+    this.setState(
+      {
+        refreshing: true
+      },
+      () => {
+        // fetch data again
+        this.setState({
+          refreshing: false
+        })
+      }
+    )
   }
 
   _renderList = () => {
-    const { searchText } = this.state
+    const { isLoading } = this.props
+    if (isLoading) {
+      const array = [1, 2, 3]
+      return (
+        <FlatList
+          data={array}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => {
+            return (
+              <CardItem
+                isLoading
+                item={item}
+                index={index}
+                _navigateToDetail={this._navigateToDetail}
+              />
+            )
+          }}
+          style={styles.flatList}
+          showsVerticalScrollIndicator={false}
+        />
+      )
+    }
+
+    const { searchText, refreshing } = this.state
     let data = this.props.markers
     if (searchText !== '') {
       data = data.filter(
@@ -60,43 +111,82 @@ class CollectionScreen extends React.PureComponent {
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
+        refreshing={refreshing}
+        onRefresh={this._handleRefresh}
       />
     )
   }
 
   render() {
-    const { searchText, loading } = this.state
+    const { searchText } = this.state
     return (
       <SafeAreaView style={styles.container}>
-        {loading ? (
-          <View style={{ flex: 1 }}>
-            <ActivityIndicator />
-          </View>
-        ) : (
-          <View style={{ flex: 1 }}>
-            <HeaderBar headerName="Collection" />
-            <SearchBox
-              _handleSearch={this._handleSearch}
-              searchText={searchText}
-              _onClosePressed={this._onClosePressed}
-            />
-            <View
-              style={{
-                flex: 1,
-                paddingHorizontal: 24
-              }}
-            >
-              {this._renderList()}
+        <View style={{ flex: 1 }}>
+          <HeaderBar headerName="Collection" />
+          {/* <SearchBox
+            _handleSearch={() => {}}
+            searchText=""
+            _onClosePressed={() => {}}
+          /> */}
+          <TouchableWithoutFeedback
+            onPress={() => this.props.navigation.navigate('Search')}
+          >
+            <View style={styles.searchBox}>
+              <FontAwesome
+                style={{ padding: 10 }}
+                name="search"
+                size={20}
+                color={palette.primaryColorLight}
+              />
+              <View
+                style={{
+                  flex: 1,
+                  paddingVertical: 10,
+                  paddingBottom: 10,
+                  paddingLeft: 0,
+                  width: '100%',
+                  fontFamily: 'Montserrat-Medium',
+                  fontSize: 14
+                }}
+              >
+                <Text style={styles.placeholder}>Enter keywords...</Text>
+              </View>
+              {/* <TextInput
+                // onFocus={() => {
+                //   this.props.navigation.navigate('Search')
+                // }}
+                value={searchText}
+                placeholder="Enter keywords..."
+                style={{
+                  flex: 1,
+                  paddingVertical: 10,
+                  paddingBottom: 10,
+                  paddingLeft: 0,
+                  width: '100%',
+                  fontFamily: 'Montserrat-Medium',
+                  fontSize: 14
+                }}
+              /> */}
+              {icons.micro}
             </View>
+          </TouchableWithoutFeedback>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: 24
+            }}
+          >
+            {this._renderList()}
           </View>
-        )}
+        </View>
       </SafeAreaView>
     )
   }
 }
 
 const mapStateToProps = getState => ({
-  markers: getState.markerReducer.markers
+  markers: getState.markerReducer.markers,
+  isLoading: getState.markerReducer.isLoading
 })
 
 export default connect(mapStateToProps)(CollectionScreen)

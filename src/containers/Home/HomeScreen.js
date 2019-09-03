@@ -17,10 +17,6 @@ import PopularItem from './PopularItem'
 import { _handleNotification } from '../../library/notificationTask'
 
 class HomeScreen extends React.PureComponent {
-  state = {
-    isLoading: false
-  }
-
   componentDidMount = () => {
     this._notificationSubscription = Notifications.addListener(notification =>
       _handleNotification(notification, this.props.navigation)
@@ -44,7 +40,7 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
-    const { isLoading } = this.state
+    const { isLoading } = this.props
     const data = this.props.markers
     return (
       <SafeAreaView style={styles.container}>
@@ -55,7 +51,7 @@ class HomeScreen extends React.PureComponent {
             {isLoading ? (
               <View style={styles.nearbyItemStyle}>
                 <Placeholder Animation={Fade}>
-                  <PlaceholderMedia size="100%" />
+                  <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
                 </Placeholder>
               </View>
             ) : (
@@ -73,7 +69,8 @@ class HomeScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
-  markers: getState.markerReducer.markers
+  markers: getState.markerReducer.markers,
+  isLoading: getState.markerReducer.isLoading
 })
 
 export default connect(mapStateToProps)(HomeScreen)

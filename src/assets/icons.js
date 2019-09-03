@@ -42,6 +42,23 @@ export const DirectionIcon = maneuver => (
 )
 
 export const icons = {
+  noun_arrow: (
+    <CustomIcon name="noun-arrow" size={24} color={palette.primaryColorLight} />
+  ),
+  clock: (
+    <View
+      style={{
+        height: 30,
+        width: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30 / 2,
+        backgroundColor: palette.primaryColorLight
+      }}
+    >
+      <CustomIcon name="clock" size={16} color={palette.backgroundColorWhite} />
+    </View>
+  ),
   trophy: <Image source={images.trophy} />,
   head_forward: (
     <CustomIcon
@@ -74,6 +91,14 @@ export const icons = {
   ),
   back: <CustomIcon name="back" size={24} color="#fff" />,
   back_blue: <CustomIcon name="back" size={24} color={palette.primaryColor} />,
+  back_blue_light: (
+    <CustomIcon
+      name="back"
+      size={24}
+      color={palette.primaryColorLight}
+      style={{ padding: 10, paddingBottom: 13 }} // icons not center
+    />
+  ),
   close: (
     <CustomIcon
       name="close"

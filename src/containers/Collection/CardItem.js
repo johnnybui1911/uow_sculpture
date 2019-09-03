@@ -13,101 +13,100 @@ import styles from './styles'
 import LikeButton from './LikeButton'
 
 const CardItem = props => {
-  const { item, _navigateToDetail } = props
-  const isLoading = false
+  const { item, index, _navigateToDetail, isLoading = false } = props
   return (
-    <View
-      style={{
-        ...styles.cardItem,
-        alignItems: item.id % 2 !== 0 ? 'flex-end' : 'flex-start'
-      }}
-    >
+    <TouchableWithoutFeedback onPress={() => _navigateToDetail(item)}>
       <View
-        style={item.id % 2 !== 0 ? styles.cardDesLeft : styles.cardDesRight}
+        style={{
+          ...styles.cardItem,
+          alignItems: index % 2 === 0 ? 'flex-end' : 'flex-start'
+        }}
       >
-        {isLoading ? (
-          <Placeholder
-            Animation={Fade}
-            style={{
-              alignItems: 'center',
-              height: '100%'
-            }}
-          >
-            <PlaceholderLine width={20} />
-            <PlaceholderLine width={60} />
-            <PlaceholderLine width={80} />
-            <PlaceholderLine width={40} />
-          </Placeholder>
-        ) : (
-          <React.Fragment>
-            <View style={{}}>
-              <Text style={styles.distance}>{item.distance}</Text>
-              <Text style={styles.title}>{item.name}</Text>
-            </View>
-            <View
+        <View
+          style={index % 2 === 0 ? styles.cardDesLeft : styles.cardDesRight}
+        >
+          {isLoading ? (
+            <Placeholder
+              Animation={Fade}
               style={{
-                flex: 1,
-                justifyContent: 'center'
+                alignItems: 'center',
+                height: '100%'
               }}
             >
-              <Text style={styles.description}>{item.des}</Text>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'flex-end',
-                flexDirection: 'row'
-              }}
-            >
+              <PlaceholderLine width={20} />
+              <PlaceholderLine width={60} />
+              <PlaceholderLine width={80} />
+              <PlaceholderLine width={40} />
+            </Placeholder>
+          ) : (
+            <React.Fragment>
+              <View style={{}}>
+                <Text style={styles.distance}>{item.distance}</Text>
+                <Text style={styles.title}>{item.name}</Text>
+              </View>
               <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center'
+                }}
+              >
+                <Text style={styles.description}>{item.des}</Text>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'flex-end',
+                  flexDirection: 'row'
+                }}
+              >
+                {/* <View
                 style={{
                   flexDirection: 'row',
                   marginRight: 20,
                   alignItems: 'center',
                   marginLeft: -5
                 }}
-              >
+              > */}
                 <LikeButton />
-                <Text style={styles.numberStyle}>100</Text>
+                {/* <Text style={styles.numberStyle}>100</Text>
+              </View> */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginLeft: -5
+                  }}
+                >
+                  <TouchableWithoutFeedback>
+                    <View style={{ padding: 5 }}>{icons.comment}</View>
+                  </TouchableWithoutFeedback>
+                  <Text style={styles.numberStyle}>2</Text>
+                </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginLeft: -5
-                }}
-              >
-                <TouchableWithoutFeedback>
-                  <View style={{ padding: 5 }}>{icons.comment}</View>
-                </TouchableWithoutFeedback>
-                <Text style={styles.numberStyle}>2</Text>
-              </View>
+            </React.Fragment>
+          )}
+        </View>
+        <View
+          style={[
+            styles.imageContainer,
+            index % 2 === 0 ? { left: 0 } : { right: 0 }
+          ]}
+        >
+          {isLoading ? (
+            <View style={styles.image}>
+              <Placeholder Animation={Fade}>
+                <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
+              </Placeholder>
             </View>
-          </React.Fragment>
-        )}
-      </View>
-      <View
-        style={[
-          styles.imageContainer,
-          item.id % 2 !== 0 ? { left: 0 } : { right: 0 }
-        ]}
-      >
-        {isLoading ? (
-          <View style={styles.image}>
-            <Placeholder Animation={Fade}>
-              <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
-            </Placeholder>
-          </View>
-        ) : (
-          <TouchableWithoutFeedback onPress={() => _navigateToDetail(item)}>
+          ) : (
             <Image
               source={images.sculptures[item.photoURL]}
               style={styles.image}
             />
-          </TouchableWithoutFeedback>
-        )}
+          )}
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

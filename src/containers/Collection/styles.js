@@ -77,9 +77,14 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 24,
-    height: 44,
+    height: 51,
     backgroundColor: palette.backgroundColorWhite,
-    elevation: 10,
+    elevation: 2,
     borderRadius: 12
+  },
+  placeholder: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 16,
+    color: palette.secondaryTypographyColor
   }
 })

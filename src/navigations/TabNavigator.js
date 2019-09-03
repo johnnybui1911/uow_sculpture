@@ -4,6 +4,7 @@ import MapScreen from '../containers/Map/MapScreen'
 import CustomBottomTab from '../components/BottomTabBar/CustomBottomTab'
 import HomeScreen from '../containers/Home/HomeScreen'
 import ProfileContainer from './ProfileContainer'
+import CollectionStack from './CollectionStack'
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -13,15 +14,15 @@ const TabNavigator = createBottomTabNavigator(
     Map: {
       screen: MapScreen
     },
-    Collection: {
-      screen: CollectionScreen
+    CollectionStack: {
+      screen: CollectionStack
     },
     Profile: {
       screen: ProfileContainer
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'CollectionStack',
     tabBarPosition: 'bottom',
     tabBarComponent: CustomBottomTab,
     animationEnabled: true

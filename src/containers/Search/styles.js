@@ -1,5 +1,17 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
+import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
+
+const shadowStyle = {
+  elevation: 4,
+  shadowColor: '#000000',
+  shadowOffset: {
+    width: 0,
+    height: 3
+  },
+  shadowRadius: 5,
+  shadowOpacity: 0.1
+}
 
 const cardItem = {
   justifyContent: 'center',
@@ -14,7 +26,8 @@ const cardDes = {
   width: '85%',
   height: 144,
   borderRadius: 12,
-  elevation: 5
+  elevation: 5,
+  paddingRight: 10
 }
 
 const imageContainer = {
@@ -27,32 +40,30 @@ const imageContainer = {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.backgroundColorGrey
+    backgroundColor: palette.backgroundColorWhite
+  },
+  searchBoxContainer: {
+    marginTop: STATUS_BAR_HEIGHT,
+    zIndex: 1000,
+    backgroundColor: palette.backgroundColorWhite
   },
   flatList: {
-    marginTop: 9,
     width: '100%'
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     color: palette.primaryColor,
-    fontFamily: 'Montserrat-SemiBold'
-  },
-  distance: {
-    fontSize: 14,
-    fontFamily: 'Montserrat-SemiBold',
-    color: palette.primaryColorLight
-  },
-  description: {
-    fontSize: 14,
-    color: palette.secondaryTypographyColor,
     fontFamily: 'Montserrat-Medium'
   },
-  numberStyle: {
+  description: {
     fontSize: 12,
-    color: palette.primaryColor,
-    fontFamily: 'Montserrat-SemiBold',
-    paddingLeft: 5
+    color: palette.primaryColorLight,
+    fontFamily: 'Montserrat-Medium'
+  },
+  flatListHeader: {
+    fontSize: 14,
+    color: palette.secondaryTypographyColor,
+    fontFamily: 'Montserrat-SemiBold'
   },
   cardItem,
   cardDes,
@@ -75,23 +86,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 10,
     marginHorizontal: 24,
-    height: 51,
+    height: 44,
     backgroundColor: palette.backgroundColorWhite,
-    elevation: 2,
+    elevation: 10,
     borderRadius: 12
-  },
-  searchBoxFlat: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10,
-    marginHorizontal: 24,
-    height: 51,
-    backgroundColor: palette.backgroundColorWhite,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#D9D9D6'
   }
 })
