@@ -1,11 +1,10 @@
 import React from 'react'
 import { View, TouchableWithoutFeedback, Text } from 'react-native'
 import { connect } from 'react-redux'
-import SearchBox from '../../../components/SearchButton/SearchBox'
 import styles from './styles'
 import { icons } from '../../../assets/icons'
-import MidDivider from '../../../components/MidDivider/MidDivider'
 import FormDirection from './FormDirection'
+import { SearchBox, MidDivider } from '../../../components'
 
 class Header extends React.PureComponent {
   _goBack = () => {

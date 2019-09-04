@@ -25,6 +25,7 @@ const SearchBox = ({
       />
     )}
     <TextInput
+      autoFocus={flat}
       value={searchText}
       onChange={e => {
         _handleSearch(e)

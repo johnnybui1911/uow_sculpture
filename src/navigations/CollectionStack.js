@@ -12,7 +12,7 @@ const CollectionStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Search',
+    initialRouteName: 'Collection',
     headerMode: 'none'
   }
 )

@@ -4,8 +4,8 @@ import {
   View,
   TouchableWithoutFeedback,
   Text,
-  FlatList,
-  Animated
+  Animated,
+  Keyboard
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -34,6 +34,7 @@ class SearchScreen extends React.PureComponent {
 
   _onClosePressed = () => {
     this.setState({ searchText: '', closed: true })
+    Keyboard.dismiss()
   }
 
   _renderItem = ({ item, index }) => {
@@ -78,14 +79,6 @@ class SearchScreen extends React.PureComponent {
           [{ nativeEvent: { contentOffset: { y: this.scrollY } } }],
           {
             useNativeDriver: true
-            // listener: event => {
-            //   const y = event.nativeEvent.contentOffset.y
-            //   if (y > 10 && !this.state.shadow) {
-            //     this.setState({ shadow: true })
-            //   } else if (y < 10 && this.state.shadow) {
-            //     this.setState({ shadow: false })
-            //   }
-            // }
           }
         )}
         keyExtractor={item => item.id.toString()}

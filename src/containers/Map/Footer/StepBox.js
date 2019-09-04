@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import numeral from 'numeral'
-import styles from './styles'
-import { icons, DirectionIcon } from '../../assets/icons'
+import styles from '../styles'
+import { icons, DirectionIcon } from '../../../assets/icons'
 
 const decodeStepInstruction = html_instructions => {
   const regex = /(<b>|<\/b>|<div.*)/gi

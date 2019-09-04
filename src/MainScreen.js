@@ -84,23 +84,24 @@ class MainScreen extends React.PureComponent {
         {Platform.OS === 'android' ? (
           <StatusBar
             barStyle="light-content"
-            backgroundColor="rgba(0,0,0,0.8)"
+            backgroundColor="rgba(0,0,0,0.6)"
             translucent
           />
         ) : null}
         <AppContainer />
-        {/* <View
-          style={{
-            position: 'absolute',
-            height: STATUS_BAR_HEIGHT,
-            top: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: palette.primaryColor,
-            zIndex: 100,
-            opacity: this.state.isModalVisible ? 1 : 0
-          }}
-        />
+        {this.state.isModalVisible && (
+          <View
+            style={{
+              position: 'absolute',
+              height: STATUS_BAR_HEIGHT,
+              top: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: palette.primaryColor,
+              zIndex: 100
+            }}
+          />
+        )}
         <Modal
           isVisible={this.state.isModalVisible}
           animationIn="slideInDown"
@@ -122,7 +123,7 @@ class MainScreen extends React.PureComponent {
           >
             <IntroScreen />
           </View>
-        </Modal> */}
+        </Modal>
       </SafeAreaView>
     )
   }

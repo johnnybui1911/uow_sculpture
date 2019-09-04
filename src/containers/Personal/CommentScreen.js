@@ -51,10 +51,10 @@ class CommentScreen extends React.PureComponent {
   }
 
   componentDidMount = () => {
-    this._getDate()
+    this._fetchData()
   }
 
-  _getDate = () => {
+  _fetchData = () => {
     localComments.sort((a, b) => {
       return b.submitDate - a.submitDate
     })

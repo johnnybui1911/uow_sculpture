@@ -6,7 +6,7 @@ import styles from './styles'
 import LikeButton from '../Collection/LikeButton'
 
 export default function TitleCard(props) {
-  const { item, elevation } = props
+  const { item, elevation, _navigateToComment } = props
   const cardStyle = [styles.card, { elevation, marginTop: 0 }]
   return (
     <View style={cardStyle}>
@@ -28,7 +28,7 @@ export default function TitleCard(props) {
             marginLeft: -5
           }}
         >
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => _navigateToComment()}>
             <View style={{ padding: 5 }}>{icons.comment}</View>
           </TouchableWithoutFeedback>
           <Text style={styles.numberStyle}>2</Text>

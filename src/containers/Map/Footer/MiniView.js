@@ -6,11 +6,10 @@ import {
   Image,
   TouchableWithoutFeedback
 } from 'react-native'
-import styles from './styles'
-import images from '../../assets/images'
-import { icons } from '../../assets/icons'
-import Divider from '../../components/Divider/Divider'
-import SwipeButton from '../../components/SwipeButton/SwipeButton'
+import styles from '../styles'
+import images from '../../../assets/images'
+import { icons } from '../../../assets/icons'
+import { Divider, SwipeButton } from '../../../components'
 
 export default ({
   marker,
@@ -19,7 +18,8 @@ export default ({
   _handleShowDirection
 }) => {
   return (
-    <View style={styles.mini_view_container}>
+    // <View style={styles.mini_view_container}>
+    <React.Fragment>
       <View style={styles.transparent_container}>
         <TouchableWithoutFeedback onPress={() => _navigateToDetail(marker)}>
           <View style={styles.mini_image_container}>
@@ -80,6 +80,7 @@ export default ({
           </View>
         </TouchableOpacity>
       </View>
-    </View>
+    </React.Fragment>
+    // </View>
   )
 }

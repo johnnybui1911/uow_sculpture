@@ -1,6 +1,7 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import DetailScreen from '../containers/Detail/DetailScreen'
 import TabNavigator from './TabNavigator'
+import CommentScreen from '../containers/Comment/CommentScreen'
 
 const AppStack = createStackNavigator(
   {
@@ -9,6 +10,9 @@ const AppStack = createStackNavigator(
     },
     Detail: {
       screen: DetailScreen
+    },
+    Comment: {
+      screen: CommentScreen
     }
   },
   {

@@ -30,7 +30,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0C2340"
     },
     "androidStatusBar": {},
     "updates": {

@@ -185,7 +185,7 @@ export const icons = {
   one_dot: (
     <FontAwesome
       name="circle"
-      size={5}
+      size={3}
       color={palette.secondaryTypographyColor}
       style={{ paddingHorizontal: 6 }}
     />

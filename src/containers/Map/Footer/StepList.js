@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, ScrollView } from 'react-native'
-import styles from './styles'
+import styles from '../styles'
 import StepBox from './StepBox'
-import { icons } from '../../assets/icons'
+import { icons } from '../../../assets/icons'
 
 export default ({ steps }) => {
   return (

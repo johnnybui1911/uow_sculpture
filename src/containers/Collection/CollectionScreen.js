@@ -37,6 +37,10 @@ class CollectionScreen extends React.PureComponent {
     this.props.navigation.navigate('Detail', { id: item.id })
   }
 
+  _navigateToComment = item => {
+    this.props.navigation.navigate('Comment', { id: item.id })
+  }
+
   _handleSearch = event => {
     const { closed } = this.state
     if (!closed) {
@@ -55,6 +59,7 @@ class CollectionScreen extends React.PureComponent {
         item={item}
         index={index}
         _navigateToDetail={this._navigateToDetail}
+        _navigateToComment={this._navigateToComment}
       />
     )
   }
@@ -123,11 +128,6 @@ class CollectionScreen extends React.PureComponent {
       <SafeAreaView style={styles.container}>
         <View style={{ flex: 1 }}>
           <HeaderBar headerName="Collection" />
-          {/* <SearchBox
-            _handleSearch={() => {}}
-            searchText=""
-            _onClosePressed={() => {}}
-          /> */}
           <TouchableWithoutFeedback
             onPress={() => this.props.navigation.navigate('Search')}
           >
@@ -151,22 +151,6 @@ class CollectionScreen extends React.PureComponent {
               >
                 <Text style={styles.placeholder}>Enter keywords...</Text>
               </View>
-              {/* <TextInput
-                // onFocus={() => {
-                //   this.props.navigation.navigate('Search')
-                // }}
-                value={searchText}
-                placeholder="Enter keywords..."
-                style={{
-                  flex: 1,
-                  paddingVertical: 10,
-                  paddingBottom: 10,
-                  paddingLeft: 0,
-                  width: '100%',
-                  fontFamily: 'Montserrat-Medium',
-                  fontSize: 14
-                }}
-              /> */}
               {icons.micro}
             </View>
           </TouchableWithoutFeedback>

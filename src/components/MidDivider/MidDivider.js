@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ({ children }) => {
+const MidDivider = ({ children }) => {
   return (
     <View style={styles.middleSeparator}>
       <View
@@ -55,3 +55,5 @@ export default ({ children }) => {
     </View>
   )
 }
+
+export default MidDivider

@@ -13,7 +13,13 @@ import styles from './styles'
 import LikeButton from './LikeButton'
 
 const CardItem = props => {
-  const { item, index, _navigateToDetail, isLoading = false } = props
+  const {
+    item,
+    index,
+    _navigateToDetail,
+    _navigateToComment,
+    isLoading = false
+  } = props
   return (
     <TouchableWithoutFeedback onPress={() => _navigateToDetail(item)}>
       <View
@@ -59,17 +65,7 @@ const CardItem = props => {
                   flexDirection: 'row'
                 }}
               >
-                {/* <View
-                style={{
-                  flexDirection: 'row',
-                  marginRight: 20,
-                  alignItems: 'center',
-                  marginLeft: -5
-                }}
-              > */}
                 <LikeButton />
-                {/* <Text style={styles.numberStyle}>100</Text>
-              </View> */}
                 <View
                   style={{
                     flexDirection: 'row',
@@ -77,7 +73,9 @@ const CardItem = props => {
                     marginLeft: -5
                   }}
                 >
-                  <TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
+                    onPress={() => _navigateToComment(item)}
+                  >
                     <View style={{ padding: 5 }}>{icons.comment}</View>
                   </TouchableWithoutFeedback>
                   <Text style={styles.numberStyle}>2</Text>

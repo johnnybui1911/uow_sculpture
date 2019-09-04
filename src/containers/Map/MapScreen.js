@@ -34,7 +34,7 @@ import {
   unselectMarker,
   fetchDataThunk
 } from '../../redux/actions/markerActions'
-import Footer from './Footer'
+import Footer from './Footer/Footer'
 import MarkersContainer from './MarkersContainer'
 import Direction from './Direction'
 import Header from './HeaderMap/Header'
@@ -454,19 +454,20 @@ class MapScreen extends React.PureComponent {
               _handleShowDirection={this._handleShowDirection}
             />
           )}
-          <View
-            style={{
-              position: 'absolute',
-              height: STATUS_BAR_HEIGHT,
-              top: 0,
-              left: 0,
-              right: 0,
-              backgroundColor: '#000000',
-              zIndex: 100,
-              opacity: 0.7,
-              display: this.state.isModalVisible ? 'flex' : 'none'
-            }}
-          />
+          {this.state.isModalVisible && (
+            <View
+              style={{
+                position: 'absolute',
+                height: STATUS_BAR_HEIGHT,
+                top: 0,
+                left: 0,
+                right: 0,
+                backgroundColor: '#000000',
+                zIndex: 100,
+                opacity: 0.7
+              }}
+            />
+          )}
           <Modal
             isVisible={this.state.isModalVisible}
             animationIn="zoomInDown"
