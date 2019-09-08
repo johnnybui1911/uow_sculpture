@@ -10,6 +10,7 @@ import styles from '../styles'
 import images from '../../../assets/images'
 import { icons } from '../../../assets/icons'
 import { Divider, SwipeButton } from '../../../components'
+import { SCREEN_WIDTH } from '../../../assets/dimension'
 
 export default ({
   marker,
@@ -18,9 +19,17 @@ export default ({
   _handleShowDirection
 }) => {
   return (
-    // <View style={styles.mini_view_container}>
-    <React.Fragment>
-      <View style={styles.transparent_container}>
+    <View
+      style={{
+        height: 220 + 96
+      }}
+    >
+      <View
+        style={[
+          styles.transparent_container,
+          { height: 96, paddingBottom: 12 }
+        ]}
+      >
         <TouchableWithoutFeedback onPress={() => _navigateToDetail(marker)}>
           <View style={styles.mini_image_container}>
             <Image
@@ -31,25 +40,25 @@ export default ({
         </TouchableWithoutFeedback>
         {children}
       </View>
-      <View style={styles.description_container}>
-        <SwipeButton />
-        <Text style={styles.distance}>{marker.distance}</Text>
-        <Text style={styles.title}>{marker.name}</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}
-        >
-          {/* <Text style={styles.description}>{marker.des}</Text>
+      <View style={[styles.description_container, { paddingTop: 12 }]}>
+        <View>
+          <SwipeButton />
+          <Text style={styles.distance}>{marker.distance}</Text>
+          <Text style={styles.title}>{marker.name}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}
+          >
+            {/* <Text style={styles.description}>{marker.des}</Text>
           {icons.one_dot} */}
-          <Text style={styles.description}>{marker.duration} min</Text>
+            <Text style={styles.description}>{marker.duration} min</Text>
+          </View>
         </View>
-        <Divider />
+        <Divider styles={{ marginVertical: 12 }} />
         <View
           style={{
-            flex: 1,
-            alignItems: 'flex-end',
             flexDirection: 'row'
           }}
         >
@@ -71,16 +80,17 @@ export default ({
             <Text style={styles.numberStyle}>2</Text>
           </View>
         </View>
-        <TouchableOpacity
-          style={[styles.button]}
-          onPress={() => _handleShowDirection(true)}
-        >
-          <View style={{ flex: 1 }}>
-            <Text style={[styles.titleButton]}>GO THERE</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={{ justifyContent: 'center' }}>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={() => _handleShowDirection(true)}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.titleButton]}>GO THERE</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-    </React.Fragment>
-    // </View>
+    </View>
   )
 }

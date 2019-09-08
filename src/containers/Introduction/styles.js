@@ -1,20 +1,19 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import {
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT
-} from '../../assets/dimension'
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
 
 export default StyleSheet.create({
   container: {
-    // position: "absolute",
-    // top: -STATUS_BAR_HEIGHT,
+    // position: 'absolute',
     // height: SCREEN_HEIGHT,
     // width: SCREEN_WIDTH,
+    // top: -STATUS_BAR_HEIGHT,
+    flex: 1,
     backgroundColor: palette.primaryColor,
     alignItems: 'center',
-    paddingVertical: 12
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 6
   },
   title: {
     fontSize: 30,
@@ -22,7 +21,7 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-Bold'
   },
   description: {
-    fontSize: 16,
+    fontSize: 14,
     color: palette.backgroundColorWhite,
     fontFamily: 'Montserrat-Medium',
     textAlign: 'center'

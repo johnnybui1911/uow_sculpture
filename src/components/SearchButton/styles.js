@@ -92,6 +92,6 @@ export default StyleSheet.create({
     backgroundColor: palette.backgroundColorWhite,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#D9D9D6'
+    borderColor: palette.borderGreyColor
   }
 })

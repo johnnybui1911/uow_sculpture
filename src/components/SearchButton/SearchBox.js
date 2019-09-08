@@ -17,12 +17,20 @@ const SearchBox = ({
     {flat ? (
       children
     ) : (
-      <FontAwesome
-        style={{ padding: 10 }}
-        name="search"
-        size={20}
-        color={palette.primaryColorLight}
-      />
+      <View
+        style={{
+          alignItems: 'center',
+          padding: 10,
+          width: 50
+        }}
+      >
+        <FontAwesome
+          style={{ padding: 0 }}
+          name="search"
+          size={20}
+          color={palette.primaryColorLight}
+        />
+      </View>
     )}
     <TextInput
       autoFocus={flat}
@@ -33,9 +41,9 @@ const SearchBox = ({
       placeholder="Enter keywords..."
       style={{
         flex: 1,
-        paddingVertical: 10,
-        paddingBottom: 10,
-        paddingLeft: 0,
+        // paddingVertical: 10,
+        // paddingBottom: 10,,
+        paddingHorizontal: 12,
         width: '100%',
         fontFamily: 'Montserrat-Medium',
         fontSize: 16,
@@ -45,10 +53,28 @@ const SearchBox = ({
     />
     {searchText ? (
       <TouchableWithoutFeedback onPress={_onClosePressed}>
-        {icons.close}
+        <View
+          style={{
+            width: 50,
+            alignItems: 'flex-end',
+            padding: 10
+          }}
+        >
+          {icons.close}
+        </View>
       </TouchableWithoutFeedback>
     ) : (
-      icons.micro
+      <TouchableWithoutFeedback>
+        <View
+          style={{
+            width: 50,
+            alignItems: 'flex-end',
+            padding: 10
+          }}
+        >
+          {icons.micro}
+        </View>
+      </TouchableWithoutFeedback>
     )}
   </View>
 )

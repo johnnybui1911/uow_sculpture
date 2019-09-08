@@ -9,5 +9,6 @@ export default {
   secondaryTypographyStrongColor: '#A1A1A1',
   backgroundTabColor: '#EBEBEB',
   facebookColor: '#3B5998',
-  dividerColor: '#F4F4F6'
+  dividerColor: '#F4F4F6',
+  borderGreyColor: '#D9D9D6'
 }

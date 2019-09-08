@@ -11,66 +11,54 @@ import { connect } from 'react-redux'
 import styles from './styles'
 import SearchBox from '../../components/SearchButton/SearchBox'
 import { icons } from '../../assets/icons'
-import DividerLight from '../../components/Divider/DividerLight'
-import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import SearchItem from './SearchItem'
+import palette from '../../assets/palette'
 
 class SearchScreen extends React.PureComponent {
   state = {
     searchText: '',
-    closed: false,
-    refreshing: false,
-    shadow: false
+    refreshing: false
   }
 
   scrollY = new Animated.Value(0)
 
+  _navigateToDetail = id => {
+    this.props.navigation.navigate('Detail', { id })
+  }
+
   _handleSearch = event => {
-    const { closed } = this.state
-    // if (!closed) {
     const { text } = event.nativeEvent
-    this.setState({ searchText: text.trim(), closed: false })
-    // }
+    this.setState({ searchText: text })
   }
 
   _onClosePressed = () => {
-    this.setState({ searchText: '', closed: true })
+    this.setState({ searchText: '' })
     Keyboard.dismiss()
   }
 
   _renderItem = ({ item, index }) => {
+    const { searchText } = this.state
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <View style={[]}>{icons.clock}</View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            paddingLeft: 12
-          }}
-        >
-          <Text style={[styles.title]}>{item.name}</Text>
-          <Text style={[styles.description]}>{item.features.maker}</Text>
-        </View>
-        <View style={[]}>{icons.noun_arrow}</View>
-      </View>
+      <SearchItem
+        item={item}
+        searchText={searchText}
+        _navigateToDetail={this._navigateToDetail}
+      />
     )
   }
 
   _renderList = () => {
-    const { isLoading } = this.props
+    const { isLoading, recentSearchList } = this.props
     const { searchText, refreshing } = this.state
-    let data = this.props.markers
-    if (searchText !== '') {
-      data = data.filter(
-        item => item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+    let data = []
+    if (searchText.trim().length > 0) {
+      data = this.props.markers.filter(
+        item =>
+          item.name.toLowerCase().slice(0, searchText.length) ===
+          searchText.toLowerCase()
       )
+    } else {
+      data = recentSearchList
     }
     return (
       <Animated.FlatList
@@ -81,21 +69,33 @@ class SearchScreen extends React.PureComponent {
             useNativeDriver: true
           }
         )}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
         refreshing={refreshing}
         onRefresh={this._handleRefresh}
-        contentContainerStyle={{ padding: 18 }}
+        keyboardShouldPersistTaps="always"
+        contentContainerStyle={{
+          paddingVertical: 10
+          // borderWidth: 1,
+          // borderColor: palette.borderGreyColor,
+          // borderRadius: 4
+        }}
         ItemSeparatorComponent={() => (
-          <View style={{ marginLeft: 43 }}>
-            <DividerLight />
-          </View>
+          <View
+            style={{
+              height: 1,
+              flex: 1,
+              backgroundColor: palette.backgroundTabColor,
+              marginLeft: 50 + 12,
+              marginRight: 10
+            }}
+          />
         )}
         ListHeaderComponent={() => {
           return (
-            <View style={{ flex: 1, paddingBottom: 18 }}>
+            <View style={{ flex: 1, paddingBottom: 5, paddingHorizontal: 10 }}>
               <Text style={styles.flatListHeader}>RECENT</Text>
             </View>
           )
@@ -152,7 +152,15 @@ class SearchScreen extends React.PureComponent {
             <TouchableWithoutFeedback
               onPress={() => this.props.navigation.goBack()}
             >
-              {icons.back_blue_light}
+              <View
+                style={{
+                  padding: 10,
+                  paddingBottom: 13,
+                  width: 50
+                }}
+              >
+                {icons.back_blue_light}
+              </View>
             </TouchableWithoutFeedback>
           </SearchBox>
         </Animated.View>
@@ -171,7 +179,8 @@ class SearchScreen extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   markers: getState.markerReducer.markers,
-  isLoading: getState.markerReducer.isLoading
+  isLoading: getState.markerReducer.isLoading,
+  recentSearchList: getState.searchReducer.recentSearchList
 })
 
 export default connect(mapStateToProps)(SearchScreen)

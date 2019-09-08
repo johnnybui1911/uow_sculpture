@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import MapViewDirections from '../../library/MapViewDirections'
+import MapViewDirections from '../../library/react-native-maps-directions/MapViewDirections'
 import { GOOGLE_MAPS_APIKEY } from '../../library/maps'
 
 const Direction = ({

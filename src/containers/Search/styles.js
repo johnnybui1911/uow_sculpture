@@ -65,6 +65,11 @@ export default StyleSheet.create({
     color: palette.secondaryTypographyColor,
     fontFamily: 'Montserrat-SemiBold'
   },
+  distance: {
+    fontSize: 8,
+    fontFamily: 'Montserrat-Medium',
+    color: palette.primaryColorLight
+  },
   cardItem,
   cardDes,
   cardDesLeft: {

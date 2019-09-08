@@ -89,7 +89,7 @@ class MainScreen extends React.PureComponent {
           />
         ) : null}
         <AppContainer />
-        {this.state.isModalVisible && (
+        {/* {this.state.isModalVisible && (
           <View
             style={{
               position: 'absolute',
@@ -97,33 +97,24 @@ class MainScreen extends React.PureComponent {
               top: 0,
               left: 0,
               right: 0,
-              backgroundColor: palette.primaryColor,
-              zIndex: 100
+              backgroundColor: palette.primaryColor
             }}
           />
         )}
         <Modal
           isVisible={this.state.isModalVisible}
           animationIn="slideInDown"
-          animationInTiming={1000}
+          animationInTiming={500}
           onSwipeComplete={() => this.setState({ isModalVisible: false })}
           swipeDirection="up"
           style={{
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            margin: 0
           }}
         >
-          <View
-            style={{
-              height: SCREEN_HEIGHT,
-              width: SCREEN_WIDTH,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <IntroScreen />
-          </View>
-        </Modal>
+          <IntroScreen />
+        </Modal> */}
       </SafeAreaView>
     )
   }

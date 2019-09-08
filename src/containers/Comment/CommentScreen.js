@@ -120,7 +120,9 @@ class CommentScreen extends React.PureComponent {
     return (
       <SafeAreaView style={styles.container}>
         <CommentList
-          comments={localComments}
+          comments={localComments.sort((a, b) => {
+            return b.submitDate - a.submitDate
+          })}
           navigation={this.props.navigation}
         />
         <View

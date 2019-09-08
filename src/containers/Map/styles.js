@@ -3,7 +3,8 @@ import palette from '../../assets/palette'
 import {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
-  STATUS_BAR_HEIGHT
+  STATUS_BAR_HEIGHT,
+  BUTTON_HEIGHT
 } from '../../assets/dimension'
 
 const shadowStyle = {
@@ -97,10 +98,10 @@ export default StyleSheet.create({
     ...shadowStyle
   },
   transparent_container: {
-    minHeight: 90,
+    // height: 90,
     alignItems: 'flex-end',
     paddingHorizontal: 24,
-    paddingBottom: 12,
+    // paddingBottom: 12,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
@@ -117,10 +118,10 @@ export default StyleSheet.create({
   },
   description_container: {
     flex: 1,
-    minHeight: 215,
+    // height: 215,
     paddingHorizontal: 24,
     backgroundColor: palette.backgroundColorWhite,
-    paddingVertical: 12,
+    // paddingVertical: 12,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     ...shadowStyle,
@@ -137,14 +138,13 @@ export default StyleSheet.create({
     elevation: 9
   },
   button: {
-    flex: 1,
     backgroundColor: palette.primaryColorLight,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
-    marginVertical: 10,
-    height: 51,
+    marginVertical: 12,
+    height: BUTTON_HEIGHT,
     ...shadowStyle
   },
   secondary_button: {
@@ -156,8 +156,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
-    marginVertical: 10,
-    height: 51,
+    marginVertical: 12,
+    height: BUTTON_HEIGHT,
     ...shadowStyle
   },
   titleButton: {
@@ -218,7 +218,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     // marginHorizontal: 10, //20
-    marginTop: 24
+    paddingTop: 24
   },
   stepBoxDetail: {
     flexDirection: 'row',
@@ -254,8 +254,8 @@ export default StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     ...shadowStyle,
-    minHeight: 142 + 16, //fix later,
-    maxHeight: SCREEN_HEIGHT - STATUS_BAR_HEIGHT, //44
+    // minHeight: 142 + 16, //fix later,
+    // maxHeight: SCREEN_HEIGHT - STATUS_BAR_HEIGHT, //44
     elevation: 9
   },
   showStepButton: {
@@ -265,8 +265,8 @@ export default StyleSheet.create({
     right: 0,
     backgroundColor: '#fff',
     paddingHorizontal: 24,
-    zIndex: 9,
-    elevation: 9
+    zIndex: 9
+    // elevation: 9
   },
   topBorderStep: {
     height: 1,

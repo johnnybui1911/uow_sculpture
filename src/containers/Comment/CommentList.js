@@ -13,30 +13,29 @@ class CommentList extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      comments: [],
+      // comments: [],
       loading: true,
       refreshing: false
     }
   }
 
-  componentDidMount = () => {
-    this._fetchData()
-  }
+  // componentDidMount = () => {
+  //   this._fetchData()
+  // }
 
-  _fetchData = () => {
-    if (this.props.comments) {
-      const { comments } = this.props
-      comments.sort((a, b) => {
-        return b.submitDate - a.submitDate
-      })
+  // _fetchData = () => {
+  //   if (this.props.comments) {
+  //     // const { comments } = this.props
+  //     // comments.sort((a, b) => {
+  //     //   return b.submitDate - a.submitDate
+  //     // })
 
-      this.setState({
-        comments,
-        refreshing: false,
-        loading: false
-      })
-    }
-  }
+  //     this.setState({
+  //       refreshing: false,
+  //       loading: false
+  //     })
+  //   }
+  // }
 
   _handleLoadMore = () => {
     // console.log('End Reached')
@@ -52,10 +51,6 @@ class CommentList extends React.PureComponent {
         }}
       >
         <View style={[]}>
-          {/* <Image
-            source={images.sculptures[item.photoURL]}
-            style={{ width: 40, height: 40, borderRadius: 40 / 2 }}
-          /> */}
           {item.photoURL ? (
             <Image
               source={images.profile}
@@ -117,17 +112,11 @@ class CommentList extends React.PureComponent {
   }
 
   _renderList = () => {
-    const { comments, refreshing } = this.state
+    const { refreshing } = this.state
+    const { comments } = this.props
     return (
       <FlatList
         ref={scroll => (this.flatCommentList = scroll)}
-        // onLayout={e => {
-        //   // this.flatCommentList.scrollToIndex({
-        //   //   animated: true,
-        //   //   index: comments.length - 1
-        //   // })
-        //   this.flatCommentList.scrollToEnd({ animated: true })
-        // }}
         data={comments}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}

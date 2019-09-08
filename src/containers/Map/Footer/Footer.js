@@ -1,40 +1,232 @@
 /* eslint-disable react/jsx-key */
 import React from 'react'
-import { View, Text, TouchableOpacity, Animated } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  PanResponder,
+  TouchableWithoutFeedback,
+  Image
+} from 'react-native'
 import { connect } from 'react-redux'
-import { PanGestureHandler } from 'react-native-gesture-handler'
+import BottomDrawer from '../../../library/rn-bottom-drawer/BottomDrawer'
 import { SwipeButton, ButtonMyLocation } from '../../../components'
 import styles from '../styles'
 import StepList from './StepList'
 import MiniView from './MiniView'
-import { SCREEN_WIDTH } from '../../../assets/dimension'
+import {
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
+  STATUS_BAR_HEIGHT,
+  BOTTOM_TAB_BAR_HEIGHT,
+  COLLAPSED_HEIGHT_STEPBOX,
+  EXPANDED_HEIGHT_STEPBOX
+} from '../../../assets/dimension'
+import images from '../../../assets/images'
+
+const fakeMarker = {
+  id: 1,
+  name: 'Winged Figure',
+  distance: 500,
+  duration: 5,
+  des: 'Western side of Robsons Road',
+  features: {
+    date: '1988-1989',
+    maker: 'Bert Flugelman',
+    material: 'Stainless steel'
+  },
+  description: {
+    location:
+      'Main campus, on UOW land on the western side of  Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and  Northfields Avenue',
+    creditLine:
+      'Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988'
+  },
+  photoURL: 1,
+  coordinate: {
+    latitude: -34.40478,
+    longitude: 150.88115
+  }
+}
+
+const fakeSteps = [
+  {
+    distance: {
+      text: '0.1 km',
+      value: 106
+    },
+    duration: {
+      text: '1 min',
+      value: 78
+    },
+    end_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    html_instructions: 'Head <b>west</b> on <b>Exeter Ave</b>',
+    polyline: {
+      points: 'p``qEym~w[AD]hBAF?F?B@F@FRfA'
+    },
+    start_location: {
+      lat: -34.4117659,
+      lng: 150.8938938
+    },
+    travel_mode: 'WALKING'
+  },
+  {
+    distance: {
+      text: '62 m',
+      value: 62
+    },
+    duration: {
+      text: '1 min',
+      value: 47
+    },
+    end_location: {
+      lat: -34.4122518,
+      lng: 150.8927059
+    },
+    html_instructions: 'Turn <b>left</b> toward <b>Station St</b>',
+    maneuver: 'turn-left',
+    polyline: {
+      points: 'f``qE}f~w[f@GLBB@FBDDFBBBD@D?HA'
+    },
+    start_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    travel_mode: 'WALKING'
+  },
+  {
+    distance: {
+      text: '62 m',
+      value: 62
+    },
+    duration: {
+      text: '1 min',
+      value: 47
+    },
+    end_location: {
+      lat: -34.4122518,
+      lng: 150.8927059
+    },
+    html_instructions: 'Turn <b>left</b> toward <b>Station St</b>',
+    maneuver: 'turn-left',
+    polyline: {
+      points: 'f``qE}f~w[f@GLBB@FBDDFBBBD@D?HA'
+    },
+    start_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    travel_mode: 'WALKING'
+  },
+  {
+    distance: {
+      text: '62 m',
+      value: 62
+    },
+    duration: {
+      text: '1 min',
+      value: 47
+    },
+    end_location: {
+      lat: -34.4122518,
+      lng: 150.8927059
+    },
+    html_instructions: 'Turn <b>left</b> toward <b>Station St</b>',
+    maneuver: 'turn-left',
+    polyline: {
+      points: 'f``qE}f~w[f@GLBB@FBDDFBBBD@D?HA'
+    },
+    start_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    travel_mode: 'WALKING'
+  },
+  {
+    distance: {
+      text: '62 m',
+      value: 62
+    },
+    duration: {
+      text: '1 min',
+      value: 47
+    },
+    end_location: {
+      lat: -34.4122518,
+      lng: 150.8927059
+    },
+    html_instructions: 'Turn <b>left</b> toward <b>Station St</b>',
+    maneuver: 'turn-left',
+    polyline: {
+      points: 'f``qE}f~w[f@GLBB@FBDDFBBBD@D?HA'
+    },
+    start_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    travel_mode: 'WALKING'
+  },
+  {
+    distance: {
+      text: '62 m',
+      value: 62
+    },
+    duration: {
+      text: '1 min',
+      value: 47
+    },
+    end_location: {
+      lat: -34.4122518,
+      lng: 150.8927059
+    },
+    html_instructions: 'Turn <b>left</b> toward <b>Station St</b>',
+    maneuver: 'turn-left',
+    polyline: {
+      points: 'f``qE}f~w[f@GLBB@FBDDFBBBD@D?HA'
+    },
+    start_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    travel_mode: 'WALKING'
+  },
+  {
+    distance: {
+      text: '62 m',
+      value: 62
+    },
+    duration: {
+      text: '1 min',
+      value: 47
+    },
+    end_location: {
+      lat: -34.4122518,
+      lng: 150.8927059
+    },
+    html_instructions: 'Turn <b>left</b> toward <b>Station St</b>',
+    maneuver: 'turn-left',
+    polyline: {
+      points: 'f``qE}f~w[f@GLBB@FBDDFBBBD@D?HA'
+    },
+    start_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    travel_mode: 'WALKING'
+  }
+]
 
 class Footer extends React.PureComponent {
-  // onGestureEvent = Animated.event([
-  //   {
-  //     nativeEvent: { translationY: this._translateY }
-  //   }
-  // ])
-
-  onGestureEvent = event => {
-    if (
-      event.nativeEvent.translationY >= 0 &&
-      event.nativeEvent.translationY <= 100
-    ) {
-      Animated.timing(this._translateY, {
-        toValue: 125,
-        duration: 100
-      }).start()
-      // this._translateY.setValue(event.nativeEvent.translationY)
-    } else if (event.nativeEvent.translationY < 0) {
-      Animated.timing(this._translateY, {
-        toValue: 0,
-        duration: 100
-      }).start()
-    }
+  static defaultProps = {
+    steps: fakeSteps
   }
 
-  _translateY = new Animated.Value(0)
+  state = {
+    _translateY: new Animated.Value(0)
+  }
 
   _renderLocationButton = () => {
     const { centered, _centerUserLocation } = this.props
@@ -62,39 +254,28 @@ class Footer extends React.PureComponent {
       _centerUserLocation
     } = this.props
 
-    // const animateScroll = this._translateY.interpolate({
-    //   inputRange: [0, 100],
-    //   outputRange: [0, 125],
-    //   extrapolate: 'clamp'
-    // })
-
     return (
-      <PanGestureHandler onGestureEvent={this.onGestureEvent}>
-        <Animated.View
-          style={[
-            {
-              position: 'absolute',
-              // height: 300,
-              bottom: 0,
-              width: SCREEN_WIDTH
-            },
-            { transform: [{ translateY: this._translateY }] }
-          ]}
+      <BottomDrawer
+        containerHeight={220 + 96}
+        downDisplay={220 - 118}
+        backgroundColor="transparent"
+        roundedEdges={false}
+      >
+        <MiniView
+          marker={selectedMarker}
+          _navigateToDetail={_navigateToDetail}
+          _handleShowDirection={_handleShowDirection}
         >
-          <MiniView
-            marker={selectedMarker}
-            _navigateToDetail={_navigateToDetail}
-            _handleShowDirection={_handleShowDirection}
-          >
-            <ButtonMyLocation
-              centered={centered}
-              _centerUserLocation={_centerUserLocation}
-            />
-          </MiniView>
-        </Animated.View>
-      </PanGestureHandler>
+          <ButtonMyLocation
+            centered={centered}
+            _centerUserLocation={_centerUserLocation}
+          />
+        </MiniView>
+      </BottomDrawer>
     )
   }
+
+  drawer = null
 
   _renderDirectionFooter = () => {
     const {
@@ -105,14 +286,16 @@ class Footer extends React.PureComponent {
       selectedMarker,
       steps
     } = this.props
+
     return (
-      <View style={[styles.mini_view_container]}>
+      <View style={{ flex: 1, justifyContent: 'flex-end' }}>
         <View
           style={[
-            styles.transparent_container,
             {
-              justifyContent: 'flex-end',
-              display: showSteps ? 'none' : 'flex'
+              bottom: COLLAPSED_HEIGHT_STEPBOX + 12,
+              position: 'absolute',
+              right: 24,
+              zIndex: 0
             }
           ]}
         >
@@ -122,49 +305,65 @@ class Footer extends React.PureComponent {
           />
         </View>
         <View
-          style={[styles.showStepButton, { elevation: showSteps ? 10 : 9 }]}
+          style={[styles.showStepButton, { elevation: showSteps ? 12 : 0 }]}
         >
-          {showSteps ? (
-            <TouchableOpacity
-              style={[
-                styles.secondary_button,
-                { marginVertical: 16, elevation: 0 }
-              ]}
-              onPress={() => _handleShowStep(false)}
-            >
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.secondaryTitleButton]}>SHOW MAPS</Text>
-              </View>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[styles.button, { marginVertical: 16, elevation: 0 }]}
-              onPress={() => _handleShowStep(true)}
-            >
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.titleButton]}>SHOW STEPS</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        </View>
-        <View style={styles.stepsContainer}>
-          <SwipeButton />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginVertical: 24,
-              marginLeft: 24
+          <TouchableOpacity
+            style={[
+              showSteps ? styles.secondary_button : styles.button,
+              { marginVertical: 16, elevation: 0 }
+            ]}
+            onPress={() => {
+              _handleShowStep(!showSteps)
+              this.drawer.toggleDrawerState()
             }}
           >
-            <Text style={styles.minuteStyle}>
-              {selectedMarker.duration} min
-            </Text>
-            <Text style={styles.distance_grey}>
-              {` (${selectedMarker.distance})`}
-            </Text>
-          </View>
-          {showSteps && <StepList steps={steps} />}
+            <View style={{ flex: 1 }}>
+              {showSteps ? (
+                <Text style={[styles.secondaryTitleButton]}>SHOW MAPS</Text>
+              ) : (
+                <Text style={[styles.titleButton]}>SHOW STEPS</Text>
+              )}
+            </View>
+          </TouchableOpacity>
         </View>
+
+        <BottomDrawer
+          containerHeight={EXPANDED_HEIGHT_STEPBOX}
+          downDisplay={EXPANDED_HEIGHT_STEPBOX - COLLAPSED_HEIGHT_STEPBOX}
+          backgroundColor="transparent"
+          startUp={false}
+          roundedEdges={false}
+          onExpanded={() => {
+            const { currentState } = this.drawer.state
+            _handleShowStep(currentState === 1 ? true : false)
+          }}
+          ref={ref => (this.drawer = ref)}
+        >
+          <View
+            style={{ height: EXPANDED_HEIGHT_STEPBOX, zIndex: 1, elevation: 9 }}
+          >
+            <View style={styles.stepsContainer}>
+              <SwipeButton />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  paddingVertical: 24,
+                  paddingHorizontal: 24,
+                  alignItems: 'center',
+                  height: 75
+                }}
+              >
+                <Text style={styles.minuteStyle}>
+                  {fakeMarker.duration} min
+                </Text>
+                <Text style={styles.distance_grey}>
+                  {` (${fakeMarker.distance})`}
+                </Text>
+              </View>
+              <StepList steps={steps} />
+            </View>
+          </View>
+        </BottomDrawer>
       </View>
     )
   }
@@ -179,7 +378,8 @@ class Footer extends React.PureComponent {
       return this._renderMarkerFooter()
     }
 
-    return this._renderLocationButton()
+    return this._renderDirectionFooter()
+    // return this._renderLocationButton()
   }
 }
 

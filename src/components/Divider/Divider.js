@@ -2,6 +2,6 @@ import React from 'react'
 import { View } from 'react-native'
 import styles from './styles'
 
-const Divider = () => <View style={styles.divider} />
+const Divider = props => <View style={[styles.divider, { ...props.styles }]} />
 
 export default Divider

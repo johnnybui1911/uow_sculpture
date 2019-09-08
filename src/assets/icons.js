@@ -76,6 +76,24 @@ export const icons = {
   marker_fill: (
     <CustomIcon name="marker-s" size={24} color={palette.primaryColorLight} />
   ),
+  marker_fill_w: (
+    <View
+      style={{
+        height: 30,
+        width: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30 / 2,
+        backgroundColor: palette.primaryColorLight
+      }}
+    >
+      <CustomIcon
+        name="marker-s"
+        size={16}
+        color={palette.backgroundColorWhite}
+      />
+    </View>
+  ),
   marker_fill_red: (
     <CustomIcon name="marker-s" size={24} color={palette.secondaryColor} />
   ),
@@ -96,16 +114,11 @@ export const icons = {
       name="back"
       size={24}
       color={palette.primaryColorLight}
-      style={{ padding: 10, paddingBottom: 13 }} // icons not center
+      // style={{ padding: 10, paddingBottom: 13 }} // icons not center
     />
   ),
   close: (
-    <CustomIcon
-      name="close"
-      size={20}
-      color={palette.primaryColorLight}
-      style={{ padding: 10 }}
-    />
+    <CustomIcon name="close" size={16} color={palette.primaryColorLight} />
   ),
   close_w: (
     <View
@@ -213,12 +226,7 @@ export const icons = {
     />
   ),
   micro: (
-    <CustomIcon
-      name="micro"
-      size={20}
-      color={palette.primaryColorLight}
-      style={{ padding: 10, elevation: 4 }}
-    />
+    <CustomIcon name="micro" size={20} color={palette.primaryColorLight} />
   ),
   like: (
     <CustomIcon name="heart-o" size={16} color={palette.backgroundColorWhite} />

@@ -70,7 +70,7 @@ const calcDistance = (latLng1, latLng2) => {
 class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
     return {
-      tabBarVisible: navigation.getParam('showTab', true)
+      tabBarVisible: navigation.getParam('showTab', false)
     }
   }
 
@@ -98,18 +98,18 @@ class MapScreen extends React.PureComponent {
     }
   }
 
-  componentDidMount = () => {
-    this._notificationSubscription = Notifications.addListener(notification =>
-      _handleNotification(notification, this.props.navigation, this._resetUI)
-    )
-    this._getLocationAsync()
-    this._animateLoop()
-  }
+  // componentDidMount = () => {
+  //   this._notificationSubscription = Notifications.addListener(notification =>
+  //     _handleNotification(notification, this.props.navigation, this._resetUI)
+  //   )
+  //   this._getLocationAsync()
+  //   this._animateLoop()
+  // }
 
-  componentWillUnmount = () => {
-    this.subscribeLocation()
-    this.animation.reset()
-  }
+  // componentWillUnmount = () => {
+  //   this.subscribeLocation()
+  //   this.animation.reset()
+  // }
 
   userCoordinate = null
 
@@ -404,17 +404,18 @@ class MapScreen extends React.PureComponent {
     if (region) {
       return (
         <SafeAreaView style={styles.container}>
-          {!showMapOnly && (
-            <Header
-              showSteps={showSteps}
-              searchText={searchText}
-              showDirection={showDirection}
-              _handleSearch={this._handleSearch}
-              _onClosePressed={this._onClosePressed}
-              _handleShowDirection={this._handleShowDirection}
-            />
-          )}
-          <MapView
+          {/* {!showMapOnly && ( */}
+          {/* <Header
+            showMapOnly={showMapOnly}
+            showSteps={showSteps}
+            searchText={searchText}
+            showDirection={showDirection}
+            _handleSearch={this._handleSearch}
+            _onClosePressed={this._onClosePressed}
+            _handleShowDirection={this._handleShowDirection}
+          /> */}
+          {/* )} */}
+          {/* <MapView
             style={styles.mapStyle}
             mapType={Platform.OS === 'android' ? 'none' : 'standard'}
             provider={Platform.OS === 'ios' ? 'google' : null}
@@ -441,19 +442,30 @@ class MapScreen extends React.PureComponent {
               _handleDirectionState={this._handleDirectionState}
               _fitToCoordinate={this._fitToCoordinate}
             />
-          </MapView>
-          {!showMapOnly && (
-            <Footer
-              showSteps={showSteps}
-              steps={steps}
-              centered={centered}
-              showDirection={showDirection}
-              _handleShowStep={this._handleShowStep}
-              _navigateToDetail={this._navigateToDetail}
-              _centerUserLocation={this._centerUserLocation}
-              _handleShowDirection={this._handleShowDirection}
-            />
-          )}
+          </MapView> */}
+
+          {/* <TouchableOpacity
+            style={{ flex: 1, backgroundColor: 'red' }}
+            onPress={() =>
+              this.setState(prev => ({ showMapOnly: !prev.showMapOnly }))
+            }
+          >
+            <View style={{ flex: 1, backgroundColor: 'red' }} />
+          </TouchableOpacity> */}
+
+          {/* {!showMapOnly && ( */}
+          <Footer
+            showMapOnly={showMapOnly}
+            showSteps={showSteps}
+            // steps={steps}
+            centered={centered}
+            showDirection={showDirection}
+            _handleShowStep={this._handleShowStep}
+            _navigateToDetail={this._navigateToDetail}
+            _centerUserLocation={this._centerUserLocation}
+            _handleShowDirection={this._handleShowDirection}
+          />
+          {/* )} */}
           {this.state.isModalVisible && (
             <View
               style={{

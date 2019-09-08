@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback
 } from 'react-native'
 import { connect } from 'react-redux'
-import LottieView from 'lottie-react-native'
 import { Notifications } from 'expo'
 import { FontAwesome } from '@expo/vector-icons'
 import styles from './styles'
@@ -132,12 +131,20 @@ class CollectionScreen extends React.PureComponent {
             onPress={() => this.props.navigation.navigate('Search')}
           >
             <View style={styles.searchBox}>
-              <FontAwesome
-                style={{ padding: 10 }}
-                name="search"
-                size={20}
-                color={palette.primaryColorLight}
-              />
+              <View
+                style={{
+                  alignItems: 'center',
+                  padding: 10,
+                  width: 50
+                }}
+              >
+                <FontAwesome
+                  name="search"
+                  size={20}
+                  color={palette.primaryColorLight}
+                />
+              </View>
+
               <View
                 style={{
                   flex: 1,
@@ -151,7 +158,15 @@ class CollectionScreen extends React.PureComponent {
               >
                 <Text style={styles.placeholder}>Enter keywords...</Text>
               </View>
-              {icons.micro}
+              <View
+                style={{
+                  width: 50,
+                  alignItems: 'flex-end',
+                  padding: 10
+                }}
+              >
+                {icons.micro}
+              </View>
             </View>
           </TouchableWithoutFeedback>
           <View
