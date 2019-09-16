@@ -18,6 +18,16 @@ export default class Animator extends Component {
     })
   }
 
+  componentDidMount = () => {
+    if (this.props._translateY) {
+      this.props._translateY.setValue(SCREEN_HEIGHT)
+      Animated.timing(this.props._translateY, {
+        toValue: 0,
+        duration: 1000
+      }).start()
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.drawerState !== this.props.drawerState) {
       if (nextProps.drawerState === 0) {
@@ -33,19 +43,27 @@ export default class Animator extends Component {
     return (
       <Animated.View
         style={[
-          { ...this.position.getLayout(), left: 0 },
-          StyleSheet.flatten([
-            styles.animationContainer(
-              this.props.containerHeight,
-              this.props.backgroundColor
-            ),
-            styles.roundedEdges(this.props.roundedEdges),
-            styles.shadow(this.props.shadow)
-          ])
+          { flex: 1, position: 'absolute' },
+          { ...this.props.style },
+          this.props._translateY && { top: this.props._translateY }
         ]}
-        {...this._panResponder.panHandlers}
       >
-        {this.props.children}
+        <Animated.View
+          style={[
+            { ...this.position.getLayout(), left: 0 },
+            StyleSheet.flatten([
+              styles.animationContainer(
+                this.props.containerHeight,
+                this.props.backgroundColor
+              ),
+              styles.roundedEdges(this.props.roundedEdges),
+              styles.shadow(this.props.shadow)
+            ])
+          ]}
+          {...this._panResponder.panHandlers}
+        >
+          {this.props.children}
+        </Animated.View>
       </Animated.View>
     )
   }
@@ -73,7 +91,17 @@ export default class Animator extends Component {
     ) {
       this._transitionTo(this.props.upPosition, this.props.onExpanded)
       this.props.onDrawerStateSet(UP_STATE)
-    } else {
+    }
+    // else if (
+    //   gesture.dy > -this.props.toggleThreshold &&
+    //   gesture.dy < 0 &&
+    //   this.props.currentPosition === this.props.downPosition
+    // ) {
+    //   console.log('back to collapsed')
+    //   this._transitionTo(this.props.downPosition, this.props.onCollapsed)
+    //   this.props.onDrawerStateSet(DOWN_STATE)
+    // }
+    else {
       this._resetPosition()
     }
   }
@@ -90,7 +118,8 @@ export default class Animator extends Component {
   _transitionTo(position, callback) {
     Animated.spring(this.position, {
       toValue: position
-    }).start(() => this.props.onExpanded())
+    }).start()
+    // .start(() => this.props.onExpanded())
 
     this.props.setCurrentPosition(position)
     callback()
@@ -106,15 +135,14 @@ export default class Animator extends Component {
 const styles = {
   animationContainer: (height, color) => ({
     width: SCREEN_WIDTH,
-    position: 'absolute',
     height: height + Math.sqrt(SCREEN_HEIGHT),
     backgroundColor: color
   }),
   roundedEdges: rounded => {
     return (
       rounded == true && {
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12
       }
     )
   },
@@ -124,6 +152,7 @@ const styles = {
         shadowColor: '#CECDCD',
         shadowRadius: 3,
         shadowOpacity: 5
+        // elevation: 10
       }
     )
   }

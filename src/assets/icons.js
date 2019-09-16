@@ -10,29 +10,7 @@ import palette from './palette'
 import icoMoonConfig from './selection.json'
 import images from './images'
 
-const styles = StyleSheet.create({
-  oval_large_style: {
-    width: 20,
-    height: 20,
-    backgroundColor: 'rgba(255, 0,11,0.25)',
-    position: 'absolute',
-    bottom: 0,
-    borderRadius: 50,
-    transform: [{ scaleX: 2 }]
-  },
-  oval_small_style: {
-    width: 10,
-    height: 10,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.80)',
-    transform: [{ scaleX: 2 }],
-    position: 'absolute',
-    bottom: 5
-  }
-})
-
 export const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig, 'Font-Name')
-
 export const DirectionIcon = maneuver => (
   <CustomIcon
     name={maneuver ? maneuver : 'straight'}
@@ -142,25 +120,12 @@ export const icons = {
   ),
   user_location: <Image source={require('./images/user-location.png')} />,
   user_location_sm: <Image source={require('./images/user-location-sm.png')} />,
-  chosen_marker: (
-    <View
-      style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}
-    >
-      <View style={styles.oval_large_style} />
-      <View style={styles.oval_small_style} />
-      <View>
-        <Image source={require('./images/marker.png')} />
-      </View>
-    </View>
-  ),
   marker: (
-    <View
-      style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}
-    >
-      <View>
-        <Image source={require('./images/marker.png')} />
-      </View>
-    </View>
+    <Image
+      style={{ width: 22, height: 40 }}
+      source={require('./images/chosen-marker.png')}
+      resizeMode="contain"
+    />
   ),
   marker_sm: <Image source={require('./images/marker-sm.png')} />,
   fullName: (

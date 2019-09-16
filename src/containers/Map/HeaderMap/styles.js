@@ -5,7 +5,7 @@ import { STATUS_BAR_HEIGHT } from '../../../assets/dimension'
 export default StyleSheet.create({
   searchBoxContainer: {
     marginTop: STATUS_BAR_HEIGHT,
-    zIndex: 1000
+    zIndex: 1
   },
   formDirectionStyle: {
     position: 'absolute',
@@ -28,8 +28,7 @@ export default StyleSheet.create({
     marginTop: 8
   },
   backButtonStyle: {
-    paddingVertical: 4,
-    borderRadius: 50
+    paddingVertical: 4
   },
   secondColumnStyle: {
     flex: 1,

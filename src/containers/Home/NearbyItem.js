@@ -6,9 +6,11 @@ import {
   TouchableWithoutFeedback,
   Animated
 } from 'react-native'
+import { connect } from 'react-redux'
 import styles from './styles'
 import { icons } from '../../assets/icons'
 import images from '../../assets/images'
+import formatDistance from '../../library/formatDistance'
 
 class NearbyItem extends React.PureComponent {
   constructor(props) {
@@ -65,7 +67,7 @@ class NearbyItem extends React.PureComponent {
   }
 
   render() {
-    const { item, navigation } = this.props
+    const { item, navigation, distanceMatrix } = this.props
     return (
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('Detail', { id: item.id })}
@@ -73,7 +75,7 @@ class NearbyItem extends React.PureComponent {
         <View style={styles.nearbyItemStyle}>
           <View style={styles.imageNearbyContainer}>
             <Image
-              source={images.sculptures[item.photoURL]}
+              source={{ uri: item.photoURL }}
               resizeMode="cover"
               style={styles.imageNearbyItem}
             />
@@ -85,8 +87,15 @@ class NearbyItem extends React.PureComponent {
                   justifyContent: 'space-between'
                 }}
               >
-                <Text style={styles.title}>{item.distance}</Text>
-                <Text style={styles.title}>{item.name}</Text>
+                {distanceMatrix[item.id] ? (
+                  <Text style={styles.title}>
+                    {formatDistance(distanceMatrix[item.id].distance)}
+                  </Text>
+                ) : null}
+
+                <Text numberOfLines={2} style={styles.title}>
+                  {item.name}
+                </Text>
               </View>
               <View
                 style={{
@@ -108,4 +117,8 @@ class NearbyItem extends React.PureComponent {
   }
 }
 
-export default NearbyItem
+const mapStateToProps = getState => ({
+  distanceMatrix: getState.distanceReducer.distanceMatrix
+})
+
+export default connect(mapStateToProps)(NearbyItem)

@@ -11,7 +11,12 @@ import {
 import Modal from 'react-native-modal'
 import Constants from 'expo-constants'
 import { connect } from 'react-redux'
-import { syncLocationThunk, thunkSignIn } from './redux/actions'
+import {
+  syncLocationThunk,
+  thunkSignIn,
+  fetchDataThunk,
+  fetchDistanceMatrix
+} from './redux/actions'
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
@@ -56,8 +61,19 @@ class MainScreen extends React.PureComponent {
   }
 
   componentDidMount = () => {
-    this.props.syncLocationThunk()
+    this.props.fetchDataThunk().then(res => {
+      this.props.syncLocationThunk(res.data)
+    })
     this.props.thunkSignIn()
+
+    // this.props.syncLocationThunk().then(res => {
+    //   this.props.fetchDataThunk(res.coordinate).then(res => {
+    //     this.props.fetchDistanceMatrix(
+    //       res.userCoordinate,
+    //       res.data.filter(item => item.coordinate.latitude)
+    //     )
+    //   })
+    // })
   }
 
   render() {
@@ -122,7 +138,9 @@ class MainScreen extends React.PureComponent {
 
 const mapDispatchToProps = {
   syncLocationThunk,
-  thunkSignIn
+  thunkSignIn,
+  fetchDataThunk,
+  fetchDistanceMatrix
 }
 
 export default connect(

@@ -30,7 +30,7 @@ export default StyleSheet.create({
     width: SCREEN_WIDTH
   },
   title: {
-    fontSize: 36,
+    fontSize: 26,
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold'
   },
@@ -58,7 +58,7 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-Medium'
   },
   distance: {
-    fontSize: 20,
+    fontSize: 14,
     fontFamily: 'Montserrat-Bold',
     color: palette.primaryColorLight
   },
@@ -108,8 +108,7 @@ export default StyleSheet.create({
   mini_image_container: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 2,
-    ...shadowStyle
+    padding: 2
   },
   image: {
     width: 80,
@@ -118,10 +117,8 @@ export default StyleSheet.create({
   },
   description_container: {
     flex: 1,
-    // height: 215,
     paddingHorizontal: 24,
     backgroundColor: palette.backgroundColorWhite,
-    // paddingVertical: 12,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     ...shadowStyle,
@@ -144,8 +141,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 12,
-    height: BUTTON_HEIGHT,
-    ...shadowStyle
+    height: BUTTON_HEIGHT
+    // ...shadowStyle
   },
   secondary_button: {
     flex: 1,
@@ -157,8 +154,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 12,
-    height: BUTTON_HEIGHT,
-    ...shadowStyle
+    height: BUTTON_HEIGHT
+    // ...shadowStyle
   },
   titleButton: {
     fontSize: 16,
@@ -173,15 +170,9 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   description: {
-    fontSize: 14,
+    fontSize: 12,
     color: palette.secondaryTypographyColor,
     fontFamily: 'Montserrat-Medium'
-  },
-  unselected_marker: {
-    width: 12,
-    height: 12,
-    borderRadius: 100,
-    backgroundColor: palette.secondaryColor
   },
   inputBox: {
     marginVertical: 4,
@@ -275,5 +266,29 @@ export default StyleSheet.create({
     top: 0,
     position: 'absolute'
     // zIndex: 100
+  },
+  oval_large_style: {
+    width: 10,
+    height: 12,
+    backgroundColor: '#FF0A00',
+    position: 'absolute',
+    borderRadius: 50,
+    transform: [{ scaleX: 2 }],
+    bottom: 6
+  },
+  oval_small_style: {
+    width: 4,
+    height: 4,
+    borderRadius: 50,
+    backgroundColor: '#fff',
+    transform: [{ scaleX: 2 }],
+    position: 'absolute',
+    bottom: 6 + 4
+  },
+  unselected_marker: {
+    width: 12,
+    height: 12,
+    borderRadius: 100,
+    backgroundColor: '#FF0A00'
   }
 })

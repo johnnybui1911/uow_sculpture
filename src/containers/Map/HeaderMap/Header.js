@@ -1,161 +1,142 @@
 import React from 'react'
-import { View, TouchableWithoutFeedback, Text, Animated } from 'react-native'
+import {
+  View,
+  TouchableWithoutFeedback,
+  Text,
+  Animated,
+  TouchableOpacity
+} from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
 import { icons } from '../../../assets/icons'
 import FormDirection from './FormDirection'
 import { SearchBox, MidDivider } from '../../../components'
+import { SCREEN_HEIGHT } from '../../../assets/dimension'
+import { MapContext } from '../context/MapContext'
+import SearchView from '../../../components/SearchButton/SearchView'
 
-class Header extends React.PureComponent {
+class Header extends React.Component {
+  static contextType = MapContext
+
+  // FIXME: DUPLICATE WITH FOOTER
   componentDidMount = () => {
-    Animated.sequence([
-      Animated.timing(this._translateY_SearchBox, {
-        toValue: 0,
-        duration: 400
-      })
-    ]).start()
+    const { animate } = this.context
+    animate()
   }
 
-  componentDidUpdate = () => {
-    const {
-      showSteps,
-      searchText,
-      showDirection,
-      selectedMarker,
-      _handleSearch,
-      _onClosePressed,
-      _handleShowDirection,
-      showMapOnly
-    } = this.props
-    if (!showMapOnly) {
-      if (showDirection && !showSteps) {
-        Animated.sequence([
-          Animated.timing(this._translateY_SearchBox, {
-            toValue: -100,
-            duration: 400
-          }),
-          Animated.timing(this._translateY_DirectionForm, {
-            toValue: 0,
-            duration: 400
-          })
-        ]).start()
-      } else if (showDirection && showSteps) {
-        Animated.sequence([
-          Animated.timing(this._translateY_DirectionForm, {
-            toValue: -500,
-            duration: 400
-          })
-        ]).start()
+  componentDidUpdate = prevProps => {
+    if (
+      this.props.showSteps !== prevProps.showSteps ||
+      this.props.showDirection !== prevProps.showDirection ||
+      this.props.selectedMarker !== prevProps.selectedMarker ||
+      this.props.showMapOnly !== prevProps.showMapOnly
+    ) {
+      const { animate, animateHide } = this.context
+      if (this.props.showMapOnly) {
+        animateHide()
       } else {
-        Animated.sequence([
-          Animated.timing(this._translateY_DirectionForm, {
-            toValue: -500,
-            duration: 400
-          }),
-          Animated.timing(this._translateY_SearchBox, {
-            toValue: 0,
-            duration: 400
-          })
-        ]).start()
+        animate()
       }
-    } else {
-      Animated.parallel([
-        Animated.timing(this._translateY_DirectionForm, {
-          toValue: -500,
-          duration: 400
-        }),
-        Animated.timing(this._translateY_SearchBox, {
-          toValue: -100,
-          duration: 400
-        })
-      ]).start()
     }
   }
 
-  _translateY_SearchBox = new Animated.Value(-100)
-  _translateY_DirectionForm = new Animated.Value(-500)
-
   _goBack = () => {
-    this.props._handleShowDirection(false)
+    const { setShowDirection } = this.context
+    setShowDirection(false)
+  }
+
+  switchView = () => {
+    Animated.timing(this.state._translateY, {
+      toValue: -500,
+      duration: 400
+    }).start(() => {
+      this.props._handleShowDirection(false)
+    })
   }
 
   render() {
     const {
-      showSteps,
       searchText,
-      showDirection,
       selectedMarker,
       _handleSearch,
       _onClosePressed,
-      _handleShowDirection
+      showSteps,
+      showDirection,
+      distanceMatrix
     } = this.props
 
-    // if (showDirection) {
-    //   if (!showSteps) {
-    //     const destination = selectedMarker.name
-    //     return (
-    //       <View style={styles.formDirectionStyle}>
-    //         <View style={styles.rowStyle}>
-    //           <View style={styles.backButtonContainerStyle}>
-    //             <TouchableWithoutFeedback onPress={this._goBack}>
-    //               <View style={styles.backButtonStyle}>{icons.back_blue}</View>
-    //             </TouchableWithoutFeedback>
-    //           </View>
-    //           <FormDirection destination={destination} />
-    //           <TouchableWithoutFeedback>
-    //             <View
-    //               style={{
-    //                 padding: 12,
-    //                 borderRadius: 50
-    //               }}
-    //             >
-    //               {icons.exchange}
-    //             </View>
-    //           </TouchableWithoutFeedback>
-    //         </View>
-    //         <MidDivider>
-    //           <View style={styles.walkingBox}>
-    //             {icons.walking}
-    //             <Text style={styles.title_sm}>
-    //               {selectedMarker.duration} min
-    //             </Text>
-    //           </View>
-    //         </MidDivider>
-    //       </View>
-    //     )
-    //   }
-    //   return null
-    // }
-    return (
-      <React.Fragment>
-        <Animated.View
-          style={[
-            styles.formDirectionStyle,
-            {
-              height: 171,
-              transform: [{ translateY: this._translateY_DirectionForm }]
-            }
-          ]}
-        ></Animated.View>
-        <Animated.View
-          style={[
-            styles.searchBoxContainer,
-            { transform: [{ translateY: this._translateY_SearchBox }] }
-          ]}
-        >
-          <SearchBox
-            _handleSearch={_handleSearch}
-            searchText={searchText}
-            _onClosePressed={_onClosePressed}
-          />
-        </Animated.View>
-      </React.Fragment>
-    )
+    const { header_translateY } = this.context
+
+    if (!showSteps) {
+      if (selectedMarker && showDirection) {
+        const destination = selectedMarker.name
+        return (
+          <Animated.View
+            style={[
+              styles.formDirectionStyle,
+              { transform: [{ translateY: header_translateY }] }
+            ]}
+          >
+            <View style={styles.rowStyle}>
+              <View style={styles.backButtonContainerStyle}>
+                <TouchableOpacity
+                  style={[styles.backButtonStyle]}
+                  onPress={() => this._goBack()}
+                >
+                  <View>{icons.back_blue}</View>
+                </TouchableOpacity>
+              </View>
+              <FormDirection destination={destination} />
+              <TouchableWithoutFeedback>
+                <View
+                  style={{
+                    padding: 12,
+                    borderRadius: 50
+                  }}
+                >
+                  {icons.exchange}
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+            <MidDivider>
+              <View style={styles.walkingBox}>
+                {icons.walking}
+                <Text style={styles.title_sm}>
+                  {distanceMatrix[selectedMarker.id]
+                    ? distanceMatrix[selectedMarker.id].duration
+                    : ''}{' '}
+                  min
+                </Text>
+              </View>
+            </MidDivider>
+          </Animated.View>
+        )
+      } else {
+        return (
+          <Animated.View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              transform: [{ translateY: header_translateY }],
+              zIndex: 1
+            }}
+          >
+            <View style={[styles.searchBoxContainer]}>
+              {this.props.children}
+            </View>
+          </Animated.View>
+        )
+      }
+    }
+    return null
   }
 }
 
 const mapStateToProps = getState => ({
-  selectedMarker: getState.markerReducer.selectedMarker
+  selectedMarker: getState.markerReducer.selectedMarker,
+  distanceMatrix: getState.distanceReducer.distanceMatrix
 })
 
 export default connect(mapStateToProps)(Header)

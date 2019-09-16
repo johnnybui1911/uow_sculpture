@@ -1,16 +1,16 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
-import images from "../../assets/images";
-import { icons } from "../../assets/icons";
-import styles from "./styles";
+import React from 'react'
+import { View, Text, Image } from 'react-native'
+import images from '../../assets/images'
+import { icons } from '../../assets/icons'
+import styles from './styles'
 
 const CardItem = props => {
-  const { item } = props;
+  const { item } = props
   return (
     <View
       style={{
         ...styles.cardItem,
-        alignItems: item.id % 2 !== 0 ? "flex-end" : "flex-start"
+        alignItems: item.id % 2 !== 0 ? 'flex-end' : 'flex-start'
       }}
     >
       <View
@@ -23,21 +23,21 @@ const CardItem = props => {
         <View
           style={{
             flex: 1,
-            justifyContent: "center"
+            justifyContent: 'center'
           }}
         >
-          <Text style={styles.description}>{item.des}</Text>
+          <Text style={styles.description}>{item.features.maker}</Text>
         </View>
         <View
           style={{
             flex: 1,
-            alignItems: "flex-end",
-            flexDirection: "row"
+            alignItems: 'flex-end',
+            flexDirection: 'row'
           }}
         >
           <View
             style={{
-              flexDirection: "row",
+              flexDirection: 'row',
               marginRight: 20
             }}
           >
@@ -46,7 +46,7 @@ const CardItem = props => {
           </View>
           <View
             style={{
-              flexDirection: "row"
+              flexDirection: 'row'
             }}
           >
             {icons.comment}
@@ -63,7 +63,7 @@ const CardItem = props => {
         <Image source={images.sculptures[item.photoURL]} style={styles.image} />
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default CardItem;
+export default CardItem

@@ -16,11 +16,11 @@ const markerReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DATA_SUCCESSFUL: {
       const { data, isLoading } = action.payload
-      if (state.selectedMarker) {
-        state.selectedMarker = data.find(
-          marker => marker.id === state.selectedMarker.id
-        )
-      }
+      // if (state.selectedMarker) {
+      //   state.selectedMarker = data.find(
+      //     marker => marker.id === state.selectedMarker.id
+      //   )
+      // }
       return { ...state, isLoading, markers: data }
     }
 
@@ -35,11 +35,7 @@ const markerReducer = (state = initialState, action) => {
     }
 
     case MARKER_SELECTED: {
-      const { markerID } = action
-      const { markers } = state
-
-      const selectedMarker = markers.find(marker => marker.id === markerID)
-
+      const { selectedMarker } = action
       return { ...state, selectedMarker }
     }
 

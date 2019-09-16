@@ -1,21 +1,26 @@
 import React from 'react'
 import { View, Text, TouchableNativeFeedback } from 'react-native'
+import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
 import { icons } from '../../assets/icons'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { insertSearchItem } from '../../redux/actions'
+import formatDistance from '../../library/formatDistance'
 
 const SearchItem = ({
   item,
   searchText,
   _navigateToDetail,
-  insertSearchItem
+  insertSearchItem,
+  distanceMatrix,
+  navigation
 }) => {
   const animatedName = item.name.slice(0, searchText.length)
   const originalName = item.name.slice(searchText.length, item.name.length)
   const onItemClick = () => {
-    _navigateToDetail(item.id)
+    // _navigateToDetail(item.id)
+    navigation.navigate('Detail', { id: item.id })
     insertSearchItem(item)
   }
   return (
@@ -43,7 +48,11 @@ const SearchItem = ({
           }}
         >
           {item.recent ? icons.clock : icons.marker_fill_w}
-          <Text style={styles.distance}>{!item.recent && item.distance}</Text>
+          <Text style={styles.distance}>
+            {!item.recent && distanceMatrix[item.id]
+              ? formatDistance(distanceMatrix[item.id].distance)
+              : ''}
+          </Text>
         </View>
         <View
           style={{
@@ -72,8 +81,7 @@ const SearchItem = ({
           style={{
             width: 50,
             alignItems: 'flex-end',
-            padding: 10,
-            paddingRight: 5 //icons error, so padding = default padding / 2
+            paddingRight: 12
           }}
         >
           {icons.noun_arrow}
@@ -82,11 +90,18 @@ const SearchItem = ({
     </TouchableNativeFeedback>
   )
 }
+
+const mapStateToProps = getState => ({
+  distanceMatrix: getState.distanceReducer.distanceMatrix
+})
+
 const mapDispatchToProps = {
   insertSearchItem
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SearchItem)
+export default withNavigation(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(SearchItem)
+)

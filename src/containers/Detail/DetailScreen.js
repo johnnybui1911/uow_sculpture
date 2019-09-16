@@ -32,11 +32,13 @@ class DetailScreen extends React.PureComponent {
         creditLine:
           'Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988'
       },
-      photoURL: 1,
+      photoURL:
+        'https://uowac-sculpture-images.s3-ap-southeast-2.amazonaws.com/1987.08/IMG_2477.JPG',
       coordinate: {
         latitude: -34.40478,
         longitude: 150.88115
-      }
+      },
+      imageList: []
     }
   }
 
@@ -61,30 +63,39 @@ class DetailScreen extends React.PureComponent {
 
   render() {
     const id = this.props.navigation.getParam('id', -1)
-    // const item = this.props.markers.find(item => item.id === id)
     const item =
       id === -1
         ? this.props.item
         : this.props.markers.find(item => item.id === id)
+
+    const { imageList } = item
+
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.detailContainer}>
-            <MapCard
-              item={item}
-              _navigateToMap={this._navigateToMap}
-              elevation={2}
-            />
-            <DescriptionCard item={item} elevation={3} />
-            <FeatureCard item={item} elevation={4} />
-            <TitleCard
-              _navigateToComment={this._navigateToComment}
-              item={item}
-              elevation={5}
-            />
-            <Header navigation={this.props.navigation} />
-          </View>
-        </ScrollView>
+        {item ? (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.detailContainer}>
+              {item.coordinate.latitude ? (
+                <MapCard
+                  item={item}
+                  _navigateToMap={this._navigateToMap}
+                  elevation={2}
+                />
+              ) : null}
+              <DescriptionCard item={item} elevation={3} />
+              <FeatureCard item={item} elevation={4} />
+              <TitleCard
+                _navigateToComment={this._navigateToComment}
+                item={item}
+                elevation={5}
+              />
+              <Header
+                imageList={imageList}
+                navigation={this.props.navigation}
+              />
+            </View>
+          </ScrollView>
+        ) : null}
       </SafeAreaView>
     )
   }

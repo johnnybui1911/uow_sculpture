@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
+import { TEXT_INPUT_HEIGHT } from '../../assets/dimension'
 
 const cardItem = {
   justifyContent: 'center',
@@ -71,20 +72,5 @@ export default StyleSheet.create({
     height: 120,
     borderRadius: 12
   },
-  imageContainer,
-  searchBox: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 24,
-    height: 51,
-    backgroundColor: palette.backgroundColorWhite,
-    elevation: 2,
-    borderRadius: 12
-  },
-  placeholder: {
-    fontFamily: 'Montserrat-Medium',
-    fontSize: 16,
-    color: palette.secondaryTypographyColor
-  }
+  imageContainer
 })

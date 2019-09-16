@@ -40,8 +40,21 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
-    const { isLoading } = this.props
-    const data = this.props.markers
+    const { isLoading, distanceMatrix, markers } = this.props
+    const data = markers
+    const nearbyData = data
+      .filter(item => item.coordinate.latitude)
+      .sort((itemA, itemB) => {
+        if (distanceMatrix[itemA.id]) {
+          return (
+            distanceMatrix[itemA.id].distance -
+            distanceMatrix[itemB.id].distance
+          )
+        }
+        return true
+      })
+      .slice(0, 5)
+    const popularData = data.slice(0, 10)
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -55,12 +68,45 @@ class HomeScreen extends React.PureComponent {
                 </Placeholder>
               </View>
             ) : (
-              <NearbyList data={data} _renderItem={this._renderNearbyItem} />
+              <NearbyList
+                data={nearbyData}
+                _renderItem={this._renderNearbyItem}
+              />
             )}
           </View>
           <View style={[styles.popularList]}>
             <Text style={styles.listTitle}>Popular Sculptures</Text>
-            <PopularList data={data} _renderItem={this._renderPopularItem} />
+            {isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: 9,
+                  marginLeft: 24,
+                  flexDirection: 'row'
+                }}
+              >
+                {[1, 2, 3].map(item => {
+                  return (
+                    <View
+                      key={item}
+                      style={[styles.imagePopularItem, { marginRight: 12 }]}
+                    >
+                      <Placeholder Animation={Fade}>
+                        <PlaceholderMedia
+                          size="100%"
+                          style={{ borderRadius: 12 }}
+                        />
+                      </Placeholder>
+                    </View>
+                  )
+                })}
+              </View>
+            ) : (
+              <PopularList
+                data={popularData}
+                _renderItem={this._renderPopularItem}
+              />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -70,7 +116,8 @@ class HomeScreen extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   markers: getState.markerReducer.markers,
-  isLoading: getState.markerReducer.isLoading
+  isLoading: getState.markerReducer.isLoading,
+  distanceMatrix: getState.distanceReducer.distanceMatrix
 })
 
 export default connect(mapStateToProps)(HomeScreen)

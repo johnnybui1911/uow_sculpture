@@ -1,11 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import styles from '../styles'
 import StepBox from './StepBox'
 import { icons } from '../../../assets/icons'
 import { COLLAPSED_HEIGHT_STEPBOX } from '../../../assets/dimension'
 
-export default ({ steps }) => {
+const StepList = ({ steps, selectedMarker }) => {
   return (
     <View>
       <View style={styles.topBorderStep} />
@@ -29,15 +30,23 @@ export default ({ steps }) => {
             <View style={styles.stepViewIconStyle}>
               {icons.marker_fill_red}
             </View>
-            <View style={styles.stepTitleStyle}>
-              <Text style={styles.title_step}>Winged Figure</Text>
-              <Text style={styles.meter_step_red}>
-                Western side of Robsons Road
-              </Text>
-            </View>
+            {selectedMarker && (
+              <View style={styles.stepTitleStyle}>
+                <Text style={styles.title_step}>{selectedMarker.name}</Text>
+                {/* <Text numberOfLines={2} style={styles.meter_step_red}>
+                  {selectedMarker.description.location}
+                </Text> */}
+              </View>
+            )}
           </View>
         </TouchableOpacity>
       </ScrollView>
     </View>
   )
 }
+
+const mapStateToProps = getState => ({
+  selectedMarker: getState.markerReducer.selectedMarker
+})
+
+export default connect(mapStateToProps)(StepList)

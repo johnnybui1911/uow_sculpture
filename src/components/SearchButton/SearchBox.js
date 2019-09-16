@@ -20,7 +20,6 @@ const SearchBox = ({
       <View
         style={{
           alignItems: 'center',
-          padding: 10,
           width: 50
         }}
       >
@@ -57,7 +56,7 @@ const SearchBox = ({
           style={{
             width: 50,
             alignItems: 'flex-end',
-            padding: 10
+            padding: 16
           }}
         >
           {icons.close}
@@ -69,11 +68,9 @@ const SearchBox = ({
           style={{
             width: 50,
             alignItems: 'flex-end',
-            padding: 10
+            padding: 16
           }}
-        >
-          {icons.micro}
-        </View>
+        />
       </TouchableWithoutFeedback>
     )}
   </View>

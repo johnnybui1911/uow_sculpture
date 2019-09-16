@@ -6,11 +6,14 @@ import {
   Fade,
   Loader
 } from 'rn-placeholder'
+import { connect } from 'react-redux'
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native'
 import images from '../../assets/images'
 import { icons } from '../../assets/icons'
 import styles from './styles'
 import LikeButton from './LikeButton'
+import palette from '../../assets/palette'
+import formatDistance from '../../library/formatDistance'
 
 const CardItem = props => {
   const {
@@ -18,8 +21,37 @@ const CardItem = props => {
     index,
     _navigateToDetail,
     _navigateToComment,
-    isLoading = false
+    isLoading = false,
+    distanceMatrix
   } = props
+
+  const renderImage = () => {
+    const { photoURL } = item
+    if (!photoURL) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            width: 120,
+            height: 120,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: palette.backgroundTabColor,
+            borderRadius: 12
+          }}
+        >
+          <Image
+            source={images.empty_image}
+            style={{ width: 42, height: 42 }}
+            resizeMode="cover"
+          />
+        </View>
+      )
+    } else {
+      return <Image source={{ uri: item.photoURL }} style={styles.image} />
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => _navigateToDetail(item)}>
       <View
@@ -47,16 +79,18 @@ const CardItem = props => {
           ) : (
             <React.Fragment>
               <View style={{}}>
-                <Text style={styles.distance}>{item.distance}</Text>
-                <Text style={styles.title}>{item.name}</Text>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-              >
-                <Text style={styles.description}>{item.des}</Text>
+                <Text style={styles.distance}>
+                  {distanceMatrix[item.id]
+                    ? formatDistance(distanceMatrix[item.id].distance)
+                    : ''}
+                </Text>
+                <Text numberOfLines={2} style={styles.title}>
+                  {item.name}
+                </Text>
+
+                <Text style={[styles.description, { marginTop: 0 }]}>
+                  {item.features.maker}
+                </Text>
               </View>
               <View
                 style={{
@@ -97,10 +131,7 @@ const CardItem = props => {
               </Placeholder>
             </View>
           ) : (
-            <Image
-              source={images.sculptures[item.photoURL]}
-              style={styles.image}
-            />
+            renderImage()
           )}
         </View>
       </View>
@@ -108,4 +139,8 @@ const CardItem = props => {
   )
 }
 
-export default CardItem
+const mapStateToProps = getState => ({
+  distanceMatrix: getState.distanceReducer.distanceMatrix
+})
+
+export default connect(mapStateToProps)(CardItem)

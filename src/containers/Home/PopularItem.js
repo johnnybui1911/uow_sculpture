@@ -20,12 +20,14 @@ const PopularItem = props => {
         }}
       >
         <Image
-          source={images.sculptures[item.photoURL]}
+          source={{ uri: item.photoURL }}
           style={styles.imagePopularItem}
         />
         <View style={styles.popularItemDetail}>
           <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
-            <Text style={styles.secondaryTitle}>{item.name}</Text>
+            <Text numberOfLines={2} style={styles.secondaryTitle}>
+              {item.name}
+            </Text>
           </View>
         </View>
       </View>

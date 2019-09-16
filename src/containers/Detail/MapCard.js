@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import MapView, { UrlTile, Marker } from 'react-native-maps'
 import styles from './styles'
 import images from '../../assets/images'
+import { icons } from '../../assets/icons'
 
 export default function MapCard(props) {
   const { item, _navigateToMap, elevation } = props
@@ -28,12 +29,15 @@ export default function MapCard(props) {
           maximumZ={19}
           zIndex={-1}
         />
-        <Marker
-          zIndex={1}
-          coordinate={item.coordinate}
-          image={images.chosen_marker}
-        />
-        {/* <Marker coordinate={item.coordinate} title={item.title} zIndex={1} /> */}
+        <Marker zIndex={1} coordinate={item.coordinate}>
+          <View
+            style={{
+              paddingBottom: 5
+            }}
+          >
+            {icons.marker}
+          </View>
+        </Marker>
       </MapView>
       <TouchableOpacity onPress={_navigateToMap} style={[styles.button]}>
         <View style={{ flex: 1 }}>

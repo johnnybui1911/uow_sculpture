@@ -60,7 +60,9 @@ export default class BottomDrawer extends Component {
     /*
      * An state for changing and toggling drawer
      */
-    drawerState: PropTypes.number
+    drawerState: PropTypes.number,
+    style: PropTypes.any,
+    autoAnimate: PropTypes.bool
   }
 
   static defaultProps = {
@@ -134,6 +136,9 @@ export default class BottomDrawer extends Component {
   render() {
     return (
       <Animator
+        _translateY={this.props._translateY}
+        autoAnimate={this.props.autoAnimate}
+        style={this.props.style}
         currentPosition={this.state.currentPosition}
         setCurrentPosition={position => this.setCurrentPosition(position)}
         toggleThreshold={this.TOGGLE_THRESHOLD}

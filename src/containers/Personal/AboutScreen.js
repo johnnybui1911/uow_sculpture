@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
+import { withNavigation } from 'react-navigation'
 import * as WebBrowser from 'expo-web-browser'
 import toQueryString from 'to-querystring'
 import { connect } from 'react-redux'
@@ -86,7 +87,9 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(AboutScreen)
+export default withNavigation(
+  connect(
+    null,
+    mapDispatchToProps
+  )(AboutScreen)
+)

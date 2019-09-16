@@ -4,9 +4,10 @@ import MarkerView from './MarkerView'
 
 const MarkersContainer = ({ markers, _onMarkerPressed }) => {
   if (markers.length > 0) {
+    const filterMarkers = markers.filter(marker => marker.coordinate.latitude)
     return (
       <React.Fragment>
-        {markers.map(marker => (
+        {filterMarkers.map(marker => (
           <MarkerView
             key={marker.id}
             marker={marker}

@@ -158,7 +158,6 @@ class CommentScreen extends React.PureComponent {
           >
             <TextInput
               ref={component => (this._textInput = component)}
-              autoFocus
               value={inputValue}
               onChangeText={text => this.setState({ inputValue: text })}
               placeholder="Add a comment"

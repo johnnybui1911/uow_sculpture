@@ -16,6 +16,7 @@ import SearchBox from '../../components/SearchButton/SearchBox'
 import { _handleNotification } from '../../library/notificationTask'
 import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
+import SearchView from '../../components/SearchButton/SearchView'
 
 class CollectionScreen extends React.PureComponent {
   constructor(props) {
@@ -80,7 +81,7 @@ class CollectionScreen extends React.PureComponent {
   _renderList = () => {
     const { isLoading } = this.props
     if (isLoading) {
-      const array = [1, 2, 3]
+      const array = [1, 2, 3, 4]
       return (
         <FlatList
           data={array}
@@ -127,48 +128,7 @@ class CollectionScreen extends React.PureComponent {
       <SafeAreaView style={styles.container}>
         <View style={{ flex: 1 }}>
           <HeaderBar headerName="Collection" />
-          <TouchableWithoutFeedback
-            onPress={() => this.props.navigation.navigate('Search')}
-          >
-            <View style={styles.searchBox}>
-              <View
-                style={{
-                  alignItems: 'center',
-                  padding: 10,
-                  width: 50
-                }}
-              >
-                <FontAwesome
-                  name="search"
-                  size={20}
-                  color={palette.primaryColorLight}
-                />
-              </View>
-
-              <View
-                style={{
-                  flex: 1,
-                  paddingVertical: 10,
-                  paddingBottom: 10,
-                  paddingLeft: 0,
-                  width: '100%',
-                  fontFamily: 'Montserrat-Medium',
-                  fontSize: 14
-                }}
-              >
-                <Text style={styles.placeholder}>Enter keywords...</Text>
-              </View>
-              <View
-                style={{
-                  width: 50,
-                  alignItems: 'flex-end',
-                  padding: 10
-                }}
-              >
-                {icons.micro}
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
+          <SearchView />
           <View
             style={{
               flex: 1,

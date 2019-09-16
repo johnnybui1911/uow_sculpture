@@ -242,14 +242,22 @@ class MapViewDirections extends Component {
         <Marker anchor={{ x: 0.5, y: 0.5 }} coordinate={coordinates[0]}>
           <View
             style={{
-              width: 20,
-              height: 20,
-              borderRadius: 20 / 2,
-              borderWidth: 2,
-              borderColor: '#000000',
-              backgroundColor: '#A1A1A1'
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 12
             }}
-          />
+          >
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 20 / 2,
+                borderWidth: 2,
+                borderColor: '#909090',
+                backgroundColor: '#E0E0E0'
+              }}
+            />
+          </View>
         </Marker>
         <Marker
           anchor={{ x: 0.5, y: 0.5 }}
@@ -257,14 +265,22 @@ class MapViewDirections extends Component {
         >
           <View
             style={{
-              width: 20,
-              height: 20,
-              borderRadius: 20 / 2,
-              borderWidth: 2,
-              borderColor: '#000000',
-              backgroundColor: '#FFF'
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 12
             }}
-          />
+          >
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 20 / 2,
+                borderWidth: 2,
+                borderColor: '#909090',
+                backgroundColor: '#FFF'
+              }}
+            />
+          </View>
         </Marker>
         <MapView.Polyline coordinates={this.state.coordinates} {...props} />
       </React.Fragment>

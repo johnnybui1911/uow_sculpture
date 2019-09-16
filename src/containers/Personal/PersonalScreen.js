@@ -198,7 +198,7 @@ class PersonalScreen extends React.PureComponent {
           this._AboutScreenScrollV = scrollView
         }
         tabToCheck = 2
-        content = <AboutScreen navigation={this.props.navigation} />
+        content = <AboutScreen />
         break
 
       default:

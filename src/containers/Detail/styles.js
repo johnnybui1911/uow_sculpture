@@ -46,17 +46,14 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     zIndex: 10
   },
-  headerImage: {
-    // borderBottomRightRadius: 12,
-    // borderBottomLeftRadius: 12,
-    // backgroundColor: palette.backgroundColorWhite,
-    // ...shadowStyle,
-    // elevation: 10
-  },
+  headerImage: {},
   imageItem: {
     width: width,
     height: height * 0.4,
-    zIndex: 2
+    zIndex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: palette.backgroundTabColor
     // borderBottomRightRadius: 12
     // borderBottomLeftRadius: 12
   },

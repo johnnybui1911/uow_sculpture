@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
+import { TEXT_INPUT_HEIGHT } from '../../assets/dimension'
 
 const cardItem = {
   justifyContent: 'center',
@@ -77,7 +78,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
     marginHorizontal: 24,
-    height: 51,
+    height: TEXT_INPUT_HEIGHT,
     backgroundColor: palette.backgroundColorWhite,
     elevation: 2,
     borderRadius: 12
@@ -88,10 +89,25 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
     marginHorizontal: 24,
-    height: 51,
+    height: TEXT_INPUT_HEIGHT,
     backgroundColor: palette.backgroundColorWhite,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: palette.borderGreyColor
+  },
+  // searchBox: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   marginHorizontal: 24,
+  //   height: TEXT_INPUT_HEIGHT,
+  //   backgroundColor: palette.backgroundColorWhite,
+  //   elevation: 2,
+  //   borderRadius: 12
+  // },
+  placeholder: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 16,
+    color: palette.secondaryTypographyColor
   }
 })

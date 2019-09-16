@@ -10,5 +10,6 @@ export default {
   backgroundTabColor: '#EBEBEB',
   facebookColor: '#3B5998',
   dividerColor: '#F4F4F6',
-  borderGreyColor: '#D9D9D6'
+  borderGreyColor: '#D9D9D6',
+  dividerColorNew: 'rgba(0,0,0,0.3)'
 }

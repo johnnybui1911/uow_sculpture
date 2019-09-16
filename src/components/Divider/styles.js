@@ -3,13 +3,13 @@ import palette from '../../assets/palette'
 
 export default StyleSheet.create({
   divider: {
-    height: 1,
-    backgroundColor: palette.secondaryTypographyStrongColor,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: palette.dividerColorNew,
     width: '100%',
     marginVertical: 20
   },
   dividerLight: {
-    height: 1,
+    height: StyleSheet.hairlineWidth,
     backgroundColor: palette.backgroundTabColor,
     width: '100%',
     marginVertical: 20

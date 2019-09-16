@@ -89,7 +89,7 @@ class SearchScreen extends React.PureComponent {
               flex: 1,
               backgroundColor: palette.backgroundTabColor,
               marginLeft: 50 + 12,
-              marginRight: 10
+              marginRight: 16
             }}
           />
         )}

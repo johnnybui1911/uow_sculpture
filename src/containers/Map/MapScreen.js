@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React from 'react'
 import {
   SafeAreaView,
@@ -6,13 +7,12 @@ import {
   Text,
   TouchableOpacity,
   Animated,
-  Alert
+  BackHandler
 } from 'react-native'
 import MapView, { UrlTile, Marker, AnimatedRegion } from 'react-native-maps'
 import LottieView from 'lottie-react-native'
 import Modal from 'react-native-modal'
 import * as Location from 'expo-location'
-import * as Permissions from 'expo-permissions'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
 import numeral from 'numeral'
@@ -23,17 +23,8 @@ import {
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
   URL_TEMPLATE,
-  LATITUDE,
-  LONGITUDE,
-  USER_LATITUDE,
-  USER_LONGITUDE,
   DEFAULT_PADDING
 } from '../../library/maps'
-import {
-  selectMarker,
-  unselectMarker,
-  fetchDataThunk
-} from '../../redux/actions/markerActions'
 import Footer from './Footer/Footer'
 import MarkersContainer from './MarkersContainer'
 import Direction from './Direction'
@@ -41,16 +32,19 @@ import Header from './HeaderMap/Header'
 import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
 import { getData } from '../../library/asyncStorage'
-import {
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT
-} from '../../assets/dimension'
+import { SCREEN_HEIGHT, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import {
   _sendLocalNotification,
   _handleNotification
 } from '../../library/notificationTask'
 import animations from '../../assets/animations'
+import { MapContext } from './context/MapContext'
+import {
+  fetchDistanceMatrix,
+  selectMarker,
+  unselectMarker
+} from '../../redux/actions'
+import SearchView from '../../components/SearchButton/SearchView'
 
 function formatNumber(number) {
   return numeral(number).format('0[.]00000')
@@ -70,59 +64,165 @@ const calcDistance = (latLng1, latLng2) => {
 class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
     return {
-      tabBarVisible: navigation.getParam('showTab', false)
+      tabBarVisible: navigation.getParam('showTab', true)
     }
   }
 
   constructor(props) {
     super(props)
+    this._footerRef = React.createRef()
+    const { initialUserCoordinate } = this.props
     this.state = {
       showMapOnly: false,
       region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
+        ...initialUserCoordinate,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
       steps: [],
-      showSteps: false,
-      centered: false,
-      showDirection: false,
+      centered: true,
       searchText: '',
       errorMessage: '',
 
       // loading fetch data
       isDataLoading: true,
       // modalState
-      isModalVisible: false
+      isModalVisible: false,
+
+      showSteps: false,
+      showDirection: false,
+      case1_footer_translateY: new Animated.Value(-SCREEN_HEIGHT),
+      footer_translateY: new Animated.Value(SCREEN_HEIGHT),
+      header_translateY: new Animated.Value(-SCREEN_HEIGHT)
     }
   }
+  setShowDirection = showDirection => {
+    const {
+      footer_translateY,
+      header_translateY,
+      case1_footer_translateY
+    } = this.state
+    Animated.parallel([
+      Animated.timing(case1_footer_translateY, {
+        toValue: -SCREEN_HEIGHT,
+        duration: 250
+      }),
+      Animated.timing(footer_translateY, {
+        toValue: SCREEN_HEIGHT,
+        duration: 250
+      }),
+      Animated.timing(header_translateY, {
+        toValue: -SCREEN_HEIGHT,
+        duration: 250
+      })
+    ]).start(() => {
+      this.setState({ showDirection })
+    })
+  }
 
-  // componentDidMount = () => {
-  //   this._notificationSubscription = Notifications.addListener(notification =>
-  //     _handleNotification(notification, this.props.navigation, this._resetUI)
-  //   )
-  //   this._getLocationAsync()
-  //   this._animateLoop()
-  // }
+  setShowSteps = showSteps => {
+    const { header_translateY } = this.state
 
-  // componentWillUnmount = () => {
-  //   this.subscribeLocation()
-  //   this.animation.reset()
-  // }
+    Animated.timing(header_translateY, {
+      toValue: -500,
+      duration: 250
+    }).start(() => {
+      this.setState({ showSteps })
+    })
+  }
 
-  userCoordinate = null
+  animate = () => {
+    const {
+      footer_translateY,
+      header_translateY,
+      case1_footer_translateY
+    } = this.state
+    Animated.parallel([
+      Animated.timing(case1_footer_translateY, {
+        toValue: 0,
+        duration: 250
+      }),
+      Animated.timing(footer_translateY, {
+        toValue: 0,
+        duration: 250
+      }),
+      Animated.timing(header_translateY, {
+        toValue: 0,
+        duration: 250
+      })
+    ]).start()
+  }
 
-  // new AnimatedRegion({
-  //   latitude: USER_LATITUDE,
-  //   longitude: USER_LONGITUDE,
-  //   latitudeDelta: 0,
-  //   longitudeDelta: 0
-  // })
+  animateHide = callback => {
+    const {
+      case1_footer_translateY,
+      footer_translateY,
+      header_translateY
+    } = this.state
+    Animated.parallel([
+      Animated.timing(case1_footer_translateY, {
+        toValue: -SCREEN_HEIGHT,
+        duration: 250
+      }),
+      Animated.timing(footer_translateY, {
+        toValue: SCREEN_HEIGHT,
+        duration: 250
+      }),
+      Animated.timing(header_translateY, {
+        toValue: -SCREEN_HEIGHT,
+        duration: 250
+      })
+    ]).start(() => callback && callback())
+  }
+
+  componentDidMount = () => {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this._handleBackPress
+    )
+    this._notificationSubscription = Notifications.addListener(notification =>
+      _handleNotification(notification, this.props.navigation, this._resetUI)
+    )
+    this._getLocationAsync()
+    this._animateLoop()
+  }
+
+  componentWillUnmount = () => {
+    this.backHandler.remove()
+    this.subscribeLocation()
+    this.animation.reset()
+  }
+
+  userCoordinate = new AnimatedRegion({
+    ...this.props.initialUserCoordinate,
+    latitudeDelta: 0,
+    longitudeDelta: 0
+  })
 
   subscribeLocation = null
 
   progressAnimation = new Animated.Value(0)
+  loopAnimate = new Animated.Value(0)
+
+  _handleBackPress = () => {
+    const { selectedMarker } = this.props
+    const { showDirection, showSteps } = this.state
+    if (selectedMarker) {
+      if (showDirection) {
+        if (showSteps) {
+          this._footerRef.current._collapseStepList()
+          return true
+        } else {
+          this.setShowDirection(false)
+          return true
+        }
+      } else {
+        this._resetUI()
+        return true
+      }
+    }
+    return false
+  }
 
   _animateCeleb = () => {
     this.progressAnimation.setValue(0)
@@ -131,8 +231,6 @@ class MapScreen extends React.PureComponent {
       duration: 5000
     }).start()
   }
-
-  loopAnimate = new Animated.Value(0)
 
   _animateLoop = () => {
     Animated.sequence([
@@ -147,13 +245,6 @@ class MapScreen extends React.PureComponent {
   }
 
   _getLocationAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION)
-    if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied'
-      })
-    }
-
     this.subscribeLocation = await Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.Highest,
@@ -163,77 +254,53 @@ class MapScreen extends React.PureComponent {
       loc => {
         if (loc.timestamp) {
           const { latitude, longitude } = loc.coords
-          if (!this.userCoordinate) {
-            this.userCoordinate = new AnimatedRegion({
-              latitude: latitude,
-              longitude: longitude,
-              latitudeDelta: 0,
-              longitudeDelta: 0
-            })
-            const userRegion = {
-              latitude,
-              longitude,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA
-            }
-            this.setState(
-              {
-                region: userRegion,
-                centered: true
-              },
-              () => this.map.animateToRegion(userRegion)
-            )
-          } else {
-            const duration = 500
-            this.userCoordinate
-              .timing({ latitude, longitude, duration })
-              .start()
-
+          this.userCoordinate
+            .timing({ latitude, longitude, duration: 250 })
+            .start()
+          if (this.props.selectedMarker) {
+            const userLocation = { latitude, longitude }
             if (this.props.selectedMarker) {
-              const userLocation = { latitude, longitude }
-              if (this.props.selectedMarker) {
-                const distance = calcDistance(
-                  userLocation,
-                  this.props.selectedMarker.coordinate
-                )
-                if (distance <= 10) {
-                  const message = {
-                    title: 'Congratulation',
-                    body: 'You have finished your trip !!!',
-                    data: {
-                      screen: 'Detail',
-                      id: this.props.selectedMarker.id
-                    }
+              const distance = calcDistance(
+                userLocation,
+                this.props.selectedMarker.coordinate
+              )
+              if (distance <= 10) {
+                const message = {
+                  title: 'Congratulation',
+                  body: 'You have finished your trip !!!',
+                  data: {
+                    screen: 'Detail',
+                    id: this.props.selectedMarker.id
                   }
-                  this._animateCeleb()
-                  this.setState({ isModalVisible: true })
-                  _sendLocalNotification(message)
                 }
+                this._animateCeleb()
+                this.setState({ isModalVisible: true })
+                _sendLocalNotification(message)
               }
             }
-
-            this.props.fetchDataThunk({ latitude, longitude })
           }
         } else {
           this.setState({ errorMessage: 'Problems on update location' })
         }
-        // console.log('Start sync location foreground')
       }
     )
   }
 
   _resetUI = () => {
-    this.setState({
-      steps: [],
-      showSteps: false,
-      centered: false,
-      showDirection: false,
-      searchText: '',
-      isModalVisible: false
-    })
+    this.animateHide(() => {
+      this.setState({
+        steps: [],
+        centered: false,
+        searchText: '',
+        isModalVisible: false,
 
-    this._centerUserLocation()
-    this._onClosePressed()
+        showSteps: false,
+        showDirection: false
+      })
+
+      // this._centerUserLocation()
+      this._onClosePressed()
+    })
   }
 
   _centerUserLocation = () => {
@@ -274,6 +341,7 @@ class MapScreen extends React.PureComponent {
           ref={marker => {
             this.marker = marker
           }}
+          // tracksViewChanges={false}
           style={{ zIndex: 2 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
@@ -293,7 +361,7 @@ class MapScreen extends React.PureComponent {
               longitudeDelta: 0
             })
 
-            travelDistance >= 10 && this.props.fetchDataThunk(userLocation) // each 10m, sync position again to fecth data
+            travelDistance >= 10 && this.props.fetchDistanceMatrix(userLocation) // each 10m, sync position again to fecth data
             // .then(res => console.log(res))
 
             if (this.props.selectedMarker) {
@@ -314,7 +382,6 @@ class MapScreen extends React.PureComponent {
                 this._animateCeleb()
                 this.setState({ isModalVisible: true })
                 _sendLocalNotification(message)
-                // _sendPushNotification(message)
               }
             }
           }}
@@ -328,8 +395,6 @@ class MapScreen extends React.PureComponent {
               }}
               progress={this.loopAnimate}
               source={animations.beacon}
-              // autoPlay
-              // loop
             />
           </View>
         </Marker.Animated>
@@ -341,36 +406,35 @@ class MapScreen extends React.PureComponent {
     const { text } = event.nativeEvent
     this.setState({ searchText: text.trim() })
   }
-  _onMarkerPressed = (markerID, markerName) => {
+
+  _onMarkerPressed = marker => {
+    const { id, name } = marker
     if (
-      (!this.props.selectedMarker ||
-        this.props.selectedMarker.id !== markerID) &&
+      (!this.props.selectedMarker || this.props.selectedMarker.id !== id) &&
       !this.state.showDirection
     ) {
       if (this.props.navigation.getParam('showTab', true)) {
         this.props.navigation.setParams({ showTab: false })
       }
-      this.props.handleSelectMarker(markerID)
-      this.setState({ searchText: markerName.trim(), showMapOnly: false })
+      this.props.handleSelectMarker(marker)
+      this.setState({ searchText: name.trim(), showMapOnly: false })
     }
   }
 
   _onClosePressed = () => {
-    this.props.navigation.setParams({ showTab: true })
-    this.props.handleUnselectMarker()
-    this.setState({ searchText: '', showDirection: false })
-  }
-
-  _handleShowDirection = showDirection => {
-    this.setState({ showDirection })
+    const { footer_translateY } = this.state
+    Animated.timing(footer_translateY, {
+      toValue: SCREEN_HEIGHT,
+      duration: 250
+    }).start(() => {
+      this.props.navigation.setParams({ showTab: true })
+      this.props.handleUnselectMarker()
+      this.setState({ searchText: '', showDirection: false })
+    })
   }
 
   _getSteps = steps => {
     this.setState({ steps })
-  }
-
-  _handleShowStep = showSteps => {
-    this.setState({ showSteps })
   }
 
   _fitToCoordinate = coordinates => {
@@ -384,7 +448,6 @@ class MapScreen extends React.PureComponent {
     this.setState(prevState => ({
       showMapOnly: !prevState.showMapOnly
     }))
-
     if (!this.props.selectedMarker) {
       const showTab = this.props.navigation.getParam('showTab', true)
       this.props.navigation.setParams({ showTab: !showTab })
@@ -399,156 +462,162 @@ class MapScreen extends React.PureComponent {
       showDirection,
       centered,
       steps,
-      showSteps
+      showSteps,
+      footer_translateY,
+      header_translateY,
+      case1_footer_translateY
     } = this.state
+
+    const { setShowDirection, setShowSteps, animate, animateHide } = this
     if (region) {
       return (
         <SafeAreaView style={styles.container}>
-          {/* {!showMapOnly && ( */}
-          {/* <Header
-            showMapOnly={showMapOnly}
-            showSteps={showSteps}
-            searchText={searchText}
-            showDirection={showDirection}
-            _handleSearch={this._handleSearch}
-            _onClosePressed={this._onClosePressed}
-            _handleShowDirection={this._handleShowDirection}
-          /> */}
-          {/* )} */}
-          {/* <MapView
-            style={styles.mapStyle}
-            mapType={Platform.OS === 'android' ? 'none' : 'standard'}
-            provider={Platform.OS === 'ios' ? 'google' : null}
-            ref={ref => {
-              this.map = ref
+          <MapContext.Provider
+            value={{
+              case1_footer_translateY,
+              footer_translateY,
+              header_translateY,
+              showDirection,
+              showSteps,
+              setShowDirection,
+              setShowSteps,
+              animate,
+              animateHide
             }}
-            onPress={this.toggleShowMapOnly}
-            onRegionChangeComplete={region =>
-              this._handleRegionChangeComplete(region)
-            }
-            initialRegion={region}
-            showsCompass={false}
-            moveOnMarkerPress={false}
           >
-            {Platform.OS === 'android' && (
-              <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
-            )}
-            {this._renderUserLocation()}
-            <MarkersContainer _onMarkerPressed={this._onMarkerPressed} />
-            <Direction
-              userCoordinate={this.userCoordinate}
+            <Header
+              showSteps={showSteps}
               showDirection={showDirection}
-              _getSteps={this._getSteps}
-              _handleDirectionState={this._handleDirectionState}
-              _fitToCoordinate={this._fitToCoordinate}
-            />
-          </MapView> */}
-
-          {/* <TouchableOpacity
-            style={{ flex: 1, backgroundColor: 'red' }}
-            onPress={() =>
-              this.setState(prev => ({ showMapOnly: !prev.showMapOnly }))
-            }
-          >
-            <View style={{ flex: 1, backgroundColor: 'red' }} />
-          </TouchableOpacity> */}
-
-          {/* {!showMapOnly && ( */}
-          <Footer
-            showMapOnly={showMapOnly}
-            showSteps={showSteps}
-            // steps={steps}
-            centered={centered}
-            showDirection={showDirection}
-            _handleShowStep={this._handleShowStep}
-            _navigateToDetail={this._navigateToDetail}
-            _centerUserLocation={this._centerUserLocation}
-            _handleShowDirection={this._handleShowDirection}
-          />
-          {/* )} */}
-          {this.state.isModalVisible && (
-            <View
-              style={{
-                position: 'absolute',
-                height: STATUS_BAR_HEIGHT,
-                top: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: '#000000',
-                zIndex: 100,
-                opacity: 0.7
-              }}
-            />
-          )}
-          <Modal
-            isVisible={this.state.isModalVisible}
-            animationIn="zoomInDown"
-            animationInTiming={1000}
-            onSwipeComplete={() => this._resetUI()}
-            swipeDirection={['up', 'left', 'right', 'down']}
-            onBackdropPress={() => this._resetUI()}
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <LottieView
-              ref={animation => {
-                this.animation = animation
-              }}
-              style={{
-                zIndex: 99,
-                elevation: 20,
-                transform: [{ scale: (1.1, 1.4) }]
-              }}
-              source={animations.confetti}
-              progress={this.progressAnimation}
-            />
-            <View
-              style={{
-                zIndex: 900,
-                backgroundColor: '#fff',
-                borderRadius: 26,
-                height: 200,
-                width: 240,
-                justifyContent: 'center',
-                alignItems: 'center',
-                elevation: 10
-              }}
+              showMapOnly={showMapOnly}
+              searchText={searchText}
+              _handleSearch={this._handleSearch}
+              _onClosePressed={this._onClosePressed}
             >
-              <View style={{ position: 'absolute', top: -55 }}>
-                {icons.trophy}
-              </View>
+              <SearchView searchText={searchText} />
+            </Header>
+            <MapView
+              style={styles.mapStyle}
+              mapType={Platform.OS === 'android' ? 'none' : 'standard'}
+              provider={Platform.OS === 'ios' ? 'google' : null}
+              ref={ref => {
+                this.map = ref
+              }}
+              onPress={this.toggleShowMapOnly}
+              onRegionChangeComplete={region =>
+                this._handleRegionChangeComplete(region)
+              }
+              initialRegion={region}
+              showsCompass={false}
+              moveOnMarkerPress={false}
+            >
+              {Platform.OS === 'android' && (
+                <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
+              )}
+              {/* {this._renderUserLocation()} */}
+              <MarkersContainer _onMarkerPressed={this._onMarkerPressed} />
+              <Direction
+                userCoordinate={this.userCoordinate}
+                showDirection={showDirection}
+                _getSteps={this._getSteps}
+                _handleDirectionState={this._handleDirectionState}
+                _fitToCoordinate={this._fitToCoordinate}
+              />
+            </MapView>
+            <Footer
+              ref={this._footerRef}
+              showSteps={showSteps}
+              showDirection={showDirection}
+              showMapOnly={showMapOnly}
+              steps={steps}
+              centered={centered}
+              _navigateToDetail={this._navigateToDetail}
+              _centerUserLocation={this._centerUserLocation}
+            />
+
+            {this.state.isModalVisible && (
               <View
                 style={{
-                  marginTop: 30,
-                  justifyContent: 'center',
-                  alignItems: 'center'
+                  position: 'absolute',
+                  height: STATUS_BAR_HEIGHT,
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  backgroundColor: '#000000',
+                  zIndex: 100,
+                  opacity: 0.7
                 }}
-              >
-                <Text style={[styles.title, { fontSize: 20 }]}>
-                  Congratulation
-                </Text>
-              </View>
-              <TouchableOpacity
+              />
+            )}
+            <Modal
+              isVisible={this.state.isModalVisible}
+              animationIn="zoomInDown"
+              animationInTiming={1000}
+              onSwipeComplete={() => this._resetUI()}
+              swipeDirection={['up', 'left', 'right', 'down']}
+              onBackdropPress={() => this._resetUI()}
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <LottieView
+                ref={animation => {
+                  this.animation = animation
+                }}
                 style={{
-                  height: 44,
+                  zIndex: 99,
+                  elevation: 20,
+                  transform: [{ scale: (1.1, 1.4) }]
+                }}
+                source={animations.confetti}
+                progress={this.progressAnimation}
+              />
+              <View
+                style={{
+                  zIndex: 900,
+                  backgroundColor: '#fff',
                   borderRadius: 26,
-                  width: 140,
-                  backgroundColor: palette.primaryColorLight,
+                  height: 200,
+                  width: 240,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginTop: 30,
-                  zIndex: 100
-                }}
-                onPress={() => {
-                  this._navigateToDetail(this.props.selectedMarker)
+                  elevation: 10
                 }}
               >
-                <Text style={styles.titleButton}>PROCEED</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
+                <View style={{ position: 'absolute', top: -55 }}>
+                  {icons.trophy}
+                </View>
+                <View
+                  style={{
+                    marginTop: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text style={[styles.title, { fontSize: 20 }]}>
+                    Congratulation
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={{
+                    height: 44,
+                    borderRadius: 26,
+                    width: 140,
+                    backgroundColor: palette.primaryColorLight,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 30,
+                    zIndex: 100
+                  }}
+                  onPress={() => {
+                    this._navigateToDetail(this.props.selectedMarker)
+                  }}
+                >
+                  <Text style={styles.titleButton}>PROCEED</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </MapContext.Provider>
         </SafeAreaView>
       )
     }
@@ -558,19 +627,20 @@ class MapScreen extends React.PureComponent {
 }
 
 const mapDispatchToProps = dispatch => ({
-  handleSelectMarker: markerID => {
-    dispatch(selectMarker(markerID))
+  handleSelectMarker: marker => {
+    dispatch(selectMarker(marker))
   },
   handleUnselectMarker: () => {
     dispatch(unselectMarker())
   },
-  fetchDataThunk: userCoordinate => {
-    return dispatch(fetchDataThunk(userCoordinate))
+  fetchDistanceMatrix: userCoordinate => {
+    return dispatch(fetchDistanceMatrix(userCoordinate))
   }
 })
 
 const mapStateToProps = getState => ({
-  selectedMarker: getState.markerReducer.selectedMarker
+  selectedMarker: getState.markerReducer.selectedMarker,
+  initialUserCoordinate: getState.locationReducer.userCoordinate
 })
 
 export default connect(
