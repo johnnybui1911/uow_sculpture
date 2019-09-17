@@ -9,18 +9,24 @@ export default function FeatureCard(props) {
   return (
     <View style={cardStyle}>
       <View style={styles.contentBox}>
-        <Text style={[styles.title, { fontSize: 14 }]}>Created Date</Text>
-        <Text style={styles.alt_description}>{item.features.date}</Text>
+        <Text style={[styles.title, { fontSize: 14 }]}>Production Date</Text>
+        <View style={{ width: 200 }}>
+          <Text style={styles.alt_description}>{item.features.date}</Text>
+        </View>
       </View>
       <Divider />
       <View style={styles.contentBox}>
         <Text style={[styles.title, { fontSize: 14 }]}>Maker</Text>
-        <Text style={styles.alt_description}>{item.features.maker}</Text>
+        <View style={{ width: 200 }}>
+          <Text style={styles.alt_description}>{item.features.maker}</Text>
+        </View>
       </View>
       <Divider />
       <View style={styles.contentBox}>
         <Text style={[styles.title, { fontSize: 14 }]}>Materials</Text>
-        <Text style={styles.alt_description}>{item.features.material}</Text>
+        <View style={{ width: 200 }}>
+          <Text style={styles.alt_description}>{item.features.material}</Text>
+        </View>
       </View>
     </View>
   )

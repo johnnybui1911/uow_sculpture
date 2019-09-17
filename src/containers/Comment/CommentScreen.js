@@ -115,11 +115,8 @@ class CommentScreen extends React.PureComponent {
   }
 
   render() {
-    const id = this.props.navigation.getParam('id', -1)
-    const item =
-      id === -1
-        ? this.props.item
-        : this.props.markers.find(item => item.id === id)
+    // const id = this.props.navigation.getParam('id', -1)
+    // const item = id === -1 ? this.props.item : this.props.markerMatrix[id]
     const { inputValue, inputHeight } = this.state
     return (
       <SafeAreaView style={styles.container}>
@@ -214,7 +211,7 @@ class CommentScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
-  markers: getState.markerReducer.markers
+  markerMatrix: getState.markerReducer.markerMatrix
 })
 
 export default connect(mapStateToProps)(CommentScreen)

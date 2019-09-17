@@ -7,6 +7,7 @@ import {
   Text,
   ActivityIndicator
 } from 'react-native'
+import { connect } from 'react-redux'
 import moment from 'moment'
 import styles from './styles'
 import images from '../../assets/images'
@@ -67,7 +68,9 @@ class CommentScreen extends React.PureComponent {
   }
 
   _renderItem = ({ item }) => {
-    const username = this.props.user || 'Cristiano Ronaldo'
+    const { markerMatrix, username } = this.props
+    const { sculptureId, text, submitDate } = item
+    const { photoURL } = markerMatrix[sculptureId]
     return (
       <View
         style={{
@@ -78,7 +81,7 @@ class CommentScreen extends React.PureComponent {
       >
         <View style={[]}>
           <Image
-            source={images.sculptures[item.photoURL]}
+            source={photoURL ? { uri: photoURL } : images.empty_image}
             style={{ width: 60, height: 60, borderRadius: 4 }}
           />
         </View>
@@ -93,10 +96,10 @@ class CommentScreen extends React.PureComponent {
             {username}
           </Text>
           <Text style={[styles.description_cmt, { marginBottom: 3 }]}>
-            {item.text}
+            {text}
           </Text>
           <Text style={[styles.description, { fontSize: 12 }]}>
-            {moment(item.submitDate).fromNow()}
+            {moment(submitDate).fromNow()}
           </Text>
         </View>
       </View>
@@ -104,11 +107,12 @@ class CommentScreen extends React.PureComponent {
   }
 
   _renderList = () => {
-    const { comments, refreshing } = this.state
+    const { refreshing } = this.state
+    const { commentList } = this.props
     return (
       <FlatList
-        data={comments}
-        keyExtractor={(item, index) => index.toString()}
+        data={commentList}
+        keyExtractor={(item, index) => item.sculptureId.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
@@ -138,4 +142,10 @@ class CommentScreen extends React.PureComponent {
   }
 }
 
-export default CommentScreen
+const mapStateToProps = getState => ({
+  commentList: getState.authReducer.commentList,
+  markerMatrix: getState.markerReducer.markerMatrix,
+  username: getState.authReducer.user.username
+})
+
+export default connect(mapStateToProps)(CommentScreen)

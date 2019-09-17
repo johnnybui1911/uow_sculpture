@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
+import { BUTTON_HEIGHT } from '../../assets/dimension'
 
 const { width, height } = Dimensions.get('window')
 
@@ -93,7 +94,8 @@ export default StyleSheet.create({
   alt_description: {
     fontSize: 14,
     color: palette.primaryColorLight,
-    fontFamily: 'Montserrat-Medium'
+    fontFamily: 'Montserrat-Medium',
+    textAlign: 'right'
   },
   description: {
     fontSize: 14,
@@ -120,7 +122,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 10,
-    minHeight: 51,
+    minHeight: BUTTON_HEIGHT,
     ...shadowStyle
   },
   titleButton: {

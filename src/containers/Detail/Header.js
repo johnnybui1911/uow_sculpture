@@ -42,10 +42,10 @@ class Header extends React.PureComponent {
     const imageSlide = imageList.map(item => {
       return {
         url: item.url,
-        height: SCREEN_HEIGHT * 0.4,
+        height: SCREEN_HEIGHT,
         width: SCREEN_WIDTH,
         props: {
-          resizeMode: 'cover'
+          resizeMode: 'contain'
         }
       }
     })

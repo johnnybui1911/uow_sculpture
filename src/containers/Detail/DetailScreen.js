@@ -57,13 +57,14 @@ class DetailScreen extends React.PureComponent {
   }
 
   _navigateToComment = () => {
-    const id = this.props.navigation.getParam('id', -1)
+    const id = this.props.navigation.getParam('id', 2015.003)
     this.props.navigation.navigate('Comment', { id: id })
   }
 
   render() {
-    const id = this.props.navigation.getParam('id', -1)
-    const item = this.props.markers.find(item => item.id == id)
+    const id = this.props.navigation.getParam('id', 2015.003)
+    // const item = this.props.markers.find(item => item.id == id)
+    const item = this.props.markerMatrix[id]
     // const item =
     //   id === -1
     //     ? this.props.item
@@ -103,6 +104,7 @@ class DetailScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
+  markerMatrix: getState.markerReducer.markerMatrix,
   markers: getState.markerReducer.markers
 })
 

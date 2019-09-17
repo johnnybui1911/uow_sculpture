@@ -133,7 +133,7 @@ class CommentList extends React.PureComponent {
         ListHeaderComponent={() => {
           return (
             <View style={{ flex: 1 }}>
-              {/* <Header navigation={this.props.navigation} /> */}
+              <Header />
               <View
                 style={{
                   flex: 1,

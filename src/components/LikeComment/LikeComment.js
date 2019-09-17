@@ -13,19 +13,22 @@ class LikeComment extends React.PureComponent {
   }
 
   onPress = () => {
-    const { markerId, statisticMatrix, _like, _unlike } = this.props
+    const { markerId, statisticMatrix, _like, _unlike, loggedIn } = this.props
     const statItem = statisticMatrix[markerId]
-
-    if (statItem && !statItem.isLiked) {
-      _like(markerId)
-      this.animatedValue.setValue(1.4)
-      Animated.spring(this.animatedValue, {
-        toValue: 1,
-        friction: 2
-      }).start()
+    if (loggedIn) {
+      if (statItem && !statItem.isLiked) {
+        _like(markerId)
+        this.animatedValue.setValue(1.4)
+        Animated.spring(this.animatedValue, {
+          toValue: 1,
+          friction: 2
+        }).start()
+      } else {
+        _unlike(markerId)
+        this.animatedValue.setValue(1)
+      }
     } else {
-      _unlike(markerId)
-      this.animatedValue.setValue(1)
+      this.props.navigation.navigate('Profile')
     }
   }
 
@@ -88,7 +91,8 @@ class LikeComment extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix,
-  statisticMatrix: getState.markerReducer.statisticMatrix
+  statisticMatrix: getState.markerReducer.statisticMatrix,
+  loggedIn: getState.authReducer.loggedIn
 })
 
 const mapDispatchToProps = {

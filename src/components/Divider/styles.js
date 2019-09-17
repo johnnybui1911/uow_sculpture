@@ -6,7 +6,7 @@ export default StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     backgroundColor: palette.dividerColorNew,
     width: '100%',
-    marginVertical: 20
+    marginVertical: 12
   },
   dividerLight: {
     height: StyleSheet.hairlineWidth,

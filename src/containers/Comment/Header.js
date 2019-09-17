@@ -1,27 +1,14 @@
 import React from 'react'
 import { View, TouchableWithoutFeedback, Image, Text } from 'react-native'
+import { withNavigation } from 'react-navigation'
+import { connect } from 'react-redux'
 import Swiper from 'react-native-swiper'
-import { CustomIcon } from '../../assets/icons'
 import styles from './styles'
-import images from '../../assets/images'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
 import ImageViewerModal from './ImageViewerModal'
 import ImageOverlay from '../../components/ImageOverlay.js/ImageOverlay'
 import BackButton from '../../components/BackButton/BackButton'
-
-const localImages = [1, 2, 3, 4]
-
-const imageSlide = localImages.map(index => {
-  return {
-    url: '',
-    height: SCREEN_HEIGHT * 0.4,
-    width: SCREEN_WIDTH,
-    props: {
-      source: images.sculptures[index],
-      resizeMode: 'cover'
-    }
-  }
-})
+import images from '../../assets/images'
 
 const activeDot = <View style={activeDot} />
 
@@ -33,7 +20,7 @@ class Header extends React.PureComponent {
 
   swiper = null
 
-  _onMomentumScrollEnd = (e, state, context) => {
+  _onMomentumScrollEnd = (e, state) => {
     this.setState({ currentIndex: state.index })
   }
 
@@ -52,51 +39,80 @@ class Header extends React.PureComponent {
   }
 
   render() {
+    const id = this.props.navigation.getParam('id', 2015.003)
+    const item = this.props.markerMatrix[id]
+    const { imageList } = item
+    const imageSlide = imageList.map(item => {
+      return {
+        url: item.url,
+        height: SCREEN_HEIGHT,
+        width: SCREEN_WIDTH,
+        props: {
+          resizeMode: 'contain'
+        }
+      }
+    })
     const { modalVisible, currentIndex } = this.state
     return (
       <View style={styles.headerImage}>
-        <ImageViewerModal
-          modalVisible={modalVisible}
-          imageSlide={imageSlide}
-          setModalVisible={this.setModalVisible}
-          currentIndex={currentIndex}
-          setCurrentIndex={this.setCurrentIndex}
-        />
-        <Swiper
-          height="100%"
-          activeDotColor="#fff"
-          dotColor="rgba(185,185,185,.2)"
-          paginationStyle={{ bottom: 7 }}
-          ref={component => (this.swiper = component)}
-          onMomentumScrollEnd={this._onMomentumScrollEnd}
-        >
-          {localImages.map(index => {
-            return (
-              <TouchableWithoutFeedback
-                key={index}
-                onPress={() => this.setModalVisible(true)}
-              >
-                <View>
-                  <Image
-                    source={images.sculptures[index]}
-                    resizeMode="cover"
-                    style={styles.imageItem}
-                  />
-                  <ImageOverlay />
-                </View>
-              </TouchableWithoutFeedback>
-            )
-          })}
-        </Swiper>
-        <View style={styles.overlayImage}>
+        {imageList.length > 0 ? (
           <View>
-            <Text style={styles.visitorsText}>100 visitors</Text>
+            <ImageViewerModal
+              modalVisible={modalVisible}
+              imageSlide={imageSlide}
+              setModalVisible={this.setModalVisible}
+              currentIndex={currentIndex}
+              setCurrentIndex={this.setCurrentIndex}
+            />
+            <Swiper
+              height="100%"
+              activeDotColor="#fff"
+              dotColor="rgba(185,185,185,.2)"
+              paginationStyle={{ bottom: 7 }}
+              ref={component => (this.swiper = component)}
+              onMomentumScrollEnd={this._onMomentumScrollEnd}
+            >
+              {imageList.map(image => {
+                return (
+                  <TouchableWithoutFeedback
+                    key={image.id}
+                    onPress={() => this.setModalVisible(true)}
+                  >
+                    <View>
+                      <Image
+                        source={{ uri: image.url }}
+                        resizeMode="cover"
+                        style={styles.imageItem}
+                      />
+                      <ImageOverlay />
+                    </View>
+                  </TouchableWithoutFeedback>
+                )
+              })}
+            </Swiper>
+            <View style={styles.overlayImage}>
+              <View>
+                <Text style={styles.visitorsText}>100 visitors</Text>
+              </View>
+            </View>
           </View>
-        </View>
+        ) : (
+          <View style={[styles.imageItem]}>
+            <Image
+              source={images.empty_image}
+              style={{ width: 84, height: 84 }}
+              resizeMode="contain"
+            />
+          </View>
+        )}
+
         <BackButton _goBack={this._goBack} />
       </View>
     )
   }
 }
+const mapStateToProps = getState => ({
+  markerMatrix: getState.markerReducer.markerMatrix
+})
 
-export default Header
+export default connect(mapStateToProps)(withNavigation(Header))

@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Animated
 } from 'react-native'
+import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
 import styles from './styles'
 import { icons } from '../../assets/icons'
@@ -42,23 +43,27 @@ class NearbyItem extends React.PureComponent {
   }
 
   onLikePress = () => {
-    const { item, statisticMatrix } = this.props
+    const { item, statisticMatrix, loggedIn } = this.props
 
-    const statItem = statisticMatrix[item.id]
-    if (statItem && !statItem.isLiked) {
-      this._handleLike()
-      Animated.sequence([
-        Animated.spring(this.animatedValue, {
-          toValue: 1,
-          useNativeDriver: true
-        }),
-        Animated.spring(this.animatedValue, {
-          toValue: 0,
-          useNativeDriver: true
-        })
-      ]).start()
+    if (loggedIn) {
+      const statItem = statisticMatrix[item.id]
+      if (statItem && !statItem.isLiked) {
+        this._handleLike()
+        Animated.sequence([
+          Animated.spring(this.animatedValue, {
+            toValue: 1,
+            useNativeDriver: true
+          }),
+          Animated.spring(this.animatedValue, {
+            toValue: 0,
+            useNativeDriver: true
+          })
+        ]).start()
+      } else {
+        this._handleUnlike()
+      }
     } else {
-      this._handleUnlike()
+      this.props.navigation.navigate('Profile')
     }
   }
 
@@ -115,11 +120,11 @@ class NearbyItem extends React.PureComponent {
                   justifyContent: 'space-between'
                 }}
               >
-                {distanceMatrix[item.id] ? (
-                  <Text style={styles.title}>
-                    {formatDistance(distanceMatrix[item.id].distance)}
-                  </Text>
-                ) : null}
+                <Text style={styles.title}>
+                  {distanceMatrix[item.id]
+                    ? formatDistance(distanceMatrix[item.id].distance)
+                    : ''}
+                </Text>
 
                 <Text numberOfLines={2} style={styles.title}>
                   {item.name}
@@ -154,7 +159,8 @@ class NearbyItem extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix,
-  statisticMatrix: getState.markerReducer.statisticMatrix
+  statisticMatrix: getState.markerReducer.statisticMatrix,
+  loggedIn: getState.authReducer.loggedIn
 })
 
 const mapDispatchToProps = {
@@ -165,4 +171,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NearbyItem)
+)(withNavigation(NearbyItem))

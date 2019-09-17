@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
+import { BUTTON_HEIGHT } from '../../assets/dimension'
 
 const { width, height } = Dimensions.get('window')
 
@@ -57,9 +58,10 @@ export default StyleSheet.create({
   imageItem: {
     width: width,
     height: height * 0.4,
-    zIndex: 2
-    // borderBottomRightRadius: 12
-    // borderBottomLeftRadius: 12
+    zIndex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: palette.backgroundTabColor
   },
   detailContainer: {
     flexDirection: 'column-reverse'
@@ -129,7 +131,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 10,
-    minHeight: 51,
+    minHeight: BUTTON_HEIGHT,
     ...shadowStyle
   },
   titleButton: {

@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import { STATUS_BAR_HEIGHT, MIN_TABVIEW_HEIGHT } from '../../assets/dimension'
+import {
+  STATUS_BAR_HEIGHT,
+  MIN_TABVIEW_HEIGHT,
+  BUTTON_HEIGHT
+} from '../../assets/dimension'
 
 const shadowStyle = {
   elevation: 3,
@@ -138,6 +142,17 @@ export default StyleSheet.create({
   },
   box,
   button: {
+    backgroundColor: palette.backgroundColorWhite,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    marginVertical: 10,
+    height: BUTTON_HEIGHT,
+    ...shadowStyle,
+    elevation: 2
+  },
+  accountNameView: {
     backgroundColor: palette.backgroundColorWhite,
     flexDirection: 'row',
     justifyContent: 'center',

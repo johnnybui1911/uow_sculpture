@@ -84,6 +84,8 @@ class SignInScreen extends React.Component {
               {
                 alignItems: 'center',
                 backgroundColor: palette.primaryColorLight,
+                borderWidth: 1,
+                borderColor: palette.primaryColorLight,
                 marginBottom: 10
               }
             ]}
@@ -105,7 +107,8 @@ class SignInScreen extends React.Component {
               styles.box,
               {
                 borderWidth: 1,
-                borderColor: palette.primaryColorLight
+                borderColor: palette.primaryColorLight,
+                elevation: 2
               }
             ]}
             onPress={this._loginWithAuth0}
@@ -136,7 +139,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(thunkSignIn())
   },
   signInSuccesful: () => {
-    signInSuccesful()
+    dispatch(signInSuccesful())
   }
 })
 

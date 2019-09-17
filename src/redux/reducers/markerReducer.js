@@ -5,7 +5,9 @@ import {
   FETCH_DATA_REJECTED,
   FETCH_DATA_PENDING,
   LIKE,
-  UNLIKE
+  UNLIKE,
+  SIGN_IN_SUCCESSFULL,
+  SIGN_IN_REJECTED
 } from '../../assets/actionTypes'
 
 const initialState = {
@@ -24,11 +26,13 @@ const markerReducer = (state = initialState, action) => {
       const statisticMatrix = {}
       data.forEach(element => {
         const { id, likeCount, commentCount } = element
-        statisticMatrix[id] = {
-          id,
-          likeCount,
-          commentCount,
-          isLiked: false
+        if (!state.statisticMatrix[id]) {
+          statisticMatrix[id] = {
+            id,
+            likeCount,
+            commentCount,
+            isLiked: false
+          }
         }
         markerMatrix[id] = {
           ...element
@@ -38,7 +42,7 @@ const markerReducer = (state = initialState, action) => {
         ...state,
         isLoading,
         markers: data,
-        statisticMatrix,
+        statisticMatrix: { ...statisticMatrix },
         markerMatrix
       }
     }
@@ -75,6 +79,35 @@ const markerReducer = (state = initialState, action) => {
       const { id } = action
       statisticMatrix[id].isLiked = false
       return { ...state, statisticMatrix: { ...statisticMatrix } } // updating data immutably
+    }
+
+    case SIGN_IN_SUCCESSFULL: {
+      // after already fetch statisticaMatrix from backend data
+      const { statisticMatrix } = state
+      const { likeList } = action.payload
+      likeList.forEach(element => {
+        let { sculptureId } = element
+        let { likeCount, commentCount } = statisticMatrix[sculptureId]
+        statisticMatrix[sculptureId] = {
+          id: sculptureId,
+          likeCount,
+          commentCount,
+          isLiked: true
+        }
+      })
+      return { ...state, statisticMatrix: { ...statisticMatrix } }
+    }
+
+    case SIGN_IN_REJECTED: {
+      const { statisticMatrix } = state
+      Object.entries(statisticMatrix).forEach(([key, value]) => {
+        statisticMatrix[key] = {
+          ...value,
+          isLiked: false
+        }
+      })
+
+      return { ...state, statisticMatrix: { ...statisticMatrix } }
     }
 
     default:

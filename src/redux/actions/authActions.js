@@ -4,8 +4,25 @@ import { SIGN_IN_REJECTED, SIGN_IN_SUCCESSFULL } from '../../assets/actionTypes'
 import { getData, storeData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 
-export const signInSuccesful = userAuth => {
-  return { type: SIGN_IN_SUCCESSFULL, payload: { user: userAuth } }
+const initialUser = {
+  user: {
+    userId: 'hnb133',
+    username: 'Cristiano Ronaldo',
+    email: 'cristiano@gmail.com',
+    joinDate: new Date('October 13, 2014'),
+    comments: 3,
+    visited: 3
+  },
+  likeList: [
+    { sculptureId: 1986.058, userId: 'hnb133' },
+    { sculptureId: 1987.08, userId: 'hnb133' },
+    { sculptureId: 1987.081, userId: 'hnb133' },
+    { sculptureId: 1989.067, userId: 'hnb133' }
+  ]
+}
+
+export const signInSuccesful = (userAuth = initialUser) => {
+  return { type: SIGN_IN_SUCCESSFULL, payload: { ...userAuth } }
 }
 
 export const signInRejected = () => {

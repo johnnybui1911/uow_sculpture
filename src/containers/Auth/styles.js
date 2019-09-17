@@ -1,12 +1,13 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
+import { BUTTON_HEIGHT } from '../../assets/dimension'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const HEADER_HEIGHT = 209
 
 const shadowStyle = {
-  elevation: 4,
+  elevation: 2,
   shadowColor: '#000000',
   shadowOffset: {
     width: 0,
@@ -21,7 +22,7 @@ const inputBox = {
   justifyContent: 'center',
   alignItems: 'center',
   marginHorizontal: 24,
-  height: 51,
+  height: BUTTON_HEIGHT,
   paddingHorizontal: 15,
   backgroundColor: palette.backgroundColorWhite,
   borderRadius: 12

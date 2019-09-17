@@ -15,7 +15,7 @@ const SearchItem = ({
   distanceMatrix,
   navigation,
   _onMarkerPressed,
-  markers
+  markerMatrix
 }) => {
   const animatedName = item.name.slice(0, searchText.length)
   const originalName = item.name.slice(searchText.length, item.name.length)
@@ -25,7 +25,7 @@ const SearchItem = ({
     if (_onMarkerPressed) {
       if (!item.coordinate) {
         // Check for recent search item
-        selectedItem = markers.find(element => element.id === item.id) //FIXME: will fix later by using object matrix
+        selectedItem = markerMatrix[item.id] //FIXME: will fix later by using object matrix
       }
       _onMarkerPressed(selectedItem)
       navigation.navigate('Map', { showTab: false })
@@ -103,7 +103,7 @@ const SearchItem = ({
 
 const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix,
-  markers: getState.markerReducer.markers
+  markerMatrix: getState.markerReducer.markerMatrix
 })
 
 const mapDispatchToProps = {

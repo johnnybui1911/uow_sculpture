@@ -46,7 +46,6 @@ export default class App extends React.PureComponent {
 
   _loadDataAsync = async () => {
     const fetchData = stores.dispatch(fetchDataThunk())
-    const authorization = stores.dispatch(thunkSignIn())
     const loadFont = Font.loadAsync({
       'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
       'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
@@ -54,7 +53,7 @@ export default class App extends React.PureComponent {
       'Font-Name': require('./assets/icons/icomoon.ttf')
     })
 
-    await Promise.all([fetchData, authorization, loadFont])
+    await Promise.all([fetchData, loadFont])
   }
 
   // FIXME: BACKGROUND NOT WORKING IN IOS EXPO APP
@@ -92,8 +91,9 @@ export default class App extends React.PureComponent {
           startAsync={this._loadDataAsync}
           onFinish={() => {
             this.setState({ isReady: true })
-            const data = stores.getState().markerReducer.markers
-            stores.dispatch(syncLocationThunk())
+            const syncLocation = stores.dispatch(syncLocationThunk())
+            const authorization = stores.dispatch(thunkSignIn())
+            Promise.all([syncLocation, authorization])
             // syncLocationBackground()
             // geofencingRegion(data)
           }}

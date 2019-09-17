@@ -10,9 +10,7 @@ import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
 import { signInRejected } from '../../redux/actions/authActions'
 import { clearData } from '../../library/asyncStorage'
-
-const AUTH0_DOMAIN = 'https://dev-t5oe7-d3.au.auth0.com'
-const AUTH0_CLIENT_ID = 'kUKlrPhDkRIBsuPOL4c52uiZxN1N6eKK'
+import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 
 const _signOut = async props => {
   const result = await WebBrowser.openBrowserAsync(
@@ -29,9 +27,7 @@ const _signOut = async props => {
 }
 
 const AboutScreen = props => {
-  const username = props.username || 'Cristiano Ronaldo'
-  const email = props.email || 'cristiano@gmail.com'
-  const joinDate = props.joinDate || new Date('October 13, 2014')
+  const { user } = props
   return (
     <View
       style={{
@@ -39,11 +35,11 @@ const AboutScreen = props => {
         padding: 24
       }}
     >
-      <FeatureCard email={email} joinDate={joinDate} />
-      <View style={styles.button}>
+      <FeatureCard email={user.email} joinDate={user.joinDate} />
+      <View style={styles.accountNameView}>
         <View style={{ flex: 1, padding: 20 }}>{icons.google}</View>
         <View style={{ position: 'absolute', left: 60 }}>
-          <Text style={[styles.title, { fontSize: 16 }]}>{username}</Text>
+          <Text style={[styles.title, { fontSize: 16 }]}>{user.username}</Text>
           <Text style={(styles.description, { fontSize: 12 })}>
             Account name
           </Text>
@@ -81,6 +77,10 @@ const AboutScreen = props => {
   )
 }
 
+const mapStateToProps = getState => ({
+  user: getState.authReducer.user
+})
+
 const mapDispatchToProps = dispatch => ({
   handleSignOut: () => {
     dispatch(signInRejected())
@@ -89,7 +89,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default withNavigation(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   )(AboutScreen)
 )

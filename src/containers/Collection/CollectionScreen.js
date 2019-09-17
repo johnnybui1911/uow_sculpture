@@ -64,7 +64,7 @@ class CollectionScreen extends React.PureComponent {
   }
 
   _renderList = () => {
-    const { isLoading } = this.props
+    const { isLoading, markerMatrix } = this.props
     if (isLoading) {
       const array = [1, 2, 3, 4]
       return (
@@ -88,8 +88,13 @@ class CollectionScreen extends React.PureComponent {
       )
     }
 
+    let matrixData = []
+    Object.entries(markerMatrix).forEach(([key, value]) => {
+      matrixData.push(value)
+    })
+
     const { searchText, refreshing } = this.state
-    let data = this.props.markers
+    let data = matrixData
     if (searchText !== '') {
       data = data.filter(
         item => item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
@@ -134,6 +139,7 @@ class CollectionScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
+  markerMatrix: getState.markerReducer.markerMatrix,
   markers: getState.markerReducer.markers,
   isLoading: getState.markerReducer.isLoading
 })
