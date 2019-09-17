@@ -1,30 +1,40 @@
 import React from 'react'
-import { View, Text, TouchableNativeFeedback } from 'react-native'
+import { View, Text, TouchableWithoutFeedback } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
 import { icons } from '../../assets/icons'
 import styles from './styles'
 import palette from '../../assets/palette'
-import { insertSearchItem } from '../../redux/actions'
+import { insertSearchItem, selectMarker } from '../../redux/actions'
 import formatDistance from '../../library/formatDistance'
 
 const SearchItem = ({
   item,
   searchText,
-  _navigateToDetail,
   insertSearchItem,
   distanceMatrix,
-  navigation
+  navigation,
+  _onMarkerPressed,
+  markers
 }) => {
   const animatedName = item.name.slice(0, searchText.length)
   const originalName = item.name.slice(searchText.length, item.name.length)
   const onItemClick = () => {
-    // _navigateToDetail(item.id)
-    navigation.navigate('Detail', { id: item.id })
-    insertSearchItem(item)
+    let selectedItem = item
+    insertSearchItem(selectedItem)
+    if (_onMarkerPressed) {
+      if (!item.coordinate) {
+        // Check for recent search item
+        selectedItem = markers.find(element => element.id === item.id) //FIXME: will fix later by using object matrix
+      }
+      _onMarkerPressed(selectedItem)
+      navigation.navigate('Map', { showTab: false })
+    } else {
+      navigation.navigate('Detail', { id: item.id })
+    }
   }
   return (
-    <TouchableNativeFeedback
+    <TouchableWithoutFeedback
       style={{
         flex: 1
       }}
@@ -87,16 +97,18 @@ const SearchItem = ({
           {icons.noun_arrow}
         </View>
       </View>
-    </TouchableNativeFeedback>
+    </TouchableWithoutFeedback>
   )
 }
 
 const mapStateToProps = getState => ({
-  distanceMatrix: getState.distanceReducer.distanceMatrix
+  distanceMatrix: getState.distanceReducer.distanceMatrix,
+  markers: getState.markerReducer.markers
 })
 
 const mapDispatchToProps = {
-  insertSearchItem
+  insertSearchItem,
+  selectMarker
 }
 
 export default withNavigation(

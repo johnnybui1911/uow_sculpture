@@ -4,7 +4,7 @@ import { Platform } from 'react-native'
 import { GEOFENCING_TASK } from './TaskManager'
 import { localData } from '../../../library/localData'
 
-export default async () => {
+export default async (data = []) => {
   const {
     status,
     permissions: { Location: ios }
@@ -20,15 +20,23 @@ export default async () => {
     }
   }
 
-  const regionArray = localData.map(marker => {
-    const { coordinate } = marker
-    return {
-      ...coordinate,
-      radius: 5
-    }
-  })
+  if (data !== []) {
+    const regionArray = data
+      .filter(item => item.coordinate.latitude)
+      .map(marker => {
+        const { coordinate, id, name } = marker
+        return {
+          identifier: `${id}-${name}`,
+          ...coordinate,
+          radius: 5
+        }
+      })
 
-  await Location.startGeofencingAsync(GEOFENCING_TASK, regionArray)
+    await Location.startGeofencingAsync(
+      GEOFENCING_TASK,
+      Platform.OS === 'ios' ? regionArray.slice(0, 20) : regionArray
+    )
 
-  console.log('Start geofencing')
+    console.log('Start geofencing')
+  }
 }

@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import Divider from '../../components/Divider/Divider'
 import { icons } from '../../assets/icons'
 import styles from './styles'
-import LikeButton from '../Collection/LikeButton'
 import formatDistance from '../../library/formatDistance'
+import LikeComment from '../../components/LikeComment/LikeComment'
 
 const TitleCard = props => {
   const { item, elevation, _navigateToComment, distanceMatrix } = props
@@ -29,27 +29,7 @@ const TitleCard = props => {
         {item.name}
       </Text>
       <Divider />
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'flex-end',
-          flexDirection: 'row'
-        }}
-      >
-        <LikeButton />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: -5
-          }}
-        >
-          <TouchableWithoutFeedback onPress={() => _navigateToComment()}>
-            <View style={{ padding: 5 }}>{icons.comment}</View>
-          </TouchableWithoutFeedback>
-          <Text style={styles.numberStyle}>2</Text>
-        </View>
-      </View>
+      <LikeComment markerId={item.id} />
     </View>
   )
 }

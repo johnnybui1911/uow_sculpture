@@ -1,22 +1,14 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
-import {
-  SafeAreaView,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Animated
-} from 'react-native'
+import { SafeAreaView, View, Animated } from 'react-native'
 import { TabView, TabBar } from 'react-native-tab-view'
 import styles from './styles'
 import palette from '../../assets/palette'
 import LikeScreen from './LikeScreen'
-import images from '../../assets/images'
 import AboutScreen from './AboutScreen'
-import ProfileBox from './ProfileBox'
 import CommentScreen from './CommentScreen'
 import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import PersonalHeader from './PersonalHeader'
 
 const HEADER_HEIGHT = 400
 const TAB_BAR_HEIGHT = 44
@@ -27,79 +19,7 @@ const initialLayout = {
   width: SCREEN_WIDTH
 }
 
-const PersonalHeader = ({
-  user = {
-    username: 'Cristiano Ronaldo',
-    email: 'cristiano@gmail.com',
-    joinDate: new Date('October 13, 2014'),
-    likes: 3,
-    comments: 4,
-    visited: 3
-  }
-}) => {
-  return (
-    <View style={styles.profileFixedContainer}>
-      <View style={styles.headerContainer}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.headerTitle}>Profile</Text>
-        </View>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.titleButton}>EDIT</Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginVertical: 15
-        }}
-      >
-        <View
-          style={{
-            height: 100,
-            width: 100,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 100 / 2,
-            backgroundColor: palette.primaryColor,
-            overflow: 'hidden'
-          }}
-        >
-          <Image source={images.profile} resizeMode="center" />
-        </View>
-        <View style={{ marginTop: 15 }}>
-          <Text
-            style={[
-              styles.title,
-              { fontSize: 24, color: palette.backgroundColorWhite }
-            ]}
-          >
-            {user.username}
-          </Text>
-        </View>
-      </View>
-      <ProfileBox
-        likes={user.likes}
-        comments={user.comments}
-        visited={user.visited}
-      />
-    </View>
-  )
-}
-
 class PersonalScreen extends React.PureComponent {
-  static defaultProps = {
-    user: {
-      username: 'Cristiano Ronaldo',
-      email: 'cristiano@gmail.com',
-      joinDate: new Date('October 13, 2014'),
-      likes: 3,
-      comments: 4,
-      visited: 3
-    }
-  }
-
   state = {
     scrollY: new Animated.Value(0),
     index: 0,

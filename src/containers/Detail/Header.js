@@ -94,11 +94,11 @@ class Header extends React.PureComponent {
             </View>
           </View>
         ) : (
-          <View style={styles.imageItem}>
+          <View style={[styles.imageItem]}>
             <Image
               source={images.empty_image}
               style={{ width: 84, height: 84 }}
-              resizeMode="cover"
+              resizeMode="contain"
             />
           </View>
         )}

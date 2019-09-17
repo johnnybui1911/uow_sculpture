@@ -5,11 +5,11 @@ import {
   Text,
   TouchableOpacity,
   Animated,
-  PanResponder,
   TouchableWithoutFeedback,
   Image
 } from 'react-native'
 import { connect } from 'react-redux'
+import { withNavigation } from 'react-navigation'
 import BottomDrawer from '../../../library/rn-bottom-drawer/BottomDrawer'
 import { SwipeButton, ButtonMyLocation } from '../../../components'
 import styles from '../styles'
@@ -26,6 +26,8 @@ import {
 import images from '../../../assets/images'
 import { MapContext } from '../context/MapContext'
 import formatDistance from '../../../library/formatDistance'
+import palette from '../../../assets/palette'
+import { selectMarker } from '../../../redux/actions'
 
 const fakeMarker = {
   coordinate: {
@@ -195,16 +197,15 @@ class Footer extends React.PureComponent {
 
   // FIXME: fix bottom drawer
   _renderMarkerFooter = () => {
-    const {
-      _navigateToDetail,
-      centered,
-      _centerUserLocation,
-      selectedMarker
-    } = this.props
+    const { centered, _centerUserLocation, selectedMarker } = this.props
     const { footer_translateY } = this.context
     return (
       <View>
-        <TouchableWithoutFeedback onPress={() => _navigateToDetail(fakeMarker)}>
+        <TouchableWithoutFeedback
+          onPress={() =>
+            this.props.navigation.navigate('Detail', { id: selectedMarker.id })
+          }
+        >
           <Animated.View
             style={[
               styles.mini_image_container,
@@ -217,10 +218,32 @@ class Footer extends React.PureComponent {
               }
             ]}
           >
-            <Image
-              source={{ uri: selectedMarker.photoURL }}
-              style={styles.image}
-            />
+            {selectedMarker.photoURL ? (
+              <Image
+                source={{ uri: selectedMarker.photoURL }}
+                style={styles.image}
+              />
+            ) : (
+              <View
+                style={[
+                  {
+                    flex: 1,
+                    width: 80,
+                    height: 80,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: palette.backgroundTabColor,
+                    borderRadius: 12
+                  }
+                ]}
+              >
+                <Image
+                  source={images.empty_image}
+                  style={[styles.image, { width: 42, height: 42 }]}
+                  resizeMode="contain"
+                />
+              </View>
+            )}
           </Animated.View>
         </TouchableWithoutFeedback>
         <Animated.View
@@ -252,10 +275,7 @@ class Footer extends React.PureComponent {
             this.slideIn()
           }}
         >
-          <MiniView
-            fakeMarker={fakeMarker}
-            _navigateToDetail={_navigateToDetail}
-          />
+          <MiniView />
         </BottomDrawer>
       </View>
     )
@@ -390,4 +410,4 @@ export default connect(
   null,
   null,
   { forwardRef: true }
-)(Footer)
+)(withNavigation(Footer))

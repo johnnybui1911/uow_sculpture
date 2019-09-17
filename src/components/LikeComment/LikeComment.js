@@ -6,7 +6,7 @@ import { icons } from '../../assets/icons'
 import styles from './styles'
 import { _like, _unlike } from '../../redux/actions'
 
-class LikeButton extends React.PureComponent {
+class LikeComment extends React.PureComponent {
   constructor(props) {
     super(props)
     this.animatedValue = new Animated.Value(1)
@@ -99,4 +99,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withNavigation(LikeButton))
+)(withNavigation(LikeComment))

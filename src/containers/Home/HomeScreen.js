@@ -40,9 +40,14 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
-    const { isLoading, distanceMatrix, markers } = this.props
-    const data = markers
-    const nearbyData = data
+    const { isLoading, distanceMatrix, markers, markerMatrix } = this.props
+    // const data = markers
+    let matrixData = []
+    Object.entries(markerMatrix).forEach(([key, value]) => {
+      matrixData.push(value)
+    })
+
+    const nearbyData = matrixData
       .filter(item => item.coordinate.latitude)
       .sort((itemA, itemB) => {
         if (distanceMatrix[itemA.id]) {
@@ -54,7 +59,7 @@ class HomeScreen extends React.PureComponent {
         return true
       })
       .slice(0, 5)
-    const popularData = data.slice(0, 10)
+    const popularData = matrixData
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -115,6 +120,7 @@ class HomeScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
+  markerMatrix: getState.markerReducer.markerMatrix,
   markers: getState.markerReducer.markers,
   isLoading: getState.markerReducer.isLoading,
   distanceMatrix: getState.distanceReducer.distanceMatrix

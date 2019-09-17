@@ -14,15 +14,28 @@ const PopularItem = props => {
         style={{
           marginLeft: index === 0 ? 24 : 0,
           marginRight: 12,
-          backgroundColor: palette.backgroundColorGrey,
+          backgroundColor: palette.backgroundTabColor,
           borderRadius: 12,
-          elevation: 4
+          elevation: 2,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: 135,
+          height: 186,
+          marginBottom: 12
         }}
       >
-        <Image
-          source={{ uri: item.photoURL }}
-          style={styles.imagePopularItem}
-        />
+        {!item.photoURL ? (
+          <Image
+            source={images.empty_image}
+            resizeMode="contain"
+            style={[styles.imagePopularItem, { width: 42, height: 42 }]}
+          />
+        ) : (
+          <Image
+            source={{ uri: item.photoURL }}
+            style={styles.imagePopularItem}
+          />
+        )}
         <View style={styles.popularItemDetail}>
           <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
             <Text numberOfLines={2} style={styles.secondaryTitle}>

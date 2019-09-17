@@ -33,14 +33,6 @@ class CollectionScreen extends React.PureComponent {
     )
   }
 
-  _navigateToDetail = item => {
-    this.props.navigation.navigate('Detail', { id: item.id })
-  }
-
-  _navigateToComment = item => {
-    this.props.navigation.navigate('Comment', { id: item.id })
-  }
-
   _handleSearch = event => {
     const { closed } = this.state
     if (!closed) {
@@ -54,14 +46,7 @@ class CollectionScreen extends React.PureComponent {
   }
 
   _renderItem = ({ item, index }) => {
-    return (
-      <CardItem
-        item={item}
-        index={index}
-        _navigateToDetail={this._navigateToDetail}
-        _navigateToComment={this._navigateToComment}
-      />
-    )
+    return <CardItem item={item} index={index} />
   }
 
   _handleRefresh = () => {
@@ -98,6 +83,7 @@ class CollectionScreen extends React.PureComponent {
           }}
           style={styles.flatList}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingVertical: 6 }}
         />
       )
     }
@@ -118,6 +104,7 @@ class CollectionScreen extends React.PureComponent {
         showsVerticalScrollIndicator={false}
         refreshing={refreshing}
         onRefresh={this._handleRefresh}
+        contentContainerStyle={{ paddingVertical: 6 }}
       />
     )
   }
@@ -128,7 +115,10 @@ class CollectionScreen extends React.PureComponent {
       <SafeAreaView style={styles.container}>
         <View style={{ flex: 1 }}>
           <HeaderBar headerName="Collection" />
-          <SearchView />
+          <SearchView
+            customStyle={{ marginBottom: 0 }}
+            navigateTo={() => this.props.navigation.navigate('Search')}
+          />
           <View
             style={{
               flex: 1,

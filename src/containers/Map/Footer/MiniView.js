@@ -14,17 +14,12 @@ import { Divider, SwipeButton } from '../../../components'
 import { SCREEN_WIDTH } from '../../../assets/dimension'
 import { MapContext } from '../context/MapContext'
 import formatDistance from '../../../library/formatDistance'
+import LikeComment from '../../../components/LikeComment/LikeComment'
 
-const MiniView = ({
-  fakeMarker,
-  selectedMarker,
-  distanceMatrix,
-  _navigateToDetail,
-  children
-}) => {
+const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
   const { setShowDirection } = React.useContext(MapContext)
 
-  if (fakeMarker) {
+  if (selectedMarker) {
     return (
       <View
         style={{
@@ -81,29 +76,7 @@ const MiniView = ({
               <Text style={styles.description}>{selectedMarker.duration} min</Text> */}
             </View>
             <Divider styles={{ marginVertical: 12 }} />
-            <View
-              style={{
-                flexDirection: 'row'
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginRight: 20
-                }}
-              >
-                {icons.like_fill}
-                <Text style={styles.numberStyle}>100</Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row'
-                }}
-              >
-                {icons.comment}
-                <Text style={styles.numberStyle}>2</Text>
-              </View>
-            </View>
+            <LikeComment markerId={selectedMarker.id} />
           </View>
           <View
             style={{

@@ -6,7 +6,8 @@ import {
   TextInput,
   Text,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Animated
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -56,6 +57,8 @@ const localComments = [
   }
 ]
 
+const TEXT_INPUT_HEIGHT = 40
+
 class CommentScreen extends React.PureComponent {
   static defaultProps = {
     item: {
@@ -84,7 +87,8 @@ class CommentScreen extends React.PureComponent {
   }
 
   state = {
-    inputValue: ''
+    inputValue: '',
+    inputHeight: new Animated.Value(TEXT_INPUT_HEIGHT)
   }
 
   _textInput = null
@@ -116,7 +120,7 @@ class CommentScreen extends React.PureComponent {
       id === -1
         ? this.props.item
         : this.props.markers.find(item => item.id === id)
-    const { inputValue } = this.state
+    const { inputValue, inputHeight } = this.state
     return (
       <SafeAreaView style={styles.container}>
         <CommentList
@@ -139,9 +143,15 @@ class CommentScreen extends React.PureComponent {
         >
           <Image
             source={images.profile}
-            style={{ width: 40, height: 40, borderRadius: 40 / 2 }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 40 / 2,
+              alignSelf: 'flex-end',
+              marginBottom: 10
+            }}
           />
-          <View
+          <Animated.View
             style={{
               flex: 1,
               flexDirection: 'row',
@@ -149,7 +159,7 @@ class CommentScreen extends React.PureComponent {
               alignItems: 'center',
               marginVertical: 10,
               marginLeft: 7,
-              height: 40,
+              height: inputHeight,
               backgroundColor: palette.backgroundColorWhite,
               borderRadius: 12,
               borderColor: palette.secondaryTypographyColor,
@@ -157,6 +167,16 @@ class CommentScreen extends React.PureComponent {
             }}
           >
             <TextInput
+              onContentSizeChange={e => {
+                const { height } = e.nativeEvent.contentSize
+                if (height < TEXT_INPUT_HEIGHT * 3)
+                  Animated.timing(inputHeight, {
+                    toValue: height,
+                    duration: 100
+                  }).start()
+              }}
+              multiline
+              numberOfLines={4}
               ref={component => (this._textInput = component)}
               value={inputValue}
               onChangeText={text => this.setState({ inputValue: text })}
@@ -175,6 +195,7 @@ class CommentScreen extends React.PureComponent {
             <TouchableWithoutFeedback onPress={this._onSubmit}>
               <Text
                 style={{
+                  alignSelf: 'flex-end',
                   padding: 10,
                   fontFamily: 'Montserrat-Medium',
                   fontSize: 16,
@@ -185,7 +206,7 @@ class CommentScreen extends React.PureComponent {
                 Post
               </Text>
             </TouchableWithoutFeedback>
-          </View>
+          </Animated.View>
         </View>
       </SafeAreaView>
     )

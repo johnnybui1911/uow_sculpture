@@ -7,23 +7,17 @@ import {
   Loader
 } from 'rn-placeholder'
 import { connect } from 'react-redux'
+import { withNavigation } from 'react-navigation'
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native'
 import images from '../../assets/images'
 import { icons } from '../../assets/icons'
 import styles from './styles'
-import LikeButton from './LikeButton'
 import palette from '../../assets/palette'
 import formatDistance from '../../library/formatDistance'
+import LikeComment from '../../components/LikeComment/LikeComment'
 
 const CardItem = props => {
-  const {
-    item,
-    index,
-    _navigateToDetail,
-    _navigateToComment,
-    isLoading = false,
-    distanceMatrix
-  } = props
+  const { item, index, isLoading = false, distanceMatrix } = props
 
   const renderImage = () => {
     const { photoURL } = item
@@ -53,7 +47,9 @@ const CardItem = props => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => _navigateToDetail(item)}>
+    <TouchableWithoutFeedback
+      onPress={() => props.navigation.navigate('Detail', { id: item.id })}
+    >
       <View
         style={{
           ...styles.cardItem,
@@ -92,29 +88,7 @@ const CardItem = props => {
                   {item.features.maker}
                 </Text>
               </View>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'flex-end',
-                  flexDirection: 'row'
-                }}
-              >
-                <LikeButton />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginLeft: -5
-                  }}
-                >
-                  <TouchableWithoutFeedback
-                    onPress={() => _navigateToComment(item)}
-                  >
-                    <View style={{ padding: 5 }}>{icons.comment}</View>
-                  </TouchableWithoutFeedback>
-                  <Text style={styles.numberStyle}>2</Text>
-                </View>
-              </View>
+              <LikeComment markerId={item.id} />
             </React.Fragment>
           )}
         </View>
@@ -143,4 +117,4 @@ const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix
 })
 
-export default connect(mapStateToProps)(CardItem)
+export default connect(mapStateToProps)(withNavigation(CardItem))

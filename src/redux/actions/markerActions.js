@@ -4,7 +4,9 @@ import {
   MARKER_SELECTED,
   MARKER_UNSELECTED,
   FETCH_DATA_REJECTED,
-  FETCH_DATA_PENDING
+  FETCH_DATA_PENDING,
+  LIKE,
+  UNLIKE
 } from '../../assets/actionTypes'
 import baseAxios from '../../library/api'
 import { fetchDistanceMatrix } from './distanceAction'
@@ -31,6 +33,14 @@ export const selectMarker = selectedMarker => {
 
 export const unselectMarker = () => {
   return { type: MARKER_UNSELECTED }
+}
+
+export const _like = id => {
+  return { type: LIKE, id }
+}
+
+export const _unlike = id => {
+  return { type: UNLIKE, id }
 }
 
 export const fetchDataThunk = () => {
@@ -79,7 +89,9 @@ export const fetchDataThunk = () => {
               },
               imageList: images,
               distance: '',
-              duration: ''
+              duration: '',
+              likeCount: Math.floor(Math.random() * 100) + 1,
+              commentCount: Math.floor(Math.random() * 20) + 1
             }
             return newMarker
           })

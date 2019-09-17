@@ -1,7 +1,13 @@
 import { thunkSignIn, signInSuccesful } from './authActions'
 import { syncLocationThunk } from './locationActions'
 import { insertSearchItem, storeAsyncSearch } from './searchActions'
-import { fetchDataThunk, unselectMarker, selectMarker } from './markerActions'
+import {
+  fetchDataThunk,
+  unselectMarker,
+  selectMarker,
+  _like,
+  _unlike
+} from './markerActions'
 import { fetchDistanceMatrix } from './distanceAction'
 
 export {
@@ -13,5 +19,7 @@ export {
   fetchDataThunk,
   fetchDistanceMatrix,
   unselectMarker,
-  selectMarker
+  selectMarker,
+  _like,
+  _unlike
 }

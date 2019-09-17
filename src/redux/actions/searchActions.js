@@ -2,7 +2,6 @@ import { AsyncStorage } from 'react-native'
 import { INSERT_SEARCH_ITEM, SET_INIT_SEARCH } from '../../assets/actionTypes'
 
 export const insertSearchItem = item => {
-  console.log(item)
   return { type: INSERT_SEARCH_ITEM, payload: { item } }
 }
 

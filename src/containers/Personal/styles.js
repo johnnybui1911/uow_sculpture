@@ -3,7 +3,7 @@ import palette from '../../assets/palette'
 import { STATUS_BAR_HEIGHT, MIN_TABVIEW_HEIGHT } from '../../assets/dimension'
 
 const shadowStyle = {
-  elevation: 4,
+  elevation: 3,
   shadowColor: '#000000',
   shadowOffset: {
     width: 0,

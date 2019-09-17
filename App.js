@@ -10,6 +10,11 @@ import { registerForPushNotificationsAsync } from './src/library/notificationTas
 import syncLocationBackground from './src/containers/Map/Background/syncLocationBackground'
 import geofencingRegion from './src/containers/Map/Background/geofencingRegion'
 import { BACKGROUND_LOCATION_TASK } from './src/containers/Map/Background/TaskManager'
+import {
+  fetchDataThunk,
+  thunkSignIn,
+  syncLocationThunk
+} from './src/redux/actions'
 
 export default class App extends React.PureComponent {
   state = {
@@ -25,7 +30,6 @@ export default class App extends React.PureComponent {
     // )
     // await syncLocationBackground()
     // await geofencingRegion()
-    // await registerForPushNotificationsAsync()
     // stop background sync when open app
     // const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
     //   BACKGROUND_LOCATION_TASK
@@ -37,19 +41,23 @@ export default class App extends React.PureComponent {
   }
 
   componentWillUnmount = () => {
-    // AppState.removeEventListener('change', this._handleAppStateChange)
+    AppState.removeEventListener('change', this._handleAppStateChange)
   }
 
-  _loadFontAsync = async () => {
-    await Font.loadAsync({
+  _loadDataAsync = async () => {
+    const fetchData = stores.dispatch(fetchDataThunk())
+    const authorization = stores.dispatch(thunkSignIn())
+    const loadFont = Font.loadAsync({
       'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
       'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
       'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
       'Font-Name': require('./assets/icons/icomoon.ttf')
     })
-    return Promise.resolve()
+
+    await Promise.all([fetchData, authorization, loadFont])
   }
 
+  // FIXME: BACKGROUND NOT WORKING IN IOS EXPO APP
   _handleAppStateChange = async nextAppState => {
     if (
       this.state.appState.match(/inactive|background/) &&
@@ -81,8 +89,14 @@ export default class App extends React.PureComponent {
     if (!this.state.isReady) {
       return (
         <AppLoading
-          startAsync={this._loadFontAsync}
-          onFinish={() => this.setState({ isReady: true })}
+          startAsync={this._loadDataAsync}
+          onFinish={() => {
+            this.setState({ isReady: true })
+            const data = stores.getState().markerReducer.markers
+            stores.dispatch(syncLocationThunk())
+            // syncLocationBackground()
+            // geofencingRegion(data)
+          }}
           onError={console.warn}
         />
       )

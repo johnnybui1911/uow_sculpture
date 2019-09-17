@@ -63,10 +63,11 @@ class DetailScreen extends React.PureComponent {
 
   render() {
     const id = this.props.navigation.getParam('id', -1)
-    const item =
-      id === -1
-        ? this.props.item
-        : this.props.markers.find(item => item.id === id)
+    const item = this.props.markers.find(item => item.id == id)
+    // const item =
+    //   id === -1
+    //     ? this.props.item
+    //     : this.props.markers.find(item => item.id === id)
 
     const { imageList } = item
 

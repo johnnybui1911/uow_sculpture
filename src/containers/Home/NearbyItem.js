@@ -9,38 +9,57 @@ import {
 import { connect } from 'react-redux'
 import styles from './styles'
 import { icons } from '../../assets/icons'
-import images from '../../assets/images'
 import formatDistance from '../../library/formatDistance'
+import images from '../../assets/images'
+import { _like, _unlike } from '../../redux/actions'
 
 class NearbyItem extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      liked: false
-    }
-
     this.animatedValue = new Animated.Value(0)
   }
 
+  _handleLike = () => {
+    const {
+      item: { id },
+      _like
+    } = this.props
+
+    this.props._like(id)
+
+    //TODO: Send POST to backend
+  }
+
+  _handleUnlike = () => {
+    const {
+      item: { id },
+      _like
+    } = this.props
+
+    this.props._unlike(id)
+
+    //TODO: Send POST to backend
+  }
+
   onLikePress = () => {
-    this.setState(prevState => {
-      const newLiked = !prevState.liked
+    const { item, statisticMatrix } = this.props
 
-      if (newLiked) {
-        Animated.sequence([
-          Animated.spring(this.animatedValue, {
-            toValue: 1,
-            useNativeDriver: true
-          }),
-          Animated.spring(this.animatedValue, {
-            toValue: 0,
-            useNativeDriver: true
-          })
-        ]).start()
-      }
-
-      return { liked: newLiked }
-    })
+    const statItem = statisticMatrix[item.id]
+    if (statItem && !statItem.isLiked) {
+      this._handleLike()
+      Animated.sequence([
+        Animated.spring(this.animatedValue, {
+          toValue: 1,
+          useNativeDriver: true
+        }),
+        Animated.spring(this.animatedValue, {
+          toValue: 0,
+          useNativeDriver: true
+        })
+      ]).start()
+    } else {
+      this._handleUnlike()
+    }
   }
 
   _renderOverlay = () => {
@@ -67,18 +86,27 @@ class NearbyItem extends React.PureComponent {
   }
 
   render() {
-    const { item, navigation, distanceMatrix } = this.props
+    const { item, navigation, distanceMatrix, statisticMatrix } = this.props
+    const statItem = statisticMatrix[item.id]
     return (
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('Detail', { id: item.id })}
       >
         <View style={styles.nearbyItemStyle}>
           <View style={styles.imageNearbyContainer}>
-            <Image
-              source={{ uri: item.photoURL }}
-              resizeMode="cover"
-              style={styles.imageNearbyItem}
-            />
+            {!item.photoURL ? (
+              <Image
+                source={images.empty_image}
+                resizeMode="contain"
+                style={[styles.imageNearbyItem, { width: 84, height: 84 }]}
+              />
+            ) : (
+              <Image
+                source={{ uri: item.photoURL }}
+                resizeMode="cover"
+                style={styles.imageNearbyItem}
+              />
+            )}
             {this._renderOverlay()}
             <View style={styles.nearbyItemDetail}>
               <View
@@ -104,10 +132,17 @@ class NearbyItem extends React.PureComponent {
               >
                 <TouchableWithoutFeedback onPress={this.onLikePress}>
                   <View style={[{ marginTop: 10, padding: 5 }]}>
-                    {this.state.liked ? icons.like_fill_white : icons.like}
+                    {statItem && statItem.isLiked
+                      ? icons.like_fill_white
+                      : icons.like}
                   </View>
                 </TouchableWithoutFeedback>
-                <Text style={[styles.like, { marginTop: 10 }]}>100</Text>
+                <Text style={[styles.like, { marginTop: 10 }]}>
+                  {statItem &&
+                    (statItem.isLiked
+                      ? statisticMatrix[item.id].likeCount + 1
+                      : statisticMatrix[item.id].likeCount)}
+                </Text>
               </View>
             </View>
           </View>
@@ -118,7 +153,16 @@ class NearbyItem extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
-  distanceMatrix: getState.distanceReducer.distanceMatrix
+  distanceMatrix: getState.distanceReducer.distanceMatrix,
+  statisticMatrix: getState.markerReducer.statisticMatrix
 })
 
-export default connect(mapStateToProps)(NearbyItem)
+const mapDispatchToProps = {
+  _like,
+  _unlike
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NearbyItem)

@@ -40,8 +40,6 @@ const SearchBox = ({
       placeholder="Enter keywords..."
       style={{
         flex: 1,
-        // paddingVertical: 10,
-        // paddingBottom: 10,,
         paddingHorizontal: 12,
         width: '100%',
         fontFamily: 'Montserrat-Medium',

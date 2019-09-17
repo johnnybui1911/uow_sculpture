@@ -8,7 +8,7 @@ const NearbyList = props => {
     <FlatList
       horizontal
       data={data}
-      keyExtractor={(item, index) => item.id.toString()}
+      keyExtractor={item => item.id.toString()}
       renderItem={_renderItem}
       showsHorizontalScrollIndicator={false}
       pagingEnabled

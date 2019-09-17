@@ -217,7 +217,8 @@ class MapScreen extends React.PureComponent {
           return true
         }
       } else {
-        this._resetUI()
+        // this._resetUI()
+        this._onClosePressed()
         return true
       }
     }
@@ -298,7 +299,7 @@ class MapScreen extends React.PureComponent {
         showDirection: false
       })
 
-      // this._centerUserLocation()
+      this._centerUserLocation()
       this._onClosePressed()
     })
   }
@@ -341,7 +342,7 @@ class MapScreen extends React.PureComponent {
           ref={marker => {
             this.marker = marker
           }}
-          // tracksViewChanges={false}
+          tracksViewChanges={false}
           style={{ zIndex: 2 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
@@ -493,7 +494,15 @@ class MapScreen extends React.PureComponent {
               _handleSearch={this._handleSearch}
               _onClosePressed={this._onClosePressed}
             >
-              <SearchView searchText={searchText} />
+              <SearchView
+                searchText={searchText}
+                _onClosePressed={this._onClosePressed}
+                navigateTo={() => {
+                  this.props.navigation.navigate('Search', {
+                    _onMarkerPressed: this._onMarkerPressed
+                  })
+                }}
+              />
             </Header>
             <MapView
               style={styles.mapStyle}
@@ -513,7 +522,7 @@ class MapScreen extends React.PureComponent {
               {Platform.OS === 'android' && (
                 <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
               )}
-              {/* {this._renderUserLocation()} */}
+              {this._renderUserLocation()}
               <MarkersContainer _onMarkerPressed={this._onMarkerPressed} />
               <Direction
                 userCoordinate={this.userCoordinate}

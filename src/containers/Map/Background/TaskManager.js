@@ -14,7 +14,7 @@ TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
   }
   if (data) {
     const { locations } = data
-    // console.log('Background Update Location: ', locations) // send it to back end
+    console.log('Background Update Location: ', locations)
   }
 })
 
@@ -26,23 +26,28 @@ TaskManager.defineTask(
       console.log(error)
       return
     }
+
+    const { identifier } = region
+    const name = identifier.slice(identifier.indexOf('-') + 1)
+
     if (eventType === Location.GeofencingEventType.Enter) {
       _sendLocalNotification({
-        title: `Entered sculpture region`,
-        body: `Sculpture: ${region.latitude}, ${region.longitude}`,
+        title: `Entered ${name}`,
+        body: `${region.latitude}, ${region.longitude}`,
         data: {
           screen: 'Map'
         }
       })
-      // console.log("You've entered region:", region)
+      console.log("You've entered region:", region)
     } else if (eventType === Location.GeofencingEventType.Exit) {
-      // _sendLocalNotification({
-      //   title: `Left sculpture region`,
-      //   body: `Sculpture: ${region.latitude}, ${region.longitude}`,
-      // data: {
-      //   screen: 'Map'
-      // }
-      // })?
+      _sendLocalNotification({
+        title: `Left ${name}`,
+        body: `${region.latitude}, ${region.longitude}`,
+        data: {
+          screen: 'Map'
+        }
+      })
+
       console.log("You've left region:", region)
     }
   }

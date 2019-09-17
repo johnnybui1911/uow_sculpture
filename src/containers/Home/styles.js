@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
 
 const shadowStyle = {
-  elevation: 8,
+  elevation: 3,
   shadowColor: '#000000',
   shadowOffset: {
     width: 0,
@@ -20,7 +20,7 @@ const IMAGE_HEIGHT = IMAGE_WIDTH * 1.15
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.backgroundColorGrey
+    backgroundColor: palette.backgroundColorWhite
   },
   nearbyView: {
     minHeight: IMAGE_HEIGHT + PADDING * 2
@@ -31,12 +31,15 @@ export default StyleSheet.create({
     height: IMAGE_HEIGHT,
     padding: PADDING,
     margin: PADDING,
-    backgroundColor: palette.backgroundColorGrey,
+    backgroundColor: palette.backgroundColorWhite,
     borderRadius: 12
   },
   imageNearbyContainer: {
-    // parent container
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 12,
+    backgroundColor: palette.backgroundTabColor,
     ...shadowStyle
   },
   imageNearbyItem: {
@@ -54,8 +57,8 @@ export default StyleSheet.create({
     zIndex: 2
   },
   popularList: {
-    marginTop: 16,
-    marginBottom: PADDING
+    marginTop: 16
+    // marginBottom: PADDING
   },
   imagePopularItem: {
     width: 135,

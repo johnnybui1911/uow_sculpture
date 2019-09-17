@@ -133,9 +133,14 @@ class CommentList extends React.PureComponent {
         ListHeaderComponent={() => {
           return (
             <View style={{ flex: 1 }}>
-              <Header navigation={this.props.navigation} />
+              {/* <Header navigation={this.props.navigation} /> */}
               <View
-                style={{ flex: 1, paddingVertical: 18, paddingHorizontal: 24 }}
+                style={{
+                  flex: 1,
+                  paddingVertical: 18,
+                  paddingHorizontal: 24,
+                  paddingTop: 18 + 6 // if no header rendered
+                }}
               >
                 <Text style={styles.flatListHeader}>Comments</Text>
               </View>

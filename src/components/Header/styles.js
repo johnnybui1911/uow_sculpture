@@ -7,7 +7,7 @@ export default StyleSheet.create({
     marginTop: STATUS_BAR_HEIGHT * 2,
     height: 53,
     marginHorizontal: 24,
-    marginBottom: 18
+    marginBottom: 6
   },
   headerTitle: {
     fontSize: 40,

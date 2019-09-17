@@ -22,10 +22,6 @@ class SearchScreen extends React.PureComponent {
 
   scrollY = new Animated.Value(0)
 
-  _navigateToDetail = id => {
-    this.props.navigation.navigate('Detail', { id })
-  }
-
   _handleSearch = event => {
     const { text } = event.nativeEvent
     this.setState({ searchText: text })
@@ -38,21 +34,28 @@ class SearchScreen extends React.PureComponent {
 
   _renderItem = ({ item, index }) => {
     const { searchText } = this.state
+    const { navigation } = this.props
+    const _onMarkerPressed = navigation.getParam('_onMarkerPressed', null)
     return (
       <SearchItem
         item={item}
         searchText={searchText}
-        _navigateToDetail={this._navigateToDetail}
+        _onMarkerPressed={_onMarkerPressed}
       />
     )
   }
 
   _renderList = () => {
-    const { isLoading, recentSearchList } = this.props
+    const { isLoading, recentSearchList, markers, navigation } = this.props
     const { searchText, refreshing } = this.state
+    const _onMarkerPressed = navigation.getParam('_onMarkerPressed', null) // reuse in Map Screen
+    let validData = markers.filter(item => item.coordinate.latitude)
+    // if (_onMarkerPressed) {
+    //   validData = validData.filter(item => item.coordinate.latitude)
+    // }
     let data = []
     if (searchText.trim().length > 0) {
-      data = this.props.markers.filter(
+      data = validData.filter(
         item =>
           item.name.toLowerCase().slice(0, searchText.length) ===
           searchText.toLowerCase()
@@ -154,7 +157,8 @@ class SearchScreen extends React.PureComponent {
             >
               <View
                 style={{
-                  padding: 10,
+                  paddingTop: 10,
+                  paddingLeft: 14, //icon error real paddingleft 16
                   paddingBottom: 13,
                   width: 50
                 }}

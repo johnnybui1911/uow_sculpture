@@ -16,7 +16,7 @@ const shadowStyle = {
 const cardItem = {
   justifyContent: 'center',
   width: '100%',
-  marginVertical: 6,
+  marginVertical: 12,
   paddingHorizontal: 2
 }
 
