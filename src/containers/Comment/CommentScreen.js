@@ -7,7 +7,8 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
-  Animated
+  Animated,
+  StyleSheet
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -157,10 +158,9 @@ class CommentScreen extends React.PureComponent {
               marginVertical: 10,
               marginLeft: 7,
               height: inputHeight,
-              backgroundColor: palette.backgroundColorWhite,
-              borderRadius: 12,
-              borderColor: palette.secondaryTypographyColor,
-              borderWidth: 0.5
+              backgroundColor: '#F2F3F5',
+              borderRadius: 16,
+              borderColor: 'rgba(0,0,0,0)'
             }}
           >
             <TextInput
@@ -177,17 +177,18 @@ class CommentScreen extends React.PureComponent {
               ref={component => (this._textInput = component)}
               value={inputValue}
               onChangeText={text => this.setState({ inputValue: text })}
-              placeholder="Add a comment"
+              placeholder="Add a comment..."
+              underlineColorAndroid="rgba(0,0,0,0)"
+              bor
               style={{
                 flex: 1,
                 padding: 10,
                 width: '100%',
                 fontFamily: 'Montserrat-Medium',
-                fontSize: 16,
+                fontSize: 14,
                 color: palette.primaryColor
               }}
-              //clearButtonMode="while-editing" // ios only
-              placeholderTextColor={palette.secondaryTypographyColor}
+              placeholderTextColor="rgb(110, 117, 125)"
             />
             <TouchableWithoutFeedback onPress={this._onSubmit}>
               <Text
@@ -195,9 +196,9 @@ class CommentScreen extends React.PureComponent {
                   alignSelf: 'flex-end',
                   padding: 10,
                   fontFamily: 'Montserrat-Medium',
-                  fontSize: 16,
+                  fontSize: 14,
                   color: palette.primaryColorLight,
-                  opacity: inputValue.trim() === '' ? 0.5 : 1
+                  opacity: inputValue.trim() === '' ? 0 : 1
                 }}
               >
                 Post

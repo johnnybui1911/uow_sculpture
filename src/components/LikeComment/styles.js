@@ -66,7 +66,10 @@ export default StyleSheet.create({
     fontSize: 12,
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold',
-    paddingLeft: 5
+    paddingLeft: 5,
+    paddingRight: 7
+    // borderColor: 'black',
+    // borderWidth: 0.5
   },
   cardItem,
   cardDes,

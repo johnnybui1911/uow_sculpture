@@ -23,7 +23,7 @@ const TitleCard = props => {
     return null
   }
   return (
-    <View style={cardStyle}>
+    <View style={[cardStyle, { paddingBottom: 16, paddingTop: 16 }]}>
       {renderDistance()}
       <Text numberOfLines={2} style={styles.title}>
         {item.name}

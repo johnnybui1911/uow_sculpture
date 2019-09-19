@@ -82,7 +82,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   title: {
-    fontSize: 36,
+    fontSize: 30,
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold'
   },

@@ -159,14 +159,17 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 10,
-    height: 51,
+    height: 60,
     ...shadowStyle
   },
   card: {
-    padding: 24,
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingTop: 20,
+    paddingBottom: 20,
     backgroundColor: palette.backgroundColorWhite,
     borderRadius: 12,
-    height: 126,
+    // height: 126,
     ...shadowStyle
   },
   contentBox: {

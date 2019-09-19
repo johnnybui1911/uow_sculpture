@@ -43,34 +43,36 @@ class LikeComment extends React.PureComponent {
         style={{
           flex: 1,
           alignItems: 'flex-end',
-          flexDirection: 'row',
-          paddingBottom: 5
+          flexDirection: 'row'
         }}
       >
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
-            width: 55
+            alignItems: 'center'
           }}
         >
           <TouchableWithoutFeedback onPress={this.onPress}>
-            <Animated.View style={[animatedStyle, { width: 20 }]}>
+            <Animated.View style={[animatedStyle, { width: 22 }]}>
               {statItem && statItem.isLiked
                 ? icons.like_fill
                 : icons.like_outline}
             </Animated.View>
           </TouchableWithoutFeedback>
-          <Text style={styles.numberStyle}>
-            {statItem &&
-              (statItem.isLiked ? statItem.likeCount + 1 : statItem.likeCount)}
-          </Text>
+          <TouchableWithoutFeedback onPress={this.onPress}>
+            <Text style={[styles.numberStyle]}>
+              {statItem &&
+                (statItem.isLiked
+                  ? statItem.likeCount + 1
+                  : statItem.likeCount)}
+            </Text>
+          </TouchableWithoutFeedback>
         </View>
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
-            width: 55
+            alignItems: 'center'
+            // width: 55
           }}
         >
           <TouchableWithoutFeedback
@@ -78,11 +80,17 @@ class LikeComment extends React.PureComponent {
               this.props.navigation.navigate('Comment', { id: markerId })
             }
           >
-            <View style={{ width: 20 }}>{icons.comment}</View>
+            <View style={{ width: 22 }}>{icons.comment}</View>
           </TouchableWithoutFeedback>
-          <Text style={styles.numberStyle}>
-            {statItem && statItem.commentCount}
-          </Text>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              this.props.navigation.navigate('Comment', { id: markerId })
+            }
+          >
+            <Text style={styles.numberStyle}>
+              {statItem && statItem.commentCount}
+            </Text>
+          </TouchableWithoutFeedback>
         </View>
       </View>
     )

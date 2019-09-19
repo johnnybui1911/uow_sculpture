@@ -5,7 +5,7 @@ import styles from './styles'
 
 export default function DescriptionCard(props) {
   const { item, elevation } = props
-  const cardStyle = [styles.card, { elevation }]
+  const cardStyle = [styles.card, { elevation, paddingBottom: 16 }]
   return (
     <View style={cardStyle}>
       <Text style={[styles.title, { fontSize: 20 }]}>Description</Text>

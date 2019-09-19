@@ -5,7 +5,7 @@ import styles from './styles'
 
 export default function FeatureCard(props) {
   const { item, elevation } = props
-  const cardStyle = [styles.card, { elevation }]
+  const cardStyle = [styles.card, { elevation, paddingBottom: 16 }]
   return (
     <View style={cardStyle}>
       <View style={styles.contentBox}>
