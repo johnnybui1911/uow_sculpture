@@ -239,8 +239,11 @@ class Footer extends React.PureComponent {
               >
                 <Image
                   source={images.empty_image}
-                  style={[styles.image, { width: 42, height: 42 }]}
-                  resizeMode="contain"
+                  style={[
+                    styles.image,
+                    { width: 80, height: 50, backgroundColor: '#F6F6F6' }
+                  ]}
+                  resizeMode="cover"
                 />
               </View>
             )}

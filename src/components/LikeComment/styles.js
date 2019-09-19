@@ -67,9 +67,21 @@ export default StyleSheet.create({
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold',
     paddingLeft: 5,
-    paddingRight: 7
+    paddingRight: 9,
+    paddingTop: 12,
+    paddingBottom: 12
     // borderColor: 'black',
     // borderWidth: 0.5
+  },
+  socialIconStyle: {
+    width: 22,
+    paddingTop: 12,
+    paddingBottom: 12
+    // borderColor: 'black',
+    // borderWidth: 0.5
+  },
+  likeNumberSpecial: {
+    paddingLeft: 4
   },
   cardItem,
   cardDes,

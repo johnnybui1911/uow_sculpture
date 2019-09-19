@@ -125,7 +125,7 @@ class CommentScreen extends React.PureComponent {
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => (
-          <DividerLight style={{ backgroundColor: 'rgba(0,0,0,0.2)' }} />
+          <DividerLight style={{ backgroundColor: 'rgba(0,0,0,0.15)' }} />
         )}
         refreshing={refreshing}
         onRefresh={this._handleRefresh}

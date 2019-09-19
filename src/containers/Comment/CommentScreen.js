@@ -146,7 +146,8 @@ class CommentScreen extends React.PureComponent {
               height: 40,
               borderRadius: 40 / 2,
               alignSelf: 'flex-end',
-              marginBottom: 10
+              marginBottom: 10,
+              backgroundColor: '#F6F6F6'
             }}
           />
           <Animated.View

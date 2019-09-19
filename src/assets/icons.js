@@ -87,7 +87,9 @@ export const icons = {
   exchange: (
     <CustomIcon name="exchange-arrows" size={24} color={palette.primaryColor} />
   ),
-  back: <CustomIcon name="back" size={24} color="#fff" />,
+  back: props => (
+    <CustomIcon name="back" size={24} style={{ ...props.style }} />
+  ),
   back_blue: <CustomIcon name="back" size={24} color={palette.primaryColor} />,
   back_blue_light: (
     <CustomIcon

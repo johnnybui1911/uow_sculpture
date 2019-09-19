@@ -30,13 +30,13 @@ const CardItem = props => {
             height: 120,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: palette.backgroundTabColor,
+            backgroundColor: '#F6F6F6',
             borderRadius: 12
           }}
         >
           <Image
             source={images.empty_image}
-            style={{ width: 42, height: 42 }}
+            style={{ width: 120, height: 75 }}
             resizeMode="cover"
           />
         </View>
@@ -74,7 +74,7 @@ const CardItem = props => {
             </Placeholder>
           ) : (
             <React.Fragment>
-              <View style={{}}>
+              <View>
                 <Text style={styles.distance}>
                   {distanceMatrix[item.id]
                     ? formatDistance(distanceMatrix[item.id].distance)
@@ -88,7 +88,8 @@ const CardItem = props => {
                   {item.features.maker}
                 </Text>
               </View>
-              <LikeComment markerId={item.id} />
+
+              <LikeComment markerId={item.id} style={{ marginBottom: -7 }} />
             </React.Fragment>
           )}
         </View>

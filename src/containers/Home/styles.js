@@ -39,14 +39,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
-    backgroundColor: palette.backgroundTabColor,
+    backgroundColor: '#F6F6F6',
     ...shadowStyle
   },
   imageNearbyItem: {
     //child
     width: '100%',
     height: '100%',
-    borderRadius: 12
+    borderRadius: 12,
+    backgroundColor: '#F6F6F6'
   },
   nearbyItemDetail: {
     position: 'absolute',
@@ -63,7 +64,8 @@ export default StyleSheet.create({
   imagePopularItem: {
     width: 135,
     height: 186,
-    borderRadius: 12
+    borderRadius: 12,
+    backgroundColor: '#F6F6F6'
   },
   popularItemDetail: {
     position: 'absolute',
@@ -102,6 +104,12 @@ export default StyleSheet.create({
     textShadowColor: '#474747',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 5,
+    fontFamily: 'Montserrat-SemiBold'
+  },
+  secondaryTitleNoShadow: {
+    fontSize: 14,
+    color: '#3A3A3A',
+    opacity: 0.7,
     fontFamily: 'Montserrat-SemiBold'
   },
   overlayHeart: {

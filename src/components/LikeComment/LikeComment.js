@@ -36,11 +36,12 @@ class LikeComment extends React.PureComponent {
     const animatedStyle = {
       transform: [{ scale: this.animatedValue }]
     }
-    const { markerId, statisticMatrix } = this.props
+    const { markerId, statisticMatrix, style } = this.props
     const statItem = statisticMatrix[markerId]
     return (
       <View
         style={{
+          ...style,
           flex: 1,
           alignItems: 'flex-end',
           flexDirection: 'row'
@@ -53,14 +54,14 @@ class LikeComment extends React.PureComponent {
           }}
         >
           <TouchableWithoutFeedback onPress={this.onPress}>
-            <Animated.View style={[animatedStyle, { width: 22 }]}>
+            <Animated.View style={[animatedStyle, styles.socialIconStyle]}>
               {statItem && statItem.isLiked
                 ? icons.like_fill
                 : icons.like_outline}
             </Animated.View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={this.onPress}>
-            <Text style={[styles.numberStyle]}>
+            <Text style={[styles.numberStyle, styles.likeNumberSpecial]}>
               {statItem &&
                 (statItem.isLiked
                   ? statItem.likeCount + 1
@@ -80,14 +81,14 @@ class LikeComment extends React.PureComponent {
               this.props.navigation.navigate('Comment', { id: markerId })
             }
           >
-            <View style={{ width: 22 }}>{icons.comment}</View>
+            <View style={styles.socialIconStyle}>{icons.comment}</View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
             onPress={() =>
               this.props.navigation.navigate('Comment', { id: markerId })
             }
           >
-            <Text style={styles.numberStyle}>
+            <Text style={[styles.numberStyle]}>
               {statItem && statItem.commentCount}
             </Text>
           </TouchableWithoutFeedback>

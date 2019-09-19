@@ -113,7 +113,8 @@ export default StyleSheet.create({
   image: {
     width: 80,
     height: 80,
-    borderRadius: 12
+    borderRadius: 12,
+    backgroundColor: '#F6F6F6'
   },
   description_container: {
     flex: 1,

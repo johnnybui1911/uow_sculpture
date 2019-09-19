@@ -54,7 +54,12 @@ class CommentList extends React.PureComponent {
           {item.photoURL ? (
             <Image
               source={images.profile}
-              style={{ width: 40, height: 40, borderRadius: 40 / 2 }}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 40 / 2,
+                backgroundColor: '#F6F6F6'
+              }}
             />
           ) : (
             <View

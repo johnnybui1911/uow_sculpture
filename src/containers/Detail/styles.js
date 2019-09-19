@@ -54,7 +54,7 @@ export default StyleSheet.create({
     zIndex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: palette.backgroundTabColor
+    backgroundColor: '#F6F6F6'
     // borderBottomRightRadius: 12
     // borderBottomLeftRadius: 12
   },

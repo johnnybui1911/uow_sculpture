@@ -13,6 +13,6 @@ export default {
   chosen_marker: require('./images/chosen-marker.png'),
   marker: require('./images/marker.png'),
   trophy: require('./images/trophy.png'),
-  empty_image: require('./images/empty-image.png'),
+  empty_image: require('./images/no-image.png'),
   new_marker: require('./images/new-marker.png')
 }
