@@ -11,14 +11,16 @@ import palette from '../../assets/palette'
 import { signInRejected } from '../../redux/actions/authActions'
 import { clearData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
+import { AuthSession } from 'expo'
 
 const _signOut = async props => {
   const result = await WebBrowser.openBrowserAsync(
-    `${AUTH0_DOMAIN}/v2/logout?federated` +
-      toQueryString({
-        client_id: AUTH0_CLIENT_ID
-      })
+    `${AUTH0_DOMAIN}/v2/logout?federated`
   )
+  if (!__DEV__) {
+    WebBrowser.dismissBrowser()
+  }
+  console.log('result', result)
   if (result.type === 'opened') {
     await clearData('auth')
     props.handleSignOut()

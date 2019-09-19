@@ -1,9 +1,10 @@
 {
   "expo": {
-    "name": "UOW Sculpture",
+    "name": "UOW Sculptures",
     "slug": "ExpoUOWS",
     "privacy": "public",
     "sdkVersion": "33.0.0",
+    "scheme": "myapp",
     "ios": {
       "bundleIdentifier": "com.UOW.UOWSculpture",
       "supportsTablet": true,

@@ -34,12 +34,13 @@ class SignInScreen extends React.Component {
   _loginWithAuth0 = async () => {
     const redirectUrl = AuthSession.getRedirectUrl()
     //`${Constants.linkingUri}`
+    console.log('redirect:', redirectUrl)
 
     const queryParams = toQueryString({
       client_id: AUTH0_CLIENT_ID,
       redirect_uri: redirectUrl,
       response_type: 'token',
-      scope: 'openid email offline_access '
+      scope: 'openid email offline_access'
     })
 
     const authUrl = `${AUTH0_DOMAIN}/authorize?` + queryParams
@@ -50,11 +51,13 @@ class SignInScreen extends React.Component {
       authUrl: authUrl
     })
 
+    console.log(response)
+
     if (response.type === 'success') {
       // console.log(response)
       const { refresh_token, expires_in, access_token } = response.params
       const auth = { token: access_token, refresh_token, expires_in }
-      // console.log(response)
+      console.log('final', auth)
       await storeData('auth', JSON.stringify(auth))
       this.props.signInSuccesful()
       this.props.navigation.navigate('Personal')
