@@ -1,4 +1,4 @@
-export const AUTH0_DOMAIN = 'https://dev-t5oe7-d3.au.auth0.com'
-export const AUTH0_CLIENT_ID = 'kUKlrPhDkRIBsuPOL4c52uiZxN1N6eKK'
+export const AUTH0_DOMAIN = 'https://uowac.au.auth0.com'
+export const AUTH0_CLIENT_ID = 'yuIhs5CutF7PVOsq8bMmoIyrs6JqJycy'
 
 // 'kUKlrPhDkRIBsuPOL4c52uiZxN1N6eKK'
