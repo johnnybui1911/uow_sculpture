@@ -15,7 +15,7 @@ const searchReducer = (state = initialState, action) => {
       const oldSearchList = state.recentSearchList
 
       let recentSearchList = [
-        { id: item.id, name: item.name, recent: true },
+        { id: item.id, name: item.name, recent: true, features: item.features },
         ...oldSearchList
       ]
       if (recentSearchList.length > 5) {

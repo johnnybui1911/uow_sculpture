@@ -21,7 +21,7 @@ const _signOut = async props => {
     WebBrowser.dismissBrowser()
   }
   console.log('result', result)
-  if (result.type === 'opened') {
+  if (result.type === 'opened' || result.type === 'cancel') {
     await clearData('auth')
     props.handleSignOut()
     props.navigation.navigate('Auth')

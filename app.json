@@ -2,12 +2,11 @@
   "expo": {
     "name": "UOW Sculptures",
     "slug": "ExpoUOWS",
-    "scheme": "uowac-sculpture",
+    "scheme": "uow-sculptures",
     "privacy": "public",
     "sdkVersion": "33.0.0",
-    "scheme": "myapp",
     "ios": {
-      "bundleIdentifier": "com.UOW.UOWSculpture",
+      "bundleIdentifier": "com.UOW.UOWSculptures",
       "supportsTablet": true,
       "config": {
         "googleMapsApiKey": "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs"
@@ -17,7 +16,7 @@
       }
     },
     "android": {
-      "package": "com.UOW.UOWSculpture",
+      "package": "com.UOW.UOWSculptures",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs"

@@ -9,6 +9,7 @@ import {
 } from '../../assets/actionTypes'
 import { getData, storeData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
+import baseAxios from '../../library/api'
 
 const initialUser = {
   user: {
@@ -90,12 +91,19 @@ export const thunkSignIn = () => {
       const auth = await getData('auth')
       if (auth) {
         // send GET to back end to fetch user data
+        baseAxios
+          .get('user/me')
+          .then(res => {
+            console.log(res)
+          })
+          .catch(e => console.log(e))
         dispatch(signInSuccesful())
         dispatch(fetchUserDataThunk())
-        resolve()
+        // resolve()
       } else {
         dispatch(signInRejected())
-        reject({ errorMessage: 'Error' })
+        // console.log("error check")
+        // reject({ errorMessage: 'Error' })
       }
     })
   }

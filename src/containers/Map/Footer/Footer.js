@@ -154,6 +154,7 @@ class Footer extends React.PureComponent {
   _collapseStepList = () => {
     const { setShowSteps } = this.context
     setShowSteps(false)
+    console.log('Collapsed')
     this.drawer.closeBottomDrawer()
   }
 
@@ -416,4 +417,4 @@ export default connect(
   null,
   null,
   { forwardRef: true }
-)(withNavigation(Footer))
+)(Footer)

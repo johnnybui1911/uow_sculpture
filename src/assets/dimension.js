@@ -17,6 +17,7 @@ export const STATUS_BAR_HEIGHT =
     : Constants.statusBarHeight === 0
     ? Constants.statusBarHeight
     : 24
+
 export const MIN_TABVIEW_HEIGHT =
   SCREEN_HEIGHT -
   (TOP_TAB_BAR_HEIGHT + BOTTOM_TAB_BAR_HEIGHT + STATUS_BAR_HEIGHT) // fix status bar, plus status bar height in tab view height an scroll height

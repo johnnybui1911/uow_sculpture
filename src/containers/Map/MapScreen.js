@@ -549,6 +549,7 @@ class MapScreen extends React.PureComponent {
               showMapOnly={showMapOnly}
               steps={steps}
               centered={centered}
+              navigation={this.props.navigation}
               _navigateToDetail={this._navigateToDetail}
               _centerUserLocation={this._centerUserLocation}
             />

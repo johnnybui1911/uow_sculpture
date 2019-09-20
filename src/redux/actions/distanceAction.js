@@ -23,12 +23,12 @@ export const fetchDistanceRejected = () => {
   return { type: FETCH_DISTANCE_REJECTED, payload: { isLoading: false } }
 }
 
-export const fetchDistanceMatrix = (userCoord = null, newData = null) => {
+export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
   return (dispatch, getState) => {
-    let userCoordinate = userCoord
-    if (!userCoord) {
-      userCoordinate = getState().locationReducer.userCoordinate
-    }
+    // let userCoordinate = userCoord
+    // if (!userCoord) {
+    //   userCoordinate = getState().locationReducer.userCoordinate
+    // }
     const { markers } = getState().markerReducer
     let initialData = newData
     if (!newData || markers) {
@@ -79,7 +79,9 @@ export const fetchDistanceMatrix = (userCoord = null, newData = null) => {
           return { distanceMatrix, enteredMarkers }
         })
         .then(({ distanceMatrix, enteredMarkers }) => {
-          dispatch({ type: OPEN_MODAL, enteredMarkers })
+          // if (enteredMarkers.length > 0) {
+          //   dispatch({ type: OPEN_MODAL, enteredMarkers })
+          // }
           dispatch(fetchDistanceSuccessful(distanceMatrix))
         })
         .catch(error => {

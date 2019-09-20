@@ -2,7 +2,7 @@ import { OPEN_MODAL, CLOSE_MODAL } from '../../assets/actionTypes'
 import { storeData } from '../../library/asyncStorage'
 
 const initialState = {
-  isCongratModalVisible: true,
+  isCongratModalVisible: false,
   enteredMarkers: []
 }
 

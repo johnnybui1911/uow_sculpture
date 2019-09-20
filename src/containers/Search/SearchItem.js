@@ -17,8 +17,8 @@ const SearchItem = ({
   _onMarkerPressed,
   markerMatrix
 }) => {
-  const animatedName = item.name.slice(0, searchText.length)
-  const originalName = item.name.slice(searchText.length, item.name.length)
+  // const animatedName = item.name.slice(0, searchText.length)
+  // const originalName = item.name.slice(searchText.length, item.name.length)
 
   const onItemClick = () => {
     let selectedItem = item
@@ -79,19 +79,17 @@ const SearchItem = ({
           }}
         >
           <Text numberOfLines={1} style={[styles.title]}>
-            <Text
+            {/* <Text
               style={[
                 styles.title,
                 { color: palette.secondaryTypographyColor }
               ]}
             >
               {animatedName}
-            </Text>
-            {originalName}
+            </Text> */}
+            {item.name}
           </Text>
-          {!item.recent && (
-            <Text style={[styles.description]}>{item.features.maker}</Text>
-          )}
+          <Text style={[styles.description]}>{item.features.maker}</Text>
         </View>
         <View
           style={{

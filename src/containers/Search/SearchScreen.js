@@ -71,11 +71,15 @@ class SearchScreen extends React.PureComponent {
     let validData = markers
     let data = []
     if (searchText.trim().length > 0) {
-      data = validData.filter(
-        item =>
-          item.name.toLowerCase().slice(0, searchText.length) ===
-          searchText.toLowerCase()
-      )
+      data = validData.filter(item => {
+        return (
+          item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1 ||
+          item.features.maker.toLowerCase().indexOf(searchText.toLowerCase()) >
+            -1
+        )
+        // return (item.name.toLowerCase().slice(0, searchText.length) ===
+        // searchText.toLowerCase())
+      })
     } else {
       data = recentSearchList
     }

@@ -17,7 +17,7 @@ export default ({ step }) => {
   } = step
   const distance =
     value >= 1000
-      ? numeral(distance.value).format('0.0 a') + 'ilometer'
+      ? numeral(value).format('0.0 a') + 'ilometer'
       : `${value} meters`
   const instruction = decodeStepInstruction(html_instructions)
   return (
