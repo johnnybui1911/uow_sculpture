@@ -23,13 +23,13 @@ const TitleCard = props => {
     return null
   }
   return (
-    <View style={cardStyle}>
+    <View style={[cardStyle, { paddingBottom: 4, paddingTop: 16 }]}>
       {renderDistance()}
       <Text numberOfLines={2} style={styles.title}>
         {item.name}
       </Text>
       <Divider />
-      <LikeComment markerId={item.id} />
+      <LikeComment markerId={item.id} style={{ marginTop: -12 }} />
     </View>
   )
 }

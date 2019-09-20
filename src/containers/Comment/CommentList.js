@@ -57,7 +57,12 @@ class CommentList extends React.PureComponent {
           {photoURL ? (
             <Image
               source={images.profile}
-              style={{ width: 40, height: 40, borderRadius: 40 / 2 }}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 40 / 2,
+                backgroundColor: '#F6F6F6'
+              }}
             />
           ) : (
             <View
@@ -89,15 +94,14 @@ class CommentList extends React.PureComponent {
               alignItems: 'flex-end'
             }}
           >
-            <Text style={[styles.title, { fontSize: 16 }]}>{item.userId}</Text>
-            <FontAwesome
-              name="circle"
-              size={3}
-              color={palette.secondaryTypographyColor}
-              style={{ paddingHorizontal: 6, paddingBottom: 7 }}
-            />
+            <Text style={[styles.title, { fontSize: 14, marginRight: 5 }]}>
+              {item.name}
+            </Text>
             <Text
-              style={[styles.description, { fontSize: 12, paddingBottom: 1 }]}
+              style={[
+                styles.description,
+                { fontSize: 13, paddingBottom: 0.75, color: 'rgb(136,136,136)' }
+              ]}
             >
               {moment(item.submitDate)
                 .fromNow()
@@ -106,7 +110,12 @@ class CommentList extends React.PureComponent {
                 : moment(item.submitDate).fromNow()}
             </Text>
           </View>
-          <Text style={[styles.description_cmt, { marginBottom: 3 }]}>
+          <Text
+            style={[
+              styles.description_cmt,
+              { marginBottom: 3, fontSize: 14, opacity: 0.9 }
+            ]}
+          >
             {item.text}
           </Text>
         </View>
@@ -125,12 +134,12 @@ class CommentList extends React.PureComponent {
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ marginVertical: 12 }} />}
+        ItemSeparatorComponent={() => <View style={{ marginVertical: 8 }} />}
         refreshing={refreshing}
         onRefresh={this._handleRefresh}
         contentContainerStyle={{
           paddingHorizontal: 24,
-          paddingBottom: 60 + 24
+          paddingBottom: 60 + 16
         }}
         ListHeaderComponentStyle={{ marginHorizontal: -24 }}
         ListHeaderComponent={() => {
@@ -140,9 +149,9 @@ class CommentList extends React.PureComponent {
               <View
                 style={{
                   flex: 1,
-                  paddingVertical: 18,
-                  paddingHorizontal: 24,
-                  paddingTop: 18 + 6 // if no header rendered
+                  paddingVertical: 16,
+                  paddingHorizontal: 24
+                  // paddingTop: 18 + 6 // if no header rendered
                 }}
               >
                 <Text style={styles.flatListHeader}>Comments</Text>

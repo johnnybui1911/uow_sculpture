@@ -35,7 +35,7 @@ const cardDes = {
 
 const imageContainer = {
   position: 'absolute',
-  backgroundColor: palette.backgroundColorWhite,
+  backgroundColor: palette.backgroundTabColor,
   borderRadius: 12,
   elevation: 5
 }
@@ -128,7 +128,8 @@ export default StyleSheet.create({
   image: {
     width: 120,
     height: 120,
-    borderRadius: 12
+    borderRadius: 12,
+    backgroundColor: palette.backgroundTabColor
   },
   imageContainer,
   searchBox: {
@@ -160,14 +161,17 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 12,
     marginVertical: 10,
-    height: 51,
+    height: 60,
     ...shadowStyle
   },
   card: {
-    padding: 24,
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingTop: 20,
+    paddingBottom: 20,
     backgroundColor: palette.backgroundColorWhite,
     borderRadius: 12,
-    height: 126,
+    // height: 126,
     ...shadowStyle
   },
   contentBox: {

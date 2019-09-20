@@ -7,9 +7,9 @@ export default {
   primaryTypographyColor: '#0C2340',
   secondaryTypographyColor: '#B9B9B9',
   secondaryTypographyStrongColor: '#A1A1A1',
-  backgroundTabColor: '#EBEBEB',
+  backgroundTabColor: '#F6F6F6',
   facebookColor: '#3B5998',
   dividerColor: '#F4F4F6',
   borderGreyColor: '#D9D9D6',
-  dividerColorNew: 'rgba(0,0,0,0.3)'
+  dividerColorNew: 'rgba(0,0,0,0.15)'
 }

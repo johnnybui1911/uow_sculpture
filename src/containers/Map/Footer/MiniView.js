@@ -76,7 +76,10 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
               <Text style={styles.description}>{selectedMarker.duration} min</Text> */}
             </View>
             <Divider styles={{ marginVertical: 12 }} />
-            <LikeComment markerId={selectedMarker.id} />
+            <LikeComment
+              markerId={selectedMarker.id}
+              style={{ marginBottom: -12 }}
+            />
           </View>
           <View
             style={{

@@ -100,13 +100,20 @@ class Header extends React.PureComponent {
           <View style={[styles.imageItem]}>
             <Image
               source={images.empty_image}
-              style={{ width: 84, height: 84 }}
+              style={{ width: 120, height: 75, backgroundColor: '#F6F6F6' }}
               resizeMode="contain"
             />
           </View>
         )}
 
-        <BackButton _goBack={this._goBack} />
+        <BackButton
+          _goBack={this._goBack}
+          style={
+            imageList.length > 0
+              ? { color: 'white' }
+              : { color: '#3A3A3A', opacity: 0.7 }
+          }
+        />
       </View>
     )
   }

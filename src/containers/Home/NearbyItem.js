@@ -102,8 +102,11 @@ class NearbyItem extends React.PureComponent {
             {!item.photoURL ? (
               <Image
                 source={images.empty_image}
-                resizeMode="contain"
-                style={[styles.imageNearbyItem, { width: 84, height: 84 }]}
+                resizeMode="cover"
+                style={[
+                  styles.imageNearbyItem,
+                  { width: 120, height: 75, backgroundColor: '#F6F6F6' }
+                ]}
               />
             ) : (
               <Image

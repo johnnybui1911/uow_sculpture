@@ -98,13 +98,21 @@ class CommentScreen extends React.PureComponent {
             paddingLeft: 12
           }}
         >
-          <Text style={[styles.title, { fontSize: 16, marginBottom: 3 }]}>
-            {username}
-          </Text>
-          <Text style={[styles.description_cmt, { marginBottom: 3 }]}>
+          <Text style={[styles.title, { fontSize: 14 }]}>{username}</Text>
+          <Text
+            style={[
+              styles.description_cmt,
+              { marginBottom: 3, fontSize: 14, opacity: 0.9 }
+            ]}
+          >
             {text}
           </Text>
-          <Text style={[styles.description, { fontSize: 12 }]}>
+          <Text
+            style={[
+              styles.description,
+              { fontSize: 13, color: 'rgb(136,136,136)' }
+            ]}
+          >
             {moment(submitDate).fromNow()}
           </Text>
         </View>
@@ -124,7 +132,9 @@ class CommentScreen extends React.PureComponent {
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <DividerLight />}
+        ItemSeparatorComponent={() => (
+          <DividerLight style={{ backgroundColor: 'rgba(0,0,0,0.15)' }} />
+        )}
         refreshing={refreshing}
         onRefresh={this._handleRefresh}
         contentContainerStyle={{ padding: 24 }}

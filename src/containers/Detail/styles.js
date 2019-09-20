@@ -54,7 +54,7 @@ export default StyleSheet.create({
     zIndex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: palette.backgroundTabColor
+    backgroundColor: '#F6F6F6'
     // borderBottomRightRadius: 12
     // borderBottomLeftRadius: 12
   },
@@ -82,7 +82,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   title: {
-    fontSize: 36,
+    fontSize: 30,
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold'
   },

@@ -14,7 +14,7 @@ const PopularItem = props => {
         style={{
           marginLeft: index === 0 ? 24 : 0,
           marginRight: 12,
-          backgroundColor: palette.backgroundTabColor,
+          backgroundColor: '#F6F6F6',
           borderRadius: 12,
           elevation: 2,
           justifyContent: 'center',
@@ -27,8 +27,11 @@ const PopularItem = props => {
         {!item.photoURL ? (
           <Image
             source={images.empty_image}
-            resizeMode="contain"
-            style={[styles.imagePopularItem, { width: 42, height: 42 }]}
+            resizeMode="cover"
+            style={[
+              styles.imagePopularItem,
+              { width: 120, height: 75, backgroundColor: '#F6F6F6' }
+            ]}
           />
         ) : (
           <Image
@@ -38,7 +41,14 @@ const PopularItem = props => {
         )}
         <View style={styles.popularItemDetail}>
           <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
-            <Text numberOfLines={2} style={styles.secondaryTitle}>
+            <Text
+              numberOfLines={2}
+              style={
+                item.photoURL
+                  ? styles.secondaryTitle
+                  : styles.secondaryTitleNoShadow
+              }
+            >
               {item.name}
             </Text>
           </View>

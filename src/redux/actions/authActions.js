@@ -101,25 +101,25 @@ export const thunkSignIn = () => {
   }
 }
 
-export const refreshNewToken = async () => {
-  const auth = await getData('auth')
-  const { token, refresh_token, expires_in } = JSON.parse(auth)
+// export const refreshNewToken = async () => {
+//   const auth = await getData('auth')
+//   const { token, refresh_token, expires_in } = JSON.parse(auth)
 
-  const response = await axios({
-    method: 'POST',
-    url: `${AUTH0_DOMAIN}/oauth/token`,
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    data: qs.stringify({
-      grant_type: 'refresh_token',
-      client_id: AUTH0_CLIENT_ID,
-      refresh_token: refresh_token
-    })
-  })
+//   const response = await axios({
+//     method: 'POST',
+//     url: `${AUTH0_DOMAIN}/oauth/token`,
+//     headers: { 'content-type': 'application/x-www-form-urlencoded' },
+//     data: qs.stringify({
+//       grant_type: 'refresh_token',
+//       client_id: AUTH0_CLIENT_ID,
+//       refresh_token: refresh_token
+//     })
+//   })
 
-  const new_auth = {
-    token: response.data.access_token,
-    refresh_token,
-    expires_in: response.data.expires_in
-  }
-  await storeData('auth', JSON.stringify(new_auth))
-}
+//   const new_auth = {
+//     token: response.data.access_token,
+//     refresh_token,
+//     expires_in: response.data.expires_in
+//   }
+//   await storeData('auth', JSON.stringify(new_auth))
+// }

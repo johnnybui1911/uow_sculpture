@@ -19,6 +19,8 @@ export const DirectionIcon = maneuver => (
   />
 )
 
+const socialSize = 18
+
 export const icons = {
   noun_arrow: (
     <CustomIcon name="noun-arrow" size={24} color={palette.primaryColorLight} />
@@ -85,7 +87,9 @@ export const icons = {
   exchange: (
     <CustomIcon name="exchange-arrows" size={24} color={palette.primaryColor} />
   ),
-  back: <CustomIcon name="back" size={24} color="#fff" />,
+  back: props => (
+    <CustomIcon name="back" size={24} style={{ ...props.style }} />
+  ),
   back_blue: <CustomIcon name="back" size={24} color={palette.primaryColor} />,
   back_blue_light: (
     <CustomIcon
@@ -194,21 +198,41 @@ export const icons = {
     <CustomIcon name="micro" size={20} color={palette.primaryColorLight} />
   ),
   like: (
-    <CustomIcon name="heart-o" size={16} color={palette.backgroundColorWhite} />
+    <CustomIcon
+      name="heart-o"
+      size={socialSize}
+      color={palette.backgroundColorWhite}
+    />
   ),
   like_fill_white: (
-    <CustomIcon name="heart-f" size={16} color={palette.backgroundColorWhite} />
+    <CustomIcon
+      name="heart-f"
+      size={socialSize}
+      color={palette.backgroundColorWhite}
+    />
   ),
   like_fill_popup: (
     <AntDesign name="heart" color={palette.backgroundColorWhite} size={60} />
   ),
   like_outline: (
-    <CustomIcon name="heart-o" size={16} color={palette.primaryColorLight} />
+    <CustomIcon
+      name="heart-o"
+      size={socialSize}
+      color={palette.primaryColorLight}
+    />
   ),
   like_fill: (
-    <CustomIcon name="heart-f" size={16} color={palette.secondaryColor} />
+    <CustomIcon
+      name="heart-f"
+      size={socialSize}
+      color={palette.secondaryColor}
+    />
   ),
   comment: (
-    <CustomIcon name="comment-o" size={16} color={palette.primaryColorLight} />
+    <CustomIcon
+      name="comment-o"
+      size={socialSize}
+      color={palette.primaryColorLight}
+    />
   )
 }
