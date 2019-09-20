@@ -54,6 +54,7 @@ class SignInScreen extends React.Component {
       // console.log(response)
       const { refresh_token, expires_in, access_token } = response.params
       const auth = { token: access_token, refresh_token, expires_in }
+      console.log(auth)
       // console.log(response)
       await storeData('auth', JSON.stringify(auth))
       this.props.signInSuccesful()

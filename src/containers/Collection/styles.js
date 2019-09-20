@@ -27,6 +27,7 @@ const cardDes = {
   height: 144,
   borderRadius: 12,
   paddingRight: 10,
+  justifyContent: 'center',
   ...shadowStyle
 }
 

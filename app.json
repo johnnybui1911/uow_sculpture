@@ -2,6 +2,7 @@
   "expo": {
     "name": "UOW Sculpture",
     "slug": "ExpoUOWS",
+    "scheme": "uowac-sculpture",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "ios": {

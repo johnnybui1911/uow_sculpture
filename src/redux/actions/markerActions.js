@@ -9,6 +9,8 @@ import {
   UNLIKE
 } from '../../assets/actionTypes'
 import baseAxios from '../../library/api'
+import geofencingRegion from '../../containers/Map/Background/geofencingRegion'
+import { syncLocationThunk } from './locationActions'
 import { fetchDistanceMatrix } from './distanceAction'
 
 function capitalizeFirstLetter(string) {
@@ -99,6 +101,9 @@ export const fetchDataThunk = () => {
         })
         .then(newData => {
           dispatch(fetchDataSuccessful(newData))
+          dispatch(fetchDistanceMatrix(null, newData))
+          // dispatch(syncLocationThunk(newData))
+          geofencingRegion(newData)
           resolve({ data: newData })
         })
         .catch(e => {

@@ -34,24 +34,26 @@ const SearchView = ({
             flex: 1,
             // paddingVertical: 16,
             width: '100%',
-            paddingLeft: 10
+            paddingLeft: 10,
+            paddingRight: 10
           }}
         >
           <Text
+            numberOfLines={1}
             style={[
               styles.placeholder,
               {
                 color:
-                  searchText.trim() !== ''
+                  searchText !== ''
                     ? palette.primaryColor
                     : palette.secondaryTypographyColor
               }
             ]}
           >
-            {searchText.trim() !== '' ? searchText : 'Enter keywords..'}.
+            {searchText !== '' ? searchText : 'Enter keywords..'}
           </Text>
         </View>
-        {searchText.trim() !== '' ? (
+        {searchText !== '' ? (
           <TouchableWithoutFeedback onPress={_onClosePressed}>
             <View
               style={{

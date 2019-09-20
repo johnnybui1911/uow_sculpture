@@ -4,7 +4,6 @@ import {
   SYNC_LOCATION_SUCCESSFULL,
   SYNC_LOCATION_REJECTED
 } from '../../assets/actionTypes'
-import { fetchDataThunk } from './markerActions'
 import { fetchDistanceMatrix } from './distanceAction'
 
 export const syncLocationSuccessful = userCoordinate => {
@@ -33,8 +32,10 @@ export const syncLocationThunk = data => {
               const { latitude, longitude } = loc.coords
               dispatch(syncLocationSuccessful({ latitude, longitude }))
               dispatch(fetchDistanceMatrix(loc.coords, data))
+              resolve()
             } else {
               dispatch(syncLocationRejected())
+              reject()
             }
           }
         )

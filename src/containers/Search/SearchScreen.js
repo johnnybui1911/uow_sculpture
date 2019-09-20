@@ -5,7 +5,8 @@ import {
   TouchableWithoutFeedback,
   Text,
   Animated,
-  Keyboard
+  Keyboard,
+  BackHandler
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -21,6 +22,24 @@ class SearchScreen extends React.PureComponent {
   }
 
   scrollY = new Animated.Value(0)
+
+  componentDidMount = () => {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress
+    )
+    const searchText = this.props.navigation.getParam('searchText', '')
+    searchText !== '' && this.setState({ searchText })
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.goBack()
+    return true
+  }
 
   _handleSearch = event => {
     const { text } = event.nativeEvent
@@ -49,10 +68,7 @@ class SearchScreen extends React.PureComponent {
     const { isLoading, recentSearchList, markers, navigation } = this.props
     const { searchText, refreshing } = this.state
     const _onMarkerPressed = navigation.getParam('_onMarkerPressed', null) // reuse in Map Screen
-    let validData = markers.filter(item => item.coordinate.latitude)
-    // if (_onMarkerPressed) {
-    //   validData = validData.filter(item => item.coordinate.latitude)
-    // }
+    let validData = markers
     let data = []
     if (searchText.trim().length > 0) {
       data = validData.filter(
@@ -97,11 +113,11 @@ class SearchScreen extends React.PureComponent {
           />
         )}
         ListHeaderComponent={() => {
-          return (
+          return searchText === '' ? (
             <View style={{ flex: 1, paddingBottom: 5, paddingHorizontal: 10 }}>
               <Text style={styles.flatListHeader}>RECENT</Text>
             </View>
-          )
+          ) : null
         }}
       />
     )

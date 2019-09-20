@@ -74,6 +74,7 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-Medium'
   },
   flatList: {
+    flex: 1,
     width: '100%'
   },
   title: {

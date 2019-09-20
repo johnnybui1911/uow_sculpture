@@ -203,7 +203,10 @@ class Footer extends React.PureComponent {
       <View>
         <TouchableWithoutFeedback
           onPress={() =>
-            this.props.navigation.navigate('Detail', { id: selectedMarker.id })
+            this.props.navigation.navigate('Detail', {
+              id: selectedMarker.id,
+              goBackMap: true
+            })
           }
         >
           <Animated.View

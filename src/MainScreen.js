@@ -1,7 +1,13 @@
 import React from 'react'
-import { Platform, StatusBar, View, SafeAreaView, Text } from 'react-native'
+import {
+  Platform,
+  StatusBar,
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity
+} from 'react-native'
 import Modal from 'react-native-modal'
-import Constants from 'expo-constants'
 import { connect } from 'react-redux'
 import {
   syncLocationThunk,
@@ -9,21 +15,20 @@ import {
   fetchDataThunk,
   fetchDistanceMatrix
 } from './redux/actions'
-import {
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT
-} from './assets/dimension'
+import { STATUS_BAR_HEIGHT } from './assets/dimension'
 import { AppContainer } from './navigations/AppStack'
 import IntroScreen from './containers/Introduction/IntroScreen'
 import palette from './assets/palette'
+import { icons } from './assets/icons'
+import CongratModal from './components/CongratModal/CongratModal'
 
 // TODO: just swipe up, not swipe down
 class MainScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      isModalVisible: true
+      isModalVisible: true,
+      isCongratModalVisible: true
     }
   }
 
@@ -34,7 +39,12 @@ class MainScreen extends React.PureComponent {
     // this.props.thunkSignIn()
   }
 
+  _closeModal = () => {
+    this.setState({ isCongratModalVisible: false })
+  }
+
   render() {
+    const { isCongratModalVisible } = this.state
     return (
       <SafeAreaView style={{ flex: 1 }}>
         {Platform.OS === 'android' ? (
@@ -71,6 +81,10 @@ class MainScreen extends React.PureComponent {
         >
           <IntroScreen />
         </Modal> */}
+        <CongratModal
+          isCongratModalVisible={isCongratModalVisible}
+          closeModal={this._closeModal}
+        />
       </SafeAreaView>
     )
   }

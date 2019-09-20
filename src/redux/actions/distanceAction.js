@@ -3,7 +3,8 @@ import axios from 'axios'
 import {
   FETCH_DISTANCE_SUCCESSFUL,
   FETCH_DISTANCE_PENDING,
-  FETCH_DISTANCE_REJECTED
+  FETCH_DISTANCE_REJECTED,
+  OPEN_MODAL
 } from '../../assets/actionTypes'
 import { DISTANCE_MATRIX_API, GOOGLE_MAPS_APIKEY } from '../../library/maps'
 
@@ -22,8 +23,12 @@ export const fetchDistanceRejected = () => {
   return { type: FETCH_DISTANCE_REJECTED, payload: { isLoading: false } }
 }
 
-export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
+export const fetchDistanceMatrix = (userCoord = null, newData = null) => {
   return (dispatch, getState) => {
+    let userCoordinate = userCoord
+    if (!userCoord) {
+      userCoordinate = getState().locationReducer.userCoordinate
+    }
     const { markers } = getState().markerReducer
     let initialData = newData
     if (!newData || markers) {
@@ -48,6 +53,7 @@ export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
         .then(mapData => {
           const distance_duration_array = mapData.rows[0].elements
           const distanceMatrix = {}
+          let enteredMarkers = []
           data.forEach((marker, index) => {
             const { distance, duration } = distance_duration_array[index]
             const { id } = marker
@@ -57,11 +63,23 @@ export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
 
               duration: Math.floor(duration.value / 60)
             }
+            if (distance.value <= 10) {
+              enteredMarkers = [
+                ...enteredMarkers,
+                {
+                  id,
+                  name: marker.name,
+                  coordinate: marker.coordinate,
+                  photoURL: marker.photoURL
+                }
+              ]
+            }
           })
 
-          return distanceMatrix
+          return { distanceMatrix, enteredMarkers }
         })
-        .then(distanceMatrix => {
+        .then(({ distanceMatrix, enteredMarkers }) => {
+          dispatch({ type: OPEN_MODAL, enteredMarkers })
           dispatch(fetchDistanceSuccessful(distanceMatrix))
         })
         .catch(error => {

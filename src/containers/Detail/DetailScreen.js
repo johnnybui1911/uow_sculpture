@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, View, ScrollView } from 'react-native'
+import { SafeAreaView, View, ScrollView, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 import { Notifications } from 'expo'
 import { localData } from '../../library/localData'
@@ -47,9 +47,17 @@ class DetailScreen extends React.PureComponent {
   }
 
   componentDidMount = () => {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack()
+      return true
+    })
     this._notificationSubscription = Notifications.addListener(notification =>
       _handleNotification(notification, this.props.navigation)
     )
+  }
+
+  componentWillUnmount = () => {
+    this.backHandler.remove()
   }
 
   _navigateToMap = () => {

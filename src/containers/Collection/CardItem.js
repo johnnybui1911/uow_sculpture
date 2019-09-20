@@ -17,7 +17,7 @@ import formatDistance from '../../library/formatDistance'
 import LikeComment from '../../components/LikeComment/LikeComment'
 
 const CardItem = props => {
-  const { item, index, isLoading = false, distanceMatrix } = props
+  const { item, index, isLoading = false, distanceMatrix, inProfile } = props
 
   const renderImage = () => {
     const { photoURL } = item
@@ -74,7 +74,7 @@ const CardItem = props => {
             </Placeholder>
           ) : (
             <React.Fragment>
-              <View style={{}}>
+              <View style={{ justifyContent: 'center' }}>
                 <Text style={styles.distance}>
                   {distanceMatrix[item.id]
                     ? formatDistance(distanceMatrix[item.id].distance)
@@ -88,7 +88,7 @@ const CardItem = props => {
                   {item.features.maker}
                 </Text>
               </View>
-              <LikeComment markerId={item.id} />
+              {!inProfile && <LikeComment markerId={item.id} />}
             </React.Fragment>
           )}
         </View>

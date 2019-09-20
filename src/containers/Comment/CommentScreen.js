@@ -17,43 +17,28 @@ import CommentList from './CommentList'
 import images from '../../assets/images'
 import palette from '../../assets/palette'
 import { SCREEN_WIDTH } from '../../assets/dimension'
+import { addComment } from '../../redux/actions/authActions'
 
 const localComments = [
   {
-    userId: 1,
-    name: 'Cristiano Ronaldo',
-    photoURL: 1,
-    text: 'Hello',
-    submitDate: new Date(2019, 5, 24, 10, 33, 30)
+    sculptureId: 1986.058,
+    userId: 'hnb133',
+    content: 'Hello',
+    createdTime: new Date(2019, 5, 24, 10, 33, 30)
   },
   {
-    userId: 2,
-    name: 'David Beckham',
-    text:
+    sculptureId: 1987.08,
+    userId: 'hnb134',
+    content:
       'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    submitDate: new Date(2019, 5, 29, 10, 33, 30)
+    createdTime: new Date(2019, 5, 29, 10, 33, 30)
   },
   {
-    userId: 1,
-    name: 'Cristiano Ronaldo',
-    photoURL: 1,
-    text:
+    sculptureId: 1987.081,
+    userId: 'hnb135',
+    content:
       'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    submitDate: new Date(2019, 5, 29, 10, 33, 30)
-  },
-  {
-    userId: 2,
-    name: 'David Beckham',
-    text:
-      'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    submitDate: new Date(2019, 5, 29, 10, 33, 30)
-  },
-  {
-    userId: 1,
-    name: 'Cristiano Ronaldo',
-    photoURL: 1,
-    text: 'Hello',
-    submitDate: new Date()
+    createdTime: new Date()
   }
 ]
 
@@ -91,41 +76,45 @@ class CommentScreen extends React.PureComponent {
     inputHeight: new Animated.Value(TEXT_INPUT_HEIGHT)
   }
 
-  _textInput = null
+  _contentInput = null
 
   _onSubmit = () => {
-    const { item } = this.props
+    const sculptureId = this.props.navigation.getParam('id', 1986.058)
+    const { user } = this.props
     const { inputValue } = this.state
 
     // send post API to back end
     const postData = {
-      userId: 1,
-      name: 'Cristiano Ronaldo',
-      sculptureId: item.id,
-      text: inputValue,
-      submitDate: new Date(),
-      photoURL: 1
+      userId: user.userId,
+      sculptureId,
+      content: inputValue,
+      createdTime: new Date()
     }
     localComments.push(postData)
+    this.props.addComment(postData)
 
     this.setState({ inputValue: '' })
-    // this._textInput.clear() // can not clear text input during typing with keyboard
-    // this._textInput.setNativeProps({ text: '' })
     Keyboard.dismiss()
   }
 
   render() {
-    // const id = this.props.navigation.getParam('id', -1)
-    // const item = id === -1 ? this.props.item : this.props.markerMatrix[id]
     const { inputValue, inputHeight } = this.state
+    const comments = localComments
+      .map(item => {
+        return {
+          userId: item.userId,
+          sculptureId: item.sculptureId,
+          text: item.content,
+          submitDate: item.createdTime
+        }
+      })
+      .sort((a, b) => {
+        return b.submitDate - a.submitDate
+      })
+
     return (
       <SafeAreaView style={styles.container}>
-        <CommentList
-          comments={localComments.sort((a, b) => {
-            return b.submitDate - a.submitDate
-          })}
-          navigation={this.props.navigation}
-        />
+        <CommentList comments={comments} navigation={this.props.navigation} />
         <View
           style={{
             position: 'absolute',
@@ -174,9 +163,9 @@ class CommentScreen extends React.PureComponent {
               }}
               multiline
               numberOfLines={4}
-              ref={component => (this._textInput = component)}
+              ref={component => (this._contentInput = component)}
               value={inputValue}
-              onChangeText={text => this.setState({ inputValue: text })}
+              onChangeText={content => this.setState({ inputValue: content })}
               placeholder="Add a comment"
               style={{
                 flex: 1,
@@ -211,7 +200,15 @@ class CommentScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
-  markerMatrix: getState.markerReducer.markerMatrix
+  markerMatrix: getState.markerReducer.markerMatrix,
+  user: getState.authReducer.user
 })
 
-export default connect(mapStateToProps)(CommentScreen)
+const mapDispatchToProps = {
+  addComment
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentScreen)

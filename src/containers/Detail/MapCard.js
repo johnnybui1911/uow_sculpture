@@ -1,44 +1,64 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
-import MapView, { UrlTile, Marker } from 'react-native-maps'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
+import { withNavigation } from 'react-navigation'
+import MapView, { UrlTile, Marker, Callout } from 'react-native-maps'
 import styles from './styles'
 import images from '../../assets/images'
 import { icons } from '../../assets/icons'
+import { URL_TEMPLATE } from '../../library/maps'
 
-export default function MapCard(props) {
-  const { item, _navigateToMap, elevation } = props
+export default withNavigation(function MapCard(props) {
+  const { item, elevation } = props
   const cardStyle = [styles.card, { elevation, marginBottom: 3 }]
   const region = {
     ...item.coordinate,
     latitudeDelta: 0.0066,
     longitudeDelta: 0.004
   }
+
+  const _navigateToMap = () => {
+    const goBackMap = props.navigation.getParam('goBackMap', false)
+    goBackMap
+      ? props.navigation.goBack()
+      : props.navigation.navigate('Map', { detailMarker: item, showTab: false })
+  }
+
   return (
     <View style={cardStyle}>
       <Text style={[styles.title, { fontSize: 20 }]}>Map</Text>
-      <MapView
-        style={{ flex: 1, height: 350, marginVertical: 14 }}
-        mapType="none"
-        initialRegion={region}
-        showsCompass={false}
-        scrollEnabled={false}
-        loadingEnabled
+      <View
+        style={{
+          flex: 1,
+          height: 350,
+          borderRadius: 12,
+          overflow: 'hidden',
+          marginVertical: 14
+        }}
       >
-        <UrlTile
-          urlTemplate="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieW53dyIsImEiOiJjanlyNmg4dDYwN3Z6M210a3E2ZmJoemprIn0.yDLDtTyLhPBSI_qnjes0kw"
-          maximumZ={19}
-          zIndex={-1}
-        />
-        <Marker zIndex={1} coordinate={item.coordinate}>
-          <View
-            style={{
-              paddingBottom: 5
-            }}
-          >
-            {icons.marker}
-          </View>
-        </Marker>
-      </MapView>
+        <MapView
+          style={{ flex: 1 }}
+          mapType={Platform.OS === 'android' ? 'none' : 'standard'}
+          provider={Platform.OS === 'ios' ? 'google' : null}
+          initialRegion={region}
+          showsCompass={false}
+          scrollEnabled={false}
+          loadingEnabled
+          zoomEnabled={false}
+        >
+          {Platform.OS === 'android' && (
+            <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />
+          )}
+          <Marker zIndex={1} coordinate={item.coordinate}>
+            <View
+              style={{
+                paddingBottom: 5
+              }}
+            >
+              {icons.marker}
+            </View>
+          </Marker>
+        </MapView>
+      </View>
       <TouchableOpacity onPress={_navigateToMap} style={[styles.button]}>
         <View style={{ flex: 1 }}>
           <Text style={[styles.titleButton]}>SHOW MAP</Text>
@@ -46,4 +66,4 @@ export default function MapCard(props) {
       </TouchableOpacity>
     </View>
   )
-}
+})

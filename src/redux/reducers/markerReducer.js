@@ -7,7 +7,9 @@ import {
   LIKE,
   UNLIKE,
   SIGN_IN_SUCCESSFULL,
-  SIGN_IN_REJECTED
+  SIGN_IN_REJECTED,
+  FETCH_USER_DATA_SUCCESSFULL,
+  ADD_COMMENT
 } from '../../assets/actionTypes'
 
 const initialState = {
@@ -23,15 +25,22 @@ const markerReducer = (state = initialState, action) => {
     case FETCH_DATA_SUCCESSFUL: {
       const { data, isLoading } = action.payload
       const markerMatrix = {}
-      const statisticMatrix = {}
+      const { statisticMatrix } = state
       data.forEach(element => {
         const { id, likeCount, commentCount } = element
-        if (!state.statisticMatrix[id]) {
+        if (!statisticMatrix[id]) {
           statisticMatrix[id] = {
             id,
             likeCount,
             commentCount,
             isLiked: false
+          }
+        } else {
+          statisticMatrix[id] = {
+            id,
+            likeCount,
+            commentCount,
+            isLiked: statisticMatrix[id].isLiked
           }
         }
         markerMatrix[id] = {
@@ -81,7 +90,16 @@ const markerReducer = (state = initialState, action) => {
       return { ...state, statisticMatrix: { ...statisticMatrix } } // updating data immutably
     }
 
-    case SIGN_IN_SUCCESSFULL: {
+    case ADD_COMMENT: {
+      const {
+        comment: { sculptureId }
+      } = action.payload
+      const { statisticMatrix } = state
+      statisticMatrix[sculptureId].commentCount++
+      return { ...state, statisticMatrix: { ...statisticMatrix } }
+    }
+
+    case FETCH_USER_DATA_SUCCESSFULL: {
       // after already fetch statisticaMatrix from backend data
       const { statisticMatrix } = state
       const { likeList } = action.payload

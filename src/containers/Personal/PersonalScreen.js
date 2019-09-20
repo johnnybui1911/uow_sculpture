@@ -1,6 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
-import { SafeAreaView, View, Animated } from 'react-native'
+import { SafeAreaView, View, Animated, RefreshControl } from 'react-native'
+import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
 import styles from './styles'
 import palette from '../../assets/palette'
@@ -9,6 +10,7 @@ import AboutScreen from './AboutScreen'
 import CommentScreen from './CommentScreen'
 import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
+import { fetchUserDataThunk } from '../../redux/actions'
 
 const HEADER_HEIGHT = 400
 const TAB_BAR_HEIGHT = 44
@@ -27,7 +29,31 @@ class PersonalScreen extends React.PureComponent {
       { key: 'LIKE', title: 'LIKES' },
       { key: 'COMMENT', title: 'COMMENTS' },
       { key: 'ABOUT', title: 'ABOUT' }
-    ]
+    ],
+    refreshing: false
+  }
+
+  _handleRefresh = () => {
+    this.setState(
+      {
+        refreshing: true
+      },
+      () => {
+        this.props
+          .fetchUserDataThunk()
+          .then(() => {
+            this.setState({
+              refreshing: false
+            })
+          })
+          .catch(error => {
+            this.setState({
+              refreshing: false
+            })
+            console.log(error)
+          })
+      }
+    )
   }
 
   _renderHeader = props => {
@@ -51,7 +77,10 @@ class PersonalScreen extends React.PureComponent {
           transform: [{ translateY: translateY }]
         }}
       >
-        <PersonalHeader />
+        <PersonalHeader
+          refreshing={this.state.refreshing}
+          _handleRefresh={this._handleRefresh}
+        />
         <TabBar
           {...props}
           style={{
@@ -128,11 +157,17 @@ class PersonalScreen extends React.PureComponent {
     return (
       <Animated.ScrollView
         ref={refFunc}
+        // refreshControl={
+        //   <RefreshControl refreshing onRefresh={this._handleRefresh} />
+        // }
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: HEADER_HEIGHT + TAB_BAR_HEIGHT
         }}
+        // onMoveShouldSetResponder={e => {
+        //   console.log(e.nativeEvent)
+        // }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
           {
@@ -166,5 +201,15 @@ class PersonalScreen extends React.PureComponent {
     )
   }
 }
+const mapStateToProps = getState => ({
+  user: getState.authReducer.user
+})
 
-export default PersonalScreen
+const mapDispatchToProps = {
+  fetchUserDataThunk
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PersonalScreen)

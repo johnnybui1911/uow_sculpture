@@ -11,7 +11,6 @@ import {
 } from 'react-native'
 import MapView, { UrlTile, Marker, AnimatedRegion } from 'react-native-maps'
 import LottieView from 'lottie-react-native'
-import Modal from 'react-native-modal'
 import * as Location from 'expo-location'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
@@ -45,6 +44,7 @@ import {
   unselectMarker
 } from '../../redux/actions'
 import SearchView from '../../components/SearchButton/SearchView'
+import calcDistance from '../../library/calcDistance'
 
 function formatNumber(number) {
   return numeral(number).format('0[.]00000')
@@ -55,10 +55,6 @@ function compareCoordinate(coor1, coor2) {
     formatNumber(coor1.latitude) === formatNumber(coor2.latitude) &&
     formatNumber(coor1.longitude) === formatNumber(coor2.longitude)
   )
-}
-
-const calcDistance = (latLng1, latLng2) => {
-  return Math.floor(haversine(latLng1, latLng2)) || 0
 }
 
 class MapScreen extends React.PureComponent {
@@ -185,12 +181,25 @@ class MapScreen extends React.PureComponent {
     )
     this._getLocationAsync()
     this._animateLoop()
+    this._handleNavigateFromDetail()
+  }
+
+  componentDidUpdate = () => {
+    this._handleNavigateFromDetail()
   }
 
   componentWillUnmount = () => {
     this.backHandler.remove()
     this.subscribeLocation()
     this.animation.reset()
+  }
+
+  _handleNavigateFromDetail = () => {
+    const detailMarker = this.props.navigation.getParam('detailMarker', null)
+    if (detailMarker) {
+      this.props.navigation.setParams({ detailMarker: null })
+      this._onMarkerPressed(detailMarker, true)
+    }
   }
 
   userCoordinate = new AnimatedRegion({
@@ -201,7 +210,6 @@ class MapScreen extends React.PureComponent {
 
   subscribeLocation = null
 
-  progressAnimation = new Animated.Value(0)
   loopAnimate = new Animated.Value(0)
 
   _handleBackPress = () => {
@@ -225,14 +233,6 @@ class MapScreen extends React.PureComponent {
     return false
   }
 
-  _animateCeleb = () => {
-    this.progressAnimation.setValue(0)
-    Animated.timing(this.progressAnimation, {
-      toValue: 1,
-      duration: 5000
-    }).start()
-  }
-
   _animateLoop = () => {
     Animated.sequence([
       Animated.timing(this.loopAnimate, {
@@ -250,7 +250,7 @@ class MapScreen extends React.PureComponent {
       {
         accuracy: Location.Accuracy.Highest,
         timeInterval: 1,
-        distanceInterval: 10
+        distanceInterval: 1 // 1 because in map, want to show smooth animation
       },
       loc => {
         if (loc.timestamp) {
@@ -365,26 +365,26 @@ class MapScreen extends React.PureComponent {
             travelDistance >= 10 && this.props.fetchDistanceMatrix(userLocation) // each 10m, sync position again to fecth data
             // .then(res => console.log(res))
 
-            if (this.props.selectedMarker) {
-              const distance = calcDistance(
-                e.nativeEvent.coordinate,
-                this.props.selectedMarker.coordinate
-              )
+            // if (this.props.selectedMarker) {
+            //   const distance = calcDistance(
+            //     e.nativeEvent.coordinate,
+            //     this.props.selectedMarker.coordinate
+            //   )
 
-              if (distance <= 20) {
-                const message = {
-                  title: 'Congratulation',
-                  body: 'You have finished your trip !!!',
-                  data: {
-                    screen: 'Detail',
-                    id: this.props.selectedMarker.id
-                  }
-                }
-                this._animateCeleb()
-                this.setState({ isModalVisible: true })
-                _sendLocalNotification(message)
-              }
-            }
+            //   if (distance <= 20) {
+            //     const message = {
+            //       title: 'Congratulation',
+            //       body: 'You have finished your trip !!!',
+            //       data: {
+            //         screen: 'Detail',
+            //         id: this.props.selectedMarker.id
+            //       }
+            //     }
+            //     this._animateCeleb()
+            //     this.setState({ isModalVisible: true })
+            //     _sendLocalNotification(message)
+            //   }
+            // }
           }}
         >
           <View style={{ padding: 35 }}>
@@ -408,14 +408,23 @@ class MapScreen extends React.PureComponent {
     this.setState({ searchText: text.trim() })
   }
 
-  _onMarkerPressed = marker => {
-    const { id, name } = marker
+  _onMarkerPressed = (marker, centerToMarker = false) => {
+    const { region } = this.state
+    const {
+      id,
+      name,
+      coordinate: { latitude, longitude }
+    } = marker
     if (
       (!this.props.selectedMarker || this.props.selectedMarker.id !== id) &&
       !this.state.showDirection
     ) {
       if (this.props.navigation.getParam('showTab', true)) {
         this.props.navigation.setParams({ showTab: false })
+      }
+      if (centerToMarker) {
+        const userRegion = { ...region, latitude, longitude }
+        this.map.animateToRegion(userRegion)
       }
       this.props.handleSelectMarker(marker)
       this.setState({ searchText: name.trim(), showMapOnly: false })
@@ -499,7 +508,8 @@ class MapScreen extends React.PureComponent {
                 _onClosePressed={this._onClosePressed}
                 navigateTo={() => {
                   this.props.navigation.navigate('Search', {
-                    _onMarkerPressed: this._onMarkerPressed
+                    _onMarkerPressed: this._onMarkerPressed,
+                    searchText: this.state.searchText
                   })
                 }}
               />
@@ -542,90 +552,6 @@ class MapScreen extends React.PureComponent {
               _navigateToDetail={this._navigateToDetail}
               _centerUserLocation={this._centerUserLocation}
             />
-
-            {this.state.isModalVisible && (
-              <View
-                style={{
-                  position: 'absolute',
-                  height: STATUS_BAR_HEIGHT,
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  backgroundColor: '#000000',
-                  zIndex: 100,
-                  opacity: 0.7
-                }}
-              />
-            )}
-            <Modal
-              isVisible={this.state.isModalVisible}
-              animationIn="zoomInDown"
-              animationInTiming={1000}
-              onSwipeComplete={() => this._resetUI()}
-              swipeDirection={['up', 'left', 'right', 'down']}
-              onBackdropPress={() => this._resetUI()}
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <LottieView
-                ref={animation => {
-                  this.animation = animation
-                }}
-                style={{
-                  zIndex: 99,
-                  elevation: 20,
-                  transform: [{ scale: (1.1, 1.4) }]
-                }}
-                source={animations.confetti}
-                progress={this.progressAnimation}
-              />
-              <View
-                style={{
-                  zIndex: 900,
-                  backgroundColor: '#fff',
-                  borderRadius: 26,
-                  height: 200,
-                  width: 240,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  elevation: 10
-                }}
-              >
-                <View style={{ position: 'absolute', top: -55 }}>
-                  {icons.trophy}
-                </View>
-                <View
-                  style={{
-                    marginTop: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={[styles.title, { fontSize: 20 }]}>
-                    Congratulation
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    height: 44,
-                    borderRadius: 26,
-                    width: 140,
-                    backgroundColor: palette.primaryColorLight,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 30,
-                    zIndex: 100
-                  }}
-                  onPress={() => {
-                    this._navigateToDetail(this.props.selectedMarker)
-                  }}
-                >
-                  <Text style={styles.titleButton}>PROCEED</Text>
-                </TouchableOpacity>
-              </View>
-            </Modal>
           </MapContext.Provider>
         </SafeAreaView>
       )

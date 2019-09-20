@@ -19,20 +19,26 @@ const SearchItem = ({
 }) => {
   const animatedName = item.name.slice(0, searchText.length)
   const originalName = item.name.slice(searchText.length, item.name.length)
+
   const onItemClick = () => {
     let selectedItem = item
     insertSearchItem(selectedItem)
     if (_onMarkerPressed) {
-      if (!item.coordinate) {
+      if (item.recent) {
         // Check for recent search item
         selectedItem = markerMatrix[item.id] //FIXME: will fix later by using object matrix
       }
-      _onMarkerPressed(selectedItem)
-      navigation.navigate('Map', { showTab: false })
+      if (selectedItem.coordinate.latitude) {
+        _onMarkerPressed(selectedItem, true)
+        navigation.navigate('Map', { showTab: false })
+      } else {
+        navigation.navigate('Detail', { id: item.id })
+      }
     } else {
       navigation.navigate('Detail', { id: item.id })
     }
   }
+
   return (
     <TouchableWithoutFeedback
       style={{
@@ -72,7 +78,7 @@ const SearchItem = ({
             paddingBottom: item.recent ? 6 : 0
           }}
         >
-          <Text style={[styles.title]}>
+          <Text numberOfLines={1} style={[styles.title]}>
             <Text
               style={[
                 styles.title,

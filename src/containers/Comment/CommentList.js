@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, FlatList, Image, Text } from 'react-native'
+import { connect } from 'react-redux'
 import moment from 'moment'
 import styles from './styles'
 import images from '../../assets/images'
@@ -8,6 +9,7 @@ import { icons } from '../../assets/icons'
 import { FontAwesome } from '@expo/vector-icons'
 import palette from '../../assets/palette'
 import Header from './Header'
+import { withNavigation } from 'react-navigation'
 
 class CommentList extends React.PureComponent {
   constructor(props) {
@@ -42,6 +44,7 @@ class CommentList extends React.PureComponent {
   }
 
   _renderItem = ({ item }) => {
+    const photoURL = null
     return (
       <View
         style={{
@@ -51,7 +54,7 @@ class CommentList extends React.PureComponent {
         }}
       >
         <View style={[]}>
-          {item.photoURL ? (
+          {photoURL ? (
             <Image
               source={images.profile}
               style={{ width: 40, height: 40, borderRadius: 40 / 2 }}
@@ -69,7 +72,7 @@ class CommentList extends React.PureComponent {
               }}
             >
               <Text style={[styles.title, { color: '#FFF' }]}>
-                {item.name.charAt(0)}
+                {item.userId.toUpperCase().charAt(0)}
               </Text>
             </View>
           )}
@@ -86,7 +89,7 @@ class CommentList extends React.PureComponent {
               alignItems: 'flex-end'
             }}
           >
-            <Text style={[styles.title, { fontSize: 16 }]}>{item.name}</Text>
+            <Text style={[styles.title, { fontSize: 16 }]}>{item.userId}</Text>
             <FontAwesome
               name="circle"
               size={3}
@@ -133,7 +136,7 @@ class CommentList extends React.PureComponent {
         ListHeaderComponent={() => {
           return (
             <View style={{ flex: 1 }}>
-              <Header />
+              {/* <Header /> */}
               <View
                 style={{
                   flex: 1,

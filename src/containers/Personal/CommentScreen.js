@@ -13,6 +13,7 @@ import styles from './styles'
 import images from '../../assets/images'
 import DividerLight from '../../components/Divider/DividerLight'
 import { MIN_TABVIEW_HEIGHT } from '../../assets/dimension'
+import palette from '../../assets/palette'
 
 const localComments = [
   {
@@ -82,7 +83,12 @@ class CommentScreen extends React.PureComponent {
         <View style={[]}>
           <Image
             source={photoURL ? { uri: photoURL } : images.empty_image}
-            style={{ width: 60, height: 60, borderRadius: 4 }}
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 4,
+              backgroundColor: palette.backgroundTabColor
+            }}
           />
         </View>
         <View
@@ -111,8 +117,10 @@ class CommentScreen extends React.PureComponent {
     const { commentList } = this.props
     return (
       <FlatList
-        data={commentList}
-        keyExtractor={(item, index) => item.sculptureId.toString()}
+        data={commentList.sort((a, b) => {
+          return b.submitDate - a.submitDate
+        })}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}

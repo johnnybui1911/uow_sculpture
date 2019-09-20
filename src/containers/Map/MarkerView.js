@@ -24,30 +24,7 @@ class MarkerView extends React.PureComponent {
 
   render() {
     const { marker, selectedMarker } = this.props
-    if (selectedMarker) {
-      if (marker.id !== selectedMarker.id) {
-        return (
-          <Marker
-            zIndex={1}
-            tracksViewChanges={false}
-            coordinate={marker.coordinate}
-            onPress={() => this.props._onMarkerPressed(marker)}
-          >
-            <View
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 30,
-                backgroundColor: 'rgba(167,164,164,0.3)',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <View style={styles.unselected_marker} />
-            </View>
-          </Marker>
-        )
-      }
+    if (selectedMarker && marker.id === selectedMarker.id) {
       return (
         <Marker
           zIndex={1}

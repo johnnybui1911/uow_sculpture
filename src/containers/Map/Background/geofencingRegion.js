@@ -2,7 +2,6 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { Platform } from 'react-native'
 import { GEOFENCING_TASK } from './TaskManager'
-import { localData } from '../../../library/localData'
 
 export default async (data = []) => {
   const {

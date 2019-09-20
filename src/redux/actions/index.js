@@ -1,4 +1,4 @@
-import { thunkSignIn, signInSuccesful } from './authActions'
+import { thunkSignIn, signInSuccesful, fetchUserDataThunk } from './authActions'
 import { syncLocationThunk } from './locationActions'
 import { insertSearchItem, storeAsyncSearch } from './searchActions'
 import {
@@ -21,5 +21,6 @@ export {
   unselectMarker,
   selectMarker,
   _like,
-  _unlike
+  _unlike,
+  fetchUserDataThunk
 }

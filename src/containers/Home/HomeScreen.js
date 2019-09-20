@@ -1,5 +1,11 @@
 import React from 'react'
-import { SafeAreaView, Text, View, ScrollView } from 'react-native'
+import {
+  SafeAreaView,
+  Text,
+  View,
+  ScrollView,
+  RefreshControl
+} from 'react-native'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
 import {
@@ -15,8 +21,24 @@ import PopularList from './PopularList'
 import NearbyItem from './NearbyItem'
 import PopularItem from './PopularItem'
 import { _handleNotification } from '../../library/notificationTask'
+import { fetchDataThunk } from '../../redux/actions'
 
 class HomeScreen extends React.PureComponent {
+  state = {
+    refreshing: false
+  }
+
+  _onRefresh = () => {
+    this.setState({ refreshing: true }, () => {
+      this.props
+        .fetchDataThunk()
+        .then(() => {
+          this.setState({ refreshing: false })
+        })
+        .catch(() => this.setState({ refreshing: false }))
+    })
+  }
+
   componentDidMount = () => {
     this._notificationSubscription = Notifications.addListener(notification =>
       _handleNotification(notification, this.props.navigation)
@@ -62,7 +84,15 @@ class HomeScreen extends React.PureComponent {
     const popularData = matrixData
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+        >
           <HeaderBar headerName="Home" />
           <View style={styles.nearbyView}>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
@@ -126,4 +156,11 @@ const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix
 })
 
-export default connect(mapStateToProps)(HomeScreen)
+const mapDispatchToProps = {
+  fetchDataThunk
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeScreen)

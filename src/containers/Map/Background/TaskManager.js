@@ -40,15 +40,14 @@ TaskManager.defineTask(
       })
       console.log("You've entered region:", region)
     } else if (eventType === Location.GeofencingEventType.Exit) {
-      _sendLocalNotification({
-        title: `Left ${name}`,
-        body: `${region.latitude}, ${region.longitude}`,
-        data: {
-          screen: 'Map'
-        }
-      })
-
-      console.log("You've left region:", region)
+      // _sendLocalNotification({
+      //   title: `Left ${name}`,
+      //   body: `${region.latitude}, ${region.longitude}`,
+      //   data: {
+      //     screen: 'Map'
+      //   }
+      // })
+      // console.log("You've left region:", region)
     }
   }
 )

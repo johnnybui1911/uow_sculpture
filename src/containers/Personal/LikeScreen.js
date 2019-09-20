@@ -7,30 +7,27 @@ import CardItem from '../Collection/CardItem'
 // import CardItem from './CardItem'
 
 class LikeScreen extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      data: []
-    }
-  }
-
-  componentDidMount = () => {
-    this.setState({ data: localData })
+  state = {
+    refreshing: false
   }
 
   _renderItem = ({ item, index }) => {
     const { markerMatrix } = this.props
-    const sculptureItem = markerMatrix[item.sculptureId]
-    return <CardItem item={sculptureItem} index={index} />
+    const sculptureItem = markerMatrix[item.id]
+    return <CardItem item={sculptureItem} index={index} inProfile />
   }
 
   _renderList = () => {
-    // const { data } = this.state
-    const { likeList } = this.props
+    const { refreshing } = this.state
+    const { statisticMatrix } = this.props
+    let likeList = []
+    Object.entries(statisticMatrix).forEach(([key, value]) => {
+      value.isLiked && likeList.push(value)
+    })
     return (
       <FlatList
         data={likeList}
-        keyExtractor={(item, index) => item.sculptureId.toString()}
+        keyExtractor={(item, index) => item.id.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
@@ -40,13 +37,13 @@ class LikeScreen extends React.PureComponent {
   }
 
   render() {
-    return <View style={{ flex: 1 }}>{this._renderList()}</View>
+    return this._renderList()
   }
 }
 
 const mapStateToProps = getState => ({
-  likeList: getState.authReducer.likeList,
-  markerMatrix: getState.markerReducer.markerMatrix
+  markerMatrix: getState.markerReducer.markerMatrix,
+  statisticMatrix: getState.markerReducer.statisticMatrix
 })
 
 export default connect(mapStateToProps)(LikeScreen)
