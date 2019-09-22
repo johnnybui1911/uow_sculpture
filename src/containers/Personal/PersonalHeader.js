@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -18,73 +19,94 @@ const PersonalHeader = ({
   refreshing,
   _handleRefresh,
   likeUserCount,
-  commentUserCount
+  commentUserCount,
+  visitUserCount
 }) => {
   return user ? (
     <View style={styles.profileFixedContainer}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={_handleRefresh} />
-        }
-      >
-        <View style={styles.headerContainer}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.headerTitle}>Profile</Text>
-          </View>
-          <TouchableOpacity style={styles.box}>
-            <Text style={styles.titleButton}>EDIT</Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginVertical: 15
-          }}
+      {user.userId ? (
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={_handleRefresh}
+            />
+          }
         >
+          <View style={styles.headerContainer}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.headerTitle}>Profile</Text>
+            </View>
+            <TouchableOpacity style={styles.box}>
+              <Text style={styles.titleButton}>EDIT</Text>
+            </TouchableOpacity>
+          </View>
           <View
             style={{
-              height: 100,
-              width: 100,
+              flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: 100 / 2,
-              backgroundColor: palette.primaryColor,
-              overflow: 'hidden'
+              marginVertical: 15
             }}
           >
-            <Image source={images.profile} resizeMode="center" />
-          </View>
-          <View style={{ marginTop: 15 }}>
-            <Text
-              style={[
-                styles.title,
-                { fontSize: 24, color: palette.backgroundColorWhite }
-              ]}
+            <View
+              style={{
+                height: 100,
+                width: 100,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 100 / 2,
+                backgroundColor: palette.primaryColor,
+                overflow: 'hidden'
+              }}
             >
-              {user.username}
-            </Text>
+              <Image
+                source={{ uri: user.picture }}
+                style={{ height: 100, width: 100 }}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={{ marginTop: 15 }}>
+              <Text
+                style={[
+                  styles.title,
+                  { fontSize: 24, color: palette.backgroundColorWhite }
+                ]}
+              >
+                {user.username}
+              </Text>
+            </View>
           </View>
+          <ProfileBox
+            likes={likeUserCount}
+            comments={commentUserCount}
+            visited={visitUserCount}
+          />
+        </ScrollView>
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <ActivityIndicator color={palette.backgroundColorWhite} />
         </View>
-        <ProfileBox
-          likes={likeUserCount}
-          comments={commentUserCount}
-          visited={user.visited}
-        />
-      </ScrollView>
+      )}
     </View>
   ) : null
 }
 
 const mapStateToProps = getState => {
-  const { user, commentList } = getState.authReducer
-  const { statisticMatrix } = getState.markerReducer
+  const { user, commentList, visitList } = getState.authReducer
+  const { markerMatrix } = getState.markerReducer
   let likeUserCount = 0
-  Object.entries(statisticMatrix).forEach(([key, value]) => {
-    value.isLiked && likeUserCount++
+  Object.entries(markerMatrix).forEach(([key, value]) => {
+    value.likeId && likeUserCount++
   })
-  return { user, likeUserCount, commentUserCount: commentList.length }
+  return {
+    user,
+    likeUserCount,
+    commentUserCount: commentList.length,
+    visitUserCount: visitList.length
+  }
 }
 
 export default connect(mapStateToProps)(PersonalHeader)

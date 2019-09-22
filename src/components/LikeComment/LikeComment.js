@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { icons } from '../../assets/icons'
 import styles from './styles'
 import { _like, _unlike } from '../../redux/actions'
+import baseAxios from '../../library/api'
 
 class LikeComment extends React.PureComponent {
   constructor(props) {
@@ -13,31 +14,66 @@ class LikeComment extends React.PureComponent {
   }
 
   onPress = () => {
-    const { markerId, statisticMatrix, _like, _unlike, loggedIn } = this.props
-    const statItem = statisticMatrix[markerId]
+    const { markerMatrix, markerId, _like, _unlike, loggedIn } = this.props
     if (loggedIn) {
-      if (statItem && !statItem.isLiked) {
-        _like(markerId)
-        this.animatedValue.setValue(1.4)
-        Animated.spring(this.animatedValue, {
-          toValue: 1,
-          friction: 2
-        }).start()
+      if (!markerMatrix[markerId].likeId) {
+        this._handleLike()
       } else {
-        _unlike(markerId)
-        this.animatedValue.setValue(1)
+        this._handleUnlike()
       }
     } else {
       this.props.navigation.navigate('Profile')
     }
   }
 
+  _handleUnlike = () => {
+    const { markerId, markerMatrix, _like, _unlike } = this.props
+    const { likeId } = markerMatrix[markerId]
+    // this.animatedValue.setValue(1)
+    if (likeId === 'temp') {
+      _unlike(markerId)
+    } else {
+      if (likeId) {
+        baseAxios
+          .delete(`like/${likeId}`)
+          .then(res => {
+            _unlike(markerId)
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
+    }
+  }
+
+  _handleLike = () => {
+    const { markerId, _like, _unlike } = this.props
+    // _like(markerId, 'temp')
+
+    baseAxios
+      .post('like', {
+        sculptureId: markerId
+      })
+      .then(res => res.data)
+      .then(resData => {
+        const { likeId } = resData
+        _like(markerId, likeId)
+        // this.animatedValue.setValue(1.4)
+        // Animated.spring(this.animatedValue, {
+        //   toValue: 1,
+        //   friction: 2
+        // }).start()
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
   render() {
     const animatedStyle = {
       transform: [{ scale: this.animatedValue }]
     }
-    const { markerId, statisticMatrix, style } = this.props
-    const statItem = statisticMatrix[markerId]
+    const { markerId, style, markerMatrix } = this.props
     return (
       <View
         style={{
@@ -55,17 +91,14 @@ class LikeComment extends React.PureComponent {
         >
           <TouchableWithoutFeedback onPress={this.onPress}>
             <Animated.View style={[animatedStyle, styles.socialIconStyle]}>
-              {statItem && statItem.isLiked
+              {markerMatrix[markerId].likeId
                 ? icons.like_fill
                 : icons.like_outline}
             </Animated.View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={this.onPress}>
             <Text style={[styles.numberStyle, styles.likeNumberSpecial]}>
-              {statItem &&
-                (statItem.isLiked
-                  ? statItem.likeCount + 1
-                  : statItem.likeCount)}
+              {markerMatrix[markerId].likeCount}
             </Text>
           </TouchableWithoutFeedback>
         </View>
@@ -89,7 +122,7 @@ class LikeComment extends React.PureComponent {
             }
           >
             <Text style={[styles.numberStyle]}>
-              {statItem && statItem.commentCount}
+              {markerMatrix[markerId].commentCount}
             </Text>
           </TouchableWithoutFeedback>
         </View>
@@ -100,8 +133,8 @@ class LikeComment extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix,
-  statisticMatrix: getState.markerReducer.statisticMatrix,
-  loggedIn: getState.authReducer.loggedIn
+  loggedIn: getState.authReducer.loggedIn,
+  markerMatrix: getState.markerReducer.markerMatrix
 })
 
 const mapDispatchToProps = {

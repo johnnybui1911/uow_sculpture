@@ -12,17 +12,15 @@ class LikeScreen extends React.PureComponent {
   }
 
   _renderItem = ({ item, index }) => {
-    const { markerMatrix } = this.props
-    const sculptureItem = markerMatrix[item.id]
-    return <CardItem item={sculptureItem} index={index} inProfile />
+    return <CardItem item={item} index={index} inProfile />
   }
 
   _renderList = () => {
     const { refreshing } = this.state
-    const { statisticMatrix } = this.props
+    const { markerMatrix } = this.props
     let likeList = []
-    Object.entries(statisticMatrix).forEach(([key, value]) => {
-      value.isLiked && likeList.push(value)
+    Object.entries(markerMatrix).forEach(([key, value]) => {
+      value.likeId && likeList.push(value)
     })
     return (
       <FlatList
@@ -42,8 +40,7 @@ class LikeScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
-  markerMatrix: getState.markerReducer.markerMatrix,
-  statisticMatrix: getState.markerReducer.statisticMatrix
+  markerMatrix: getState.markerReducer.markerMatrix
 })
 
 export default connect(mapStateToProps)(LikeScreen)

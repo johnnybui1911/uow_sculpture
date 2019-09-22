@@ -375,13 +375,13 @@ class Footer extends React.PureComponent {
                 }}
               >
                 <Text style={styles.minuteStyle}>
-                  {distanceMatrix[selectedMarker.id]
+                  {distanceMatrix && distanceMatrix[selectedMarker.id]
                     ? distanceMatrix[selectedMarker.id].duration + ' min '
                     : ''}
                 </Text>
                 <Text style={styles.distance_grey}>
                   (
-                  {distanceMatrix[selectedMarker.id]
+                  {distanceMatrix && distanceMatrix[selectedMarker.id]
                     ? formatDistance(distanceMatrix[selectedMarker.id].distance)
                     : ''}
                   )

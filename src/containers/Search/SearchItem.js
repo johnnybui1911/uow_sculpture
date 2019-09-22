@@ -39,6 +39,7 @@ const SearchItem = ({
     }
   }
 
+  const newItem = { ...markerMatrix[item.id], recent: item.recent }
   return (
     <TouchableWithoutFeedback
       style={{
@@ -63,10 +64,10 @@ const SearchItem = ({
             width: 50
           }}
         >
-          {item.recent ? icons.clock : icons.marker_fill_w}
+          {newItem.recent ? icons.clock : icons.marker_fill_w}
           <Text style={styles.distance}>
-            {!item.recent && distanceMatrix[item.id]
-              ? formatDistance(distanceMatrix[item.id].distance)
+            {!newItem.recent && distanceMatrix && distanceMatrix[newItem.id]
+              ? formatDistance(distanceMatrix[newItem.id].distance)
               : ''}
           </Text>
         </View>
@@ -75,7 +76,7 @@ const SearchItem = ({
             flex: 1,
             justifyContent: 'center',
             paddingHorizontal: 12,
-            paddingBottom: item.recent ? 6 : 0
+            paddingBottom: newItem.recent ? 6 : 0
           }}
         >
           <Text numberOfLines={1} style={[styles.title]}>
@@ -87,9 +88,9 @@ const SearchItem = ({
             >
               {animatedName}
             </Text> */}
-            {item.name}
+            {newItem.name}
           </Text>
-          <Text style={[styles.description]}>{item.features.maker}</Text>
+          <Text style={[styles.description]}>{newItem.features.maker}</Text>
         </View>
         <View
           style={{

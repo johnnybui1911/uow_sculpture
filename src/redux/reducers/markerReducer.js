@@ -16,43 +16,33 @@ const initialState = {
   markerMatrix: {},
   markers: [],
   selectedMarker: null,
-  isLoading: true,
-  statisticMatrix: {}
+  isLoading: true
 }
 
 const markerReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DATA_SUCCESSFUL: {
       const { data, isLoading } = action.payload
-      const markerMatrix = {}
-      const { statisticMatrix } = state
+      const { markerMatrix } = state
       data.forEach(element => {
         const { id, likeCount, commentCount } = element
-        if (!statisticMatrix[id]) {
-          statisticMatrix[id] = {
-            id,
-            likeCount,
-            commentCount,
-            isLiked: false
+        if (!markerMatrix[id]) {
+          markerMatrix[id] = {
+            ...element,
+            likeId: null
           }
         } else {
-          statisticMatrix[id] = {
-            id,
-            likeCount,
-            commentCount,
-            isLiked: statisticMatrix[id].isLiked
+          markerMatrix[id] = {
+            ...element,
+            likeId: markerMatrix[id].likeId
           }
-        }
-        markerMatrix[id] = {
-          ...element
         }
       })
       return {
         ...state,
         isLoading,
         markers: data,
-        statisticMatrix: { ...statisticMatrix },
-        markerMatrix
+        markerMatrix: { ...markerMatrix }
       }
     }
 
@@ -76,56 +66,69 @@ const markerReducer = (state = initialState, action) => {
     }
 
     case LIKE: {
-      const { statisticMatrix } = state
-      const { id } = action
-      statisticMatrix[id].isLiked = true
-
-      return { ...state, statisticMatrix: { ...statisticMatrix } } // updating data immutably
+      const { markerMatrix } = state
+      const { id, likeId } = action
+      markerMatrix[id].likeId = likeId
+      markerMatrix[id].likeCount++
+      return {
+        ...state,
+        markerMatrix: { ...markerMatrix }
+      } // updating data immutably
     }
 
     case UNLIKE: {
-      const { statisticMatrix } = state
+      const { markerMatrix } = state
       const { id } = action
-      statisticMatrix[id].isLiked = false
-      return { ...state, statisticMatrix: { ...statisticMatrix } } // updating data immutably
+      markerMatrix[id].likeId = null
+      markerMatrix[id].likeCount--
+      return {
+        ...state,
+        markerMatrix: { ...markerMatrix }
+      } // updating data immutably
     }
 
     case ADD_COMMENT: {
       const {
         comment: { sculptureId }
       } = action.payload
-      const { statisticMatrix } = state
-      statisticMatrix[sculptureId].commentCount++
-      return { ...state, statisticMatrix: { ...statisticMatrix } }
+      const { markerMatrix } = state
+      markerMatrix[sculptureId] = {
+        ...markerMatrix[sculptureId],
+        commentCount: markerMatrix[sculptureId].commentCount + 1
+      }
+      return {
+        ...state,
+        markerMatrix: {
+          ...markerMatrix
+        }
+      }
     }
 
     case FETCH_USER_DATA_SUCCESSFULL: {
       // after already fetch statisticaMatrix from backend data
-      const { statisticMatrix } = state
+      const { markerMatrix } = state
       const { likeList } = action.payload
       likeList.forEach(element => {
-        let { sculptureId } = element
-        let { likeCount, commentCount } = statisticMatrix[sculptureId]
-        statisticMatrix[sculptureId] = {
-          id: sculptureId,
-          likeCount,
-          commentCount,
-          isLiked: true
-        }
+        let { sculptureId, likeId } = element
+        markerMatrix[sculptureId].likeId = likeId
       })
-      return { ...state, statisticMatrix: { ...statisticMatrix } }
+      return {
+        ...state,
+        markerMatrix: { ...markerMatrix }
+      }
     }
 
     case SIGN_IN_REJECTED: {
-      const { statisticMatrix } = state
-      Object.entries(statisticMatrix).forEach(([key, value]) => {
-        statisticMatrix[key] = {
-          ...value,
-          isLiked: false
-        }
+      const { markerMatrix } = state
+
+      Object.entries(markerMatrix).forEach(([key, value]) => {
+        markerMatrix[key].likeId = null
       })
 
-      return { ...state, statisticMatrix: { ...statisticMatrix } }
+      return {
+        ...state,
+        markerMatrix: { ...markerMatrix }
+      }
     }
 
     default:

@@ -37,8 +37,8 @@ export const unselectMarker = () => {
   return { type: MARKER_UNSELECTED }
 }
 
-export const _like = id => {
-  return { type: LIKE, id }
+export const _like = (id, likeId) => {
+  return { type: LIKE, id, likeId }
 }
 
 export const _unlike = id => {
@@ -67,7 +67,10 @@ export const fetchDataThunk = () => {
               creditLine,
               locationNotes,
               primaryMaker: { firstName, lastName },
-              images
+              images,
+              totalLikes,
+              totalVisits,
+              totalComments
             } = marker
             const newMarker = {
               id: accessionId,
@@ -92,8 +95,9 @@ export const fetchDataThunk = () => {
               imageList: images,
               distance: '',
               duration: '',
-              likeCount: Math.floor(Math.random() * 100) + 1,
-              commentCount: Math.floor(Math.random() * 20) + 1
+              likeCount: Number(totalLikes),
+              commentCount: Number(totalComments),
+              visitCount: Number(totalVisits)
             }
             return newMarker
           })

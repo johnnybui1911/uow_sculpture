@@ -11,16 +11,7 @@ import { getData, storeData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 import baseAxios from '../../library/api'
 
-const initialUser = {
-  user: {
-    userId: 'hnb133',
-    username: 'Cristiano Ronaldo',
-    email: 'cristiano@gmail.com',
-    joinDate: new Date('October 13, 2014'),
-    comments: 3,
-    visited: 3
-  }
-}
+const initialUser = {}
 
 const userData = {
   likeList: [
@@ -58,7 +49,7 @@ export const fetchUserDataRejected = () => {
 }
 
 export const signInSuccesful = (userAuth = initialUser) => {
-  return { type: SIGN_IN_SUCCESSFULL, payload: { ...userAuth } }
+  return { type: SIGN_IN_SUCCESSFULL, payload: { user: userAuth } }
 }
 
 export const signInRejected = () => {
@@ -69,18 +60,49 @@ export const addComment = comment => {
   return { type: ADD_COMMENT, payload: { comment } }
 }
 
-export const fetchUserDataThunk = () => {
-  return dispatch => {
+export const fetchUserDataThunk = initialUserId => {
+  return (dispatch, getState) => {
+    const user = getState().authReducer.user
+    const userId = initialUserId ? initialUserId : user.userId
     return new Promise(async (resolve, reject) => {
-      // const auth = await getData('auth')
-      // if (auth) {
-      //   // send GET to back end to fetch user data
-      dispatch(fetchUserDataSuccessful())
-      resolve()
-      // } else {
-      //   dispatch(fetchUserDataRejected())
-      //   reject({ errorMessage: 'Error' })
-      // }
+      try {
+        const [likeList, commentList, visitList] = await Promise.all([
+          baseAxios.get(`like/user-id/${userId}`).then(res => res.data),
+          baseAxios.get(`comment/user-id/${userId}`).then(res => res.data),
+          baseAxios.get(`visit/user-id/${userId}`).then(res => res.data)
+        ])
+
+        const formatCommentList = commentList.map(element => {
+          const {
+            commentId,
+            content,
+            user: { userId, picture },
+            sculpture: { accessionId, images },
+            updatedTime
+          } = element
+          return {
+            commentId,
+            text: content,
+            userId,
+            userImg: picture,
+            sculptureId: accessionId,
+            photoURL: images[0].url,
+            submitDate: updatedTime
+          }
+        })
+
+        dispatch(
+          fetchUserDataSuccessful({
+            likeList,
+            commentList: formatCommentList,
+            visitList
+          })
+        )
+        resolve()
+      } catch (err) {
+        console.log(err)
+        reject()
+      }
     })
   }
 }
@@ -94,11 +116,21 @@ export const thunkSignIn = () => {
         baseAxios
           .get('user/me')
           .then(res => {
-            console.log(res)
+            const { userId, name, email, joinDate, picture } = res.data
+            const user = {
+              userId,
+              username: name,
+              email,
+              joinDate,
+              picture
+            }
+            dispatch(signInSuccesful(user))
+            dispatch(fetchUserDataThunk(userId))
           })
-          .catch(e => console.log(e))
-        dispatch(signInSuccesful())
-        dispatch(fetchUserDataThunk())
+          .catch(e => {
+            console.log(e)
+            dispatch(signInRejected())
+          })
         // resolve()
       } else {
         dispatch(signInRejected())

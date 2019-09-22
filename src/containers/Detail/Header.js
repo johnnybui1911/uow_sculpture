@@ -1,5 +1,11 @@
 import React from 'react'
-import { View, TouchableWithoutFeedback, Image, Text } from 'react-native'
+import {
+  View,
+  TouchableWithoutFeedback,
+  Image,
+  Text,
+  BackHandler
+} from 'react-native'
 import Swiper from 'react-native-swiper'
 import { CustomIcon } from '../../assets/icons'
 import styles from './styles'
@@ -38,7 +44,10 @@ class Header extends React.PureComponent {
   }
 
   render() {
-    const { imageList } = this.props
+    const {
+      imageList,
+      item: { visitCount }
+    } = this.props
     const imageSlide = imageList.map(item => {
       return {
         url: item.url,
@@ -89,7 +98,7 @@ class Header extends React.PureComponent {
             </Swiper>
             <View style={styles.overlayImage}>
               <View>
-                <Text style={styles.visitorsText}>100 visitors</Text>
+                <Text style={styles.visitorsText}>{visitCount} visitors</Text>
               </View>
             </View>
           </View>

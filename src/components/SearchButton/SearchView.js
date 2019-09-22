@@ -50,7 +50,7 @@ const SearchView = ({
               }
             ]}
           >
-            {searchText !== '' ? searchText : 'Enter keywords..'}
+            {searchText !== '' ? searchText : 'Enter keywords...'}
           </Text>
         </View>
         {searchText !== '' ? (

@@ -79,7 +79,7 @@ const CardItem = props => {
               // style={{ justifyContent: 'center' }}
               >
                 <Text style={styles.distance}>
-                  {distanceMatrix[item.id]
+                  {distanceMatrix && distanceMatrix[item.id]
                     ? formatDistance(distanceMatrix[item.id].distance)
                     : ''}
                 </Text>
@@ -91,9 +91,9 @@ const CardItem = props => {
                   {item.features.maker}
                 </Text>
               </View>
-              {!inProfile && (
-                <LikeComment markerId={item.id} style={{ marginBottom: -7 }} />
-              )}
+              {/* {!inProfile && ( */}
+              <LikeComment markerId={item.id} style={{ marginBottom: -7 }} />
+              {/* )} */}
             </React.Fragment>
           )}
         </View>

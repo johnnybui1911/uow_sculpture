@@ -9,11 +9,11 @@ const baseAxios = axios.create({
 
 baseAxios.interceptors.request.use(
   async config => {
-    console.log('intercepted axios')
+    // console.log('intercepted axios')
     const rawAuth0 = await AsyncStorage.getItem('auth')
     if (rawAuth0) {
       const auth0 = JSON.parse(rawAuth0)
-      console.log('interceptor auth', auth0)
+      // console.log('interceptor auth', auth0)
       let { token, refresh_token, expireDate } = auth0
       if (token) {
         if (new Date() >= new Date(expireDate)) {
@@ -29,7 +29,7 @@ baseAxios.interceptors.request.use(
             })
           })
 
-          console.log('refresh token response', response.data)
+          // console.log('refresh token response', response.data)
           token = response.data.access_token
           expireDate = new Date(
             Date.now() + Number(response.data.expires_in) * 1000

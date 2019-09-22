@@ -19,6 +19,7 @@ import images from '../../assets/images'
 import palette from '../../assets/palette'
 import { SCREEN_WIDTH } from '../../assets/dimension'
 import { addComment } from '../../redux/actions/authActions'
+import baseAxios from '../../library/api'
 
 const localComments = [
   {
@@ -74,7 +75,42 @@ class CommentScreen extends React.PureComponent {
 
   state = {
     inputValue: '',
-    inputHeight: new Animated.Value(TEXT_INPUT_HEIGHT)
+    inputHeight: new Animated.Value(TEXT_INPUT_HEIGHT),
+    comments: []
+  }
+
+  componentDidMount = () => {
+    this._fetchCommentSculpture()
+  }
+
+  _fetchCommentSculpture = () => {
+    const sculptureId = this.props.navigation.getParam('id', 1986.058)
+    baseAxios
+      .get(`comment/sculpture-id/${sculptureId}`)
+      .then(res => res.data)
+      .then(resData => {
+        const comments = resData.map(element => {
+          const {
+            commentId,
+            content,
+            user: { userId, picture, name },
+            sculpture: { accessionId, images },
+            updatedTime
+          } = element
+          return {
+            commentId,
+            text: content,
+            userId,
+            userImg: picture,
+            userName: name,
+            sculptureId: accessionId,
+            photoURL: images[0].url,
+            submitDate: updatedTime
+          }
+        })
+        this.setState({ comments })
+      })
+      .catch(e => console.log(e))
   }
 
   _contentInput = null
@@ -84,38 +120,41 @@ class CommentScreen extends React.PureComponent {
     const { user } = this.props
     const { inputValue } = this.state
 
-    // send post API to back end
-    const postData = {
+    const postingComment = {
       userId: user.userId,
+      userImg: user.picture,
       sculptureId,
-      content: inputValue,
-      createdTime: new Date()
+      text: inputValue
     }
-    localComments.push(postData)
-    this.props.addComment(postData)
+    this.setState({ comments: [...this.state.comments, postingComment] })
+    baseAxios
+      .post('comment', {
+        sculptureId,
+        content: inputValue
+      })
+      .then(res => res.data)
+      .then(resData => {
+        this.props.addComment(resData)
+        this._fetchCommentSculpture()
+      })
 
     this.setState({ inputValue: '' })
     Keyboard.dismiss()
   }
 
   render() {
-    const { inputValue, inputHeight } = this.state
-    const comments = localComments
-      .map(item => {
-        return {
-          userId: item.userId,
-          sculptureId: item.sculptureId,
-          text: item.content,
-          submitDate: item.createdTime
-        }
-      })
-      .sort((a, b) => {
-        return b.submitDate - a.submitDate
-      })
-
+    const { inputValue, inputHeight, comments } = this.state
+    const {
+      user: { picture }
+    } = this.props
     return (
       <SafeAreaView style={styles.container}>
-        <CommentList comments={comments} navigation={this.props.navigation} />
+        <CommentList
+          comments={comments.sort((a, b) => {
+            return b.submitDate - a.submitDate
+          })}
+          navigation={this.props.navigation}
+        />
         <View
           style={{
             position: 'absolute',
@@ -129,7 +168,7 @@ class CommentScreen extends React.PureComponent {
           }}
         >
           <Image
-            source={images.profile}
+            source={{ uri: picture }}
             style={{
               width: 40,
               height: 40,

@@ -5,7 +5,7 @@ import {
 } from '../../assets/actionTypes'
 
 const initialState = {
-  distanceMatrix: {},
+  distanceMatrix: null,
   isLoading: true
 }
 

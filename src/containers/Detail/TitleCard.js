@@ -14,7 +14,7 @@ const TitleCard = props => {
     if (item.coordinate.latitude) {
       return (
         <Text style={styles.distance}>
-          {distanceMatrix[item.id]
+          {distanceMatrix && distanceMatrix[item.id]
             ? formatDistance(distanceMatrix[item.id].distance)
             : ''}
         </Text>

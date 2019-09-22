@@ -70,8 +70,7 @@ class CommentScreen extends React.PureComponent {
 
   _renderItem = ({ item }) => {
     const { markerMatrix, username } = this.props
-    const { sculptureId, text, submitDate } = item
-    const { photoURL } = markerMatrix[sculptureId]
+    const { sculptureId, text, submitDate, userId, photoURL } = item
     return (
       <View
         style={{

@@ -140,7 +140,6 @@ class CollectionScreen extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   markerMatrix: getState.markerReducer.markerMatrix,
-  markers: getState.markerReducer.markers,
   isLoading: getState.markerReducer.isLoading
 })
 

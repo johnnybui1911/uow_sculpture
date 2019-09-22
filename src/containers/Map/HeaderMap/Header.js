@@ -102,7 +102,7 @@ class Header extends React.Component {
               <View style={styles.walkingBox}>
                 {icons.walking}
                 <Text style={styles.title_sm}>
-                  {distanceMatrix[selectedMarker.id]
+                  {distanceMatrix && distanceMatrix[selectedMarker.id]
                     ? distanceMatrix[selectedMarker.id].duration
                     : ''}{' '}
                   min

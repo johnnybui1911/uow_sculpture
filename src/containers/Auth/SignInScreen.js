@@ -1,26 +1,17 @@
 import React from 'react'
-import {
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  TextInput
-} from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 import { AuthSession } from 'expo'
 import { connect } from 'react-redux'
 import styles from './styles'
 import palette from '../../assets/palette'
-import { icons } from '../../assets/icons'
 import { thunkSignIn, signInSuccesful } from '../../redux/actions/authActions'
-import MidDivider from '../../components/MidDivider/MidDivider'
 import { storeData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 import * as Crypto from 'expo-crypto'
-import * as Random from 'expo-random'
 import qs from 'qs'
 import axios from 'axios'
-import baseAxios from '../../library/api'
 const nanoid = require('nanoid/async')
+import baseAxios from '../../library/api'
 
 function toQueryString(params) {
   return Object.entries(params)
@@ -48,7 +39,7 @@ class SignInScreen extends React.Component {
 
   generateChallenge = async () => {
     const verifier = await nanoid(45)
-    console.log('verifier', verifier)
+    // console.log('verifier', verifier)
     const challenge = base64URLEncode(
       await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA256,
@@ -89,8 +80,8 @@ class SignInScreen extends React.Component {
 
     if (response.type === 'success') {
       const { code } = response.params
-      console.log('code', code)
-      console.log('verifier', this.state.verifier)
+      // console.log('code', code)
+      // console.log('verifier', this.state.verifier)
       const params = {
         method: 'POST',
         url: `${AUTH0_DOMAIN}/oauth/token`,
@@ -113,16 +104,16 @@ class SignInScreen extends React.Component {
         } = exchangeResponse.data
         const expireDate = new Date(Date.now() + Number(expires_in) * 1000)
         const auth = { token: access_token, refresh_token, expireDate }
-        console.log('final', auth)
+        // console.log('final', auth)
         await storeData('auth', JSON.stringify(auth))
 
         const profile = (await baseAxios.get('/user/me')).data
-        console.log('profile', profile)
+        // console.log('profile', profile)
       } catch (e) {
         console.log(e)
       }
 
-      this.props.signInSuccesful()
+      this.props.thunkSignIn()
       this.props.navigation.navigate('Personal')
     }
   }

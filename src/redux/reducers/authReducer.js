@@ -9,25 +9,10 @@ import {
 
 const initialState = {
   loggedIn: false,
-  user: {
-    userId: 'hnb133',
-    username: 'Cristiano Ronaldo',
-    email: 'cristiano@gmail.com',
-    joinDate: new Date('October 13, 2014'),
-    comments: 3,
-    visited: 3
-  },
-  // likeList: [
-  //   { sculptureId: 1986.058 },
-  //   { sculptureId: 1987.08 },
-  //   { sculptureId: 1987.081 }
-  // ],
+  user: {},
+  likeList: [],
+  visitList: [],
   commentList: [
-    {
-      sculptureId: 1986.058,
-      text: 'Hello',
-      submitDate: new Date(2019, 5, 24, 10, 33, 30)
-    },
     {
       sculptureId: 1987.08,
       text:
@@ -47,15 +32,20 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGN_IN_SUCCESSFULL: {
       const { user } = action.payload
-      return { ...state, loggedIn: true, user }
+      return { ...state, loggedIn: true, user: { ...user } }
     }
     case SIGN_IN_REJECTED: {
       return { ...state, loggedIn: false }
     }
 
     case FETCH_USER_DATA_SUCCESSFULL: {
-      const { commentList } = action.payload
-      return { ...state, commentList }
+      const { likeList, commentList, visitList } = action.payload
+      return {
+        ...state,
+        likeList: [...likeList],
+        commentList: [...commentList],
+        visitList: [...visitList]
+      }
     }
 
     case ADD_COMMENT: {
@@ -63,7 +53,7 @@ const authReducer = (state = initialState, action) => {
       const addComment = {
         sculptureId: comment.sculptureId,
         text: comment.content,
-        submitDate: comment.createdTime
+        submitDate: comment.updatedTime
       }
       return { ...state, commentList: [...state.commentList, addComment] }
     }

@@ -14,14 +14,18 @@ export default function DescriptionCard(props) {
         <Text style={[styles.title, { fontSize: 14, paddingBottom: 3 }]}>
           Location General Notes
         </Text>
-        <Text style={styles.description}>{item.description.location}</Text>
+        <Text style={styles.description}>
+          {!item.description.location ? 'N/A' : item.description.location}
+        </Text>
       </View>
       <Divider />
       <View>
         <Text style={[styles.title, { fontSize: 14, paddingBottom: 3 }]}>
           Credit Line
         </Text>
-        <Text style={styles.description}>{item.description.creditLine}</Text>
+        <Text style={styles.description}>
+          {!item.description.creditLine ? 'N/A' : item.description.creditLine}
+        </Text>
       </View>
     </View>
   )

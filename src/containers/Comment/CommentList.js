@@ -54,33 +54,10 @@ class CommentList extends React.PureComponent {
         }}
       >
         <View style={[]}>
-          {photoURL ? (
-            <Image
-              source={images.profile}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 40 / 2,
-                backgroundColor: '#F6F6F6'
-              }}
-            />
-          ) : (
-            <View
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 40 / 2,
-                backgroundColor: palette.secondaryTypographyStrongColor,
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center'
-              }}
-            >
-              <Text style={[styles.title, { color: '#FFF' }]}>
-                {item.userId.toUpperCase().charAt(0)}
-              </Text>
-            </View>
-          )}
+          <Image
+            source={{ uri: item.userImg }}
+            style={{ height: 40, width: 40, borderRadius: 40 }}
+          />
         </View>
         <View
           style={{
@@ -95,7 +72,7 @@ class CommentList extends React.PureComponent {
             }}
           >
             <Text style={[styles.title, { fontSize: 14, marginRight: 5 }]}>
-              {item.name}
+              {item.userName}
             </Text>
             <Text
               style={[
@@ -103,11 +80,13 @@ class CommentList extends React.PureComponent {
                 { fontSize: 13, paddingBottom: 0.75, color: 'rgb(136,136,136)' }
               ]}
             >
-              {moment(item.submitDate)
-                .fromNow()
-                .includes('a few seconds ago')
-                ? 'Just now'
-                : moment(item.submitDate).fromNow()}
+              {item.submitDate
+                ? moment(item.submitDate)
+                    .fromNow()
+                    .includes('a few seconds ago')
+                  ? 'Just now'
+                  : moment(item.submitDate).fromNow()
+                : 'Posting...'}
             </Text>
           </View>
           <Text
@@ -129,7 +108,9 @@ class CommentList extends React.PureComponent {
     return (
       <FlatList
         ref={scroll => (this.flatCommentList = scroll)}
-        data={comments}
+        data={comments.sort((a, b) => {
+          return b.submitDate - a.submitDate
+        })}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}

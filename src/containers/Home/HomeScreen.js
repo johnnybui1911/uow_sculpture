@@ -62,8 +62,7 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
-    const { isLoading, distanceMatrix, markers, markerMatrix } = this.props
-    // const data = markers
+    const { isLoading, distanceMatrix, markerMatrix } = this.props
     let matrixData = []
     Object.entries(markerMatrix).forEach(([key, value]) => {
       matrixData.push(value)
@@ -72,7 +71,7 @@ class HomeScreen extends React.PureComponent {
     const nearbyData = matrixData
       .filter(item => item.coordinate.latitude)
       .sort((itemA, itemB) => {
-        if (distanceMatrix[itemA.id]) {
+        if (distanceMatrix && distanceMatrix[itemA.id]) {
           return (
             distanceMatrix[itemA.id].distance -
             distanceMatrix[itemB.id].distance
@@ -96,7 +95,7 @@ class HomeScreen extends React.PureComponent {
           <HeaderBar headerName="Home" />
           <View style={styles.nearbyView}>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
-            {isLoading ? (
+            {isLoading || !distanceMatrix ? (
               <View style={styles.nearbyItemStyle}>
                 <Placeholder Animation={Fade}>
                   <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
@@ -111,7 +110,7 @@ class HomeScreen extends React.PureComponent {
           </View>
           <View style={[styles.popularList]}>
             <Text style={styles.listTitle}>Popular Sculptures</Text>
-            {isLoading ? (
+            {isLoading || !distanceMatrix ? (
               <View
                 style={{
                   flex: 1,
@@ -151,7 +150,6 @@ class HomeScreen extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   markerMatrix: getState.markerReducer.markerMatrix,
-  markers: getState.markerReducer.markers,
   isLoading: getState.markerReducer.isLoading,
   distanceMatrix: getState.distanceReducer.distanceMatrix
 })

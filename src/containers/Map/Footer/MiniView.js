@@ -15,6 +15,7 @@ import { SCREEN_WIDTH } from '../../../assets/dimension'
 import { MapContext } from '../context/MapContext'
 import formatDistance from '../../../library/formatDistance'
 import LikeComment from '../../../components/LikeComment/LikeComment'
+import { selectMarker } from '../../../redux/actions'
 
 const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
   const { setShowDirection } = React.useContext(MapContext)
@@ -29,30 +30,6 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
           borderTopRightRadius: 12
         }}
       >
-        {/* <View
-          style={[
-            {
-              height: 96,
-              alignItems: 'flex-end',
-              paddingHorizontal: 24,
-              paddingBottom: 12,
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-            }
-          ]}
-        >
-          <TouchableWithoutFeedback
-            onPress={() => _navigateToDetail(fakeMarker)}
-          >
-            <View style={styles.mini_image_container}>
-              <Image
-                source={{ uri: fakeMarker.photoURL }}
-                style={styles.image}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          {children}
-        </View> */}
         <View style={[styles.description_container, { paddingTop: 12 }]}>
           <View
             style={{
@@ -61,7 +38,7 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
           >
             <SwipeButton />
             <Text style={styles.distance}>
-              {distanceMatrix[selectedMarker.id]
+              {distanceMatrix && distanceMatrix[selectedMarker.id]
                 ? formatDistance(distanceMatrix[selectedMarker.id].distance)
                 : ''}
             </Text>

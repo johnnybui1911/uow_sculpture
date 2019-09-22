@@ -71,13 +71,7 @@ class DetailScreen extends React.PureComponent {
 
   render() {
     const id = this.props.navigation.getParam('id', 2015.003)
-    // const item = this.props.markers.find(item => item.id == id)
     const item = this.props.markerMatrix[id]
-    // const item =
-    //   id === -1
-    //     ? this.props.item
-    //     : this.props.markers.find(item => item.id === id)
-
     const { imageList } = item
 
     return (
@@ -100,6 +94,7 @@ class DetailScreen extends React.PureComponent {
                 elevation={5}
               />
               <Header
+                item={item}
                 imageList={imageList}
                 navigation={this.props.navigation}
               />
@@ -112,8 +107,7 @@ class DetailScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
-  markerMatrix: getState.markerReducer.markerMatrix,
-  markers: getState.markerReducer.markers
+  markerMatrix: getState.markerReducer.markerMatrix
 })
 
 export default connect(mapStateToProps)(DetailScreen)

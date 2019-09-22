@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React from 'react'
 import {
   View,
@@ -13,6 +14,7 @@ import { icons } from '../../assets/icons'
 import formatDistance from '../../library/formatDistance'
 import images from '../../assets/images'
 import { _like, _unlike } from '../../redux/actions'
+import baseAxios from '../../library/api'
 
 class NearbyItem extends React.PureComponent {
   constructor(props) {
@@ -20,35 +22,34 @@ class NearbyItem extends React.PureComponent {
     this.animatedValue = new Animated.Value(0)
   }
 
-  _handleLike = () => {
-    const {
-      item: { id },
-      _like
-    } = this.props
-
-    this.props._like(id)
-
-    //TODO: Send POST to backend
-  }
-
   _handleUnlike = () => {
-    const {
-      item: { id },
-      _like
-    } = this.props
-
-    this.props._unlike(id)
-
-    //TODO: Send POST to backend
+    const { item, _like, _unlike } = this.props
+    const markerId = item.id
+    const { likeId } = item
+    console.log(likeId)
+    if (likeId) {
+      baseAxios
+        .delete(`like/${likeId}`)
+        .then(res => {
+          _unlike(markerId)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
 
-  onLikePress = () => {
-    const { item, statisticMatrix, loggedIn } = this.props
-
-    if (loggedIn) {
-      const statItem = statisticMatrix[item.id]
-      if (statItem && !statItem.isLiked) {
-        this._handleLike()
+  _handleLike = () => {
+    const { item, _like, _unlike } = this.props
+    const markerId = item.id
+    baseAxios
+      .post('like', {
+        sculptureId: markerId
+      })
+      .then(res => res.data)
+      .then(resData => {
+        const { likeId } = resData
+        _like(markerId, likeId)
         Animated.sequence([
           Animated.spring(this.animatedValue, {
             toValue: 1,
@@ -59,6 +60,17 @@ class NearbyItem extends React.PureComponent {
             useNativeDriver: true
           })
         ]).start()
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  }
+
+  onLikePress = () => {
+    const { item, loggedIn, _like, _unlike } = this.props
+    if (loggedIn) {
+      if (!item.likeId) {
+        this._handleLike()
       } else {
         this._handleUnlike()
       }
@@ -91,8 +103,7 @@ class NearbyItem extends React.PureComponent {
   }
 
   render() {
-    const { item, navigation, distanceMatrix, statisticMatrix } = this.props
-    const statItem = statisticMatrix[item.id]
+    const { item, navigation, distanceMatrix } = this.props
     return (
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('Detail', { id: item.id })}
@@ -124,7 +135,7 @@ class NearbyItem extends React.PureComponent {
                 }}
               >
                 <Text style={styles.title}>
-                  {distanceMatrix[item.id]
+                  {distanceMatrix && distanceMatrix[item.id]
                     ? formatDistance(distanceMatrix[item.id].distance)
                     : ''}
                 </Text>
@@ -140,16 +151,11 @@ class NearbyItem extends React.PureComponent {
               >
                 <TouchableWithoutFeedback onPress={this.onLikePress}>
                   <View style={[{ marginTop: 10, padding: 5 }]}>
-                    {statItem && statItem.isLiked
-                      ? icons.like_fill_white
-                      : icons.like}
+                    {item.likeId ? icons.like_fill_white : icons.like}
                   </View>
                 </TouchableWithoutFeedback>
                 <Text style={[styles.like, { marginTop: 10 }]}>
-                  {statItem &&
-                    (statItem.isLiked
-                      ? statisticMatrix[item.id].likeCount + 1
-                      : statisticMatrix[item.id].likeCount)}
+                  {item.likeCount}
                 </Text>
               </View>
             </View>
@@ -162,8 +168,8 @@ class NearbyItem extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix,
-  statisticMatrix: getState.markerReducer.statisticMatrix,
-  loggedIn: getState.authReducer.loggedIn
+  loggedIn: getState.authReducer.loggedIn,
+  markerMatrix: getState.markerReducer.markerMatrix
 })
 
 const mapDispatchToProps = {

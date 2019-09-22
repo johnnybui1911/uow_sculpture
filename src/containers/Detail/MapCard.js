@@ -20,7 +20,7 @@ export default withNavigation(function MapCard(props) {
     const goBackMap = props.navigation.getParam('goBackMap', false)
     goBackMap
       ? props.navigation.goBack()
-      : props.navigation.navigate('Map', { detailMarker: item, showTab: false })
+      : props.navigation.navigate('Map', { detailMarker: item, showTab: false }) // FIXME: map center jf not oppen map first
   }
 
   return (
