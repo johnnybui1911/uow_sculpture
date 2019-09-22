@@ -28,6 +28,7 @@ const PersonalHeader = ({
         <ScrollView
           refreshControl={
             <RefreshControl
+              colors={[palette.primaryColorLight]}
               refreshing={refreshing}
               onRefresh={_handleRefresh}
             />

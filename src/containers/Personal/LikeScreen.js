@@ -3,7 +3,7 @@ import { SafeAreaView, View, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
 import { localData } from '../../library/localData'
-import CardItem from '../Collection/CardItem'
+import CardItem from './CardItem'
 // import CardItem from './CardItem'
 
 class LikeScreen extends React.PureComponent {
@@ -12,20 +12,20 @@ class LikeScreen extends React.PureComponent {
   }
 
   _renderItem = ({ item, index }) => {
-    return <CardItem item={item} index={index} inProfile />
+    return <CardItem id={item.sculptureId} index={index} />
   }
 
   _renderList = () => {
     const { refreshing } = this.state
-    const { markerMatrix } = this.props
-    let likeList = []
-    Object.entries(markerMatrix).forEach(([key, value]) => {
-      value.likeId && likeList.push(value)
-    })
+    const { likeList } = this.props
+    // let likeList = []
+    // Object.entries(markerMatrix).forEach(([key, value]) => {
+    //   value.likeId && likeList.push(value)
+    // })
     return (
       <FlatList
         data={likeList}
-        keyExtractor={(item, index) => item.id.toString()}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
@@ -40,7 +40,7 @@ class LikeScreen extends React.PureComponent {
 }
 
 const mapStateToProps = getState => ({
-  markerMatrix: getState.markerReducer.markerMatrix
+  likeList: getState.authReducer.likeList
 })
 
 export default connect(mapStateToProps)(LikeScreen)

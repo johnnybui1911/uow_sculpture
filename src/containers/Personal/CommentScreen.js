@@ -125,7 +125,9 @@ class CommentScreen extends React.PureComponent {
     return (
       <FlatList
         data={commentList.sort((a, b) => {
-          return b.submitDate - a.submitDate
+          return (
+            new Date(b.submitDate).getTime() - new Date(a.submitDate).getTime()
+          )
         })}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}

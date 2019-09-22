@@ -8,7 +8,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Animated,
-  StyleSheet
+  StyleSheet,
+  ActivityIndicator,
+  BackHandler
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -17,9 +19,12 @@ import { _handleNotification } from '../../library/notificationTask'
 import CommentList from './CommentList'
 import images from '../../assets/images'
 import palette from '../../assets/palette'
-import { SCREEN_WIDTH } from '../../assets/dimension'
+import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import { addComment } from '../../redux/actions/authActions'
 import baseAxios from '../../library/api'
+import HeaderBar from '../../components/Header/HeaderBar'
+import BackButton from '../../components/BackButton/BackButton'
+import { icons } from '../../assets/icons'
 
 const localComments = [
   {
@@ -76,11 +81,20 @@ class CommentScreen extends React.PureComponent {
   state = {
     inputValue: '',
     inputHeight: new Animated.Value(TEXT_INPUT_HEIGHT),
-    comments: []
+    comments: [],
+    isLoading: true
   }
 
   componentDidMount = () => {
     this._fetchCommentSculpture()
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack()
+      return true
+    })
+  }
+
+  componentWillUnmount = () => {
+    this.backHandler.remove()
   }
 
   _fetchCommentSculpture = () => {
@@ -108,9 +122,12 @@ class CommentScreen extends React.PureComponent {
             submitDate: updatedTime
           }
         })
-        this.setState({ comments })
+        this.setState({ comments, isLoading: false })
       })
-      .catch(e => console.log(e))
+      .catch(e => {
+        console.log(e)
+        this.setState({ isLoading: true })
+      })
   }
 
   _contentInput = null
@@ -143,18 +160,69 @@ class CommentScreen extends React.PureComponent {
   }
 
   render() {
-    const { inputValue, inputHeight, comments } = this.state
+    const { inputValue, inputHeight, comments, isLoading } = this.state
     const {
       user: { picture }
     } = this.props
     return (
       <SafeAreaView style={styles.container}>
-        <CommentList
-          comments={comments.sort((a, b) => {
-            return b.submitDate - a.submitDate
-          })}
-          navigation={this.props.navigation}
-        />
+        <View
+          style={{
+            paddingTop: STATUS_BAR_HEIGHT + 12,
+            paddingHorizontal: 24,
+            paddingBottom: 12,
+            justifyContent: 'center',
+            flexDirection: 'row',
+            backgroundColor: palette.backgroundColorGrey,
+            borderBottomColor: palette.dividerColorNew,
+            borderBottomWidth: StyleSheet.hairlineWidth
+          }}
+        >
+          <View
+            style={{ width: 50, justifyContent: 'center', paddingBottom: 4 }}
+          >
+            {icons.back_blue}
+          </View>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center'
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                color: palette.primaryTypographyColor,
+                fontFamily: 'Montserrat-Medium'
+              }}
+            >
+              Comments
+            </Text>
+          </View>
+          <View style={{ width: 50 }} />
+        </View>
+        {isLoading ? (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              paddingTop: 12
+            }}
+          >
+            <ActivityIndicator color={palette.primaryColorLight} size="large" />
+          </View>
+        ) : (
+          <CommentList
+            comments={comments.sort((a, b) => {
+              return (
+                new Date(b.submitDate).getTime() -
+                new Date(a.submitDate).getTime()
+              )
+            })}
+            navigation={this.props.navigation}
+          />
+        )}
+
         <View
           style={{
             position: 'absolute',

@@ -51,7 +51,7 @@ export const registerForPushNotificationsAsync = async () => {
 
 export const _sendLocalNotification = async notiMessage => {
   await Notifications.presentLocalNotificationAsync({
-    categoryId: 'NOTI_ACTION',
+    // categoryId: 'NOTI_ACTION',
     ios: {
       sound: true,
       _displayInForeground: true
@@ -96,7 +96,7 @@ export const _handleNotification = (
   navigation,
   _resetUI = null
 ) => {
-  console.log(notification)
+  // console.log(notification)
   if (notification.origin === 'selected' && notification.data) {
     if (notification.actionId === 'archive') {
       Notifications.dismissNotificationAsync(notification.notificationId)

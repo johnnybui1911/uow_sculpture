@@ -58,23 +58,25 @@ const authReducer = (state = initialState, action) => {
       return { ...state, commentList: [...state.commentList, addComment] }
     }
 
-    // case LIKE: {
-    //   const { id } = action
-    //   const {
-    //     likeList,
-    //     user: { userId }
-    //   } = state
-    //   likeList.push({ sculptureId: id, userId })
-    //   return { ...state, likeList: [...likeList] }
-    // }
+    case LIKE: {
+      const { id } = action
+      const {
+        likeList,
+        user: { userId }
+      } = state
+      if (!likeList.filter(item => item.id === id)) {
+        likeList.push({ sculptureId: id, userId })
+      }
+      return { ...state, likeList: [...likeList] }
+    }
 
     // case UNLIKE: {
     //   const { id } = action
     //   let { likeList } = state
-    //   likeList = likeList.filter(element => {
-    //     return element.sculptureId != id
-    //   })
-    //   return { ...state, likeList: [...likeList] }
+    //   // likeList = likeList.filter(element => {
+    //   //   return element.sculptureId != id
+    //   // })
+    //   return { ...state, likeList }
     // }
 
     default:

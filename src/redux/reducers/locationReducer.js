@@ -4,10 +4,11 @@ import {
 } from '../../assets/actionTypes'
 
 const initialState = {
-  userCoordinate: {
-    latitude: -34.4114455,
-    longitude: 150.8939863
-  }
+  userCoordinate: null
+  // {
+  //   latitude: -34.4114455,
+  //   longitude: 150.8939863
+  // }
 }
 
 export default (state = initialState, action) => {

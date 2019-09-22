@@ -35,7 +35,7 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold'
   },
   title_sm: {
-    fontSize: 12,
+    fontSize: 14,
     color: palette.primaryColorLight,
     fontFamily: 'Montserrat-SemiBold',
     textAlign: 'center',

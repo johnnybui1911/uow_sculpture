@@ -89,11 +89,11 @@ export default class App extends React.PureComponent {
       return (
         <AppLoading
           startAsync={this._loadDataAsync}
-          onFinish={() => {
+          onFinish={async () => {
+            await stores.dispatch(thunkSignIn())
+            await stores.dispatch(syncLocationThunk())
             this.setState({ isReady: true })
-            const syncLocation = stores.dispatch(syncLocationThunk())
-            const authorization = stores.dispatch(thunkSignIn())
-            Promise.all([syncLocation, authorization])
+            // Promise.all([authorization])
             // syncLocationBackground()
             // geofencingRegion(data)
           }}

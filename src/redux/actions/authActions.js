@@ -126,14 +126,22 @@ export const thunkSignIn = () => {
             }
             dispatch(signInSuccesful(user))
             dispatch(fetchUserDataThunk(userId))
+              .then(() => {
+                resolve()
+              })
+              .catch(() => {
+                reject()
+              })
           })
           .catch(e => {
             console.log(e)
             dispatch(signInRejected())
+            reject()
           })
         // resolve()
       } else {
         dispatch(signInRejected())
+        reject()
         // console.log("error check")
         // reject({ errorMessage: 'Error' })
       }

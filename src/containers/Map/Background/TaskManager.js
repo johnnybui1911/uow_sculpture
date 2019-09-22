@@ -10,6 +10,7 @@ export const GEOFENCING_TASK = 'GEOFENCING_TASK'
 
 TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
   if (error) {
+    console.log(error)
     return
   }
   if (data) {
@@ -29,13 +30,14 @@ TaskManager.defineTask(
 
     const { identifier } = region
     const name = identifier.slice(identifier.indexOf('-') + 1)
-
+    const id = identifier.slice(0, identifier.indexOf('-'))
     if (eventType === Location.GeofencingEventType.Enter) {
       _sendLocalNotification({
-        title: `Entered ${name}`,
-        body: `${region.latitude}, ${region.longitude}`,
+        title: `Congratulations! You have visited ${name}.`,
+        body: 'Tap to view more details',
         data: {
-          screen: 'Map'
+          screen: 'Detail',
+          id
         }
       })
       console.log("You've entered region:", region)
@@ -47,7 +49,7 @@ TaskManager.defineTask(
       //     screen: 'Map'
       //   }
       // })
-      // console.log("You've left region:", region)
+      console.log("You've left region:", region)
     }
   }
 )

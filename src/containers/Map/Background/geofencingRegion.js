@@ -27,7 +27,7 @@ export default async (data = []) => {
         return {
           identifier: `${id}-${name}`,
           ...coordinate,
-          radius: 5
+          radius: 45
         }
       })
 

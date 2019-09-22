@@ -77,7 +77,7 @@ const CongratModal = ({
             zIndex: 900,
             backgroundColor: '#fff',
             borderRadius: 26,
-            height: 200,
+            minHeight: 200,
             width: 240,
             justifyContent: 'center',
             alignItems: 'center',
@@ -92,7 +92,9 @@ const CongratModal = ({
               alignItems: 'center'
             }}
           >
-            <Text style={[styles.title, { fontSize: 20 }]}>Congratulation</Text>
+            <Text style={[styles.title, { fontSize: 20 }]}>
+              Congratulations!
+            </Text>
             <Text
               style={[
                 styles.title_sm,
@@ -101,9 +103,7 @@ const CongratModal = ({
                 }
               ]}
             >
-              {enteredMarkers.length > 1
-                ? `You've have entered ${enteredMarkers.length} sculptures`
-                : "You've have entered a sculpture"}
+              You have visited
             </Text>
           </View>
           {/* <TouchableOpacity
@@ -133,15 +133,16 @@ const CongratModal = ({
                     padding: 12,
                     backgroundColor: palette.backgroundColorWhite,
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    minHeight: 80
                   }}
                 >
                   {photoURL ? (
                     <Image
                       source={{ uri: photoURL }}
                       style={{
-                        width: 60,
-                        height: 60,
+                        width: 80,
+                        height: 80,
                         borderRadius: 4,
                         backgroundColor: palette.backgroundTabColor
                       }}
@@ -149,8 +150,8 @@ const CongratModal = ({
                   ) : (
                     <View
                       style={{
-                        width: 70,
-                        height: 70,
+                        width: 80,
+                        height: 80,
                         borderRadius: 4,
                         backgroundColor: palette.backgroundTabColor,
                         justifyContent: 'center',
@@ -168,17 +169,25 @@ const CongratModal = ({
                     </View>
                   )}
 
-                  <Text
-                    style={[
-                      styles.title_sm,
-                      {
-                        color: palette.primaryColor,
-                        textAlign: 'center'
-                      }
-                    ]}
+                  <View
+                    style={{
+                      paddingBottom: 7,
+                      paddingTop: 3,
+                      alignItems: 'center'
+                    }}
                   >
-                    {name}
-                  </Text>
+                    <Text
+                      style={[
+                        styles.title_sm,
+                        {
+                          color: palette.primaryColor,
+                          textAlign: 'center'
+                        }
+                      ]}
+                    >
+                      {name}
+                    </Text>
+                  </View>
                 </View>
               )
             })}

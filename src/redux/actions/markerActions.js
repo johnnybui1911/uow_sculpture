@@ -46,7 +46,7 @@ export const _unlike = id => {
 }
 
 export const fetchDataThunk = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
     return new Promise((resolve, reject) => {
       dispatch(fetchDataPending())
 
@@ -105,9 +105,14 @@ export const fetchDataThunk = () => {
         })
         .then(newData => {
           dispatch(fetchDataSuccessful(newData))
-          dispatch(fetchDistanceMatrix(null, newData))
+          dispatch(
+            fetchDistanceMatrix(
+              getState().locationReducer.userCoordinate,
+              newData
+            )
+          )
           // dispatch(syncLocationThunk(newData))
-          geofencingRegion(newData)
+          // geofencingRegion(newData)
           resolve({ data: newData })
         })
         .catch(e => {

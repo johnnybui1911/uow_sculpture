@@ -4,9 +4,12 @@ import {
   FETCH_DISTANCE_SUCCESSFUL,
   FETCH_DISTANCE_PENDING,
   FETCH_DISTANCE_REJECTED,
-  OPEN_MODAL
+  OPEN_MODAL,
+  VISIT
 } from '../../assets/actionTypes'
 import { DISTANCE_MATRIX_API, GOOGLE_MAPS_APIKEY } from '../../library/maps'
+import { _sendLocalNotification } from '../../library/notificationTask'
+import baseAxios from '../../library/api'
 
 export const fetchDistanceSuccessful = distanceMatrix => {
   return {
@@ -63,7 +66,7 @@ export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
 
               duration: Math.floor(duration.value / 60)
             }
-            if (distance.value <= 10) {
+            if (distance.value <= 20) {
               enteredMarkers = [
                 ...enteredMarkers,
                 {
@@ -79,14 +82,40 @@ export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
           return { distanceMatrix, enteredMarkers }
         })
         .then(({ distanceMatrix, enteredMarkers }) => {
-          // if (enteredMarkers.length > 0) {
-          //   dispatch({ type: OPEN_MODAL, enteredMarkers })
-          // }
+          if (enteredMarkers.length > 0) {
+            // dispatch(handleVisitThunk(enteredMarkers))
+          }
+          // console.log(enteredMarkers)
           dispatch(fetchDistanceSuccessful(distanceMatrix))
         })
         .catch(error => {
           console.log(error)
           dispatch(fetchDistanceRejected())
         })
+  }
+}
+
+export const handleVisitThunk = enteredMarkers => {
+  return (dispatch, getState) => {
+    dispatch({ type: OPEN_MODAL, enteredMarkers })
+
+    const { user } = getState().authReducer
+    const { markerMatrix } = getState().markerReducer
+    if (user.userId) {
+      enteredMarkers.forEach(element => {
+        const { id } = element
+        if (!markerMatrix[id].isVisited) {
+          baseAxios
+            .post('visit', {
+              sculptureId: id
+            })
+            .then(res => {
+              console.log(res.data)
+            })
+            .catch(e => console.log('Can not visit'))
+        }
+      })
+      dispatch({ type: VISIT, enteredMarkers })
+    }
   }
 }

@@ -22,6 +22,7 @@ import NearbyItem from './NearbyItem'
 import PopularItem from './PopularItem'
 import { _handleNotification } from '../../library/notificationTask'
 import { fetchDataThunk } from '../../redux/actions'
+import palette from '../../assets/palette'
 
 class HomeScreen extends React.PureComponent {
   state = {
@@ -86,6 +87,7 @@ class HomeScreen extends React.PureComponent {
         <ScrollView
           refreshControl={
             <RefreshControl
+              colors={[palette.primaryColorLight]}
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
             />

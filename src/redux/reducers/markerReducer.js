@@ -9,8 +9,11 @@ import {
   SIGN_IN_SUCCESSFULL,
   SIGN_IN_REJECTED,
   FETCH_USER_DATA_SUCCESSFULL,
-  ADD_COMMENT
+  ADD_COMMENT,
+  OPEN_MODAL,
+  VISIT
 } from '../../assets/actionTypes'
+import baseAxios from '../../library/api'
 
 const initialState = {
   markerMatrix: {},
@@ -29,12 +32,14 @@ const markerReducer = (state = initialState, action) => {
         if (!markerMatrix[id]) {
           markerMatrix[id] = {
             ...element,
-            likeId: null
+            likeId: null,
+            isVisited: false
           }
         } else {
           markerMatrix[id] = {
             ...element,
-            likeId: markerMatrix[id].likeId
+            likeId: markerMatrix[id].likeId,
+            isVisited: markerMatrix[id].isVisited
           }
         }
       })
@@ -104,14 +109,34 @@ const markerReducer = (state = initialState, action) => {
       }
     }
 
+    case VISIT: {
+      const { enteredMarkers } = action
+      const { markerMatrix } = state
+      enteredMarkers.forEach(element => {
+        const { id } = element
+        // console.log('isVisited marker: ', markerMatrix[id].isVisited)
+        if (!markerMatrix[id].isVisited) {
+          markerMatrix[id].isVisited = true
+          markerMatrix[id].visitCount++
+        }
+      })
+      return { ...state, markerMatrix: { ...markerMatrix } }
+    }
+
     case FETCH_USER_DATA_SUCCESSFULL: {
       // after already fetch statisticaMatrix from backend data
       const { markerMatrix } = state
-      const { likeList } = action.payload
+      const { likeList, visitList } = action.payload
       likeList.forEach(element => {
         let { sculptureId, likeId } = element
         markerMatrix[sculptureId].likeId = likeId
       })
+
+      visitList.forEach(element => {
+        const { sculptureId } = element
+        markerMatrix[sculptureId].isVisited = true
+      })
+
       return {
         ...state,
         markerMatrix: { ...markerMatrix }
@@ -123,6 +148,7 @@ const markerReducer = (state = initialState, action) => {
 
       Object.entries(markerMatrix).forEach(([key, value]) => {
         markerMatrix[key].likeId = null
+        markerMatrix[key].isVisited = false
       })
 
       return {

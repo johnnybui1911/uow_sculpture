@@ -123,23 +123,23 @@ class CommentList extends React.PureComponent {
           paddingBottom: 60 + 16
         }}
         ListHeaderComponentStyle={{ marginHorizontal: -24 }}
-        ListHeaderComponent={() => {
-          return (
-            <View style={{ flex: 1 }}>
-              {/* <Header /> */}
-              <View
-                style={{
-                  flex: 1,
-                  paddingVertical: 16,
-                  paddingHorizontal: 24
-                  // paddingTop: 18 + 6 // if no header rendered
-                }}
-              >
-                <Text style={styles.flatListHeader}>Comments</Text>
-              </View>
-            </View>
-          )
-        }}
+        // ListHeaderComponent={() => {
+        //   return (
+        //     <View style={{ flex: 1 }}>
+        //       {/* <Header /> */}
+        //       <View
+        //         style={{
+        //           flex: 1,
+        //           paddingVertical: 16,
+        //           paddingHorizontal: 24
+        //           // paddingTop: 18 + 6 // if no header rendered
+        //         }}
+        //       >
+        //         <Text style={styles.flatListHeader}>Comments</Text>
+        //       </View>
+        //     </View>
+        //   )
+        // }}
         onEndReachedThreshold={0.5}
         onEndReached={this._handleLoadMore}
       />

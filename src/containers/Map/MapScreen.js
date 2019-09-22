@@ -181,7 +181,9 @@ class MapScreen extends React.PureComponent {
     )
     this._getLocationAsync()
     this._animateLoop()
-    this._handleNavigateFromDetail()
+    setTimeout(() => {
+      this._handleNavigateFromDetail()
+    }, 2000)
   }
 
   componentDidUpdate = () => {
@@ -255,31 +257,28 @@ class MapScreen extends React.PureComponent {
       loc => {
         if (loc.timestamp) {
           const { latitude, longitude } = loc.coords
-          this.userCoordinate
-            .timing({ latitude, longitude, duration: 250 })
-            .start()
-          if (this.props.selectedMarker) {
-            const userLocation = { latitude, longitude }
-            if (this.props.selectedMarker) {
-              const distance = calcDistance(
-                userLocation,
-                this.props.selectedMarker.coordinate
-              )
-              if (distance <= 10) {
-                const message = {
-                  title: 'Congratulation',
-                  body: 'You have finished your trip !!!',
-                  data: {
-                    screen: 'Detail',
-                    id: this.props.selectedMarker.id
-                  }
-                }
-                this._animateCeleb()
-                this.setState({ isModalVisible: true })
-                _sendLocalNotification(message)
-              }
-            }
-          }
+          this.userCoordinate.timing({ latitude, longitude }).start()
+          // if (this.props.selectedMarker) {
+          //   const userLocation = { latitude, longitude }
+          //   if (this.props.selectedMarker) {
+          //     const distance = calcDistance(
+          //       userLocation,
+          //       this.props.selectedMarker.coordinate
+          //     )
+          //     if (distance <= 10) {
+          //       const message = {
+          //         title: 'Congratulation',
+          //         body: 'You have finished your trip !!!',
+          //         data: {
+          //           screen: 'Detail',
+          //           id: this.props.selectedMarker.id
+          //         }
+          //       }
+          //       this.setState({ isModalVisible: true })
+          //       _sendLocalNotification(message)
+          //     }
+          //   }
+          // }
         } else {
           this.setState({ errorMessage: 'Problems on update location' })
         }
@@ -380,7 +379,6 @@ class MapScreen extends React.PureComponent {
             //         id: this.props.selectedMarker.id
             //       }
             //     }
-            //     this._animateCeleb()
             //     this.setState({ isModalVisible: true })
             //     _sendLocalNotification(message)
             //   }
