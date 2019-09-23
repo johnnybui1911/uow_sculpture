@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, TouchableHighlight } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
 import { icons } from '../../assets/icons'
@@ -26,7 +26,7 @@ const SearchItem = ({
     if (_onMarkerPressed) {
       if (item.recent) {
         // Check for recent search item
-        selectedItem = markerMatrix[item.id] //FIXME: will fix later by using object matrix
+        selectedItem = markerMatrix[item.id]
       }
       if (selectedItem.coordinate.latitude) {
         _onMarkerPressed(selectedItem, true)
@@ -42,19 +42,18 @@ const SearchItem = ({
   if (markerMatrix[item.id]) {
     const newItem = { ...markerMatrix[item.id], recent: item.recent }
     return (
-      <TouchableWithoutFeedback
-        style={{
-          flex: 1
-        }}
+      <TouchableHighlight
+        underlayColor="#FAFAFA"
         onPress={() => onItemClick()}
+        style={{ paddingVertical: 5, flex: 1 }}
       >
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 5
+            alignItems: 'center'
+            // paddingVertical: 5
             // paddingHorizontal: 18
           }}
         >
@@ -103,7 +102,7 @@ const SearchItem = ({
             {icons.noun_arrow}
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableHighlight>
     )
   }
   return null

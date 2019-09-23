@@ -63,7 +63,7 @@ class MainScreen extends React.PureComponent {
           />
         ) : null}
         <AppContainer />
-        {this.state.isModalVisible && (
+        {/* {this.state.isModalVisible && (
           <View
             style={{
               position: 'absolute',
@@ -93,7 +93,7 @@ class MainScreen extends React.PureComponent {
           <View style={{ flex: 1, zIndex: 900, elevation: 10 }}>
             <IntroScreen />
           </View>
-        </Modal>
+        </Modal> */}
         <CongratModal
           isCongratModalVisible={isCongratModalVisible}
           closeModal={this._closeModal}

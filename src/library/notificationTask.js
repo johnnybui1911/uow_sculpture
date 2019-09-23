@@ -1,18 +1,20 @@
 /* eslint-disable import/prefer-default-export */
+import { Platform } from 'react-native'
 import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions'
 import { storeData, getData } from './asyncStorage'
 
 // Notifications.deleteChannelAndroidAsync('MAP_CONGRATULATION')
 
-Notifications.createChannelAndroidAsync('MAP_CONGRATULATION', {
-  name: 'MAP_CONGRATULATION',
-  description: 'Congratulation',
-  sound: true,
-  priority: 'max',
-  vibrate: [0, 250, 250, 250],
-  badge: true
-})
+Platform.OS === 'android' &&
+  Notifications.createChannelAndroidAsync('MAP_CONGRATULATION', {
+    name: 'MAP_CONGRATULATION',
+    description: 'Congratulation',
+    sound: true,
+    priority: 'max',
+    vibrate: [0, 250, 250, 250],
+    badge: true
+  })
 
 Notifications.deleteCategoryAsync('NOTI_ACTION')
 

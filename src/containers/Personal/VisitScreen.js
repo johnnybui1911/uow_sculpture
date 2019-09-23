@@ -50,7 +50,7 @@ class VisitScreen extends React.PureComponent {
             userId,
             sculptureId: accessionId,
             sculptureName: name,
-            photoURL: images[0].url,
+            photoURL: images.length ? images[0].url : null,
             submitDate: visitTime
           }
         })
@@ -121,7 +121,8 @@ class VisitScreen extends React.PureComponent {
 
   _renderList = () => {
     const { refreshing, visitList } = this.state
-    return (
+    console.log(visitList)
+    return visitList.length ? (
       <FlatList
         data={visitList.sort((a, b) => {
           return (
@@ -146,6 +147,10 @@ class VisitScreen extends React.PureComponent {
         }
         // contentContainerStyle={{ paddingHorizontal: 24 }}
       />
+    ) : (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={[styles.description, { fontSize: 22 }]}>No visit</Text>
+      </View>
     )
   }
 

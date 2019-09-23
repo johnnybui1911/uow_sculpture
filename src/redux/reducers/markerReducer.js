@@ -36,19 +36,6 @@ const markerReducer = (state = initialState, action) => {
           likeId: null,
           isVisited: false
         }
-        // if (!markerMatrix[id]) {
-        //   markerMatrix[id] = {
-        //     ...element,
-        //     likeId: null,
-        //     isVisited: false
-        //   }
-        // } else {
-        //   markerMatrix[id] = {
-        //     ...element,
-        //     likeId: markerMatrix[id].likeId,
-        //     isVisited: markerMatrix[id].isVisited
-        //   }
-        // }
       })
       return {
         ...state,

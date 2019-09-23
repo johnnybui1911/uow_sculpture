@@ -87,11 +87,10 @@ export const fetchUserDataThunk = (initialUserId = null) => {
               userId,
               userImg: picture,
               sculptureId: accessionId,
-              photoURL: images[0].url,
+              photoURL: images.length ? images[0].url : null ,
               submitDate: updatedTime
             }
           })
-
           const formatVisitList = visitList.map(element => {
             const {
               visitId,
@@ -103,11 +102,10 @@ export const fetchUserDataThunk = (initialUserId = null) => {
               visitId,
               userId,
               sculptureId: accessionId,
-              photoURL: images[0].url,
+              photoURL: images.length ? images[0].url : null,
               submitDate: visitTime
             }
           })
-
           dispatch(
             fetchUserDataSuccessful({
               likeList,
@@ -134,7 +132,6 @@ export const thunkSignIn = () => {
     return new Promise(async (resolve, reject) => {
       const auth = await getData('auth')
       if (auth) {
-        // send GET to back end to fetch user data
         baseAxios
           .get('user/me')
           .then(res => {
@@ -146,6 +143,7 @@ export const thunkSignIn = () => {
               joinDate,
               picture
             }
+            console.log(userId)
             dispatch(signInSuccesful(user))
             dispatch(fetchUserDataThunk(userId))
               .then(() => {
@@ -154,7 +152,6 @@ export const thunkSignIn = () => {
               .catch(() => {
                 dispatch(signInRejected())
                 resolve()
-                // reject()
               })
           })
           .catch(e => {
@@ -162,39 +159,11 @@ export const thunkSignIn = () => {
             dispatch(signInRejected())
             clearData('auth')
             resolve()
-            // reject()
           })
-        // resolve()
       } else {
         dispatch(signInRejected())
         resolve()
-        // reject()
-        // console.log("error check")
-        // reject({ errorMessage: 'Error' })
       }
     })
   }
 }
-
-// export const refreshNewToken = async () => {
-//   const auth = await getData('auth')
-//   const { token, refresh_token, expires_in } = JSON.parse(auth)
-
-//   const response = await axios({
-//     method: 'POST',
-//     url: `${AUTH0_DOMAIN}/oauth/token`,
-//     headers: { 'content-type': 'application/x-www-form-urlencoded' },
-//     data: qs.stringify({
-//       grant_type: 'refresh_token',
-//       client_id: AUTH0_CLIENT_ID,
-//       refresh_token: refresh_token
-//     })
-//   })
-
-//   const new_auth = {
-//     token: response.data.access_token,
-//     refresh_token,
-//     expires_in: response.data.expires_in
-//   }
-//   await storeData('auth', JSON.stringify(new_auth))
-// }

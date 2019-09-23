@@ -26,6 +26,7 @@ import baseAxios from '../../library/api'
 import HeaderBar from '../../components/Header/HeaderBar'
 import BackButton from '../../components/BackButton/BackButton'
 import { icons } from '../../assets/icons'
+import { Platform } from '@unimodules/core'
 
 const localComments = [
   {
@@ -50,7 +51,7 @@ const localComments = [
   }
 ]
 
-const TEXT_INPUT_HEIGHT = 40
+const TEXT_INPUT_HEIGHT = Platform.OS === 'ios' ? 45 : 40
 
 class CommentScreen extends React.PureComponent {
   static defaultProps = {
@@ -86,16 +87,42 @@ class CommentScreen extends React.PureComponent {
     isLoading: true
   }
 
+  keyboardHeight = new Animated.Value(0)
+
   componentDidMount = () => {
     this._fetchCommentSculpture()
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack()
       return true
     })
+    this.keyboardDidShowSub = Keyboard.addListener(
+      'keyboardDidShow',
+      this.handleKeyboardDidShow
+    )
+    this.keyboardDidHideSub = Keyboard.addListener(
+      'keyboardDidHide',
+      this.handleKeyboardDidHide
+    )
   }
 
   componentWillUnmount = () => {
     this.backHandler.remove()
+    this.keyboardDidShowSub.remove()
+    this.keyboardDidHideSub.remove()
+  }
+
+  handleKeyboardDidShow = event => {
+    Animated.timing(this.keyboardHeight, {
+      duration: 1,
+      toValue: event.endCoordinates.height
+    }).start()
+  }
+
+  handleKeyboardDidHide = () => {
+    Animated.timing(this.keyboardHeight, {
+      duration: 1,
+      toValue: 0
+    }).start()
   }
 
   _fetchCommentSculpture = () => {
@@ -119,7 +146,7 @@ class CommentScreen extends React.PureComponent {
             userImg: picture,
             userName: name,
             sculptureId: accessionId,
-            photoURL: images[0].url,
+            photoURL: images.length ? images[0].url : null,
             submitDate: updatedTime
           }
         })
@@ -234,36 +261,39 @@ class CommentScreen extends React.PureComponent {
             navigation={this.props.navigation}
           />
         )}
-
-        <View
+        <KeyboardAvoidingView
           style={{
+            flex: 1,
             position: 'absolute',
-            bottom: 0,
-            width: SCREEN_WIDTH,
-            backgroundColor: palette.backgroundColorWhite,
-            elevation: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: 24
+            bottom: 0
           }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <Image
-            source={{ uri: picture }}
+          <Animated.View
             style={{
-              width: 40,
-              height: 40,
-              borderRadius: 40 / 2,
-              alignSelf: 'flex-end',
-              marginBottom: 10,
-              backgroundColor: '#F6F6F6'
+              // position: 'absolute',
+              // bottom: 0,
+              width: SCREEN_WIDTH,
+              backgroundColor: palette.backgroundColorWhite,
+              elevation: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: 24
+              // paddingBottom: this.keyboardHeight
             }}
-          />
-          <KeyboardAvoidingView
-            style={{
-              flex: 1
-            }}
-            behavior="padding"
           >
+            <Image
+              source={{ uri: picture }}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 40 / 2,
+                alignSelf: 'flex-end',
+                marginBottom: 10,
+                backgroundColor: '#F6F6F6'
+              }}
+            />
+
             <Animated.View
               style={{
                 flex: 1,
@@ -320,8 +350,8 @@ class CommentScreen extends React.PureComponent {
                 </Text>
               </TouchableWithoutFeedback>
             </Animated.View>
-          </KeyboardAvoidingView>
-        </View>
+          </Animated.View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     )
   }
