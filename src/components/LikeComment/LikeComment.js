@@ -18,6 +18,15 @@ class LikeComment extends React.PureComponent {
     isPending: false
   }
 
+  onCommentPress = () => {
+    const { markerMatrix, markerId, _like, _unlike, loggedIn } = this.props
+    if (loggedIn) {
+      this.props.navigation.navigate('Comment', { id: markerId })
+    } else {
+      this.props.navigation.navigate('Profile')
+    }
+  }
+
   onPress = () => {
     const { markerMatrix, markerId, _like, _unlike, loggedIn } = this.props
     const { isPending } = this.state
@@ -126,18 +135,10 @@ class LikeComment extends React.PureComponent {
             // width: 55
           }}
         >
-          <TouchableWithoutFeedback
-            onPress={() =>
-              this.props.navigation.navigate('Comment', { id: markerId })
-            }
-          >
+          <TouchableWithoutFeedback onPress={this.onCommentPress}>
             <View style={styles.socialIconStyle}>{icons.comment}</View>
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() =>
-              this.props.navigation.navigate('Comment', { id: markerId })
-            }
-          >
+          <TouchableWithoutFeedback onPress={this.onCommentPress}>
             <Text style={[styles.numberStyle]}>
               {markerMatrix[markerId].commentCount}
             </Text>

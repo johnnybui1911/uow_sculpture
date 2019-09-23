@@ -74,14 +74,14 @@ const CongratModal = ({
               /> */}
         <View
           style={{
-            zIndex: 900,
+            // zIndex: 900,
             backgroundColor: '#fff',
             borderRadius: 26,
             // minHeight: 200,
             width: 260,
             justifyContent: 'center',
-            alignItems: 'center',
-            elevation: 10
+            alignItems: 'center'
+            // elevation: 10
           }}
         >
           <View style={{ position: 'absolute', top: -55 }}>{icons.trophy}</View>

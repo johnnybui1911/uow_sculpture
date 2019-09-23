@@ -82,6 +82,10 @@ class HomeScreen extends React.PureComponent {
       })
       .slice(0, 5)
     const popularData = matrixData
+      .sort((itemA, itemB) => {
+        return itemB.visitCount - itemA.visitCount
+      })
+      .slice(0, 10)
 
     return (
       <SafeAreaView style={styles.container}>

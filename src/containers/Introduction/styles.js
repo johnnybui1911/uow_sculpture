@@ -8,6 +8,8 @@ export default StyleSheet.create({
     // height: SCREEN_HEIGHT,
     // width: SCREEN_WIDTH,
     // top: -STATUS_BAR_HEIGHT,
+    zIndex: 900,
+    elevation: 10,
     flex: 1,
     backgroundColor: palette.primaryColor,
     alignItems: 'center',

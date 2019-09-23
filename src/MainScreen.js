@@ -21,23 +21,31 @@ import IntroScreen from './containers/Introduction/IntroScreen'
 import palette from './assets/palette'
 import { icons } from './assets/icons'
 import CongratModal from './components/CongratModal/CongratModal'
+import { storeData, getData, clearData } from './library/asyncStorage'
 
 // TODO: just swipe up, not swipe down
+clearData('intro')
 class MainScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       isModalVisible: true,
-      isCongratModalVisible: true
+      isCongratModalVisible: false
     }
   }
 
-  componentDidMount = () => {
-    // this.props.fetchDataThunk().then(res => {
-    //   this.props.syncLocationThunk(res.data)
-    // })
-    // this.props.thunkSignIn()
-  }
+  // componentDidMount = async () => {
+  //   try {
+  //     const intro = await getData('intro')
+  //     if (intro) {
+  //       this.setState({ isModalVisible: false })
+  //     } else {
+  //       this.setState({ isModalVisible: true })
+  //     }
+  //   } catch (e) {
+  //     this.setState({ isModalVisible: true })
+  //   }
+  // }
 
   _closeModal = () => {
     this.setState({ isCongratModalVisible: false })
@@ -55,7 +63,7 @@ class MainScreen extends React.PureComponent {
           />
         ) : null}
         <AppContainer />
-        {/* {this.state.isModalVisible && (
+        {this.state.isModalVisible && (
           <View
             style={{
               position: 'absolute',
@@ -71,7 +79,10 @@ class MainScreen extends React.PureComponent {
           isVisible={this.state.isModalVisible}
           animationIn="zoomInDown"
           // animationInTiming={500}
-          onSwipeComplete={() => this.setState({ isModalVisible: false })}
+          onSwipeComplete={() => {
+            // storeData('intro', 'intro')
+            this.setState({ isModalVisible: false })
+          }}
           swipeDirection="up"
           style={{
             justifyContent: 'center',
@@ -79,8 +90,10 @@ class MainScreen extends React.PureComponent {
             margin: 0
           }}
         >
-          <IntroScreen />
-        </Modal> */}
+          <View style={{ flex: 1, zIndex: 900, elevation: 10 }}>
+            <IntroScreen />
+          </View>
+        </Modal>
         <CongratModal
           isCongratModalVisible={isCongratModalVisible}
           closeModal={this._closeModal}

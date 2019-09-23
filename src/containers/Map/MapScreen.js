@@ -216,7 +216,7 @@ class MapScreen extends React.PureComponent {
 
   subscribeLocation = null
 
-  loopAnimate = new Animated.Value(0)
+  loopAnimate = new Animated.Value(0.2)
 
   _handleBackPress = () => {
     const { selectedMarker } = this.props
@@ -240,15 +240,14 @@ class MapScreen extends React.PureComponent {
   }
 
   _animateLoop = () => {
-    Animated.sequence([
-      Animated.timing(this.loopAnimate, {
-        toValue: 1,
-        duration: 8000
-      })
-    ]).start(() => {
-      this.loopAnimate.setValue(0)
-      this._animateLoop()
-    })
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(this.loopAnimate, {
+          toValue: 0.8,
+          duration: 7000
+        })
+      ])
+    ).start()
   }
 
   _getLocationAsync = async () => {
