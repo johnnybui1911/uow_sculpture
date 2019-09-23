@@ -19,7 +19,6 @@ const activeDot = <View style={activeDot} />
 
 class Header extends React.PureComponent {
   state = {
-    modalVisible: false,
     currentIndex: 0
   }
 
@@ -27,10 +26,6 @@ class Header extends React.PureComponent {
 
   _onMomentumScrollEnd = (e, state, context) => {
     this.setState({ currentIndex: state.index })
-  }
-
-  setModalVisible = visible => {
-    this.setState({ modalVisible: visible })
   }
 
   setCurrentIndex = targetIndex => {
@@ -58,7 +53,8 @@ class Header extends React.PureComponent {
         }
       }
     })
-    const { modalVisible, currentIndex } = this.state
+    const { currentIndex } = this.state
+    const { modalVisible, setModalVisible } = this.props
     return (
       <View style={styles.headerImage}>
         {imageList.length > 0 ? (
@@ -66,7 +62,7 @@ class Header extends React.PureComponent {
             <ImageViewerModal
               modalVisible={modalVisible}
               imageSlide={imageSlide}
-              setModalVisible={this.setModalVisible}
+              setModalVisible={setModalVisible}
               currentIndex={currentIndex}
               setCurrentIndex={this.setCurrentIndex}
             />
@@ -82,7 +78,7 @@ class Header extends React.PureComponent {
                 return (
                   <TouchableWithoutFeedback
                     key={image.id}
-                    onPress={() => this.setModalVisible(true)}
+                    onPress={() => setModalVisible(true)}
                   >
                     <View>
                       <Image
@@ -98,7 +94,9 @@ class Header extends React.PureComponent {
             </Swiper>
             <View style={styles.overlayImage}>
               <View>
-                <Text style={styles.visitorsText}>{visitCount} visitors</Text>
+                <Text style={styles.visitorsText}>
+                  {visitCount} {visitCount > 1 ? 'visitors' : 'visitor'}
+                </Text>
               </View>
             </View>
           </View>

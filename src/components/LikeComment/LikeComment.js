@@ -6,6 +6,7 @@ import { icons } from '../../assets/icons'
 import styles from './styles'
 import { _like, _unlike } from '../../redux/actions'
 import baseAxios from '../../library/api'
+import { _setLikeId } from '../../redux/actions/markerActions'
 
 class LikeComment extends React.PureComponent {
   constructor(props) {
@@ -13,13 +14,27 @@ class LikeComment extends React.PureComponent {
     this.animatedValue = new Animated.Value(1)
   }
 
+  state = {
+    isPending: false
+  }
+
   onPress = () => {
     const { markerMatrix, markerId, _like, _unlike, loggedIn } = this.props
+    const { isPending } = this.state
     if (loggedIn) {
       if (!markerMatrix[markerId].likeId) {
-        this._handleLike()
+        if (!isPending) {
+          this._handleLike()
+        } else {
+          console.log('is pending!!')
+        }
       } else {
-        this._handleUnlike()
+        if (!isPending) {
+          console.log('pending: ', isPending)
+          this._handleUnlike()
+        } else {
+          console.log('is pending!!')
+        }
       }
     } else {
       this.props.navigation.navigate('Profile')
@@ -29,26 +44,26 @@ class LikeComment extends React.PureComponent {
   _handleUnlike = () => {
     const { markerId, markerMatrix, _like, _unlike } = this.props
     const { likeId } = markerMatrix[markerId]
+    this.setState({ isPending: true })
     // this.animatedValue.setValue(1)
-    if (likeId === 'temp') {
-      _unlike(markerId)
-    } else {
-      if (likeId) {
-        baseAxios
-          .delete(`like/${likeId}`)
-          .then(res => {
-            _unlike(markerId)
-          })
-          .catch(e => {
-            console.log(e)
-          })
-      }
-    }
+    console.log(likeId)
+    _unlike(markerId)
+
+    baseAxios
+      .delete(`like/${likeId}`)
+      .then(() => {
+        this.setState({ isPending: false })
+      })
+      .catch(e => {
+        console.log(e.response.data.message)
+        this.setState({ isPending: false })
+      })
   }
 
   _handleLike = () => {
-    const { markerId, _like, _unlike } = this.props
-    // _like(markerId, 'temp')
+    const { markerId, _like, _unlike, _setLikeId } = this.props
+    this.setState({ isPending: true })
+    _like(markerId, 'temp')
 
     baseAxios
       .post('like', {
@@ -57,7 +72,8 @@ class LikeComment extends React.PureComponent {
       .then(res => res.data)
       .then(resData => {
         const { likeId } = resData
-        _like(markerId, likeId)
+        _setLikeId(markerId, likeId)
+        this.setState({ isPending: false })
         // this.animatedValue.setValue(1.4)
         // Animated.spring(this.animatedValue, {
         //   toValue: 1,
@@ -65,7 +81,8 @@ class LikeComment extends React.PureComponent {
         // }).start()
       })
       .catch(e => {
-        console.log(e)
+        console.log(e.response.data.message)
+        this.setState({ isPending: false })
       })
   }
 
@@ -139,7 +156,8 @@ const mapStateToProps = getState => ({
 
 const mapDispatchToProps = {
   _like,
-  _unlike
+  _unlike,
+  _setLikeId
 }
 
 export default connect(

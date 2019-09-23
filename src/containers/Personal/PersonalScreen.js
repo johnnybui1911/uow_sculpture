@@ -1,6 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import { SafeAreaView, View, Animated, RefreshControl } from 'react-native'
+import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
 import styles from './styles'
@@ -11,6 +12,8 @@ import CommentScreen from './CommentScreen'
 import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk } from '../../redux/actions'
+import animations from '../../assets/animations'
+import { AuthHeader } from '../Auth/AuthScreen'
 
 const HEADER_HEIGHT = 400
 const TAB_BAR_HEIGHT = 44
@@ -187,7 +190,8 @@ class PersonalScreen extends React.PureComponent {
   }
 
   render() {
-    return (
+    const { user, isLoadingUser } = this.props
+    return user.userId && isLoadingUser ? (
       <SafeAreaView style={styles.container}>
         <TabView
           style={{ flex: 1 }}
@@ -198,11 +202,21 @@ class PersonalScreen extends React.PureComponent {
           initialLayout={initialLayout}
         />
       </SafeAreaView>
+    ) : (
+      <SafeAreaView
+        style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
+      >
+        <AuthHeader />
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <LottieView source={animations.loadingPersonal} autoPlay auto />
+        </View>
+      </SafeAreaView>
     )
   }
 }
 const mapStateToProps = getState => ({
-  user: getState.authReducer.user
+  user: getState.authReducer.user,
+  isLoadingUser: getState.markerReducer.isLoadingUser
 })
 
 const mapDispatchToProps = {

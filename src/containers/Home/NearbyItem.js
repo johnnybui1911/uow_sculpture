@@ -15,6 +15,7 @@ import formatDistance from '../../library/formatDistance'
 import images from '../../assets/images'
 import { _like, _unlike } from '../../redux/actions'
 import baseAxios from '../../library/api'
+import { _setLikeId } from '../../redux/actions/markerActions'
 
 class NearbyItem extends React.PureComponent {
   constructor(props) {
@@ -22,26 +23,46 @@ class NearbyItem extends React.PureComponent {
     this.animatedValue = new Animated.Value(0)
   }
 
+  state = {
+    isPending: false
+  }
+
   _handleUnlike = () => {
     const { item, _like, _unlike } = this.props
     const markerId = item.id
     const { likeId } = item
+    this.setState({ isPending: true })
+    // this.animatedValue.setValue(1)
     console.log(likeId)
-    if (likeId) {
-      baseAxios
-        .delete(`like/${likeId}`)
-        .then(res => {
-          _unlike(markerId)
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    }
+    _unlike(markerId)
+
+    baseAxios
+      .delete(`like/${likeId}`)
+      .then(() => {
+        this.setState({ isPending: false })
+      })
+      .catch(e => {
+        console.log(e.response.data.message)
+        this.setState({ isPending: false })
+      })
   }
 
   _handleLike = () => {
-    const { item, _like, _unlike } = this.props
+    const { item, _like, _unlike, _setLikeId } = this.props
     const markerId = item.id
+    this.setState({ isPending: true })
+    _like(markerId, 'temp')
+    Animated.sequence([
+      Animated.spring(this.animatedValue, {
+        toValue: 1,
+        useNativeDriver: true
+      }),
+      Animated.spring(this.animatedValue, {
+        toValue: 0,
+        useNativeDriver: true
+      })
+    ]).start()
+
     baseAxios
       .post('like', {
         sculptureId: markerId
@@ -49,30 +70,32 @@ class NearbyItem extends React.PureComponent {
       .then(res => res.data)
       .then(resData => {
         const { likeId } = resData
-        _like(markerId, likeId)
-        Animated.sequence([
-          Animated.spring(this.animatedValue, {
-            toValue: 1,
-            useNativeDriver: true
-          }),
-          Animated.spring(this.animatedValue, {
-            toValue: 0,
-            useNativeDriver: true
-          })
-        ]).start()
+        _setLikeId(markerId, likeId)
+        this.setState({ isPending: false })
       })
       .catch(e => {
-        console.log(e)
+        console.log(e.response.data.message)
+        this.setState({ isPending: false })
       })
   }
 
   onLikePress = () => {
-    const { item, loggedIn, _like, _unlike } = this.props
+    const { item, _like, _unlike, loggedIn } = this.props
+    const { isPending } = this.state
     if (loggedIn) {
       if (!item.likeId) {
-        this._handleLike()
+        if (!isPending) {
+          this._handleLike()
+        } else {
+          console.log('is pending!!')
+        }
       } else {
-        this._handleUnlike()
+        if (!isPending) {
+          console.log('pending: ', isPending)
+          this._handleUnlike()
+        } else {
+          console.log('is pending!!')
+        }
       }
     } else {
       this.props.navigation.navigate('Profile')
@@ -174,7 +197,8 @@ const mapStateToProps = getState => ({
 
 const mapDispatchToProps = {
   _like,
-  _unlike
+  _unlike,
+  _setLikeId
 }
 
 export default connect(

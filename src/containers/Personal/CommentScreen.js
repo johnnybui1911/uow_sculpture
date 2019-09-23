@@ -15,57 +15,13 @@ import DividerLight from '../../components/Divider/DividerLight'
 import { MIN_TABVIEW_HEIGHT } from '../../assets/dimension'
 import palette from '../../assets/palette'
 
-const localComments = [
-  {
-    text: 'Hello',
-    submitDate: new Date(2019, 5, 24, 10, 33, 30),
-    photoURL: 1
-  },
-  {
-    text:
-      'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    submitDate: new Date(2019, 5, 29, 10, 33, 30),
-    photoURL: 2
-  },
-  {
-    text:
-      'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    submitDate: new Date(2019, 5, 29, 10, 33, 30),
-    photoURL: 3
-  },
-  {
-    text:
-      'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    submitDate: new Date(2019, 5, 29, 10, 33, 30),
-    photoURL: 4
-  },
-  { text: 'Hello', submitDate: new Date(), photoURL: 1 }
-]
-
 class CommentScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      comments: [],
-      loading: true,
+      loading: false,
       refreshing: false
     }
-  }
-
-  componentDidMount = () => {
-    this._fetchData()
-  }
-
-  _fetchData = () => {
-    localComments.sort((a, b) => {
-      return b.submitDate - a.submitDate
-    })
-
-    this.setState({
-      comments: localComments,
-      refreshing: false,
-      loading: false
-    })
   }
 
   _renderItem = ({ item }) => {
@@ -112,7 +68,11 @@ class CommentScreen extends React.PureComponent {
               { fontSize: 13, color: 'rgb(136,136,136)' }
             ]}
           >
-            {moment(submitDate).fromNow()}
+            {moment(submitDate)
+              .fromNow()
+              .includes('few seconds')
+              ? 'Just now'
+              : moment(submitDate).fromNow()}
           </Text>
         </View>
       </View>

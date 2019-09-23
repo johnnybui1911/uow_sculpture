@@ -63,7 +63,7 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
-    const { isLoading, distanceMatrix, markerMatrix } = this.props
+    const { checkLoading, distanceMatrix, markerMatrix } = this.props
     let matrixData = []
     Object.entries(markerMatrix).forEach(([key, value]) => {
       matrixData.push(value)
@@ -82,6 +82,7 @@ class HomeScreen extends React.PureComponent {
       })
       .slice(0, 5)
     const popularData = matrixData
+
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView
@@ -97,7 +98,7 @@ class HomeScreen extends React.PureComponent {
           <HeaderBar headerName="Home" />
           <View style={styles.nearbyView}>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
-            {isLoading || !distanceMatrix ? (
+            {checkLoading || !distanceMatrix ? (
               <View style={styles.nearbyItemStyle}>
                 <Placeholder Animation={Fade}>
                   <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
@@ -112,7 +113,7 @@ class HomeScreen extends React.PureComponent {
           </View>
           <View style={[styles.popularList]}>
             <Text style={styles.listTitle}>Popular Sculptures</Text>
-            {isLoading || !distanceMatrix ? (
+            {checkLoading || !distanceMatrix ? (
               <View
                 style={{
                   flex: 1,
@@ -150,11 +151,22 @@ class HomeScreen extends React.PureComponent {
   }
 }
 
-const mapStateToProps = getState => ({
-  markerMatrix: getState.markerReducer.markerMatrix,
-  isLoading: getState.markerReducer.isLoading,
-  distanceMatrix: getState.distanceReducer.distanceMatrix
-})
+const mapStateToProps = getState => {
+  const markerMatrix = getState.markerReducer.markerMatrix
+  const isLoading = getState.markerReducer.isLoading
+  const distanceMatrix = getState.distanceReducer.distanceMatrix
+  const isLoadingUser = getState.markerReducer.isLoadingUser
+  const loggedIn = getState.authReducer.loggedIn
+
+  const checkLoading =
+    (loggedIn && (isLoading || !isLoadingUser)) || (!loggedIn && isLoading)
+
+  return {
+    markerMatrix,
+    distanceMatrix,
+    checkLoading
+  }
+}
 
 const mapDispatchToProps = {
   fetchDataThunk

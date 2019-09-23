@@ -1,4 +1,8 @@
-import { OPEN_MODAL, CLOSE_MODAL } from '../../assets/actionTypes'
+import {
+  OPEN_MODAL,
+  CLOSE_MODAL,
+  SIGN_IN_SUCCESSFULL
+} from '../../assets/actionTypes'
 import { _sendLocalNotification } from '../../library/notificationTask'
 
 const initialState = {
@@ -8,18 +12,22 @@ const initialState = {
 
 const modalReducer = (state = initialState, action) => {
   switch (action.type) {
+    // case SIGN_IN_SUCCESSFULL: {
+    //   return { ...state, enteredMarkers: [] }
+    // }
+
     case OPEN_MODAL: {
       const { enteredMarkers } = action
       const oldMarkers = state.enteredMarkers
       let check = 0
       enteredMarkers.forEach(element => {
         const { id } = element
-        if (oldMarkers.filter(item => item.id === id)) {
+        if (oldMarkers.filter(item => item.id === id).length > 0) {
           check++
         }
       })
 
-      if (check === oldMarkers.length) {
+      if (check === oldMarkers.length && oldMarkers.length) {
         return { ...state, isCongratModalVisible: false }
       } else {
         enteredMarkers.forEach(element => {

@@ -7,7 +7,7 @@ import {
   FETCH_USER_DATA_REJECTED,
   ADD_COMMENT
 } from '../../assets/actionTypes'
-import { getData, storeData } from '../../library/asyncStorage'
+import { getData, storeData, clearData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 import baseAxios from '../../library/api'
 
@@ -60,49 +60,71 @@ export const addComment = comment => {
   return { type: ADD_COMMENT, payload: { comment } }
 }
 
-export const fetchUserDataThunk = initialUserId => {
+export const fetchUserDataThunk = (initialUserId = null) => {
   return (dispatch, getState) => {
     const user = getState().authReducer.user
     const userId = initialUserId ? initialUserId : user.userId
     return new Promise(async (resolve, reject) => {
-      try {
-        const [likeList, commentList, visitList] = await Promise.all([
-          baseAxios.get(`like/user-id/${userId}`).then(res => res.data),
-          baseAxios.get(`comment/user-id/${userId}`).then(res => res.data),
-          baseAxios.get(`visit/user-id/${userId}`).then(res => res.data)
-        ])
+      if (userId) {
+        try {
+          const [likeList, commentList, visitList] = await Promise.all([
+            baseAxios.get(`like/user-id/${userId}`).then(res => res.data),
+            baseAxios.get(`comment/user-id/${userId}`).then(res => res.data),
+            baseAxios.get(`visit/user-id/${userId}`).then(res => res.data)
+          ])
 
-        const formatCommentList = commentList.map(element => {
-          const {
-            commentId,
-            content,
-            user: { userId, picture },
-            sculpture: { accessionId, images },
-            updatedTime
-          } = element
-          return {
-            commentId,
-            text: content,
-            userId,
-            userImg: picture,
-            sculptureId: accessionId,
-            photoURL: images[0].url,
-            submitDate: updatedTime
-          }
-        })
-
-        dispatch(
-          fetchUserDataSuccessful({
-            likeList,
-            commentList: formatCommentList,
-            visitList
+          const formatCommentList = commentList.map(element => {
+            const {
+              commentId,
+              content,
+              user: { userId, picture },
+              sculpture: { accessionId, images },
+              updatedTime
+            } = element
+            return {
+              commentId,
+              text: content,
+              userId,
+              userImg: picture,
+              sculptureId: accessionId,
+              photoURL: images[0].url,
+              submitDate: updatedTime
+            }
           })
-        )
-        resolve()
-      } catch (err) {
-        console.log(err)
-        reject()
+
+          const formatVisitList = visitList.map(element => {
+            const {
+              visitId,
+              user: { userId, picture },
+              sculpture: { accessionId, images },
+              visitTime
+            } = element
+            return {
+              visitId,
+              userId,
+              sculptureId: accessionId,
+              photoURL: images[0].url,
+              submitDate: visitTime
+            }
+          })
+
+          dispatch(
+            fetchUserDataSuccessful({
+              likeList,
+              commentList: formatCommentList,
+              visitList: formatVisitList
+            })
+          )
+        } catch (err) {
+          console.log('Can not reload data user')
+          dispatch(fetchUserDataRejected())
+          // resolve()
+        }
+      } else {
+        console.log('Can not reload data user')
+        dispatch(fetchUserDataRejected())
       }
+      resolve()
     })
   }
 }
@@ -130,18 +152,23 @@ export const thunkSignIn = () => {
                 resolve()
               })
               .catch(() => {
-                reject()
+                dispatch(signInRejected())
+                resolve()
+                // reject()
               })
           })
           .catch(e => {
             console.log(e)
             dispatch(signInRejected())
-            reject()
+            clearData('auth')
+            resolve()
+            // reject()
           })
         // resolve()
       } else {
         dispatch(signInRejected())
-        reject()
+        resolve()
+        // reject()
         // console.log("error check")
         // reject({ errorMessage: 'Error' })
       }

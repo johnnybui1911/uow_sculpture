@@ -10,7 +10,8 @@ import {
   Animated,
   StyleSheet,
   ActivityIndicator,
-  BackHandler
+  BackHandler,
+  KeyboardAvoidingView
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -140,10 +141,11 @@ class CommentScreen extends React.PureComponent {
     const postingComment = {
       userId: user.userId,
       userImg: user.picture,
+      userName: user.username,
       sculptureId,
       text: inputValue
     }
-    this.setState({ comments: [...this.state.comments, postingComment] })
+    this.setState({ comments: [postingComment, ...this.state.comments] })
     baseAxios
       .post('comment', {
         sculptureId,
@@ -173,25 +175,36 @@ class CommentScreen extends React.PureComponent {
             paddingBottom: 12,
             justifyContent: 'center',
             flexDirection: 'row',
-            backgroundColor: palette.backgroundColorGrey,
-            borderBottomColor: palette.dividerColorNew,
-            borderBottomWidth: StyleSheet.hairlineWidth
+            backgroundColor: '#FAFAFA',
+            // borderBottomColor: palette.dividerColorNew,
+            // borderBottomWidth: StyleSheet.hairlineWidth,
+            marginBottom: 12,
+            elevation: 2
           }}
         >
-          <View
-            style={{ width: 50, justifyContent: 'center', paddingBottom: 4 }}
+          <TouchableWithoutFeedback
+            onPress={() => this.props.navigation.goBack()}
           >
-            {icons.back_blue}
-          </View>
+            <View
+              style={{
+                width: 50,
+                justifyContent: 'center',
+                paddingBottom: 4 + 1
+              }}
+            >
+              {icons.back_blue({ size: 18 })}
+            </View>
+          </TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
-              alignItems: 'center'
+              paddingBottom: 1
+              // alignItems: 'center'
             }}
           >
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 18,
                 color: palette.primaryTypographyColor,
                 fontFamily: 'Montserrat-Medium'
               }}
@@ -205,8 +218,7 @@ class CommentScreen extends React.PureComponent {
           <View
             style={{
               flex: 1,
-              alignItems: 'center',
-              paddingTop: 12
+              alignItems: 'center'
             }}
           >
             <ActivityIndicator color={palette.primaryColorLight} size="large" />
@@ -246,61 +258,69 @@ class CommentScreen extends React.PureComponent {
               backgroundColor: '#F6F6F6'
             }}
           />
-          <Animated.View
+          <KeyboardAvoidingView
             style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginVertical: 10,
-              marginLeft: 7,
-              height: inputHeight,
-              backgroundColor: '#F2F3F5',
-              borderRadius: 16,
-              borderColor: 'rgba(0,0,0,0)'
+              flex: 1
             }}
+            behavior="padding"
           >
-            <TextInput
-              onContentSizeChange={e => {
-                const { height } = e.nativeEvent.contentSize
-                if (height < TEXT_INPUT_HEIGHT * 3)
-                  Animated.timing(inputHeight, {
-                    toValue: height,
-                    duration: 100
-                  }).start()
-              }}
-              multiline
-              numberOfLines={4}
-              ref={component => (this._contentInput = component)}
-              value={inputValue}
-              onChangeText={text => this.setState({ inputValue: text })}
-              placeholder="Add a comment..."
-              underlineColorAndroid="rgba(0,0,0,0)"
+            <Animated.View
               style={{
                 flex: 1,
-                padding: 10,
-                width: '100%',
-                fontFamily: 'Montserrat-Medium',
-                fontSize: 14,
-                color: palette.primaryColor
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginVertical: 10,
+                marginLeft: 7,
+                height: inputHeight,
+                backgroundColor: '#F2F3F5',
+                borderRadius: 16,
+                borderColor: 'rgba(0,0,0,0)'
               }}
-              placeholderTextColor="rgb(110, 117, 125)"
-            />
-            <TouchableWithoutFeedback onPress={this._onSubmit}>
-              <Text
+            >
+              <TextInput
+                autoFocus
+                onContentSizeChange={e => {
+                  const { height } = e.nativeEvent.contentSize
+                  if (height < TEXT_INPUT_HEIGHT * 3)
+                    Animated.timing(inputHeight, {
+                      toValue: height,
+                      duration: 100
+                    }).start()
+                }}
+                multiline
+                numberOfLines={4}
+                ref={component => (this._contentInput = component)}
+                value={inputValue}
+                onChangeText={text => this.setState({ inputValue: text })}
+                placeholder="Add a comment..."
+                underlineColorAndroid="rgba(0,0,0,0)"
                 style={{
-                  alignSelf: 'flex-end',
+                  flex: 1,
                   padding: 10,
+                  width: '100%',
                   fontFamily: 'Montserrat-Medium',
                   fontSize: 14,
-                  color: palette.primaryColorLight,
-                  opacity: inputValue.trim() === '' ? 0 : 1
+                  color: palette.primaryColor
                 }}
-              >
-                Post
-              </Text>
-            </TouchableWithoutFeedback>
-          </Animated.View>
+                placeholderTextColor="rgb(110, 117, 125)"
+              />
+              <TouchableWithoutFeedback onPress={this._onSubmit}>
+                <Text
+                  style={{
+                    alignSelf: 'flex-end',
+                    padding: 10,
+                    fontFamily: 'Montserrat-Medium',
+                    fontSize: 14,
+                    color: palette.primaryColorLight,
+                    opacity: inputValue.trim() === '' ? 0 : 1
+                  }}
+                >
+                  Post
+                </Text>
+              </TouchableWithoutFeedback>
+            </Animated.View>
+          </KeyboardAvoidingView>
         </View>
       </SafeAreaView>
     )

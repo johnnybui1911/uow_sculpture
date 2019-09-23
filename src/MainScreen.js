@@ -69,8 +69,8 @@ class MainScreen extends React.PureComponent {
         )}
         <Modal
           isVisible={this.state.isModalVisible}
-          animationIn="slideInDown"
-          animationInTiming={500}
+          animationIn="zoomInDown"
+          // animationInTiming={500}
           onSwipeComplete={() => this.setState({ isModalVisible: false })}
           swipeDirection="up"
           style={{

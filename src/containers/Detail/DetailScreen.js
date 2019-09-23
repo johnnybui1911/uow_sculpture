@@ -14,40 +14,20 @@ import { _handleNotification } from '../../library/notificationTask'
 // const localItem = localData[0]
 
 class DetailScreen extends React.PureComponent {
-  static defaultProps = {
-    item: {
-      id: 1,
-      name: 'Winged Figure',
-      distance: 500,
-      duration: 5,
-      des: 'Western side of Robsons Road',
-      features: {
-        date: '1988-1989',
-        maker: 'Bert Flugelman',
-        material: 'Stainless steel'
-      },
-      description: {
-        location:
-          'Main campus, on UOW land on the western side of  Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and  Northfields Avenue',
-        creditLine:
-          'Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988'
-      },
-      photoURL:
-        'https://uowac-sculpture-images.s3-ap-southeast-2.amazonaws.com/1987.08/IMG_2477.JPG',
-      coordinate: {
-        latitude: -34.40478,
-        longitude: 150.88115
-      },
-      imageList: []
-    }
-  }
-
   constructor(props) {
     super(props)
   }
 
+  state = {
+    modalVisible: false
+  }
+
   componentDidMount = () => {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (this.state.modalVisible) {
+        this.setState({ modalVisible: false })
+        return true
+      }
       this.props.navigation.goBack()
       return true
     })
@@ -58,6 +38,10 @@ class DetailScreen extends React.PureComponent {
 
   componentWillUnmount = () => {
     this.backHandler.remove()
+  }
+
+  setModalVisible = visible => {
+    this.setState({ modalVisible: visible })
   }
 
   _navigateToMap = () => {
@@ -94,6 +78,8 @@ class DetailScreen extends React.PureComponent {
                 elevation={5}
               />
               <Header
+                modalVisible={this.state.modalVisible}
+                setModalVisible={this.setModalVisible}
                 item={item}
                 imageList={imageList}
                 navigation={this.props.navigation}

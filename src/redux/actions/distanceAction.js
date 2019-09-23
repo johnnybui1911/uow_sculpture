@@ -83,9 +83,8 @@ export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
         })
         .then(({ distanceMatrix, enteredMarkers }) => {
           if (enteredMarkers.length > 0) {
-            // dispatch(handleVisitThunk(enteredMarkers))
+            dispatch(handleVisitThunk(enteredMarkers))
           }
-          // console.log(enteredMarkers)
           dispatch(fetchDistanceSuccessful(distanceMatrix))
         })
         .catch(error => {

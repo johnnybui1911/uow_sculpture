@@ -14,15 +14,18 @@ import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 import { AuthSession } from 'expo'
 
 const _signOut = async props => {
+  const redirectUrl = AuthSession.getRedirectUrl()
   const result = await WebBrowser.openBrowserAsync(
     `${AUTH0_DOMAIN}/v2/logout?federated`
   )
+
   if (!__DEV__) {
     WebBrowser.dismissBrowser()
   }
   console.log('result', result)
   if (result.type === 'opened' || result.type === 'cancel') {
-    await clearData('auth')
+    clearData('auth')
+    clearData('recentSearchList')
     props.handleSignOut()
     props.navigation.navigate('Auth')
   }
@@ -85,6 +88,7 @@ const mapStateToProps = getState => ({
 
 const mapDispatchToProps = dispatch => ({
   handleSignOut: () => {
+    clearData('auth')
     dispatch(signInRejected())
   }
 })

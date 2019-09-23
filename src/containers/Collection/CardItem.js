@@ -52,66 +52,75 @@ const CardItem = props => {
     >
       <View
         style={{
-          ...styles.cardItem,
-          alignItems: index % 2 === 0 ? 'flex-end' : 'flex-start'
+          flex: 1,
+          paddingHorizontal: 24,
+          paddingVertical: 3,
+          paddingTop: index === 0 ? 12 : 3
         }}
       >
         <View
-          style={index % 2 === 0 ? styles.cardDesLeft : styles.cardDesRight}
+          style={{
+            ...styles.cardItem,
+            alignItems: index % 2 === 0 ? 'flex-end' : 'flex-start'
+          }}
         >
-          {isLoading ? (
-            <Placeholder
-              Animation={Fade}
-              style={{
-                alignItems: 'center',
-                height: '100%'
-              }}
-            >
-              <PlaceholderLine width={20} />
-              <PlaceholderLine width={60} />
-              <PlaceholderLine width={80} />
-              <PlaceholderLine width={40} />
-            </Placeholder>
-          ) : (
-            <React.Fragment>
-              <View
-
-              // style={{ justifyContent: 'center' }}
+          <View
+            style={index % 2 === 0 ? styles.cardDesLeft : styles.cardDesRight}
+          >
+            {isLoading ? (
+              <Placeholder
+                Animation={Fade}
+                style={{
+                  alignItems: 'center',
+                  height: '100%'
+                }}
               >
-                <Text style={styles.distance}>
-                  {distanceMatrix && distanceMatrix[item.id]
-                    ? formatDistance(distanceMatrix[item.id].distance)
-                    : ''}
-                </Text>
-                <Text numberOfLines={2} style={styles.title}>
-                  {item.name}
-                </Text>
-
-                <Text style={[styles.description, { marginTop: 0 }]}>
-                  {item.features.maker}
-                </Text>
-              </View>
-              {/* {!inProfile && ( */}
-              <LikeComment markerId={item.id} style={{ marginBottom: -7 }} />
-              {/* )} */}
-            </React.Fragment>
-          )}
-        </View>
-        <View
-          style={[
-            styles.imageContainer,
-            index % 2 === 0 ? { left: 0 } : { right: 0 }
-          ]}
-        >
-          {isLoading ? (
-            <View style={styles.image}>
-              <Placeholder Animation={Fade}>
-                <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
+                <PlaceholderLine width={20} />
+                <PlaceholderLine width={60} />
+                <PlaceholderLine width={80} />
+                <PlaceholderLine width={40} />
               </Placeholder>
-            </View>
-          ) : (
-            renderImage()
-          )}
+            ) : (
+              <React.Fragment>
+                <View
+
+                // style={{ justifyContent: 'center' }}
+                >
+                  <Text style={styles.distance}>
+                    {distanceMatrix && distanceMatrix[item.id]
+                      ? formatDistance(distanceMatrix[item.id].distance)
+                      : ''}
+                  </Text>
+                  <Text numberOfLines={2} style={styles.title}>
+                    {item.name}
+                  </Text>
+
+                  <Text style={[styles.description, { marginTop: 0 }]}>
+                    {item.features.maker}
+                  </Text>
+                </View>
+                {/* {!inProfile && ( */}
+                <LikeComment markerId={item.id} style={{ marginBottom: -7 }} />
+                {/* )} */}
+              </React.Fragment>
+            )}
+          </View>
+          <View
+            style={[
+              styles.imageContainer,
+              index % 2 === 0 ? { left: 0 } : { right: 0 }
+            ]}
+          >
+            {isLoading ? (
+              <View style={styles.image}>
+                <Placeholder Animation={Fade}>
+                  <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
+                </Placeholder>
+              </View>
+            ) : (
+              renderImage()
+            )}
+          </View>
         </View>
       </View>
     </TouchableWithoutFeedback>

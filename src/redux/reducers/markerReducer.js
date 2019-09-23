@@ -11,7 +11,8 @@ import {
   FETCH_USER_DATA_SUCCESSFULL,
   ADD_COMMENT,
   OPEN_MODAL,
-  VISIT
+  VISIT,
+  SET_LIKE_ID
 } from '../../assets/actionTypes'
 import baseAxios from '../../library/api'
 
@@ -19,7 +20,8 @@ const initialState = {
   markerMatrix: {},
   markers: [],
   selectedMarker: null,
-  isLoading: true
+  isLoading: true,
+  isLoadingUser: false
 }
 
 const markerReducer = (state = initialState, action) => {
@@ -29,25 +31,31 @@ const markerReducer = (state = initialState, action) => {
       const { markerMatrix } = state
       data.forEach(element => {
         const { id, likeCount, commentCount } = element
-        if (!markerMatrix[id]) {
-          markerMatrix[id] = {
-            ...element,
-            likeId: null,
-            isVisited: false
-          }
-        } else {
-          markerMatrix[id] = {
-            ...element,
-            likeId: markerMatrix[id].likeId,
-            isVisited: markerMatrix[id].isVisited
-          }
+        markerMatrix[id] = {
+          ...element,
+          likeId: null,
+          isVisited: false
         }
+        // if (!markerMatrix[id]) {
+        //   markerMatrix[id] = {
+        //     ...element,
+        //     likeId: null,
+        //     isVisited: false
+        //   }
+        // } else {
+        //   markerMatrix[id] = {
+        //     ...element,
+        //     likeId: markerMatrix[id].likeId,
+        //     isVisited: markerMatrix[id].isVisited
+        //   }
+        // }
       })
       return {
         ...state,
         isLoading,
         markers: data,
-        markerMatrix: { ...markerMatrix }
+        markerMatrix: { ...markerMatrix },
+        isLoadingUser: false
       }
     }
 
@@ -75,6 +83,18 @@ const markerReducer = (state = initialState, action) => {
       const { id, likeId } = action
       markerMatrix[id].likeId = likeId
       markerMatrix[id].likeCount++
+      return {
+        ...state,
+        markerMatrix: { ...markerMatrix }
+      } // updating data immutably
+    }
+
+    case SET_LIKE_ID: {
+      const { markerMatrix } = state
+      const { id, likeId } = action
+      markerMatrix[id].likeId = likeId
+      // console.log(markerMatrix[id])
+      // markerMatrix[id].likeCount++
       return {
         ...state,
         markerMatrix: { ...markerMatrix }
@@ -139,7 +159,8 @@ const markerReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        markerMatrix: { ...markerMatrix }
+        markerMatrix: { ...markerMatrix },
+        isLoadingUser: true
       }
     }
 
@@ -153,7 +174,8 @@ const markerReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        markerMatrix: { ...markerMatrix }
+        markerMatrix: { ...markerMatrix },
+        isLoadingUser: false
       }
     }
 

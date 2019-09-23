@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableWithoutFeedback } from 'react-native'
 import palette from '../../assets/palette'
 import styles from './styles'
 import VerticalDivider from './VerticalDivider'
+import { withNavigation } from 'react-navigation'
 
-const ProfileBox = ({ likes, comments, visited }) => {
+const ProfileBox = ({ likes, comments, visited, navigation }) => {
   return (
     <View
       style={{
@@ -62,27 +63,29 @@ const ProfileBox = ({ likes, comments, visited }) => {
           </Text>
         </View>
         <VerticalDivider />
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center'
-          }}
-        >
-          <Text style={[styles.title, { color: palette.primaryColorLight }]}>
-            {visited}
-          </Text>
-          <Text
-            style={[
-              styles.description,
-              { fontSize: 11, color: palette.primaryColor }
-            ]}
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Visit')}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center'
+            }}
           >
-            VISITED
-          </Text>
-        </View>
+            <Text style={[styles.title, { color: palette.primaryColorLight }]}>
+              {visited}
+            </Text>
+            <Text
+              style={[
+                styles.description,
+                { fontSize: 11, color: palette.primaryColor }
+              ]}
+            >
+              VISITED
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </View>
   )
 }
 
-export default ProfileBox
+export default withNavigation(ProfileBox)

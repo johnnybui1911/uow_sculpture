@@ -90,7 +90,9 @@ export const icons = {
   back: props => (
     <CustomIcon name="back" size={24} style={{ ...props.style }} />
   ),
-  back_blue: <CustomIcon name="back" size={24} color={palette.primaryColor} />,
+  back_blue: ({ size = 24 }) => (
+    <CustomIcon name="back" size={size} color={palette.primaryColor} />
+  ),
   back_blue_light: (
     <CustomIcon
       name="back"

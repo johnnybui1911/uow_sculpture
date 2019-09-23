@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ActivityIndicator } from 'react-native'
-import { createSwitchNavigator } from 'react-navigation'
+import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import PersonalScreen from '../containers/Personal/PersonalScreen'
@@ -8,6 +8,7 @@ import AuthScreen from '../containers/Auth/AuthScreen'
 import { refreshNewToken } from '../redux/actions/authActions'
 import animations from '../assets/animations'
 import { getData } from '../library/asyncStorage'
+import VisitScreen from '../containers/Personal/VisitScreen'
 
 class AuthLoadingScreen extends React.PureComponent {
   componentDidMount = () => {
@@ -16,7 +17,7 @@ class AuthLoadingScreen extends React.PureComponent {
 
   _bootstrapAsync = async () => {
     const auth = await getData('auth')
-    this.props.navigation.navigate(auth ? 'Personal' : 'Auth')
+    this.props.navigation.navigate(auth ? 'PersonalStack' : 'Auth')
   }
 
   render() {
@@ -34,13 +35,28 @@ const mapStateToProps = getState => ({
 
 const AuthLoading = connect(mapStateToProps)(AuthLoadingScreen)
 
+const PersonalStack = createStackNavigator(
+  {
+    Personal: {
+      screen: PersonalScreen
+    },
+    Visit: {
+      screen: VisitScreen
+    }
+  },
+  {
+    headerMode: 'none',
+    initialRouteName: 'Personal'
+  }
+)
+
 const ProfileSwitchNavigator = createSwitchNavigator(
   {
     AuthLoading: {
       screen: AuthLoading
     },
-    Personal: {
-      screen: PersonalScreen
+    PersonalStack: {
+      screen: PersonalStack
     },
     Auth: {
       screen: AuthScreen

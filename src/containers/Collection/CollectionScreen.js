@@ -4,7 +4,8 @@ import {
   View,
   FlatList,
   Text,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  RefreshControl
 } from 'react-native'
 import { connect } from 'react-redux'
 import { Notifications } from 'expo'
@@ -17,6 +18,7 @@ import { _handleNotification } from '../../library/notificationTask'
 import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
 import SearchView from '../../components/SearchButton/SearchView'
+import { fetchDataThunk } from '../../redux/actions'
 
 class CollectionScreen extends React.PureComponent {
   constructor(props) {
@@ -56,6 +58,7 @@ class CollectionScreen extends React.PureComponent {
       },
       () => {
         // fetch data again
+        this.props.fetchDataThunk()
         this.setState({
           refreshing: false
         })
@@ -64,8 +67,11 @@ class CollectionScreen extends React.PureComponent {
   }
 
   _renderList = () => {
-    const { isLoading, markerMatrix } = this.props
-    if (isLoading) {
+    const { isLoading, markerMatrix, loggedIn, isLoadingUser } = this.props
+    if (
+      (loggedIn && (isLoading || !isLoadingUser)) ||
+      (!loggedIn && isLoading)
+    ) {
       const array = [1, 2, 3, 4]
       return (
         <FlatList
@@ -83,7 +89,17 @@ class CollectionScreen extends React.PureComponent {
           }}
           style={styles.flatList}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingVertical: 6 }}
+          ListHeaderComponent={() => {
+            return (
+              <View style={{ flex: 1 }}>
+                <HeaderBar headerName="Collection" />
+                <SearchView
+                  customStyle={{ marginBottom: 0 }}
+                  navigateTo={() => this.props.navigation.navigate('Search')}
+                />
+              </View>
+            )
+          }}
         />
       )
     }
@@ -102,14 +118,32 @@ class CollectionScreen extends React.PureComponent {
     }
     return (
       <FlatList
-        data={data}
+        data={data.sort((itemA, itemB) => {
+          return itemA.name > itemB.name
+        })}
         keyExtractor={item => item.id.toString()}
+        refreshControl={
+          <RefreshControl
+            colors={[palette.primaryColorLight]}
+            refreshing={refreshing}
+            onRefresh={this._handleRefresh}
+          />
+        }
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
-        refreshing={refreshing}
-        onRefresh={this._handleRefresh}
-        contentContainerStyle={{ paddingVertical: 6 }}
+        // contentContainerStyle={{ paddingVertical: 6 }}
+        ListHeaderComponent={() => {
+          return (
+            <View style={{ flex: 1 }}>
+              <HeaderBar headerName="Collection" />
+              <SearchView
+                customStyle={{ marginBottom: 0 }}
+                navigateTo={() => this.props.navigation.navigate('Search')}
+              />
+            </View>
+          )
+        }}
       />
     )
   }
@@ -119,19 +153,14 @@ class CollectionScreen extends React.PureComponent {
     return (
       <SafeAreaView style={styles.container}>
         <View style={{ flex: 1 }}>
-          <HeaderBar headerName="Collection" />
-          <SearchView
-            customStyle={{ marginBottom: 0 }}
-            navigateTo={() => this.props.navigation.navigate('Search')}
-          />
-          <View
+          {/* <View
             style={{
               flex: 1,
               paddingHorizontal: 24
             }}
-          >
-            {this._renderList()}
-          </View>
+          > */}
+          {this._renderList()}
+          {/* </View> */}
         </View>
       </SafeAreaView>
     )
@@ -140,7 +169,16 @@ class CollectionScreen extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   markerMatrix: getState.markerReducer.markerMatrix,
-  isLoading: getState.markerReducer.isLoading
+  isLoading: getState.markerReducer.isLoading,
+  isLoadingUser: getState.markerReducer.isLoadingUser,
+  loggedIn: getState.authReducer.loggedIn
 })
 
-export default connect(mapStateToProps)(CollectionScreen)
+const mapDispatchToProps = {
+  fetchDataThunk
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CollectionScreen)

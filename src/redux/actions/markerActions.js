@@ -6,12 +6,14 @@ import {
   FETCH_DATA_REJECTED,
   FETCH_DATA_PENDING,
   LIKE,
-  UNLIKE
+  UNLIKE,
+  SET_LIKE_ID
 } from '../../assets/actionTypes'
 import baseAxios from '../../library/api'
 import geofencingRegion from '../../containers/Map/Background/geofencingRegion'
 import { syncLocationThunk } from './locationActions'
 import { fetchDistanceMatrix } from './distanceAction'
+import { fetchUserDataThunk } from './authActions'
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
@@ -39,6 +41,10 @@ export const unselectMarker = () => {
 
 export const _like = (id, likeId) => {
   return { type: LIKE, id, likeId }
+}
+
+export const _setLikeId = (id, likeId) => {
+  return { type: SET_LIKE_ID, id, likeId }
 }
 
 export const _unlike = id => {
@@ -105,13 +111,15 @@ export const fetchDataThunk = () => {
         })
         .then(newData => {
           dispatch(fetchDataSuccessful(newData))
-          dispatch(
-            fetchDistanceMatrix(
-              getState().locationReducer.userCoordinate,
-              newData
+          dispatch(fetchUserDataThunk()).then(() => {
+            dispatch(
+              fetchDistanceMatrix(
+                getState().locationReducer.userCoordinate,
+                newData
+              )
             )
-          )
-          // dispatch(syncLocationThunk(newData))
+          })
+
           // geofencingRegion(newData)
           resolve({ data: newData })
         })

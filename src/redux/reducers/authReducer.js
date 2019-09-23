@@ -4,7 +4,9 @@ import {
   LIKE,
   UNLIKE,
   FETCH_USER_DATA_SUCCESSFULL,
-  ADD_COMMENT
+  ADD_COMMENT,
+  VISIT,
+  FETCH_USER_DATA_REJECTED
 } from '../../assets/actionTypes'
 
 const initialState = {
@@ -12,20 +14,7 @@ const initialState = {
   user: {},
   likeList: [],
   visitList: [],
-  commentList: [
-    {
-      sculptureId: 1987.08,
-      text:
-        'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-      submitDate: new Date(2019, 5, 29, 10, 33, 30)
-    },
-    {
-      sculptureId: 1987.081,
-      text:
-        'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-      submitDate: new Date()
-    }
-  ]
+  commentList: []
 }
 
 const authReducer = (state = initialState, action) => {
@@ -35,7 +24,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loggedIn: true, user: { ...user } }
     }
     case SIGN_IN_REJECTED: {
-      return { ...state, loggedIn: false }
+      return initialState
     }
 
     case FETCH_USER_DATA_SUCCESSFULL: {
@@ -48,26 +37,49 @@ const authReducer = (state = initialState, action) => {
       }
     }
 
+    case FETCH_USER_DATA_REJECTED: {
+      return { ...state }
+    }
+
     case ADD_COMMENT: {
       const { comment } = action.payload
+      const {
+        sculpture: { images }
+      } = comment
       const addComment = {
         sculptureId: comment.sculptureId,
         text: comment.content,
-        submitDate: comment.updatedTime
+        submitDate: comment.updatedTime,
+        photoURL: images[0].url
       }
-      return { ...state, commentList: [...state.commentList, addComment] }
+      return { ...state, commentList: [addComment, ...state.commentList] }
     }
 
     case LIKE: {
       const { id } = action
-      const {
+      let {
         likeList,
         user: { userId }
       } = state
-      if (!likeList.filter(item => item.id === id)) {
-        likeList.push({ sculptureId: id, userId })
+      if (!likeList.filter(item => item.sculptureId === id).length) {
+        likeList = [{ sculptureId: id, userId }, ...likeList]
       }
       return { ...state, likeList: [...likeList] }
+    }
+
+    case VISIT: {
+      const { enteredMarkers } = action
+      let {
+        visitList,
+        user: { userId }
+      } = state
+      enteredMarkers.forEach(element => {
+        const { id } = element
+        if (!visitList.filter(item => item.sculptureId === id).length) {
+          visitList = [...visitList, { sculptureId: id, userId }]
+        }
+      })
+      return { ...state, visitList: [...visitList] }
     }
 
     // case UNLIKE: {

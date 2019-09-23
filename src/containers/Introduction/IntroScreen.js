@@ -34,7 +34,7 @@ const IntroScreen = () => (
     >
       <Text style={styles.description}>
         The University of Wollongong Art Collection includes various outdoor
-        sculptures located throughout the University grounds.
+        sculptures located throughout the University grounds. ©
       </Text>
     </View>
     <View

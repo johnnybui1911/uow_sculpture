@@ -50,8 +50,8 @@ const CongratModal = ({
         isVisible={isCongratModalVisible}
         animationIn="zoomInDown"
         animationInTiming={1000}
-        // onSwipeComplete={() => closeModal()}
-        // swipeDirection={['up', 'left', 'right', 'down']}
+        onSwipeComplete={() => _closeModal()}
+        swipeDirection={['up', 'left', 'right', 'down']}
         onBackdropPress={() => {
           _closeModal()
         }}
@@ -77,8 +77,8 @@ const CongratModal = ({
             zIndex: 900,
             backgroundColor: '#fff',
             borderRadius: 26,
-            minHeight: 200,
-            width: 240,
+            // minHeight: 200,
+            width: 260,
             justifyContent: 'center',
             alignItems: 'center',
             elevation: 10
@@ -106,35 +106,22 @@ const CongratModal = ({
               You have visited
             </Text>
           </View>
-          {/* <TouchableOpacity
-            style={{
-              height: 44,
-              borderRadius: 26,
-              width: 140,
-              backgroundColor: palette.primaryColorLight,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 30,
-              zIndex: 100
-            }}
-            // onPress={() => {
-            //   this._navigateToDetail(this.props.selectedMarker)
-            // }}
+          <ScrollView
+            horizontal
+            style={{ padding: 16 }}
+            // contentContainerStyle={{ paddingLeft: 12 }}
           >
-            <Text style={styles.titleButton}>PROCEED</Text>
-          </TouchableOpacity> */}
-          <ScrollView horizontal>
             {enteredMarkers.map(item => {
               const { photoURL, id, name } = item
               return (
                 <View
                   key={id}
                   style={{
-                    padding: 12,
                     backgroundColor: palette.backgroundColorWhite,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    minHeight: 80
+                    paddingHorizontal: 5
+                    // minHeight: 80
                   }}
                 >
                   {photoURL ? (
@@ -171,7 +158,7 @@ const CongratModal = ({
 
                   <View
                     style={{
-                      paddingBottom: 7,
+                      // paddingBottom: 7,
                       paddingTop: 3,
                       alignItems: 'center'
                     }}

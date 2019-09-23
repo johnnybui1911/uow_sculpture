@@ -24,7 +24,11 @@ class LikeScreen extends React.PureComponent {
     // })
     return (
       <FlatList
-        data={likeList}
+        data={likeList.sort((a, b) => {
+          return (
+            new Date(b.likedTime).getTime() - new Date(a.likedTime).getTime()
+          )
+        })}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}

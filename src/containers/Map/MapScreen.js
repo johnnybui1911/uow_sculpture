@@ -22,7 +22,9 @@ import {
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
   URL_TEMPLATE,
-  DEFAULT_PADDING
+  DEFAULT_PADDING,
+  LATITUDE,
+  LONGITUDE
 } from '../../library/maps'
 import Footer from './Footer/Footer'
 import MarkersContainer from './MarkersContainer'
@@ -71,7 +73,9 @@ class MapScreen extends React.PureComponent {
     this.state = {
       showMapOnly: false,
       region: {
-        ...initialUserCoordinate,
+        // ...initialUserCoordinate,
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
@@ -183,7 +187,7 @@ class MapScreen extends React.PureComponent {
     this._animateLoop()
     setTimeout(() => {
       this._handleNavigateFromDetail()
-    }, 2000)
+    }, 1000)
   }
 
   componentDidUpdate = () => {
@@ -341,49 +345,49 @@ class MapScreen extends React.PureComponent {
           ref={marker => {
             this.marker = marker
           }}
-          tracksViewChanges={false}
+          // tracksViewChanges={false}
           style={{ zIndex: 2 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
           onPress={this._centerUserLocation}
-          draggable
-          onDragEnd={e => {
-            const userLocation = e.nativeEvent.coordinate
+          // draggable
+          // onDragEnd={e => {
+          //   const userLocation = e.nativeEvent.coordinate
 
-            const travelDistance = calcDistance(
-              userLocation,
-              this.userCoordinate.__getValue()
-            )
+          //   const travelDistance = calcDistance(
+          //     userLocation,
+          //     this.userCoordinate.__getValue()
+          //   )
 
-            this.userCoordinate.setValue({
-              ...userLocation,
-              latitudeDelta: 0,
-              longitudeDelta: 0
-            })
+          //   this.userCoordinate.setValue({
+          //     ...userLocation,
+          //     latitudeDelta: 0,
+          //     longitudeDelta: 0
+          //   })
 
-            travelDistance >= 10 && this.props.fetchDistanceMatrix(userLocation) // each 10m, sync position again to fecth data
-            // .then(res => console.log(res))
+          //   travelDistance >= 10 && this.props.fetchDistanceMatrix(userLocation) // each 10m, sync position again to fecth data
+          //   // .then(res => console.log(res))
 
-            // if (this.props.selectedMarker) {
-            //   const distance = calcDistance(
-            //     e.nativeEvent.coordinate,
-            //     this.props.selectedMarker.coordinate
-            //   )
+          //   // if (this.props.selectedMarker) {
+          //   //   const distance = calcDistance(
+          //   //     e.nativeEvent.coordinate,
+          //   //     this.props.selectedMarker.coordinate
+          //   //   )
 
-            //   if (distance <= 20) {
-            //     const message = {
-            //       title: 'Congratulation',
-            //       body: 'You have finished your trip !!!',
-            //       data: {
-            //         screen: 'Detail',
-            //         id: this.props.selectedMarker.id
-            //       }
-            //     }
-            //     this.setState({ isModalVisible: true })
-            //     _sendLocalNotification(message)
-            //   }
-            // }
-          }}
+          //   //   if (distance <= 20) {
+          //   //     const message = {
+          //   //       title: 'Congratulation',
+          //   //       body: 'You have finished your trip !!!',
+          //   //       data: {
+          //   //         screen: 'Detail',
+          //   //         id: this.props.selectedMarker.id
+          //   //       }
+          //   //     }
+          //   //     this.setState({ isModalVisible: true })
+          //   //     _sendLocalNotification(message)
+          //   //   }
+          //   // }
+          // }}
         >
           <View style={{ padding: 35 }}>
             {icons.user_location}
@@ -520,9 +524,10 @@ class MapScreen extends React.PureComponent {
                 this.map = ref
               }}
               onPress={this.toggleShowMapOnly}
-              onRegionChangeComplete={region =>
+              onRegionChangeComplete={region => {
+                // console.log(region)
                 this._handleRegionChangeComplete(region)
-              }
+              }}
               initialRegion={region}
               showsCompass={false}
               moveOnMarkerPress={false}

@@ -83,7 +83,7 @@ class Header extends React.Component {
                   style={[styles.backButtonStyle]}
                   onPress={() => this._goBack()}
                 >
-                  <View>{icons.back_blue}</View>
+                  <View>{icons.back_blue({})}</View>
                 </TouchableOpacity>
               </View>
               <FormDirection destination={destination} />

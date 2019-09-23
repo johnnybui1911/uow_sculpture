@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, FlatList, Image, Text } from 'react-native'
+import { View, FlatList, Image, Text, RefreshControl } from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import styles from './styles'
@@ -21,24 +21,6 @@ class CommentList extends React.PureComponent {
     }
   }
 
-  // componentDidMount = () => {
-  //   this._fetchData()
-  // }
-
-  // _fetchData = () => {
-  //   if (this.props.comments) {
-  //     // const { comments } = this.props
-  //     // comments.sort((a, b) => {
-  //     //   return b.submitDate - a.submitDate
-  //     // })
-
-  //     this.setState({
-  //       refreshing: false,
-  //       loading: false
-  //     })
-  //   }
-  // }
-
   _handleLoadMore = () => {
     // console.log('End Reached')
   }
@@ -51,6 +33,7 @@ class CommentList extends React.PureComponent {
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'center'
+          // paddingVertical:
         }}
       >
         <View style={[]}>
@@ -77,13 +60,13 @@ class CommentList extends React.PureComponent {
             <Text
               style={[
                 styles.description,
-                { fontSize: 13, paddingBottom: 0.75, color: 'rgb(136,136,136)' }
+                { fontSize: 13, paddingBottom: 0.5, color: 'rgb(136,136,136)' }
               ]}
             >
               {item.submitDate
                 ? moment(item.submitDate)
                     .fromNow()
-                    .includes('a few seconds ago')
+                    .includes('few seconds')
                   ? 'Just now'
                   : moment(item.submitDate).fromNow()
                 : 'Posting...'}
@@ -109,15 +92,22 @@ class CommentList extends React.PureComponent {
       <FlatList
         ref={scroll => (this.flatCommentList = scroll)}
         data={comments.sort((a, b) => {
-          return b.submitDate - a.submitDate
+          return (
+            new Date(b.submitDate).getTime() - new Date(a.submitDate).getTime()
+          )
         })}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ marginVertical: 8 }} />}
-        refreshing={refreshing}
-        onRefresh={this._handleRefresh}
+        ItemSeparatorComponent={() => <View style={{ marginVertical: 10 }} />}
+        refreshControl={
+          <RefreshControl
+            colors={[palette.primaryColorLight]}
+            refreshing={refreshing}
+            onRefresh={this._handleRefresh}
+          />
+        }
         contentContainerStyle={{
           paddingHorizontal: 24,
           paddingBottom: 60 + 16

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
+import LottieView from 'lottie-react-native'
 import { AuthSession } from 'expo'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -12,6 +13,7 @@ import qs from 'qs'
 import axios from 'axios'
 const nanoid = require('nanoid/async')
 import baseAxios from '../../library/api'
+import animations from '../../assets/animations'
 
 function toQueryString(params) {
   return Object.entries(params)
@@ -31,10 +33,9 @@ function base64URLEncode(str) {
 
 class SignInScreen extends React.Component {
   state = {
-    email: '',
-    password: '',
     challenge: '',
-    verifier: ''
+    verifier: '',
+    isLoading: false
   }
 
   generateChallenge = async () => {
@@ -78,6 +79,7 @@ class SignInScreen extends React.Component {
       authUrl: authUrl
     })
 
+    this.setState({ isLoading: true })
     if (response.type === 'success') {
       const { code } = response.params
       // console.log('code', code)
@@ -106,20 +108,25 @@ class SignInScreen extends React.Component {
         const auth = { token: access_token, refresh_token, expireDate }
         // console.log('final', auth)
         await storeData('auth', JSON.stringify(auth))
-
-        const profile = (await baseAxios.get('/user/me')).data
-        // console.log('profile', profile)
+        this.props.thunkSignIn()
+        this.props.navigation.navigate('Personal')
       } catch (e) {
         console.log(e)
+        this.setState({ isLoading: false })
       }
-
-      this.props.thunkSignIn()
-      this.props.navigation.navigate('Personal')
+    } else {
+      this.setState({ isLoading: false })
     }
   }
 
   render() {
-    return (
+    const { isLoading } = this.state
+
+    return isLoading ? (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <LottieView source={animations.loadingPersonal} autoPlay auto />
+      </View>
+    ) : (
       <View style={{ flex: 1, justifyContent: 'center', marginTop: 80 }}>
         <View
           style={{
@@ -129,9 +136,7 @@ class SignInScreen extends React.Component {
         >
           <View style={{ textAlign: 'center' }}>
             <Text style={styles.title}>Welcome</Text>
-            <Text style={styles.description}>
-              Sign in to access your account
-            </Text>
+            <Text style={styles.description}>Please sign in to continue</Text>
           </View>
         </View>
         <View style={{ flex: 1 }}>
