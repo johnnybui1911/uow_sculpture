@@ -80,6 +80,10 @@ class SignInScreen extends React.Component {
     })
 
     this.setState({ isLoading: true })
+    // if (!__DEV__) {
+    //   console.log('hello not dev')
+    //   AuthSession.dismiss()
+    // }
     if (response.type === 'success') {
       const { code } = response.params
       // console.log('code', code)

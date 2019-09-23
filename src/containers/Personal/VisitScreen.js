@@ -130,7 +130,7 @@ class VisitScreen extends React.PureComponent {
         })}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
-        style={styles.flatList}
+        style={[styles.flatList, { marginTop: -12 }]}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => (
           <DividerLight
@@ -194,7 +194,7 @@ class VisitScreen extends React.PureComponent {
             style={{
               flex: 1,
               //   paddingLeft: 12,
-              paddingBottom: 1
+              paddingBottom: 3
               // alignItems: 'center'
             }}
           >
@@ -208,7 +208,6 @@ class VisitScreen extends React.PureComponent {
               Visits
             </Text>
           </View>
-          <View style={{ width: 50 }} />
         </View>
         {isLoading ? (
           <View

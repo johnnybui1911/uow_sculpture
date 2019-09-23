@@ -388,7 +388,7 @@ class MapScreen extends React.PureComponent {
           //   // }
           // }}
         >
-          <View style={{ padding: 35 }}>
+          <View style={{ padding: 15 }}>
             {icons.user_location}
             <LottieView
               style={{
@@ -530,6 +530,7 @@ class MapScreen extends React.PureComponent {
               initialRegion={region}
               showsCompass={false}
               moveOnMarkerPress={false}
+              maxZoomLevel={19}
             >
               {Platform.OS === 'android' && (
                 <UrlTile urlTemplate={URL_TEMPLATE} maximumZ={19} zIndex={-1} />

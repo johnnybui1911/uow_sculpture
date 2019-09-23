@@ -198,7 +198,7 @@ class CommentScreen extends React.PureComponent {
           <View
             style={{
               flex: 1,
-              paddingBottom: 1
+              paddingBottom: 3
               // alignItems: 'center'
             }}
           >

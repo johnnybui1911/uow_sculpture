@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:784204977710:android:8fdf8e7fff58c18c",
         "android_client_info": {
-          "package_name": "com.UOW.UOWSculpture"
+          "package_name": "com.UOW.UOWSculptures"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "784204977710-n6jrmnf84iu0ufrpji0gotbo9ibro0bl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.UOW.UOWSculpture",
+            "package_name": "com.UOW.UOWSculptures",
             "certificate_hash": "70a302e80607aa557da3a35dfa494d9e35fa7968"
           }
         },

@@ -2,7 +2,6 @@ import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import * as WebBrowser from 'expo-web-browser'
-import toQueryString from 'to-querystring'
 import { connect } from 'react-redux'
 import FeatureCard from './FeatureCard'
 import styles from './styles'
@@ -13,15 +12,27 @@ import { clearData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 import { AuthSession } from 'expo'
 
+function toQueryString(params) {
+  return Object.entries(params)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join('&')
+}
+
 const _signOut = async props => {
   const redirectUrl = AuthSession.getRedirectUrl()
+  const queryString = toQueryString({
+    client_id: AUTH0_CLIENT_ID,
+    returnTo: redirectUrl
+  })
   const result = await WebBrowser.openBrowserAsync(
-    `${AUTH0_DOMAIN}/v2/logout?federated`
+    `${AUTH0_DOMAIN}/v2/logout?${queryString}`
   )
+  console.log('hey', `${AUTH0_DOMAIN}/v2/logout?${queryString}`)
+  // WebBrowser.dismissBrowser()
 
-  if (!__DEV__) {
-    WebBrowser.dismissBrowser()
-  }
   console.log('result', result)
   if (result.type === 'opened' || result.type === 'cancel') {
     clearData('auth')
