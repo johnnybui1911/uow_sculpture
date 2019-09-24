@@ -187,7 +187,7 @@ class MapScreen extends React.PureComponent {
     this._animateLoop()
     setTimeout(() => {
       this._handleNavigateFromDetail()
-    }, 1000)
+    }, 500)
   }
 
   componentDidUpdate = () => {

@@ -11,7 +11,7 @@ import AboutScreen from './AboutScreen'
 import CommentScreen from './CommentScreen'
 import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
-import { fetchUserDataThunk } from '../../redux/actions'
+import { fetchUserDataThunk, fetchDataThunk} from '../../redux/actions'
 import animations from '../../assets/animations'
 import { AuthHeader } from '../Auth/AuthScreen'
 
@@ -43,7 +43,7 @@ class PersonalScreen extends React.PureComponent {
       },
       () => {
         this.props
-          .fetchUserDataThunk()
+          .fetchDataThunk()
           .then(() => {
             this.setState({
               refreshing: false
@@ -220,8 +220,9 @@ const mapStateToProps = getState => ({
 })
 
 const mapDispatchToProps = {
-  fetchUserDataThunk
+  fetchUserDataThunk,fetchDataThunk
 }
+
 
 export default connect(
   mapStateToProps,

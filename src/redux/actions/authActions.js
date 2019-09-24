@@ -143,7 +143,6 @@ export const thunkSignIn = () => {
               joinDate,
               picture
             }
-            console.log(userId)
             dispatch(signInSuccesful(user))
             dispatch(fetchUserDataThunk(userId))
               .then(() => {

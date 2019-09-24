@@ -118,10 +118,10 @@ export const fetchDataThunk = () => {
                 newData
               )
             )
+            resolve({ data: newData })
           })
 
           // geofencingRegion(newData)
-          resolve({ data: newData })
         })
         .catch(e => {
           dispatch(fetchDataRejected())

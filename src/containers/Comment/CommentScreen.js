@@ -261,97 +261,97 @@ class CommentScreen extends React.PureComponent {
             navigation={this.props.navigation}
           />
         )}
-        <KeyboardAvoidingView
+        {/* <KeyboardAvoidingView
           style={{
             flex: 1,
             position: 'absolute',
             bottom: 0
           }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        > */}
+        <Animated.View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: SCREEN_WIDTH,
+            backgroundColor: palette.backgroundColorWhite,
+            elevation: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: 24,
+            paddingBottom: this.keyboardHeight
+          }}
         >
+          <Image
+            source={{ uri: picture }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 40 / 2,
+              alignSelf: 'flex-end',
+              marginBottom: 10,
+              backgroundColor: '#F6F6F6'
+            }}
+          />
+
           <Animated.View
             style={{
-              // position: 'absolute',
-              // bottom: 0,
-              width: SCREEN_WIDTH,
-              backgroundColor: palette.backgroundColorWhite,
-              elevation: 10,
+              flex: 1,
               flexDirection: 'row',
+              justifyContent: 'center',
               alignItems: 'center',
-              paddingHorizontal: 24
-              // paddingBottom: this.keyboardHeight
+              marginVertical: 10,
+              marginLeft: 7,
+              height: inputHeight,
+              backgroundColor: '#F2F3F5',
+              borderRadius: 16,
+              borderColor: 'rgba(0,0,0,0)'
             }}
           >
-            <Image
-              source={{ uri: picture }}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 40 / 2,
-                alignSelf: 'flex-end',
-                marginBottom: 10,
-                backgroundColor: '#F6F6F6'
+            <TextInput
+              autoFocus
+              onContentSizeChange={e => {
+                const { height } = e.nativeEvent.contentSize
+                if (height < TEXT_INPUT_HEIGHT * 3)
+                  Animated.timing(inputHeight, {
+                    toValue: height,
+                    duration: 100
+                  }).start()
               }}
-            />
-
-            <Animated.View
+              multiline
+              numberOfLines={4}
+              ref={component => (this._contentInput = component)}
+              value={inputValue}
+              onChangeText={text => this.setState({ inputValue: text })}
+              placeholder="Add a comment..."
+              underlineColorAndroid="rgba(0,0,0,0)"
               style={{
                 flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginVertical: 10,
-                marginLeft: 7,
-                height: inputHeight,
-                backgroundColor: '#F2F3F5',
-                borderRadius: 16,
-                borderColor: 'rgba(0,0,0,0)'
+                padding: 10,
+                width: '100%',
+                fontFamily: 'Montserrat-Medium',
+                fontSize: 14,
+                color: palette.primaryColor
               }}
-            >
-              <TextInput
-                autoFocus
-                onContentSizeChange={e => {
-                  const { height } = e.nativeEvent.contentSize
-                  if (height < TEXT_INPUT_HEIGHT * 3)
-                    Animated.timing(inputHeight, {
-                      toValue: height,
-                      duration: 100
-                    }).start()
-                }}
-                multiline
-                numberOfLines={4}
-                ref={component => (this._contentInput = component)}
-                value={inputValue}
-                onChangeText={text => this.setState({ inputValue: text })}
-                placeholder="Add a comment..."
-                underlineColorAndroid="rgba(0,0,0,0)"
+              placeholderTextColor="rgb(110, 117, 125)"
+            />
+            <TouchableWithoutFeedback onPress={this._onSubmit}>
+              <Text
                 style={{
-                  flex: 1,
+                  alignSelf: 'flex-end',
                   padding: 10,
-                  width: '100%',
                   fontFamily: 'Montserrat-Medium',
                   fontSize: 14,
-                  color: palette.primaryColor
+                  color: palette.primaryColorLight,
+                  opacity: inputValue.trim() === '' ? 0 : 1
                 }}
-                placeholderTextColor="rgb(110, 117, 125)"
-              />
-              <TouchableWithoutFeedback onPress={this._onSubmit}>
-                <Text
-                  style={{
-                    alignSelf: 'flex-end',
-                    padding: 10,
-                    fontFamily: 'Montserrat-Medium',
-                    fontSize: 14,
-                    color: palette.primaryColorLight,
-                    opacity: inputValue.trim() === '' ? 0 : 1
-                  }}
-                >
-                  Post
-                </Text>
-              </TouchableWithoutFeedback>
-            </Animated.View>
+              >
+                Post
+              </Text>
+            </TouchableWithoutFeedback>
           </Animated.View>
-        </KeyboardAvoidingView>
+        </Animated.View>
+        {/* </KeyboardAvoidingView> */}
       </SafeAreaView>
     )
   }
