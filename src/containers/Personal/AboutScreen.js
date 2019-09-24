@@ -28,9 +28,9 @@ const _signOut = async props => {
     returnTo: redirectUrl
   })
   const result = await WebBrowser.openBrowserAsync(
-    `${AUTH0_DOMAIN}/v2/logout?${queryString}`
+    `${AUTH0_DOMAIN}/v2/logout?federated&${queryString}`
   )
-  console.log('hey', `${AUTH0_DOMAIN}/v2/logout?${queryString}`)
+  console.log('hey', `${AUTH0_DOMAIN}/v2/logout?federated&${queryString}`)
   // WebBrowser.dismissBrowser()
 
   console.log('result', result)
