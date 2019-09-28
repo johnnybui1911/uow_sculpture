@@ -1,24 +1,12 @@
 import React from 'react'
-import { View, FlatList, Image, Text, RefreshControl } from 'react-native'
-import { connect } from 'react-redux'
-import moment from 'moment'
+import { View, FlatList, RefreshControl } from 'react-native'
 import styles from './styles'
-import images from '../../assets/images'
-import DividerLight from '../../components/Divider/DividerLight'
-import { icons } from '../../assets/icons'
-import { FontAwesome } from '@expo/vector-icons'
 import palette from '../../assets/palette'
-import Header from './Header'
-import { withNavigation } from 'react-navigation'
+import CommentItem from './CommentItem'
 
 class CommentList extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      // comments: [],
-      loading: true,
-      refreshing: false
-    }
   }
 
   _handleLoadMore = () => {
@@ -26,68 +14,19 @@ class CommentList extends React.PureComponent {
   }
 
   _renderItem = ({ item }) => {
-    const photoURL = null
+    const { _openModal, _selectComment, _handleEditComment } = this.props
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'center'
-          // paddingVertical:
-        }}
-      >
-        <View style={[]}>
-          <Image
-            source={{ uri: item.userImg }}
-            style={{ height: 40, width: 40, borderRadius: 40 }}
-          />
-        </View>
-        <View
-          style={{
-            flex: 1,
-            paddingLeft: 12
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'flex-end'
-            }}
-          >
-            <Text style={[styles.title, { fontSize: 14, marginRight: 5 }]}>
-              {item.userName}
-            </Text>
-            <Text
-              style={[
-                styles.description,
-                { fontSize: 13, paddingBottom: 0.5, color: 'rgb(136,136,136)' }
-              ]}
-            >
-              {item.submitDate
-                ? moment(item.submitDate)
-                    .fromNow()
-                    .includes('few seconds')
-                  ? 'Just now'
-                  : moment(item.submitDate).fromNow()
-                : 'Posting...'}
-            </Text>
-          </View>
-          <Text
-            style={[
-              styles.description_cmt,
-              { marginBottom: 3, fontSize: 14, opacity: 0.9 }
-            ]}
-          >
-            {item.text}
-          </Text>
-        </View>
-      </View>
+      <CommentItem
+        item={item}
+        _openModal={_openModal}
+        _selectComment={_selectComment}
+        _handleEditComment={_handleEditComment}
+      />
     )
   }
 
   _renderList = () => {
-    const { refreshing } = this.state
-    const { comments } = this.props
+    const { comments, refreshing, _handleRefresh } = this.props
     return (
       <FlatList
         ref={scroll => (this.flatCommentList = scroll)}
@@ -100,12 +39,13 @@ class CommentList extends React.PureComponent {
         renderItem={this._renderItem}
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
         ItemSeparatorComponent={() => <View style={{ marginVertical: 10 }} />}
         refreshControl={
           <RefreshControl
             colors={[palette.primaryColorLight]}
             refreshing={refreshing}
-            onRefresh={this._handleRefresh}
+            onRefresh={_handleRefresh}
           />
         }
         contentContainerStyle={{
@@ -113,43 +53,13 @@ class CommentList extends React.PureComponent {
           paddingBottom: 60 + 16
         }}
         ListHeaderComponentStyle={{ marginHorizontal: -24 }}
-        // ListHeaderComponent={() => {
-        //   return (
-        //     <View style={{ flex: 1 }}>
-        //       {/* <Header /> */}
-        //       <View
-        //         style={{
-        //           flex: 1,
-        //           paddingVertical: 16,
-        //           paddingHorizontal: 24
-        //           // paddingTop: 18 + 6 // if no header rendered
-        //         }}
-        //       >
-        //         <Text style={styles.flatListHeader}>Comments</Text>
-        //       </View>
-        //     </View>
-        //   )
-        // }}
         onEndReachedThreshold={0.5}
         onEndReached={this._handleLoadMore}
       />
     )
   }
 
-  _handleRefresh = () => {
-    this.setState(
-      {
-        refreshing: true
-      },
-      () =>
-        this.setState({
-          refreshing: false
-        })
-    )
-  }
-
   render() {
-    const { loading } = this.state
     return <View style={{ flex: 1 }}>{this._renderList()}</View>
   }
 }

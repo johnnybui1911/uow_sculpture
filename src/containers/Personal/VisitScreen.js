@@ -19,6 +19,7 @@ import { MIN_TABVIEW_HEIGHT, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import baseAxios from '../../library/api'
+import ListHeader from '../../components/ListHeader/ListHeader'
 class VisitScreen extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -121,7 +122,6 @@ class VisitScreen extends React.PureComponent {
 
   _renderList = () => {
     const { refreshing, visitList } = this.state
-    console.log(visitList)
     return visitList.length ? (
       <FlatList
         data={visitList.sort((a, b) => {
@@ -170,7 +170,8 @@ class VisitScreen extends React.PureComponent {
     const { isLoading } = this.state
     return (
       <View style={{ flex: 1 }}>
-        <View
+        <ListHeader headerName="Visits" />
+        {/* <View
           style={{
             paddingTop: STATUS_BAR_HEIGHT + 12,
             paddingHorizontal: 24,
@@ -213,7 +214,7 @@ class VisitScreen extends React.PureComponent {
               Visits
             </Text>
           </View>
-        </View>
+        </View> */}
         {isLoading ? (
           <View
             style={{

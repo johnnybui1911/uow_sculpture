@@ -30,7 +30,7 @@ const markerReducer = (state = initialState, action) => {
       const { data, isLoading } = action.payload
       const { markerMatrix } = state
       data.forEach(element => {
-        const { id, likeCount, commentCount } = element
+        const { id } = element
         markerMatrix[id] = {
           ...element,
           likeId: null,

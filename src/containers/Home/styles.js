@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
 
 const shadowStyle = {
-  elevation: 3,
+  elevation: 2,
   shadowColor: '#000000',
   shadowOffset: {
     width: 0,

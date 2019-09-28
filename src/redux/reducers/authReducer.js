@@ -6,7 +6,9 @@ import {
   FETCH_USER_DATA_SUCCESSFULL,
   ADD_COMMENT,
   VISIT,
-  FETCH_USER_DATA_REJECTED
+  FETCH_USER_DATA_REJECTED,
+  DELETE_COMMENT,
+  EDIT_COMMENT
 } from '../../assets/actionTypes'
 
 const initialState = {
@@ -44,15 +46,49 @@ const authReducer = (state = initialState, action) => {
     case ADD_COMMENT: {
       const { comment } = action.payload
       const {
-        sculpture: { images }
+        commentId,
+        content,
+        user: { userId, picture },
+        sculpture: { accessionId, images },
+        updatedTime
       } = comment
+
       const addComment = {
-        sculptureId: comment.sculptureId,
-        text: comment.content,
-        submitDate: comment.updatedTime,
-        photoURL: images[0].url
+        commentId,
+        text: content,
+        userId,
+        userImg: picture,
+        sculptureId: accessionId,
+        photoURL: images.length ? images[0].url : null,
+        submitDate: updatedTime
       }
+
       return { ...state, commentList: [addComment, ...state.commentList] }
+    }
+
+    case DELETE_COMMENT: {
+      const { commentId } = action.payload
+      const { commentList } = state
+      return {
+        ...state,
+        commentList: commentList.filter(
+          element => element.commentId !== commentId
+        )
+      }
+    }
+
+    case EDIT_COMMENT: {
+      const { comment } = action.payload
+      const { commentId, content, updatedTime } = comment
+      const { commentList } = state
+
+      const editedComment = commentList.find(
+        element => element.commentId === commentId
+      )
+      editedComment.text = content
+      editedComment.submitDate = updatedTime
+
+      return { ...state, commentList: [...commentList] }
     }
 
     case LIKE: {

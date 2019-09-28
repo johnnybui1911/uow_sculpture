@@ -8,12 +8,8 @@ import {
 } from 'react-native'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
-import {
-  Placeholder,
-  PlaceholderMedia,
-  PlaceholderLine,
-  Fade
-} from 'rn-placeholder'
+import { Placeholder, PlaceholderMedia, Fade } from 'rn-placeholder'
+import LottieView from 'lottie-react-native'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
 import NearbyList from './NearbyList'
@@ -23,6 +19,7 @@ import PopularItem from './PopularItem'
 import { _handleNotification } from '../../library/notificationTask'
 import { fetchDataThunk } from '../../redux/actions'
 import palette from '../../assets/palette'
+import animations from '../../assets/animations'
 
 class HomeScreen extends React.PureComponent {
   state = {
@@ -90,6 +87,7 @@ class HomeScreen extends React.PureComponent {
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView
+          scrollEnabled={checkLoading || !distanceMatrix ? false : true}
           refreshControl={
             <RefreshControl
               colors={[palette.primaryColorLight]}
@@ -103,10 +101,18 @@ class HomeScreen extends React.PureComponent {
           <View style={styles.nearbyView}>
             <Text style={styles.listTitle}>Nearby Sculptures</Text>
             {checkLoading || !distanceMatrix ? (
-              <View style={styles.nearbyItemStyle}>
-                <Placeholder Animation={Fade}>
+              <View style={[styles.nearbyItemStyle]}>
+                <View style={styles.imageNearbyContainer}>
+                  <LottieView
+                    source={animations.image_loading}
+                    autoSize={false}
+                    autoPlay
+                    loop
+                  />
+                </View>
+                {/* <Placeholder Animation={Fade}>
                   <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
-                </Placeholder>
+                </Placeholder> */}
               </View>
             ) : (
               <NearbyList

@@ -45,6 +45,7 @@ export default class App extends React.PureComponent {
   }
 
   _loadDataAsync = async () => {
+    await stores.dispatch(thunkSignIn())
     const fetchData = stores.dispatch(fetchDataThunk())
     const loadFont = Font.loadAsync({
       'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
@@ -90,14 +91,12 @@ export default class App extends React.PureComponent {
         <AppLoading
           startAsync={this._loadDataAsync}
           onFinish={async () => {
-            await stores.dispatch(thunkSignIn())
             await stores.dispatch(syncLocationThunk())
             this.setState({ isReady: true })
-            // Promise.all([authorization])
-            // syncLocationBackground()
-            // geofencingRegion(data)
           }}
-          onError={console.warn}
+          onError={() => {
+            console.log('Error')
+          }}
         />
       )
     }

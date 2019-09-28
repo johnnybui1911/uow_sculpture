@@ -11,7 +11,6 @@ import {
 } from '../../assets/actionTypes'
 import baseAxios from '../../library/api'
 import geofencingRegion from '../../containers/Map/Background/geofencingRegion'
-import { syncLocationThunk } from './locationActions'
 import { fetchDistanceMatrix } from './distanceAction'
 import { fetchUserDataThunk } from './authActions'
 
@@ -57,7 +56,7 @@ export const fetchDataThunk = () => {
       dispatch(fetchDataPending())
 
       baseAxios
-        .get('/sculpture')
+        .get('sculpture')
         .then(res => {
           return res.data
         })
@@ -109,22 +108,18 @@ export const fetchDataThunk = () => {
           })
           return newData
         })
-        .then(newData => {
+        .then(async newData => {
+          const { userCoordinate } = getState().locationReducer
           dispatch(fetchDataSuccessful(newData))
-          dispatch(fetchUserDataThunk()).then(() => {
-            dispatch(
-              fetchDistanceMatrix(
-                getState().locationReducer.userCoordinate,
-                newData
-              )
-            )
-            resolve({ data: newData })
-          })
-
+          await dispatch(fetchUserDataThunk())
+          await dispatch(fetchDistanceMatrix(userCoordinate, newData))
+          resolve({ data: newData })
           // geofencingRegion(newData)
         })
         .catch(e => {
+          console.log(e.message)
           dispatch(fetchDataRejected())
+          console.log('error fetch data thunk')
           reject()
         })
     })

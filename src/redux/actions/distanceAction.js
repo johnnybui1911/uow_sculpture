@@ -26,18 +26,14 @@ export const fetchDistanceRejected = () => {
   return { type: FETCH_DISTANCE_REJECTED, payload: { isLoading: false } }
 }
 
-export const fetchDistanceMatrix = (userCoordinate, newData = null) => {
+export const fetchDistanceMatrix = userCoordinate => {
   return (dispatch, getState) => {
     // let userCoordinate = userCoord
     // if (!userCoord) {
     //   userCoordinate = getState().locationReducer.userCoordinate
     // }
     const { markers } = getState().markerReducer
-    let initialData = newData
-    if (!newData || markers) {
-      initialData = markers
-    }
-    const data = initialData.filter(item => item.coordinate.latitude)
+    const data = markers.filter(item => item.coordinate.latitude)
 
     let destinations = ''
     data.forEach(marker => {

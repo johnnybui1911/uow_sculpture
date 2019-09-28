@@ -2,92 +2,139 @@ import React from 'react'
 import {
   SafeAreaView,
   View,
-  Image,
-  TextInput,
   Text,
   TouchableWithoutFeedback,
   Keyboard,
   Animated,
-  StyleSheet,
   ActivityIndicator,
   BackHandler,
-  KeyboardAvoidingView
+  Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
-import Header from './Header'
 import { _handleNotification } from '../../library/notificationTask'
 import CommentList from './CommentList'
-import images from '../../assets/images'
 import palette from '../../assets/palette'
 import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
-import { addComment } from '../../redux/actions/authActions'
+import {
+  addComment,
+  deleteComment,
+  editComment
+} from '../../redux/actions/authActions'
 import baseAxios from '../../library/api'
-import HeaderBar from '../../components/Header/HeaderBar'
-import BackButton from '../../components/BackButton/BackButton'
 import { icons } from '../../assets/icons'
-import { Platform } from '@unimodules/core'
-
-const localComments = [
-  {
-    sculptureId: 1986.058,
-    userId: 'hnb133',
-    content: 'Hello',
-    createdTime: new Date(2019, 5, 24, 10, 33, 30)
-  },
-  {
-    sculptureId: 1987.08,
-    userId: 'hnb134',
-    content:
-      'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    createdTime: new Date(2019, 5, 29, 10, 33, 30)
-  },
-  {
-    sculptureId: 1987.081,
-    userId: 'hnb135',
-    content:
-      'One of the best sculpture I have ever seen. Highly recommended for new visitors to Wollongong.',
-    createdTime: new Date()
-  }
-]
+import InputKeyboard from './InputKeyboard'
+import DeleteModal from './DeleteModal'
+import ListHeader from '../../components/ListHeader/ListHeader'
 
 const TEXT_INPUT_HEIGHT = Platform.OS === 'ios' ? 45 : 40
 
 class CommentScreen extends React.PureComponent {
-  static defaultProps = {
-    item: {
-      id: 1,
-      name: 'Winged Figure',
-      distance: 500,
-      duration: 5,
-      des: 'Western side of Robsons Road',
-      features: {
-        date: '1988-1989',
-        maker: 'Bert Flugelman',
-        material: 'Stainless steel'
-      },
-      description: {
-        location:
-          'Main campus, on UOW land on the western side of  Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and  Northfields Avenue',
-        creditLine:
-          'Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988'
-      },
-      photoURL: 1,
-      coordinate: {
-        latitude: -34.40478,
-        longitude: 150.88115
-      }
-    }
-  }
-
   state = {
     inputValue: '',
     inputHeight: new Animated.Value(TEXT_INPUT_HEIGHT),
     comments: [],
-    isLoading: true
+    isLoading: true,
+    refreshing: false,
+    isModalOpen: false,
+    selectedComment: null,
+    isEdit: false,
+    editing: false,
+    isUndo: false,
+    isOverflowOpen: false
   }
 
+  inputRef = React.createRef()
+
   keyboardHeight = new Animated.Value(0)
+
+  _handleRefresh = () => {
+    this.setState({ refreshing: true, isLoading: true })
+    this._fetchCommentSculpture()
+  }
+
+  _selectComment = selectedComment => {
+    this.setState({ selectedComment })
+  }
+
+  _openModal = () => {
+    this.setState({ isModalOpen: true })
+  }
+
+  _closeModal = () => {
+    this.setState({ isModalOpen: false })
+  }
+
+  _handleEditComment = () => {
+    const { comments, selectedComment } = this.state
+    const { text } = selectedComment
+    this.inputRef.current.focus()
+    this.setState({ inputValue: text, isEdit: true })
+  }
+
+  _editComment = () => {
+    const { comments, selectedComment, inputValue } = this.state
+    this.setState({ editing: true })
+
+    baseAxios
+      .patch('comment', {
+        commentId: selectedComment.commentId,
+        content: inputValue.trim()
+      })
+      .then(res => {
+        const resData = res.data
+        this.props.editComment(resData)
+        this._fetchCommentSculpture()
+
+        this.setState({ isOverflowOpen: true })
+        setTimeout(() => {
+          this.setState({ isOverflowOpen: false, isEdit: false })
+        }, 2000)
+      })
+      .catch(() => {
+        console.log('Error! Can not edit comment!')
+        this._fetchCommentSculpture()
+      })
+  }
+
+  _deleteComment = () => {
+    const { comments, selectedComment } = this.state
+    const { commentId } = selectedComment
+    this.setState({
+      isModalOpen: false,
+      isOverflowOpen: true,
+      comments: comments.filter(element => element.commentId !== commentId)
+    })
+
+    setTimeout(() => {
+      const { isUndo } = this.state
+      if (!isUndo) {
+        baseAxios
+          .delete(`comment/${commentId}`)
+          .then(() => {
+            this.props.deleteComment(selectedComment.commentId)
+            this._fetchCommentSculpture()
+          })
+          .catch(() => {
+            console.log('Error! Cant not delete this comment!')
+            this._fetchCommentSculpture()
+          })
+      } else {
+        this.setState({ isUndo: false })
+      }
+    }, 2000)
+  }
+
+  _handleUndo = () => {
+    const { selectedComment, comments } = this.state
+    if (selectedComment) {
+      this.setState({
+        comments: [selectedComment, ...comments],
+        isUndo: true,
+        isOverflowOpen: false
+      })
+    }
+  }
 
   componentDidMount = () => {
     this._fetchCommentSculpture()
@@ -111,6 +158,10 @@ class CommentScreen extends React.PureComponent {
     this.keyboardDidHideSub.remove()
   }
 
+  handleChangeText = text => {
+    this.setState({ inputValue: text })
+  }
+
   handleKeyboardDidShow = event => {
     Animated.timing(this.keyboardHeight, {
       duration: 1,
@@ -126,7 +177,7 @@ class CommentScreen extends React.PureComponent {
   }
 
   _fetchCommentSculpture = () => {
-    const sculptureId = this.props.navigation.getParam('id', 1986.058)
+    const sculptureId = this.props.navigation.getParam('id', 'unknown0')
     baseAxios
       .get(`comment/sculpture-id/${sculptureId}`)
       .then(res => res.data)
@@ -150,97 +201,95 @@ class CommentScreen extends React.PureComponent {
             submitDate: updatedTime
           }
         })
-        this.setState({ comments, isLoading: false })
+        this.setState({
+          comments,
+          isLoading: false,
+          // isEdit: false,
+          editing: false,
+          refreshing: false,
+          selectedComment: null
+          // isOverflowOpen: false
+        })
       })
       .catch(e => {
         console.log(e)
-        this.setState({ isLoading: true })
+        this.setState({
+          isLoading: true,
+          // isEdit: false,
+          editing: false,
+          refreshing: false,
+          selectedComment: null
+          // isOverflowOpen: false
+        })
       })
   }
 
-  _contentInput = null
+  // _resetUI = () => {
+  //   this.setState({
+  //     isLoading: true,
+  //     refreshing: false,
+  //     selectedComment: null,
+  //     isEdit: false,
+  //     editing: false,
+  //     isUndo: false,
+  //     isOverflowOpen: false
+  //   })
+  // }
 
   _onSubmit = () => {
-    const sculptureId = this.props.navigation.getParam('id', 1986.058)
+    const sculptureId = this.props.navigation.getParam('id', 'unknown0')
     const { user } = this.props
-    const { inputValue } = this.state
-
-    const postingComment = {
-      userId: user.userId,
-      userImg: user.picture,
-      userName: user.username,
-      sculptureId,
-      text: inputValue
-    }
-    this.setState({ comments: [postingComment, ...this.state.comments] })
-    baseAxios
-      .post('comment', {
+    const { inputValue, isEdit, selectedComment, comments } = this.state
+    if (isEdit) {
+      const { text } = selectedComment
+      if (inputValue.trim() !== text) {
+        this._editComment()
+      }
+    } else {
+      const postingComment = {
+        userId: user.userId,
+        userImg: user.picture,
+        userName: user.username,
         sculptureId,
-        content: inputValue
-      })
-      .then(res => res.data)
-      .then(resData => {
-        this.props.addComment(resData)
-        this._fetchCommentSculpture()
-      })
+        text: inputValue.trim()
+      }
+      this.setState({ comments: [postingComment, ...this.state.comments] })
+      baseAxios
+        .post('comment', {
+          sculptureId,
+          content: inputValue.trim()
+        })
+        .then(res => res.data)
+        .then(resData => {
+          this.props.addComment(resData)
+          this._fetchCommentSculpture()
+        })
+        .catch(() => 'Can not add comment')
+    }
 
     this.setState({ inputValue: '' })
     Keyboard.dismiss()
   }
 
   render() {
-    const { inputValue, inputHeight, comments, isLoading } = this.state
+    const {
+      inputValue,
+      inputHeight,
+      comments,
+      isLoading,
+      isModalOpen,
+      isEdit,
+      editing,
+      refreshing,
+      isOverflowOpen,
+      selectedComment
+    } = this.state
     const {
       user: { picture }
     } = this.props
     return (
       <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            paddingTop: STATUS_BAR_HEIGHT + 12,
-            paddingHorizontal: 24,
-            paddingBottom: 12,
-            justifyContent: 'center',
-            flexDirection: 'row',
-            backgroundColor: '#FAFAFA',
-            // borderBottomColor: palette.dividerColorNew,
-            // borderBottomWidth: StyleSheet.hairlineWidth,
-            marginBottom: 12,
-            elevation: 2
-          }}
-        >
-          <TouchableWithoutFeedback
-            onPress={() => this.props.navigation.goBack()}
-          >
-            <View
-              style={{
-                width: 50,
-                justifyContent: 'center',
-                paddingBottom: 4 + 1
-              }}
-            >
-              {icons.back_blue({ size: 18 })}
-            </View>
-          </TouchableWithoutFeedback>
-          <View
-            style={{
-              flex: 1,
-              paddingBottom: 3
-              // alignItems: 'center'
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 18,
-                color: palette.primaryTypographyColor,
-                fontFamily: 'Montserrat-Medium'
-              }}
-            >
-              Comments
-            </Text>
-          </View>
-          <View style={{ width: 50 }} />
-        </View>
+        <ListHeader headerName="Comments" />
         {isLoading ? (
           <View
             style={{
@@ -252,6 +301,11 @@ class CommentScreen extends React.PureComponent {
           </View>
         ) : (
           <CommentList
+            refreshing={refreshing}
+            _handleRefresh={this._handleRefresh}
+            _handleEditComment={this._handleEditComment}
+            _selectComment={this._selectComment}
+            _openModal={this._openModal}
             comments={comments.sort((a, b) => {
               return (
                 new Date(b.submitDate).getTime() -
@@ -261,97 +315,53 @@ class CommentScreen extends React.PureComponent {
             navigation={this.props.navigation}
           />
         )}
-        {/* <KeyboardAvoidingView
-          style={{
-            flex: 1,
-            position: 'absolute',
-            bottom: 0
-          }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        > */}
-        <Animated.View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            width: SCREEN_WIDTH,
-            backgroundColor: palette.backgroundColorWhite,
-            elevation: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: 24,
-            paddingBottom: this.keyboardHeight
-          }}
+        <InputKeyboard
+          keyboardHeight={this.keyboardHeight}
+          isEdit={isEdit}
+          editing={editing}
+          ref={this.inputRef}
+          picture={picture}
+          inputHeight={inputHeight}
+          inputValue={inputValue}
+          _onSubmit={this._onSubmit}
+          handleChangeText={this.handleChangeText}
+          selectedComment={selectedComment}
         >
-          <Image
-            source={{ uri: picture }}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 40 / 2,
-              alignSelf: 'flex-end',
-              marginBottom: 10,
-              backgroundColor: '#F6F6F6'
-            }}
-          />
-
-          <Animated.View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginVertical: 10,
-              marginLeft: 7,
-              height: inputHeight,
-              backgroundColor: '#F2F3F5',
-              borderRadius: 16,
-              borderColor: 'rgba(0,0,0,0)'
-            }}
-          >
-            <TextInput
-              autoFocus
-              onContentSizeChange={e => {
-                const { height } = e.nativeEvent.contentSize
-                if (height < TEXT_INPUT_HEIGHT * 3)
-                  Animated.timing(inputHeight, {
-                    toValue: height,
-                    duration: 100
-                  }).start()
-              }}
-              multiline
-              numberOfLines={4}
-              ref={component => (this._contentInput = component)}
-              value={inputValue}
-              onChangeText={text => this.setState({ inputValue: text })}
-              placeholder="Add a comment..."
-              underlineColorAndroid="rgba(0,0,0,0)"
+          {isOverflowOpen && (
+            <View
               style={{
-                flex: 1,
-                padding: 10,
-                width: '100%',
-                fontFamily: 'Montserrat-Medium',
-                fontSize: 14,
-                color: palette.primaryColor
+                backgroundColor: 'rgba(0,71,187,0.8)',
+                paddingHorizontal: 24,
+                paddingVertical: 16,
+                flexDirection: 'row'
               }}
-              placeholderTextColor="rgb(110, 117, 125)"
-            />
-            <TouchableWithoutFeedback onPress={this._onSubmit}>
-              <Text
-                style={{
-                  alignSelf: 'flex-end',
-                  padding: 10,
-                  fontFamily: 'Montserrat-Medium',
-                  fontSize: 14,
-                  color: palette.primaryColorLight,
-                  opacity: inputValue.trim() === '' ? 0 : 1
-                }}
-              >
-                Post
-              </Text>
-            </TouchableWithoutFeedback>
-          </Animated.View>
-        </Animated.View>
-        {/* </KeyboardAvoidingView> */}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.menuText, { color: '#FFF' }]}>
+                  {isEdit ? 'Comment edited.' : 'Comment deleted.'}
+                </Text>
+              </View>
+              {!isEdit && (
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    this._handleUndo()
+                  }}
+                >
+                  <View>
+                    <Text style={[styles.menuText, { color: '#FFF' }]}>
+                      Undo
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
+            </View>
+          )}
+        </InputKeyboard>
+        <DeleteModal
+          isModalOpen={isModalOpen}
+          _closeModal={this._closeModal}
+          _deleteComment={this._deleteComment}
+        />
       </SafeAreaView>
     )
   }
@@ -363,7 +373,9 @@ const mapStateToProps = getState => ({
 })
 
 const mapDispatchToProps = {
-  addComment
+  addComment,
+  deleteComment,
+  editComment
 }
 
 export default connect(

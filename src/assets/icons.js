@@ -4,7 +4,8 @@ import { Image, View, StyleSheet } from 'react-native'
 import {
   createIconSetFromIcoMoon,
   FontAwesome,
-  AntDesign
+  AntDesign,
+  MaterialIcons
 } from '@expo/vector-icons'
 import palette from './palette'
 import icoMoonConfig from './selection.json'
@@ -175,19 +176,14 @@ export const icons = {
     />
   ),
   vertical_dots: (
-    <View>
-      {[1, 2, 3].map(index => {
-        return (
-          <FontAwesome
-            key={index}
-            name="circle"
-            size={3}
-            color={palette.primaryColor}
-            style={{ marginVertical: 1.5 }}
-          />
-        )
-      })}
-    </View>
+    <MaterialIcons name="more-vert" size={24} color={palette.primaryColor} />
+  ),
+  vertical_dots_light: (
+    <MaterialIcons
+      name="more-vert"
+      size={24}
+      color={palette.primaryColorLight}
+    />
   ),
   up_arrow: (
     <FontAwesome

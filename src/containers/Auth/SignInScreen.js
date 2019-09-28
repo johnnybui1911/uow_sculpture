@@ -5,7 +5,11 @@ import { AuthSession } from 'expo'
 import { connect } from 'react-redux'
 import styles from './styles'
 import palette from '../../assets/palette'
-import { thunkSignIn, signInSuccesful } from '../../redux/actions/authActions'
+import {
+  thunkSignIn,
+  signInSuccesful,
+  fetchUserDataThunk
+} from '../../redux/actions/authActions'
 import { storeData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
 import * as Crypto from 'expo-crypto'
@@ -201,8 +205,9 @@ class SignInScreen extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  thunkSignIn: () => {
-    dispatch(thunkSignIn())
+  thunkSignIn: async () => {
+    await dispatch(thunkSignIn())
+    await dispatch(fetchUserDataThunk())
   },
   signInSuccesful: () => {
     dispatch(signInSuccesful())

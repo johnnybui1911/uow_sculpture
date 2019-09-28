@@ -23,6 +23,8 @@ export const SET_LIKE_ID = 'SET_LIKE_ID'
 export const UNLIKE = 'UNLIKE'
 
 export const ADD_COMMENT = 'ADD_COMMENT'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
 
 export const OPEN_MODAL = 'OPEN_MODAL'
 export const CLOSE_MODAL = 'CLOSE_MODAL'

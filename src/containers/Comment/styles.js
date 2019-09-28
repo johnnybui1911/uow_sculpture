@@ -87,7 +87,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold'
   },
@@ -124,15 +124,18 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold'
   },
   button: {
-    flex: 1,
     backgroundColor: palette.primaryColorLight,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
-    marginVertical: 10,
+    borderRadius: 4,
+    // marginVertical: 10,
     minHeight: BUTTON_HEIGHT,
-    ...shadowStyle
+    padding: 4,
+    flex: 1,
+    borderColor: palette.primaryColorLight,
+    borderWidth: 0.5
+    // ...shadowStyle
   },
   titleButton: {
     fontSize: 16,
@@ -152,5 +155,15 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: '#000000'
+  },
+  socialIconStyle: {
+    width: 22
+    // paddingHorizontal: 4,
+    // marginRight: -4,
+  },
+  menuText: {
+    fontSize: 14,
+    fontFamily: 'Montserrat-SemiBold',
+    color: palette.primaryColorLight
   }
 })

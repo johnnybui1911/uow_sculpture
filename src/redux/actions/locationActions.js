@@ -14,7 +14,7 @@ export const syncLocationRejected = () => {
   return { type: SYNC_LOCATION_REJECTED }
 }
 
-export const syncLocationThunk = data => {
+export const syncLocationThunk = () => {
   return dispatch => {
     return new Promise(async (resolve, reject) => {
       const { status } = await Permissions.askAsync(Permissions.LOCATION)
@@ -31,10 +31,11 @@ export const syncLocationThunk = data => {
             if (loc.timestamp) {
               const { latitude, longitude } = loc.coords
               dispatch(syncLocationSuccessful({ latitude, longitude }))
-              dispatch(fetchDistanceMatrix(loc.coords, data))
+              dispatch(fetchDistanceMatrix(loc.coords))
               resolve()
             } else {
               dispatch(syncLocationRejected())
+              console.log('error fetch location expo')
               reject()
             }
           }
