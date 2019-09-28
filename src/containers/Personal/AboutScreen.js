@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, AsyncStorage } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import * as WebBrowser from 'expo-web-browser'
 import { connect } from 'react-redux'
@@ -27,13 +27,27 @@ const _signOut = async props => {
     client_id: AUTH0_CLIENT_ID,
     returnTo: redirectUrl
   })
-  const result = await WebBrowser.openBrowserAsync(
-    `${AUTH0_DOMAIN}/v2/logout?${queryString}`
-  )
-  console.log('hey', `${AUTH0_DOMAIN}/v2/logout?${queryString}`)
-  // WebBrowser.dismissBrowser()
+
+  let logoutUrl = `${AUTH0_DOMAIN}/v2/logout?${queryString}`
+  if (props.user.userID.split('|')[0].includes('google')) {
+    logoutUrl = `${AUTH0_DOMAIN}/v2/logout?federated&${queryString}`
+  } else if (props.user.userId.split('|')[0].includes('facebook')) {
+    console.log('sign out facebook!')
+    const accessToken = JSON.parse(await AsyncStorage.getItem('auth')).token
+    const fbQueryString = toQueryString({
+      returnTo: `${AUTH0_DOMAIN}/logout?returnTo=${redirectUrl}`,
+      client_id: AUTH0_CLIENT_ID,
+      access_token: accessToken
+    })
+    logoutUrl = `${AUTH0_DOMAIN}/v2/logout?federated&${fbQueryString}`
+  }
+
+  const result = await WebBrowser.openBrowserAsync(logoutUrl)
+
+  console.log('hey', logoutUrl)
 
   console.log('result', result)
+
   if (result.type === 'opened' || result.type === 'cancel') {
     clearData('auth')
     clearData('recentSearchList')
