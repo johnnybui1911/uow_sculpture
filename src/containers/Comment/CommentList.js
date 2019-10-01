@@ -49,6 +49,7 @@ class CommentList extends React.PureComponent {
           />
         }
         contentContainerStyle={{
+          paddingTop: 12,
           paddingHorizontal: 24,
           paddingBottom: 60 + 16
         }}

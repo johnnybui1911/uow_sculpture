@@ -9,6 +9,7 @@ import { refreshNewToken } from '../redux/actions/authActions'
 import animations from '../assets/animations'
 import { getData } from '../library/asyncStorage'
 import VisitScreen from '../containers/Personal/VisitScreen'
+import EditProfile from '../containers/Personal/EditProfile'
 
 class AuthLoadingScreen extends React.PureComponent {
   componentDidMount = () => {
@@ -42,6 +43,9 @@ const PersonalStack = createStackNavigator(
     },
     Visit: {
       screen: VisitScreen
+    },
+    EditProfile: {
+      screen: EditProfile
     }
   },
   {

@@ -29,7 +29,7 @@ const _signOut = async props => {
   })
 
   let logoutUrl = `${AUTH0_DOMAIN}/v2/logout?${queryString}`
-  if (props.user.userID.split('|')[0].includes('google')) {
+  if (props.user.userId.split('|')[0].includes('google')) {
     logoutUrl = `${AUTH0_DOMAIN}/v2/logout?federated&${queryString}`
   } else if (props.user.userId.split('|')[0].includes('facebook')) {
     console.log('sign out facebook!')
@@ -44,9 +44,9 @@ const _signOut = async props => {
 
   const result = await WebBrowser.openBrowserAsync(logoutUrl)
 
-  console.log('hey', logoutUrl)
+  // console.log('hey', logoutUrl)
 
-  console.log('result', result)
+  // console.log('result', result)
 
   if (result.type === 'opened' || result.type === 'cancel') {
     clearData('auth')

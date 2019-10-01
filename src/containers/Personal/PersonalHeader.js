@@ -9,6 +9,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
+import { withNavigation } from 'react-navigation'
 import styles from './styles'
 import palette from '../../assets/palette'
 import images from '../../assets/images'
@@ -20,8 +21,10 @@ const PersonalHeader = ({
   _handleRefresh,
   likeUserCount,
   commentUserCount,
-  visitUserCount
+  visitUserCount,
+  navigation
 }) => {
+  const { userId } = user
   return user ? (
     <View style={styles.profileFixedContainer}>
       {user.userId ? (
@@ -38,9 +41,14 @@ const PersonalHeader = ({
             <View style={{ flex: 1 }}>
               <Text style={styles.headerTitle}>Profile</Text>
             </View>
-            <TouchableOpacity style={styles.box}>
-              <Text style={styles.titleButton}>EDIT</Text>
-            </TouchableOpacity>
+            {userId.split('|')[0].includes('auth0') && (
+              <TouchableOpacity
+                style={styles.box}
+                onPress={() => navigation.navigate('EditProfile')}
+              >
+                <Text style={styles.titleButton}>EDIT</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View
             style={{
@@ -64,9 +72,10 @@ const PersonalHeader = ({
               <Image
                 source={{ uri: user.picture }}
                 style={{ height: 100, width: 100 }}
-                resizeMode="contain"
+                resizeMode="cover"
               />
             </View>
+
             <View style={{ marginTop: 15 }}>
               <Text
                 style={[
@@ -74,7 +83,7 @@ const PersonalHeader = ({
                   { fontSize: 24, color: palette.backgroundColorWhite }
                 ]}
               >
-                {user.username}
+                {!user.username ? null : user.username}
               </Text>
             </View>
           </View>
@@ -110,4 +119,4 @@ const mapStateToProps = getState => {
   }
 }
 
-export default connect(mapStateToProps)(PersonalHeader)
+export default connect(mapStateToProps)(withNavigation(PersonalHeader))

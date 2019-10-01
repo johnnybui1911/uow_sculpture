@@ -145,7 +145,7 @@ class VisitScreen extends React.PureComponent {
             onRefresh={this._handleRefresh}
           />
         }
-        // contentContainerStyle={{ paddingHorizontal: 24 }}
+        contentContainerStyle={{ paddingTop: 12 }}
       />
     ) : (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -171,55 +171,12 @@ class VisitScreen extends React.PureComponent {
     return (
       <View style={{ flex: 1 }}>
         <ListHeader headerName="Visits" />
-        {/* <View
-          style={{
-            paddingTop: STATUS_BAR_HEIGHT + 12,
-            paddingHorizontal: 24,
-            paddingBottom: 12,
-            justifyContent: 'center',
-            flexDirection: 'row',
-            backgroundColor: '#FAFAFA',
-            marginBottom: 12,
-            elevation: 2
-          }}
-        >
-          <TouchableWithoutFeedback
-            onPress={() => this.props.navigation.goBack()}
-          >
-            <View
-              style={{
-                width: 50,
-                justifyContent: 'center',
-                paddingBottom: 4 + 1
-              }}
-            >
-              {icons.back_blue({ size: 18 })}
-            </View>
-          </TouchableWithoutFeedback>
-          <View
-            style={{
-              flex: 1,
-              //   paddingLeft: 12,
-              paddingBottom: 3
-              // alignItems: 'center'
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 18,
-                color: palette.primaryTypographyColor,
-                fontFamily: 'Montserrat-Medium'
-              }}
-            >
-              Visits
-            </Text>
-          </View>
-        </View> */}
         {isLoading ? (
           <View
             style={{
               flex: 1,
-              alignItems: 'center'
+              alignItems: 'center',
+              paddingTop: 12
             }}
           >
             <ActivityIndicator color={palette.primaryColorLight} size="large" />

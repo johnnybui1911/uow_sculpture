@@ -23,6 +23,21 @@ export const DirectionIcon = maneuver => (
 const socialSize = 18
 
 export const icons = {
+  check: ({ style }) => (
+    <MaterialIcons
+      name="check"
+      size={24}
+      color={palette.primaryColorLight}
+      style={[style]}
+    />
+  ),
+  alert: (
+    <MaterialIcons
+      name="error-outline"
+      size={14}
+      color={palette.secondaryColor}
+    />
+  ),
   noun_arrow: (
     <CustomIcon name="noun-arrow" size={24} color={palette.primaryColorLight} />
   ),

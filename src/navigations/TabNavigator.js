@@ -21,7 +21,7 @@ const TabNavigator = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Profile',
     tabBarPosition: 'bottom',
     tabBarComponent: CustomBottomTab,
     animationEnabled: true

@@ -145,10 +145,18 @@ export const thunkSignIn = () => {
         baseAxios
           .get('user/me')
           .then(res => {
-            const { userId, name, email, joinDate, picture } = res.data
+            // console.log(res.data)
+            const {
+              userId,
+              name,
+              email,
+              joinDate,
+              picture,
+              nickname
+            } = res.data
             const user = {
               userId,
-              username: name,
+              username: userId.includes('auth0') ? nickname : name,
               email,
               joinDate,
               picture

@@ -86,9 +86,28 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  textInputContainer: {
+    paddingTop: 18
+  },
+  textInputOutlined: {
+    borderBottomWidth: 1,
+    borderBottomColor: palette.secondaryTypographyColor,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   title: {
     fontSize: 22,
     color: palette.primaryColor,
+    fontFamily: 'Montserrat-SemiBold'
+  },
+  textInputTitle: {
+    fontSize: 12,
+    color: palette.secondaryTypographyStrongColor,
+    fontFamily: 'Montserrat-SemiBold'
+  },
+  textInputTitle__alert: {
+    fontSize: 12,
+    color: palette.secondaryColor,
     fontFamily: 'Montserrat-SemiBold'
   },
   flatListHeader: {

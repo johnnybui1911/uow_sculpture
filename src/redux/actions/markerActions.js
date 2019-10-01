@@ -118,8 +118,8 @@ export const fetchDataThunk = () => {
         })
         .catch(e => {
           console.log(e.message)
-          dispatch(fetchDataRejected())
           console.log('error fetch data thunk')
+          dispatch(fetchDataRejected())
           reject()
         })
     })

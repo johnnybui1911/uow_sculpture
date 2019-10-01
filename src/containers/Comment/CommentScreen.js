@@ -119,6 +119,7 @@ class CommentScreen extends React.PureComponent {
             console.log('Error! Cant not delete this comment!')
             this._fetchCommentSculpture()
           })
+        this.setState({ isOverflowOpen: false })
       } else {
         this.setState({ isUndo: false })
       }
@@ -207,8 +208,8 @@ class CommentScreen extends React.PureComponent {
           // isEdit: false,
           editing: false,
           refreshing: false,
-          selectedComment: null
-          // isOverflowOpen: false
+          selectedComment: null,
+          isUndo: false
         })
       })
       .catch(e => {
@@ -218,8 +219,8 @@ class CommentScreen extends React.PureComponent {
           // isEdit: false,
           editing: false,
           refreshing: false,
-          selectedComment: null
-          // isOverflowOpen: false
+          selectedComment: null,
+          isUndo: false
         })
       })
   }
@@ -294,7 +295,8 @@ class CommentScreen extends React.PureComponent {
           <View
             style={{
               flex: 1,
-              alignItems: 'center'
+              alignItems: 'center',
+              paddingTop: 12
             }}
           >
             <ActivityIndicator color={palette.primaryColorLight} size="large" />
