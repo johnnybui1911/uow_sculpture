@@ -1,6 +1,20 @@
 # UOW Sculpture
 UOW Sculptures app - providing information and map locations of sculptures in University Of Wollongong
 
+__Preview__
+<p float="left">
+<img src="https://i.imgur.com/LHs9P8F.png" width="225"/>
+<img src="https://i.imgur.com/MD1i4lA.png" width="225"/>
+<img src="https://i.imgur.com/CQYz3ck.png" width="225"/>
+<img src="https://i.imgur.com/lLrQx9c.png" width="225"/>
+<img src="https://i.imgur.com/nDouabk.png" width="225"/>
+<img src="https://i.imgur.com/hJBbRCW.png" width="225"/>
+<img src="https://i.imgur.com/ABNdaix.png" width="225"/>
+<img src="https://i.imgur.com/Tccr8He.png" width="225"/>
+<img src="https://i.imgur.com/PDWLzPI.png" width="225"/>
+  
+</p>
+
 __Core features__
 * Viewing and searching the sculptures, their detailed information, and location
 * Integrated map (Open Street Map)
