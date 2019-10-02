@@ -1,18 +1,20 @@
 import React from 'react'
 import { View, SafeAreaView } from 'react-native'
+import { connect } from 'react-redux'
 import LottieView from 'lottie-react-native'
 import { AuthHeader } from '../containers/Auth/AuthScreen'
 import animations from '../assets/animations'
 import { getData } from '../library/asyncStorage'
 import palette from '../assets/palette'
 
-export default class AuthLoadingScreen extends React.PureComponent {
+class AuthLoadingScreen extends React.PureComponent {
   componentDidMount = () => {
     this._bootstrapAsync()
   }
   _bootstrapAsync = async () => {
     const auth = await getData('auth')
-    this.props.navigation.navigate(auth ? 'PersonalStack' : 'Auth')
+    const { loggedIn } = this.props
+    this.props.navigation.navigate(auth && loggedIn ? 'PersonalStack' : 'Auth')
   }
   render() {
     return (
@@ -27,3 +29,10 @@ export default class AuthLoadingScreen extends React.PureComponent {
     )
   }
 }
+
+const mapStateToProps = getState => ({
+  loggedIn: getState.authReducer.loggedIn,
+  isLoadingUser: getState.markerReducer.isLoadingUser
+})
+
+export default connect(mapStateToProps)(AuthLoadingScreen)

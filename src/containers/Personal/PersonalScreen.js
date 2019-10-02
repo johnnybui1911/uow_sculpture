@@ -1,6 +1,12 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
-import { SafeAreaView, View, Animated, RefreshControl } from 'react-native'
+import {
+  SafeAreaView,
+  View,
+  Animated,
+  RefreshControl,
+  PanResponder
+} from 'react-native'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
@@ -161,17 +167,11 @@ class PersonalScreen extends React.PureComponent {
     return (
       <Animated.ScrollView
         ref={refFunc}
-        // refreshControl={
-        //   <RefreshControl refreshing onRefresh={this._handleRefresh} />
-        // }
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: HEADER_HEIGHT + TAB_BAR_HEIGHT
         }}
-        // onMoveShouldSetResponder={e => {
-        //   console.log(e.nativeEvent)
-        // }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
           {
@@ -184,10 +184,21 @@ class PersonalScreen extends React.PureComponent {
             }
           }
         )}
+        onMomentumScrollBegin={event => {
+          routeKey !== 'ABOUT' && this._refresh(event.nativeEvent)
+        }}
+        // onMomentumScrollEnd={this._refresh}
       >
         <View style={styles.tabViewStyle}>{content}</View>
       </Animated.ScrollView>
     )
+  }
+
+  _refresh = nativeEvent => {
+    var { velocity, contentOffset } = nativeEvent
+    if (contentOffset.y === 0 && velocity.y > 0 && !this.state.refreshing) {
+      this._handleRefresh()
+    }
   }
 
   render() {
@@ -205,16 +216,6 @@ class PersonalScreen extends React.PureComponent {
         />
       </SafeAreaView>
     )
-    // : (
-    //   <SafeAreaView
-    //     style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
-    //   >
-    //     <AuthHeader />
-    //     <View style={{ flex: 1, justifyContent: 'center' }}>
-    //       <LottieView source={animations.loadingPersonal} autoPlay auto />
-    //     </View>
-    //   </SafeAreaView>
-    // )
   }
 }
 const mapStateToProps = getState => ({

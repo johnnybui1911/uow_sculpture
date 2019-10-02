@@ -54,7 +54,7 @@ export const fetchDistanceMatrix = userCoordinate => {
           distance: distance,
           duration: 0
         }
-        if (distance <= 20) {
+        if (distance <= 15) {
           enteredMarkers = [
             ...enteredMarkers,
             {
