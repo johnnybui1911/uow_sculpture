@@ -24,8 +24,9 @@ export default StyleSheet.create({
   },
   backButtonContainerStyle: {
     height: '100%',
-    marginHorizontal: 12,
-    marginTop: 8
+    // marginRight: 12,
+    marginTop: 8,
+    marginLeft: 24
   },
   backButtonStyle: {
     paddingVertical: 4
@@ -33,7 +34,8 @@ export default StyleSheet.create({
   secondColumnStyle: {
     flex: 1,
     flexDirection: 'row',
-    marginHorizontal: 8
+    marginHorizontal: 8,
+    marginRight: 24
   },
   inputBox: {
     marginVertical: 4,

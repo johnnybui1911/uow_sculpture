@@ -8,24 +8,25 @@ import {
   Animated,
   ActivityIndicator,
   BackHandler,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
 import { _handleNotification } from '../../library/notificationTask'
 import CommentList from './CommentList'
 import palette from '../../assets/palette'
-import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import {
   addComment,
   deleteComment,
   editComment
 } from '../../redux/actions/authActions'
 import baseAxios from '../../library/api'
-import { icons } from '../../assets/icons'
 import InputKeyboard from './InputKeyboard'
 import DeleteModal from './DeleteModal'
 import ListHeader from '../../components/ListHeader/ListHeader'
+import { SCREEN_WIDTH } from '../../assets/dimension'
+import SignInButton from '../../components/SignIn/SignInButton'
 
 const TEXT_INPUT_HEIGHT = Platform.OS === 'ios' ? 45 : 40
 
@@ -187,7 +188,7 @@ class CommentScreen extends React.PureComponent {
           const {
             commentId,
             content,
-            user: { userId, picture, name },
+            user: { userId, picture, name, nickname },
             sculpture: { accessionId, images },
             updatedTime
           } = element
@@ -196,7 +197,7 @@ class CommentScreen extends React.PureComponent {
             text: content,
             userId,
             userImg: picture,
-            userName: name,
+            userName: userId.includes('auth0') ? nickname : name,
             sculptureId: accessionId,
             photoURL: images.length ? images[0].url : null,
             submitDate: updatedTime
@@ -286,7 +287,8 @@ class CommentScreen extends React.PureComponent {
       selectedComment
     } = this.state
     const {
-      user: { picture }
+      user: { picture },
+      loggedIn
     } = this.props
     return (
       <SafeAreaView style={styles.container}>
@@ -317,48 +319,72 @@ class CommentScreen extends React.PureComponent {
             navigation={this.props.navigation}
           />
         )}
-        <InputKeyboard
-          keyboardHeight={this.keyboardHeight}
-          isEdit={isEdit}
-          editing={editing}
-          ref={this.inputRef}
-          picture={picture}
-          inputHeight={inputHeight}
-          inputValue={inputValue}
-          _onSubmit={this._onSubmit}
-          handleChangeText={this.handleChangeText}
-          selectedComment={selectedComment}
-        >
-          {isOverflowOpen && (
-            <View
-              style={{
-                backgroundColor: 'rgba(0,71,187,0.8)',
-                paddingHorizontal: 24,
-                paddingVertical: 16,
-                flexDirection: 'row'
-              }}
-            >
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.menuText, { color: '#FFF' }]}>
-                  {isEdit ? 'Comment edited.' : 'Comment deleted.'}
-                </Text>
+        {loggedIn ? (
+          <InputKeyboard
+            keyboardHeight={this.keyboardHeight}
+            isEdit={isEdit}
+            editing={editing}
+            ref={this.inputRef}
+            picture={picture}
+            inputHeight={inputHeight}
+            inputValue={inputValue}
+            _onSubmit={this._onSubmit}
+            handleChangeText={this.handleChangeText}
+            selectedComment={selectedComment}
+          >
+            {isOverflowOpen && (
+              <View
+                style={{
+                  backgroundColor: 'rgba(0,71,187,0.8)',
+                  paddingHorizontal: 24,
+                  paddingVertical: 16,
+                  flexDirection: 'row'
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.menuText, { color: '#FFF' }]}>
+                    {isEdit ? 'Comment edited.' : 'Comment deleted.'}
+                  </Text>
+                </View>
+                {!isEdit && (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      this._handleUndo()
+                    }}
+                  >
+                    <View>
+                      <Text style={[styles.menuText, { color: '#FFF' }]}>
+                        Undo
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                )}
               </View>
-              {!isEdit && (
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    this._handleUndo()
-                  }}
-                >
-                  <View>
-                    <Text style={[styles.menuText, { color: '#FFF' }]}>
-                      Undo
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              )}
-            </View>
-          )}
-        </InputKeyboard>
+            )}
+          </InputKeyboard>
+        ) : (
+          <View
+            style={{
+              backgroundColor: '#fff',
+              alignItems: 'center',
+              position: 'absolute',
+              width: SCREEN_WIDTH,
+              elevation: 20,
+              bottom: 0
+            }}
+          >
+            <Text
+              style={[
+                styles.title,
+                { fontSize: 14, marginBottom: 12, marginTop: 10 }
+              ]}
+            >
+              Sign in to comment
+            </Text>
+            <SignInButton />
+          </View>
+        )}
+
         <DeleteModal
           isModalOpen={isModalOpen}
           _closeModal={this._closeModal}
@@ -371,7 +397,8 @@ class CommentScreen extends React.PureComponent {
 
 const mapStateToProps = getState => ({
   markerMatrix: getState.markerReducer.markerMatrix,
-  user: getState.authReducer.user
+  user: getState.authReducer.user,
+  loggedIn: getState.authReducer.loggedIn
 })
 
 const mapDispatchToProps = {

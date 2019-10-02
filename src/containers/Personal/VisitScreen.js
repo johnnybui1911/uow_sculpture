@@ -20,6 +20,7 @@ import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import baseAxios from '../../library/api'
 import ListHeader from '../../components/ListHeader/ListHeader'
+import NoResultScreen from '../../components/NoResult/NoResultScreen'
 class VisitScreen extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -148,9 +149,7 @@ class VisitScreen extends React.PureComponent {
         contentContainerStyle={{ paddingTop: 12 }}
       />
     ) : (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={[styles.description, { fontSize: 22 }]}>No visit</Text>
-      </View>
+      <NoResultScreen title="No visit" />
     )
   }
 

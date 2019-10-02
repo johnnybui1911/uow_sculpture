@@ -15,7 +15,8 @@ const SearchItem = ({
   distanceMatrix,
   navigation,
   _onMarkerPressed,
-  markerMatrix
+  markerMatrix,
+  centerToMarker
 }) => {
   // const animatedName = item.name.slice(0, searchText.length)
   // const originalName = item.name.slice(searchText.length, item.name.length)
@@ -29,7 +30,7 @@ const SearchItem = ({
         selectedItem = markerMatrix[item.id]
       }
       if (selectedItem.coordinate.latitude) {
-        _onMarkerPressed(selectedItem, true)
+        _onMarkerPressed(selectedItem, centerToMarker)
         navigation.navigate('Map', { showTab: false })
       } else {
         navigation.navigate('Detail', { id: item.id })

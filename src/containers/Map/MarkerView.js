@@ -28,7 +28,7 @@ class MarkerView extends React.PureComponent {
       return (
         <Marker
           zIndex={1}
-          // tracksViewChanges={false}
+          tracksViewChanges={false}
           coordinate={marker.coordinate}
           onPress={() => this.props._onMarkerPressed(marker)}
         >

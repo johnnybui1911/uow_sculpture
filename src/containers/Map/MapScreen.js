@@ -14,8 +14,7 @@ import LottieView from 'lottie-react-native'
 import * as Location from 'expo-location'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
-import numeral from 'numeral'
-import haversine from 'haversine-distance'
+import axios from 'axios'
 import styles from './styles'
 import images from '../../assets/images'
 import {
@@ -24,7 +23,9 @@ import {
   URL_TEMPLATE,
   DEFAULT_PADDING,
   LATITUDE,
-  LONGITUDE
+  LONGITUDE,
+  DISTANCE_MATRIX_API,
+  GOOGLE_MAPS_APIKEY
 } from '../../library/maps'
 import Footer from './Footer/Footer'
 import MarkersContainer from './MarkersContainer'
@@ -46,20 +47,9 @@ import {
   unselectMarker
 } from '../../redux/actions'
 import SearchView from '../../components/SearchButton/SearchView'
-import calcDistance from '../../library/calcDistance'
+import { compareCoordinate } from '../../library/compareCoordinate'
 
-function formatNumber(number) {
-  return numeral(number).format('0[.]00000')
-}
-
-function compareCoordinate(coor1, coor2) {
-  return (
-    formatNumber(coor1.latitude) === formatNumber(coor2.latitude) &&
-    formatNumber(coor1.longitude) === formatNumber(coor2.longitude)
-  )
-}
-
-class MapScreen extends React.PureComponent {
+export class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
     return {
       tabBarVisible: navigation.getParam('showTab', true)
@@ -93,9 +83,24 @@ class MapScreen extends React.PureComponent {
       showDirection: false,
       case1_footer_translateY: new Animated.Value(-SCREEN_HEIGHT),
       footer_translateY: new Animated.Value(SCREEN_HEIGHT),
-      header_translateY: new Animated.Value(-SCREEN_HEIGHT)
+      header_translateY: new Animated.Value(-SCREEN_HEIGHT),
+      direction_state: {
+        distance: 0,
+        duration: 0,
+        isDistanceLoading: true
+      }
     }
   }
+
+  _handleDirectionState = (distance, duration) => {
+    this.setState({
+      direction_state: {
+        distance,
+        duration
+      }
+    })
+  }
+
   setShowDirection = showDirection => {
     const {
       footer_translateY,
@@ -261,27 +266,6 @@ class MapScreen extends React.PureComponent {
         if (loc.timestamp) {
           const { latitude, longitude } = loc.coords
           this.userCoordinate.timing({ latitude, longitude }).start()
-          // if (this.props.selectedMarker) {
-          //   const userLocation = { latitude, longitude }
-          //   if (this.props.selectedMarker) {
-          //     const distance = calcDistance(
-          //       userLocation,
-          //       this.props.selectedMarker.coordinate
-          //     )
-          //     if (distance <= 10) {
-          //       const message = {
-          //         title: 'Congratulation',
-          //         body: 'You have finished your trip !!!',
-          //         data: {
-          //           screen: 'Detail',
-          //           id: this.props.selectedMarker.id
-          //         }
-          //       }
-          //       this.setState({ isModalVisible: true })
-          //       _sendLocalNotification(message)
-          //     }
-          //   }
-          // }
         } else {
           this.setState({ errorMessage: 'Problems on update location' })
         }
@@ -344,49 +328,11 @@ class MapScreen extends React.PureComponent {
           ref={marker => {
             this.marker = marker
           }}
-          // tracksViewChanges={false}
+          tracksViewChanges={false}
           style={{ zIndex: 2 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
           onPress={this._centerUserLocation}
-          // draggable
-          // onDragEnd={e => {
-          //   const userLocation = e.nativeEvent.coordinate
-
-          //   const travelDistance = calcDistance(
-          //     userLocation,
-          //     this.userCoordinate.__getValue()
-          //   )
-
-          //   this.userCoordinate.setValue({
-          //     ...userLocation,
-          //     latitudeDelta: 0,
-          //     longitudeDelta: 0
-          //   })
-
-          //   travelDistance >= 10 && this.props.fetchDistanceMatrix(userLocation) // each 10m, sync position again to fecth data
-          //   // .then(res => console.log(res))
-
-          //   // if (this.props.selectedMarker) {
-          //   //   const distance = calcDistance(
-          //   //     e.nativeEvent.coordinate,
-          //   //     this.props.selectedMarker.coordinate
-          //   //   )
-
-          //   //   if (distance <= 20) {
-          //   //     const message = {
-          //   //       title: 'Congratulation',
-          //   //       body: 'You have finished your trip !!!',
-          //   //       data: {
-          //   //         screen: 'Detail',
-          //   //         id: this.props.selectedMarker.id
-          //   //       }
-          //   //     }
-          //   //     this.setState({ isModalVisible: true })
-          //   //     _sendLocalNotification(message)
-          //   //   }
-          //   // }
-          // }}
         >
           <View style={{ padding: 15 }}>
             {icons.user_location}
@@ -410,16 +356,13 @@ class MapScreen extends React.PureComponent {
   }
 
   _onMarkerPressed = (marker, centerToMarker = false) => {
-    const { region } = this.state
+    const { region, direction_state } = this.state
     const {
       id,
       name,
       coordinate: { latitude, longitude }
     } = marker
-    if (
-      (!this.props.selectedMarker || this.props.selectedMarker.id !== id) &&
-      !this.state.showDirection
-    ) {
+    if (!this.props.selectedMarker || this.props.selectedMarker.id !== id) {
       if (this.props.navigation.getParam('showTab', true)) {
         this.props.navigation.setParams({ showTab: false })
       }
@@ -428,7 +371,34 @@ class MapScreen extends React.PureComponent {
         this.map.animateToRegion(userRegion)
       }
       this.props.handleSelectMarker(marker)
-      this.setState({ searchText: name.trim(), showMapOnly: false })
+      this.setState({
+        searchText: name.trim(),
+        showMapOnly: false,
+        direction_state: { ...direction_state, isDistanceLoading: true }
+      })
+
+      const userLocation = this.userCoordinate.__getValue()
+      const origin = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude
+      }
+      const destinations = `${latitude}%2C${longitude}%7C`
+      axios
+        .get(
+          `${DISTANCE_MATRIX_API}&origins=${origin.latitude},${origin.longitude}&destinations=${destinations}&key=${GOOGLE_MAPS_APIKEY}`
+        )
+        .then(res => {
+          const mapData = res.data
+          const distance_duration_array = mapData.rows[0].elements
+          const { distance, duration } = distance_duration_array[0]
+          this.setState({
+            direction_state: {
+              distance: distance.value,
+              duration: Math.floor(duration.value / 60),
+              isDistanceLoading: false
+            }
+          })
+        })
     }
   }
 
@@ -476,7 +446,8 @@ class MapScreen extends React.PureComponent {
       showSteps,
       footer_translateY,
       header_translateY,
-      case1_footer_translateY
+      case1_footer_translateY,
+      direction_state
     } = this.state
 
     const { setShowDirection, setShowSteps, animate, animateHide } = this
@@ -493,7 +464,8 @@ class MapScreen extends React.PureComponent {
               setShowDirection,
               setShowSteps,
               animate,
-              animateHide
+              animateHide,
+              direction_state
             }}
           >
             <Header
@@ -503,6 +475,7 @@ class MapScreen extends React.PureComponent {
               searchText={searchText}
               _handleSearch={this._handleSearch}
               _onClosePressed={this._onClosePressed}
+              _onMarkerPressed={this._onMarkerPressed}
             >
               <SearchView
                 searchText={searchText}
@@ -510,7 +483,8 @@ class MapScreen extends React.PureComponent {
                 navigateTo={() => {
                   this.props.navigation.navigate('Search', {
                     _onMarkerPressed: this._onMarkerPressed,
-                    searchText: this.state.searchText
+                    searchText: this.state.searchText,
+                    centerToMarker: true
                   })
                 }}
               />

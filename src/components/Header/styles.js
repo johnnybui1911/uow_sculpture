@@ -4,8 +4,8 @@ import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
 
 export default StyleSheet.create({
   headerContainer: {
-    marginTop: STATUS_BAR_HEIGHT * 2,
-    height: 53,
+    marginTop: STATUS_BAR_HEIGHT,
+    // height: 48,
     marginHorizontal: 24,
     marginBottom: 6
   },

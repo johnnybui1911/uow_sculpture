@@ -4,7 +4,8 @@ import {
   View,
   TouchableOpacity,
   Image,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
@@ -16,9 +17,10 @@ import { MapContext } from '../context/MapContext'
 import formatDistance from '../../../library/formatDistance'
 import LikeComment from '../../../components/LikeComment/LikeComment'
 import { selectMarker } from '../../../redux/actions'
+import palette from '../../../assets/palette'
 
 const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
-  const { setShowDirection } = React.useContext(MapContext)
+  const { setShowDirection, direction_state } = React.useContext(MapContext)
 
   if (selectedMarker) {
     return (
@@ -37,26 +39,42 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
             }}
           >
             <SwipeButton />
-            <Text style={styles.distance}>
-              {distanceMatrix && distanceMatrix[selectedMarker.id]
-                ? formatDistance(distanceMatrix[selectedMarker.id].distance)
-                : ''}
-            </Text>
-            <Text style={styles.title} numberOfLines={1}>
-              {selectedMarker.name}
-            </Text>
-            <View style={{}}>
-              <Text numberOfLines={2} style={styles.description}>
-                {selectedMarker.description.location}
-              </Text>
-              {/* {icons.one_dot}
-              <Text style={styles.description}>{selectedMarker.duration} min</Text> */}
-            </View>
-            <Divider styles={{ marginVertical: 12 }} />
-            <LikeComment
-              markerId={selectedMarker.id}
-              style={{ marginBottom: -12 }}
-            />
+            {direction_state.isDistanceLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <ActivityIndicator
+                  size="small"
+                  color={palette.primaryColorLight}
+                />
+              </View>
+            ) : (
+              <React.Fragment>
+                <Text style={styles.distance}>
+                  {/* {distanceMatrix && distanceMatrix[selectedMarker.id]
+                    ? formatDistance(distanceMatrix[selectedMarker.id].distance)
+                    : ''} */}
+                  {formatDistance(direction_state.distance)}
+                </Text>
+                <Text style={styles.title} numberOfLines={1}>
+                  {selectedMarker.name}
+                </Text>
+                <View style={{}}>
+                  <Text numberOfLines={2} style={styles.description}>
+                    {selectedMarker.description.location}
+                  </Text>
+                </View>
+                <Divider styles={{ marginVertical: 12 }} />
+                <LikeComment
+                  markerId={selectedMarker.id}
+                  style={{ marginBottom: -12 }}
+                />
+              </React.Fragment>
+            )}
           </View>
           <View
             style={{

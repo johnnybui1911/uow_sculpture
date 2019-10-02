@@ -62,10 +62,11 @@ class Header extends React.Component {
       _onClosePressed,
       showSteps,
       showDirection,
-      distanceMatrix
+      distanceMatrix,
+      _onMarkerPressed
     } = this.props
 
-    const { header_translateY } = this.context
+    const { header_translateY, direction_state } = this.context
 
     if (!showSteps) {
       if (selectedMarker && showDirection) {
@@ -86,8 +87,12 @@ class Header extends React.Component {
                   <View>{icons.back_blue({})}</View>
                 </TouchableOpacity>
               </View>
-              <FormDirection destination={destination} />
-              <TouchableWithoutFeedback>
+              <FormDirection
+                destination={destination}
+                searchText={searchText}
+                _onMarkerPressed={_onMarkerPressed}
+              />
+              {/* <TouchableWithoutFeedback>
                 <View
                   style={{
                     padding: 12,
@@ -96,16 +101,13 @@ class Header extends React.Component {
                 >
                   {icons.exchange}
                 </View>
-              </TouchableWithoutFeedback>
+              </TouchableWithoutFeedback> */}
             </View>
             <MidDivider>
               <View style={styles.walkingBox}>
                 {icons.walking}
                 <Text style={styles.title_sm}>
-                  {distanceMatrix && distanceMatrix[selectedMarker.id]
-                    ? distanceMatrix[selectedMarker.id].duration
-                    : ''}{' '}
-                  min
+                  {`${direction_state.duration} min`}
                 </Text>
               </View>
             </MidDivider>

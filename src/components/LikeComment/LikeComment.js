@@ -15,16 +15,35 @@ class LikeComment extends React.PureComponent {
   }
 
   state = {
-    isPending: false
+    isPending: false,
+    isFill: null
+  }
+
+  componentDidMount = () => {
+    this._fetchLikeId()
+  }
+
+  componentDidUpdate = () => {
+    this._fetchLikeId()
+  }
+
+  _fetchLikeId = () => {
+    const { markerId, markerMatrix, isLoadingUser } = this.props
+    const { isFill } = this.state
+    if (isLoadingUser && markerMatrix[markerId].likeId !== isFill) {
+      this.setState({ isFill: markerMatrix[markerId].likeId })
+    }
   }
 
   onCommentPress = () => {
     const { markerMatrix, markerId, _like, _unlike, loggedIn } = this.props
-    if (loggedIn) {
-      this.props.navigation.navigate('Comment', { id: markerId })
-    } else {
-      this.props.navigation.navigate('Profile')
-    }
+    // if (loggedIn) {
+    //   this.props.navigation.navigate('Comment', { id: markerId })
+    // } else {
+    //   this.props.navigation.navigate('Comment', )
+    // }
+
+    this.props.navigation.navigate('Comment', { id: markerId })
   }
 
   onPress = () => {
@@ -100,6 +119,7 @@ class LikeComment extends React.PureComponent {
       transform: [{ scale: this.animatedValue }]
     }
     const { markerId, style, markerMatrix } = this.props
+    const { isFill } = this.state
     return (
       <View
         style={{
@@ -117,9 +137,7 @@ class LikeComment extends React.PureComponent {
         >
           <TouchableWithoutFeedback onPress={this.onPress}>
             <Animated.View style={[animatedStyle, styles.socialIconStyle]}>
-              {markerMatrix[markerId].likeId
-                ? icons.like_fill
-                : icons.like_outline}
+              {isFill ? icons.like_fill : icons.like_outline}
             </Animated.View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={this.onPress}>
@@ -152,7 +170,8 @@ class LikeComment extends React.PureComponent {
 const mapStateToProps = getState => ({
   distanceMatrix: getState.distanceReducer.distanceMatrix,
   loggedIn: getState.authReducer.loggedIn,
-  markerMatrix: getState.markerReducer.markerMatrix
+  markerMatrix: getState.markerReducer.markerMatrix,
+  isLoadingUser: getState.markerReducer.isLoadingUser
 })
 
 const mapDispatchToProps = {

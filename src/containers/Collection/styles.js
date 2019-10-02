@@ -45,8 +45,7 @@ export default StyleSheet.create({
     backgroundColor: palette.backgroundColorGrey
   },
   flatList: {
-    marginTop: 9,
-    width: '100%'
+    flex: 1
   },
   title: {
     fontSize: 20,

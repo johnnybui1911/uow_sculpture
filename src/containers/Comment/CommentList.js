@@ -3,6 +3,7 @@ import { View, FlatList, RefreshControl } from 'react-native'
 import styles from './styles'
 import palette from '../../assets/palette'
 import CommentItem from './CommentItem'
+import NoResultScreen from '../../components/NoResult/NoResultScreen'
 
 class CommentList extends React.PureComponent {
   constructor(props) {
@@ -61,7 +62,12 @@ class CommentList extends React.PureComponent {
   }
 
   render() {
-    return <View style={{ flex: 1 }}>{this._renderList()}</View>
+    const { comments } = this.props
+    return !comments.length ? (
+      <NoResultScreen title="No comment" />
+    ) : (
+      <View style={{ flex: 1 }}>{this._renderList()}</View>
+    )
   }
 }
 

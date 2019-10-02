@@ -8,8 +8,7 @@ const Direction = ({
   userCoordinate,
   selectedMarker,
   showDirection,
-  _getSteps,
-  _handleDirectionState
+  _getSteps
 }) => {
   if (userCoordinate && selectedMarker && showDirection) {
     const userLocation = userCoordinate.__getValue()

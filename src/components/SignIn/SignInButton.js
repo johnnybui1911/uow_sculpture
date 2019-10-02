@@ -3,6 +3,9 @@ import { Text, View, TouchableOpacity } from 'react-native'
 import LottieView from 'lottie-react-native'
 import { AuthSession } from 'expo'
 import { connect } from 'react-redux'
+import * as Crypto from 'expo-crypto'
+import qs from 'qs'
+import axios from 'axios'
 import styles from './styles'
 import palette from '../../assets/palette'
 import {
@@ -12,12 +15,10 @@ import {
 } from '../../redux/actions/authActions'
 import { storeData } from '../../library/asyncStorage'
 import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '../../library/auth0'
-import * as Crypto from 'expo-crypto'
-import qs from 'qs'
-import axios from 'axios'
-const nanoid = require('nanoid/async')
-import baseAxios from '../../library/api'
 import animations from '../../assets/animations'
+import { withNavigation } from 'react-navigation'
+
+const nanoid = require('nanoid/async')
 
 function toQueryString(params) {
   return Object.entries(params)
@@ -35,11 +36,15 @@ function base64URLEncode(str) {
     .replace(/=/g, '')
 }
 
-class SignInScreen extends React.PureComponent {
+class SignInButton extends React.PureComponent {
   state = {
     challenge: '',
     verifier: '',
     isLoading: false
+  }
+
+  componentDidMount() {
+    this.generateChallenge()
   }
 
   generateChallenge = async () => {
@@ -55,10 +60,6 @@ class SignInScreen extends React.PureComponent {
       )
     )
     this.setState({ challenge, verifier })
-  }
-
-  componentDidMount() {
-    this.generateChallenge()
   }
 
   _loginWithAuth0 = async () => {
@@ -116,11 +117,10 @@ class SignInScreen extends React.PureComponent {
         const auth = { token: access_token, refresh_token, expireDate }
         // console.log('final', auth)
         await storeData('auth', JSON.stringify(auth))
-        await this.props.thunkSignIn()
-        this.props.navigation.navigate('PersonalStack')
+        this.props.thunkSignIn()
+        // this.props.navigation.navigate('Personal')
       } catch (e) {
         console.log(e)
-        console.log('error')
         this.setState({ isLoading: false })
       }
     } else {
@@ -130,77 +130,32 @@ class SignInScreen extends React.PureComponent {
 
   render() {
     const { isLoading } = this.state
-    return isLoading ? (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <LottieView source={animations.loadingPersonal} autoPlay auto />
-      </View>
-    ) : (
-      <View style={{ flex: 1, justifyContent: 'center', marginTop: 80 }}>
-        <View
-          style={{
-            marginVertical: 30,
-            alignItems: 'center'
-          }}
-        >
-          <View style={{ textAlign: 'center' }}>
-            <Text style={styles.title}>Welcome</Text>
-            <Text style={styles.description}>Please sign in to continue</Text>
-          </View>
-        </View>
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.box,
+          {
+            alignItems: 'center',
+            backgroundColor: palette.primaryColorLight,
+            borderWidth: 1,
+            borderColor: palette.primaryColorLight,
+            marginBottom: 10
+          }
+        ]}
+        onPress={this._loginWithAuth0}
+      >
         <View style={{ flex: 1 }}>
-          <TouchableOpacity
+          <Text
             style={[
-              styles.box,
-              {
-                alignItems: 'center',
-                backgroundColor: palette.primaryColorLight,
-                borderWidth: 1,
-                borderColor: palette.primaryColorLight,
-                marginBottom: 10
-              }
+              styles.titleButton,
+              { color: palette.backgroundColorWhite }
             ]}
-            onPress={this._loginWithAuth0}
           >
-            <View style={{ flex: 1 }}>
-              <Text
-                style={[
-                  styles.titleButton,
-                  { color: palette.backgroundColorWhite }
-                ]}
-              >
-                SIGN IN
-              </Text>
-            </View>
-          </TouchableOpacity>
-          {/* <SignInButton /> */}
-          <TouchableOpacity
-            style={[
-              styles.box,
-              {
-                borderWidth: 1,
-                borderColor: palette.primaryColorLight,
-                elevation: 2
-              }
-            ]}
-            onPress={this._loginWithAuth0}
-          >
-            <View style={{ flex: 1 }}>
-              <Text
-                style={[
-                  styles.title,
-                  {
-                    color: palette.primaryColorLight,
-                    fontSize: 16,
-                    textAlign: 'center'
-                  }
-                ]}
-              >
-                SIGN UP
-              </Text>
-            </View>
-          </TouchableOpacity>
+            SIGN IN
+          </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }
@@ -218,4 +173,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   null,
   mapDispatchToProps
-)(SignInScreen)
+)(withNavigation(SignInButton))

@@ -56,9 +56,8 @@ export default StyleSheet.create({
   },
   profileFixedContainer: { height: 400, backgroundColor: palette.primaryColor },
   headerContainer: {
-    marginTop: STATUS_BAR_HEIGHT * 2,
+    marginTop: STATUS_BAR_HEIGHT,
     alignItems: 'center',
-    height: 53,
     marginHorizontal: 24,
     marginBottom: 18,
     flexDirection: 'row'

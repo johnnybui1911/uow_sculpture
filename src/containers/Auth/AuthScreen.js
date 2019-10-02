@@ -1,11 +1,13 @@
 import React from 'react'
 import { SafeAreaView, View } from 'react-native'
+import { connect } from 'react-redux'
 import Svg, { Ellipse } from 'react-native-svg'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import SignInScreen from './SignInScreen'
 import { SCREEN_WIDTH } from '../../assets/dimension'
+import { NavigationEvents } from 'react-navigation'
 
 const HEADER_HEIGHT = 209
 
@@ -44,6 +46,13 @@ class AuthScreen extends React.PureComponent {
       <SafeAreaView
         style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
       >
+        <NavigationEvents
+          onDidFocus={() => {
+            if (this.props.loggedIn) {
+              this.props.navigation.navigate('Personal')
+            }
+          }}
+        />
         <AuthHeader />
         <SignInScreen navigation={this.props.navigation} />
       </SafeAreaView>
@@ -51,4 +60,8 @@ class AuthScreen extends React.PureComponent {
   }
 }
 
-export default AuthScreen
+const mapStateToProps = getState => ({
+  loggedIn: getState.authReducer.loggedIn
+})
+
+export default connect(mapStateToProps)(AuthScreen)

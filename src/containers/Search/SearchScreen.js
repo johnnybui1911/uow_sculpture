@@ -55,11 +55,13 @@ class SearchScreen extends React.PureComponent {
     const { searchText } = this.state
     const { navigation } = this.props
     const _onMarkerPressed = navigation.getParam('_onMarkerPressed', null)
+    const centerToMarker = navigation.getParam('centerToMarker', false)
     return (
       <SearchItem
         item={item}
         searchText={searchText}
         _onMarkerPressed={_onMarkerPressed}
+        centerToMarker={centerToMarker}
       />
     )
   }

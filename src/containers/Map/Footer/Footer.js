@@ -299,7 +299,7 @@ class Footer extends React.PureComponent {
       showSteps,
       distanceMatrix
     } = this.props
-    const { setShowSteps, footer_translateY } = this.context
+    const { setShowSteps, footer_translateY, direction_state } = this.context
     return (
       <Animated.View
         style={{
@@ -375,16 +375,18 @@ class Footer extends React.PureComponent {
                 }}
               >
                 <Text style={styles.minuteStyle}>
-                  {distanceMatrix && distanceMatrix[selectedMarker.id]
+                  {/* {distanceMatrix && distanceMatrix[selectedMarker.id]
                     ? distanceMatrix[selectedMarker.id].duration + ' min '
-                    : ''}
+                    : ''} */}
+                  {`${direction_state.duration} min `}
                 </Text>
                 <Text style={styles.distance_grey}>
                   (
-                  {distanceMatrix && distanceMatrix[selectedMarker.id]
+                  {/* {distanceMatrix && distanceMatrix[selectedMarker.id]
                     ? formatDistance(distanceMatrix[selectedMarker.id].distance)
                     : ''}
-                  )
+                  ) */}
+                  {formatDistance(direction_state.distance)})
                 </Text>
               </View>
               <StepList steps={steps} />

@@ -180,6 +180,8 @@ export const thunkSignIn = () => {
           })
       } else {
         resolve()
+        console.log('Can not sign in because no data')
+        clearData('auth')
         dispatch(signInRejected())
       }
     })

@@ -27,7 +27,7 @@ export const fetchDataSuccessful = data => {
 }
 
 export const fetchDataRejected = () => {
-  return { type: FETCH_DATA_REJECTED, payload: { isLoading: false } }
+  return { type: FETCH_DATA_REJECTED, payload: { isLoading: true } }
 }
 
 export const selectMarker = selectedMarker => {
@@ -120,7 +120,7 @@ export const fetchDataThunk = () => {
           console.log(e.message)
           console.log('error fetch data thunk')
           dispatch(fetchDataRejected())
-          reject()
+          resolve()
         })
     })
   }

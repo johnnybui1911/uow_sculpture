@@ -4,6 +4,7 @@ import { SafeAreaView, View, Animated, RefreshControl } from 'react-native'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
+import Modal from 'react-native-modal'
 import styles from './styles'
 import palette from '../../assets/palette'
 import LikeScreen from './LikeScreen'
@@ -11,7 +12,7 @@ import AboutScreen from './AboutScreen'
 import CommentScreen from './CommentScreen'
 import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
-import { fetchUserDataThunk, fetchDataThunk} from '../../redux/actions'
+import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
 import animations from '../../assets/animations'
 import { AuthHeader } from '../Auth/AuthScreen'
 
@@ -191,7 +192,8 @@ class PersonalScreen extends React.PureComponent {
 
   render() {
     const { user, isLoadingUser } = this.props
-    return user.userId && isLoadingUser ? (
+    const { refreshing } = this.state
+    return (
       <SafeAreaView style={styles.container}>
         <TabView
           style={{ flex: 1 }}
@@ -202,16 +204,17 @@ class PersonalScreen extends React.PureComponent {
           initialLayout={initialLayout}
         />
       </SafeAreaView>
-    ) : (
-      <SafeAreaView
-        style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
-      >
-        <AuthHeader />
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <LottieView source={animations.loadingPersonal} autoPlay auto />
-        </View>
-      </SafeAreaView>
     )
+    // : (
+    //   <SafeAreaView
+    //     style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
+    //   >
+    //     <AuthHeader />
+    //     <View style={{ flex: 1, justifyContent: 'center' }}>
+    //       <LottieView source={animations.loadingPersonal} autoPlay auto />
+    //     </View>
+    //   </SafeAreaView>
+    // )
   }
 }
 const mapStateToProps = getState => ({
@@ -220,9 +223,9 @@ const mapStateToProps = getState => ({
 })
 
 const mapDispatchToProps = {
-  fetchUserDataThunk,fetchDataThunk
+  fetchUserDataThunk,
+  fetchDataThunk
 }
-
 
 export default connect(
   mapStateToProps,

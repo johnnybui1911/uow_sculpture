@@ -184,5 +184,17 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Montserrat-SemiBold',
     color: palette.primaryColorLight
+  },
+  box: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 24,
+    height: BUTTON_HEIGHT,
+    paddingHorizontal: 15,
+    backgroundColor: palette.primaryColorLight,
+    borderWidth: 1,
+    borderColor: palette.primaryColorLight,
+    borderRadius: 12
   }
 })

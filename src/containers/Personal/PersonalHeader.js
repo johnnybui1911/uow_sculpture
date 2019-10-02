@@ -17,102 +17,104 @@ import ProfileBox from './ProfileBox'
 
 const PersonalHeader = ({
   user,
+  loggedIn,
   refreshing,
   _handleRefresh,
+  isLoadingUser,
   likeUserCount,
   commentUserCount,
   visitUserCount,
   navigation
 }) => {
   const { userId } = user
-  return user ? (
+  const [likeCount, setLikeCount] = React.useState(likeUserCount)
+  React.useEffect(() => {
+    if (isLoadingUser) {
+      setLikeCount(likeUserCount)
+    }
+  }, [likeUserCount, isLoadingUser])
+  return loggedIn ? (
     <View style={styles.profileFixedContainer}>
-      {user.userId ? (
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              colors={[palette.primaryColorLight]}
-              refreshing={refreshing}
-              onRefresh={_handleRefresh}
-            />
-          }
-        >
-          <View style={styles.headerContainer}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.headerTitle}>Profile</Text>
-            </View>
-            {userId.split('|')[0].includes('auth0') && (
-              <TouchableOpacity
-                style={styles.box}
-                onPress={() => navigation.navigate('EditProfile')}
-              >
-                <Text style={styles.titleButton}>EDIT</Text>
-              </TouchableOpacity>
-            )}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={[palette.primaryColorLight]}
+            refreshing={refreshing}
+            onRefresh={_handleRefresh}
+          />
+        }
+      >
+        <View style={styles.headerContainer}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Profile</Text>
           </View>
+          {userId.split('|')[0].includes('auth0') && (
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => navigation.navigate('EditProfile')}
+            >
+              <Text style={styles.titleButton}>EDIT</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginVertical: 15
+          }}
+        >
           <View
             style={{
-              flex: 1,
+              height: 100,
+              width: 100,
               alignItems: 'center',
               justifyContent: 'center',
-              marginVertical: 15
+              borderRadius: 100 / 2,
+              backgroundColor: palette.primaryColor,
+              overflow: 'hidden'
             }}
           >
-            <View
-              style={{
-                height: 100,
-                width: 100,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 100 / 2,
-                backgroundColor: palette.primaryColor,
-                overflow: 'hidden'
-              }}
-            >
-              <Image
-                source={{ uri: user.picture }}
-                style={{ height: 100, width: 100 }}
-                resizeMode="cover"
-              />
-            </View>
-
-            <View style={{ marginTop: 15 }}>
-              <Text
-                style={[
-                  styles.title,
-                  { fontSize: 24, color: palette.backgroundColorWhite }
-                ]}
-              >
-                {!user.username ? null : user.username}
-              </Text>
-            </View>
+            <Image
+              source={{ uri: user.picture }}
+              style={{ height: 100, width: 100 }}
+              resizeMode="cover"
+            />
           </View>
-          <ProfileBox
-            likes={likeUserCount}
-            comments={commentUserCount}
-            visited={visitUserCount}
-          />
-        </ScrollView>
-      ) : (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <ActivityIndicator color={palette.backgroundColorWhite} />
+
+          <View style={{ marginVertical: 15 }}>
+            <Text
+              style={[
+                styles.title,
+                { fontSize: 24, color: palette.backgroundColorWhite }
+              ]}
+            >
+              {!user.username ? null : user.username}
+            </Text>
+          </View>
         </View>
-      )}
+        <ProfileBox
+          likes={likeCount}
+          comments={commentUserCount}
+          visited={visitUserCount}
+        />
+      </ScrollView>
     </View>
   ) : null
 }
 
 const mapStateToProps = getState => {
-  const { user, commentList, visitList } = getState.authReducer
-  const { markerMatrix } = getState.markerReducer
+  const { user, commentList, visitList, loggedIn } = getState.authReducer
+  const { markerMatrix, isLoadingUser } = getState.markerReducer
   let likeUserCount = 0
   Object.entries(markerMatrix).forEach(([key, value]) => {
     value.likeId && likeUserCount++
   })
   return {
     user,
+    loggedIn,
+    isLoadingUser,
     likeUserCount,
     commentUserCount: commentList.length,
     visitUserCount: visitList.length

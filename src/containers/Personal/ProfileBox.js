@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, Text, TouchableWithoutFeedback } from 'react-native'
+import { withNavigation } from 'react-navigation'
 import palette from '../../assets/palette'
 import styles from './styles'
 import VerticalDivider from './VerticalDivider'
-import { withNavigation } from 'react-navigation'
 
 const ProfileBox = ({ likes, comments, visited, navigation }) => {
   return (
