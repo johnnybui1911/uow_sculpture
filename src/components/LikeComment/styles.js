@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 import palette from '../../assets/palette'
 import { TEXT_INPUT_HEIGHT } from '../../assets/dimension'
 
@@ -75,8 +75,8 @@ export default StyleSheet.create({
   },
   socialIconStyle: {
     width: 22,
-    paddingTop: 12,
-    paddingBottom: 12
+    paddingTop: Platform.OS === 'ios' ? 'auto' : 12,
+    paddingBottom: Platform.OS === 'ios' ? 'auto' : 12
     // borderColor: 'black',
     // borderWidth: 0.5
   },

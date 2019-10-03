@@ -17,7 +17,7 @@ import formatDistance from '../../library/formatDistance'
 import LikeComment from '../../components/LikeComment/LikeComment'
 
 const CardItem = props => {
-  const { item, index, isLoading = false, distanceMatrix, inProfile } = props
+  const { item, index, checkLoading = false, distanceMatrix } = props
 
   const renderImage = () => {
     const { photoURL } = item
@@ -67,7 +67,7 @@ const CardItem = props => {
           <View
             style={index % 2 === 0 ? styles.cardDesLeft : styles.cardDesRight}
           >
-            {isLoading ? (
+            {checkLoading || !distanceMatrix ? (
               <Placeholder
                 Animation={Fade}
                 style={{
@@ -82,10 +82,7 @@ const CardItem = props => {
               </Placeholder>
             ) : (
               <React.Fragment>
-                <View
-
-                // style={{ justifyContent: 'center' }}
-                >
+                <View>
                   <Text style={styles.distance}>
                     {distanceMatrix && distanceMatrix[item.id]
                       ? formatDistance(distanceMatrix[item.id].distance)
@@ -99,9 +96,7 @@ const CardItem = props => {
                     {item.features.maker}
                   </Text>
                 </View>
-                {/* {!inProfile && ( */}
                 <LikeComment markerId={item.id} style={{ marginBottom: -7 }} />
-                {/* )} */}
               </React.Fragment>
             )}
           </View>
@@ -111,7 +106,7 @@ const CardItem = props => {
               index % 2 === 0 ? { left: 0 } : { right: 0 }
             ]}
           >
-            {isLoading ? (
+            {checkLoading || !distanceMatrix ? (
               <View style={styles.image}>
                 <Placeholder Animation={Fade}>
                   <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
@@ -127,8 +122,21 @@ const CardItem = props => {
   )
 }
 
-const mapStateToProps = getState => ({
-  distanceMatrix: getState.distanceReducer.distanceMatrix
-})
+const mapStateToProps = getState => {
+  const markerMatrix = getState.markerReducer.markerMatrix
+  const isLoading = getState.markerReducer.isLoading
+  const distanceMatrix = getState.distanceReducer.distanceMatrix
+  const isLoadingUser = getState.markerReducer.isLoadingUser
+  const loggedIn = getState.authReducer.loggedIn
+
+  const checkLoading =
+    (loggedIn && (isLoading || !isLoadingUser)) || (!loggedIn && isLoading)
+
+  return {
+    markerMatrix,
+    distanceMatrix,
+    checkLoading
+  }
+}
 
 export default connect(mapStateToProps)(withNavigation(CardItem))

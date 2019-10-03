@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import { HEADER_BAR_MARGIN_TOP } from '../../assets/dimension'
 
 export default StyleSheet.create({
   headerContainer: {
-    marginTop: STATUS_BAR_HEIGHT,
+    marginTop: HEADER_BAR_MARGIN_TOP,
     // height: 48,
     marginHorizontal: 24,
     marginBottom: 6

@@ -356,7 +356,7 @@ export class MapScreen extends React.PureComponent {
   }
 
   _onMarkerPressed = (marker, centerToMarker = false) => {
-    const { region, direction_state } = this.state
+    const { region, direction_state, showDirection } = this.state
     const {
       id,
       name,
@@ -366,7 +366,7 @@ export class MapScreen extends React.PureComponent {
       if (this.props.navigation.getParam('showTab', true)) {
         this.props.navigation.setParams({ showTab: false })
       }
-      if (centerToMarker) {
+      if (centerToMarker && !showDirection) {
         const userRegion = { ...region, latitude, longitude }
         this.map.animateToRegion(userRegion)
       }

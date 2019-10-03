@@ -15,7 +15,11 @@ import {
   fetchDataThunk,
   fetchDistanceMatrix
 } from './redux/actions'
-import { STATUS_BAR_HEIGHT } from './assets/dimension'
+import {
+  STATUS_BAR_HEIGHT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH
+} from './assets/dimension'
 import { AppContainer } from './navigations/AppStack'
 import IntroScreen from './containers/Introduction/IntroScreen'
 import palette from './assets/palette'
@@ -23,29 +27,25 @@ import { icons } from './assets/icons'
 import CongratModal from './components/CongratModal/CongratModal'
 import { storeData, getData, clearData } from './library/asyncStorage'
 
-// TODO: just swipe up, not swipe down
-clearData('intro')
+// clearData('intro')
 class MainScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      isModalVisible: true,
+      isModalVisible: false,
       isCongratModalVisible: false
     }
   }
 
-  // componentDidMount = async () => {
-  //   try {
-  //     const intro = await getData('intro')
-  //     if (intro) {
-  //       this.setState({ isModalVisible: false })
-  //     } else {
-  //       this.setState({ isModalVisible: true })
-  //     }
-  //   } catch (e) {
-  //     this.setState({ isModalVisible: true })
-  //   }
-  // }
+  componentDidMount = async () => {
+    const intro = await getData('intro')
+    this.setState({ isModalVisible: intro ? false : true })
+  }
+
+  _swipeUpIntro = () => {
+    storeData('intro', 'intro')
+    this.setState({ isModalVisible: false })
+  }
 
   _closeModal = () => {
     this.setState({ isCongratModalVisible: false })
@@ -63,26 +63,24 @@ class MainScreen extends React.PureComponent {
           />
         ) : null}
         <AppContainer />
-        {/* {this.state.isModalVisible && (
+        {this.state.isModalVisible && (
           <View
             style={{
               position: 'absolute',
-              height: STATUS_BAR_HEIGHT,
               top: 0,
-              left: 0,
-              right: 0,
+              height: STATUS_BAR_HEIGHT,
+              width: SCREEN_WIDTH,
               backgroundColor: palette.primaryColor
             }}
           />
         )}
         <Modal
+          deviceHeight={SCREEN_HEIGHT}
           isVisible={this.state.isModalVisible}
           animationIn="zoomInDown"
-          // animationInTiming={500}
-          onSwipeComplete={() => {
-            // storeData('intro', 'intro')
-            this.setState({ isModalVisible: false })
-          }}
+          animationInTiming={500}
+          onSwipeComplete={this._swipeUpIntro}
+          hasBackdrop={false}
           swipeDirection="up"
           style={{
             justifyContent: 'center',
@@ -90,10 +88,8 @@ class MainScreen extends React.PureComponent {
             margin: 0
           }}
         >
-          <View style={{ flex: 1, zIndex: 900, elevation: 10 }}>
-            <IntroScreen />
-          </View>
-        </Modal> */}
+          <IntroScreen />
+        </Modal>
         <CongratModal
           isCongratModalVisible={isCongratModalVisible}
           closeModal={this._closeModal}

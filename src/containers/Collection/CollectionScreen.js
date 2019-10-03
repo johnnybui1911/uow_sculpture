@@ -58,51 +58,53 @@ class CollectionScreen extends React.PureComponent {
       },
       () => {
         // fetch data again
-        this.props.fetchDataThunk()
-        this.setState({
-          refreshing: false
-        })
+        this.props
+          .fetchDataThunk()
+          .then(() => {
+            this.setState({ refreshing: false })
+          })
+          .catch(() => this.setState({ refreshing: false }))
       }
     )
   }
 
   _renderList = () => {
     const { isLoading, markerMatrix, loggedIn, isLoadingUser } = this.props
-    if (
-      (loggedIn && (isLoading || !isLoadingUser)) ||
-      (!loggedIn && isLoading)
-    ) {
-      const array = [1, 2, 3, 4]
-      return (
-        <FlatList
-          data={array}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => {
-            return (
-              <CardItem
-                isLoading
-                item={item}
-                index={index}
-                _navigateToDetail={this._navigateToDetail}
-              />
-            )
-          }}
-          style={styles.flatList}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={() => {
-            return (
-              <View style={{ flex: 1 }}>
-                <HeaderBar headerName="Collection" />
-                <SearchView
-                  customStyle={{ marginBottom: 0 }}
-                  navigateTo={() => this.props.navigation.navigate('Search')}
-                />
-              </View>
-            )
-          }}
-        />
-      )
-    }
+    // if (
+    //   (loggedIn && (isLoading || !isLoadingUser)) ||
+    //   (!loggedIn && isLoading)
+    // ) {
+    //   const array = [1, 2, 3, 4]
+    //   return (
+    //     <FlatList
+    //       data={array}
+    //       keyExtractor={(item, index) => index.toString()}
+    //       renderItem={({ item, index }) => {
+    //         return (
+    //           <CardItem
+    //             isLoading
+    //             item={item}
+    //             index={index}
+    //             _navigateToDetail={this._navigateToDetail}
+    //           />
+    //         )
+    //       }}
+    //       style={styles.flatList}
+    //       showsVerticalScrollIndicator={false}
+    //       ListHeaderComponent={() => {
+    //         return (
+    //           <View style={{ flex: 1 }}>
+    //             <HeaderBar headerName="Collection" />
+    //             <SearchView
+    //               customStyle={{ marginBottom: 0 }}
+    //               navigateTo={() => this.props.navigation.navigate('Search')}
+    //             />
+    //           </View>
+    //         )
+    //       }}
+    //     />
+    //   )
+    // }
 
     let matrixData = []
     Object.entries(markerMatrix).forEach(([key, value]) => {

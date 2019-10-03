@@ -26,6 +26,7 @@ export default StyleSheet.create({
   mapStyle: {
     flex: 1,
     position: 'absolute',
+    bottom: 0,
     height: SCREEN_HEIGHT,
     width: SCREEN_WIDTH
   },

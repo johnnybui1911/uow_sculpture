@@ -27,6 +27,7 @@ import DeleteModal from './DeleteModal'
 import ListHeader from '../../components/ListHeader/ListHeader'
 import { SCREEN_WIDTH } from '../../assets/dimension'
 import SignInButton from '../../components/SignIn/SignInButton'
+import BlackModal from '../../components/BlackModal/BlackModal'
 
 const TEXT_INPUT_HEIGHT = Platform.OS === 'ios' ? 45 : 40
 
@@ -385,6 +386,7 @@ class CommentScreen extends React.PureComponent {
           </View>
         )}
 
+        {/* {isModalOpen && <BlackModal />} */}
         <DeleteModal
           isModalOpen={isModalOpen}
           _closeModal={this._closeModal}

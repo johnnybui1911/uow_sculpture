@@ -1,16 +1,17 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 import palette from '../../assets/palette'
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
+import {
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  STATUS_BAR_HEIGHT
+} from '../../assets/dimension'
 
 export default StyleSheet.create({
   container: {
-    // position: 'absolute',
-    // height: SCREEN_HEIGHT,
-    // width: SCREEN_WIDTH,
-    // top: -STATUS_BAR_HEIGHT,
-    zIndex: 900,
-    elevation: 10,
-    flex: 1,
+    position: 'absolute',
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
+    top: Platform.OS === 'ios' ? 0 : -STATUS_BAR_HEIGHT,
     backgroundColor: palette.primaryColor,
     alignItems: 'center',
     justifyContent: 'center',

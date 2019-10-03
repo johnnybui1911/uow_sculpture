@@ -9,13 +9,14 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import Modal from 'react-native-modal'
-import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import { STATUS_BAR_HEIGHT, SCREEN_HEIGHT } from '../../assets/dimension'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import { CLOSE_MODAL } from '../../assets/actionTypes'
 import animations from '../../assets/animations'
 import images from '../../assets/images'
+import BlackModal from '../BlackModal/BlackModal'
 
 const CongratModal = ({
   isCongratModalVisible,
@@ -32,21 +33,8 @@ const CongratModal = ({
   }
   return (
     <View>
-      {isCongratModalVisible && (
-        <View
-          style={{
-            position: 'absolute',
-            height: STATUS_BAR_HEIGHT,
-            top: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: '#000000',
-            zIndex: 100,
-            opacity: 0.7
-          }}
-        />
-      )}
       <Modal
+        deviceHeight={SCREEN_HEIGHT}
         isVisible={isCongratModalVisible}
         animationIn="zoomInDown"
         animationInTiming={1000}

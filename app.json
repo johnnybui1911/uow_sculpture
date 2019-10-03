@@ -9,7 +9,7 @@
       "bundleIdentifier": "com.UOW.UOWSculptures",
       "supportsTablet": true,
       "config": {
-        "googleMapsApiKey": "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs"
+        "googleMapsApiKey": "AIzaSyCoajIyj5wpNXJuemJ3PgozbhiyXA0rIac"
       },
       "infoPlist": {
         "UIBackgroundModes": ["location", "fetch"]
@@ -19,7 +19,7 @@
       "package": "com.UOW.UOWSculptures",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyD9--JJbxDeQ9XaqBL2px1nmFVbRe2DdCs"
+          "apiKey": "AIzaSyCoajIyj5wpNXJuemJ3PgozbhiyXA0rIac"
         }
       },
       "googleServicesFile": "./google-services.json"

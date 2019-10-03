@@ -163,6 +163,7 @@ class EditProfile extends React.PureComponent {
     const { isModalOpen } = this.state
     return (
       <Modal
+        deviceHeight={SCREEN_HEIGHT}
         isVisible={isModalOpen}
         onBackdropPress={_closeModal}
         style={{

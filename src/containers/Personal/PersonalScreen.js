@@ -10,7 +10,6 @@ import {
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
-import Modal from 'react-native-modal'
 import styles from './styles'
 import palette from '../../assets/palette'
 import LikeScreen from './LikeScreen'

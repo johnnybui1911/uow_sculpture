@@ -1,22 +1,30 @@
 import { Platform, Dimensions, StatusBar } from 'react-native'
 import Constants from 'expo-constants'
 
-// export const STATUS_BAR_HEIGHT =
-//   Platform.OS === 'ios' ? 20 : StatusBar.currentHeight
-export const SCREEN_HEIGHT =
-  Platform.OS === 'android'
-    ? Dimensions.get('screen').height // - STATUS_BAR_HEIGHT
-    : Dimensions.get('screen').height
-export const SCREEN_WIDTH = Dimensions.get('screen').width
-export const HEADER_AUTH = 209
-export const TOP_TAB_BAR_HEIGHT = 44
-export const BOTTOM_TAB_BAR_HEIGHT = 50
+// console.log(Dimensions.get('screen').height)
+// console.log(Dimensions.get('window').height)
+
+const checkHeight =
+  Dimensions.get('window').height < Dimensions.get('screen').height
+
+export const FULL_SCREEN_HEIGHT = Dimensions.get('screen').height
+
 export const STATUS_BAR_HEIGHT =
   Platform.OS === 'ios'
     ? 20
     : Constants.statusBarHeight === 0
     ? Constants.statusBarHeight
     : 24
+export const SCREEN_HEIGHT =
+  Platform.OS === 'android'
+    ? checkHeight
+      ? FULL_SCREEN_HEIGHT
+      : Dimensions.get('window').height // - STATUS_BAR_HEIGHT
+    : FULL_SCREEN_HEIGHT - 20
+export const SCREEN_WIDTH = Dimensions.get('window').width
+export const HEADER_AUTH = 209
+export const TOP_TAB_BAR_HEIGHT = 44
+export const BOTTOM_TAB_BAR_HEIGHT = 50
 
 export const MIN_TABVIEW_HEIGHT =
   SCREEN_HEIGHT -
@@ -26,5 +34,9 @@ export const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT
 export const BUTTON_HEIGHT = 44
 export const TEXT_INPUT_HEIGHT = 48
 
-export const EXPANDED_HEIGHT_STEPBOX = SCREEN_HEIGHT - STATUS_BAR_HEIGHT
+export const EXPANDED_HEIGHT_STEPBOX =
+  Platform.OS === 'ios' ? SCREEN_HEIGHT : SCREEN_HEIGHT - STATUS_BAR_HEIGHT
 export const COLLAPSED_HEIGHT_STEPBOX = 166 - 25
+export const MARGIN_BOTTOM_STEPBOX = COLLAPSED_HEIGHT_STEPBOX
+export const HEADER_BAR_MARGIN_TOP =
+  Platform.OS === 'ios' ? 6 : STATUS_BAR_HEIGHT + 6

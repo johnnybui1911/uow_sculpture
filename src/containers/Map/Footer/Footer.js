@@ -21,7 +21,8 @@ import {
   STATUS_BAR_HEIGHT,
   BOTTOM_TAB_BAR_HEIGHT,
   COLLAPSED_HEIGHT_STEPBOX,
-  EXPANDED_HEIGHT_STEPBOX
+  EXPANDED_HEIGHT_STEPBOX,
+  MARGIN_BOTTOM_STEPBOX
 } from '../../../assets/dimension'
 import images from '../../../assets/images'
 import { MapContext } from '../context/MapContext'
@@ -29,98 +30,12 @@ import formatDistance from '../../../library/formatDistance'
 import palette from '../../../assets/palette'
 import { selectMarker } from '../../../redux/actions'
 
-const fakeMarker = {
-  coordinate: {
-    latitude: -34.4059,
-    longitude: 150.8701
-  },
-  des: '',
-  description: {
-    creditLine:
-      'Commissioned by the Friends of the University of Wollongong in celebration of the Australian Bicentenary, 1988',
-    location:
-      'Main campus, on UOW land on the western side of Robsons Road, Keiraville. Walking track entry from corner of Robsons Road and Northfields Avenue'
-  },
-  distance: '',
-  duration: '',
-  features: {
-    date: '1988-1989',
-    maker: 'Bert Flugelman',
-    material: 'Stainless steel'
-  },
-  id: '1989.067',
-  imageList: [
-    {
-      id: '033fe8c0-6d80-4f9a-8e22-f5ed97a12cc8',
-      sculptureId: '1989.067',
-      url:
-        'https://uowac-sculpture-images.s3-ap-southeast-2.amazonaws.com/1989.067/IMG_2559.JPG'
-    },
-    {
-      id: 'd7ceeaab-63e1-4a3d-929e-03fe2410ea85',
-      sculptureId: '1989.067',
-      url:
-        'https://uowac-sculpture-images.s3.ap-southeast-2.amazonaws.com/1989.067/1568544178385-IMG_2565.JPG'
-    },
-    {
-      id: '3c3ee488-15db-4aec-83e3-43f32fb1bab0',
-      sculptureId: '1989.067',
-      url:
-        'https://uowac-sculpture-images.s3.ap-southeast-2.amazonaws.com/1989.067/1568544186206-2018-11-06%2009.45.45.jpg'
-    },
-    {
-      id: '6d091a7e-a7a1-481f-bf76-a5269991b81b',
-      sculptureId: '1989.067',
-      url:
-        'https://uowac-sculpture-images.s3.ap-southeast-2.amazonaws.com/1989.067/1568544192018-2018-11-06%2009.48.40.jpg'
-    },
-    {
-      id: 'b0f3dbd9-c03e-4a5a-9a25-1b300c84d2af',
-      sculptureId: '1989.067',
-      url:
-        'https://uowac-sculpture-images.s3.ap-southeast-2.amazonaws.com/1989.067/1568544192634-2018-11-06%2009.45.59.jpg'
-    }
-  ],
-  name: 'Winged Figure',
-  photoURL:
-    'https://uowac-sculpture-images.s3-ap-southeast-2.amazonaws.com/1989.067/IMG_2559.JPG'
-}
-
-const fakeSteps = [
-  {
-    distance: {
-      text: '0.1 km',
-      value: 106
-    },
-    duration: {
-      text: '1 min',
-      value: 78
-    },
-    end_location: {
-      lat: -34.4117182,
-      lng: 150.8927918
-    },
-    html_instructions: 'Head <b>west</b> on <b>Exeter Ave</b>',
-    polyline: {
-      points: 'p``qEym~w[AD]hBAF?F?B@F@FRfA'
-    },
-    start_location: {
-      lat: -34.4117659,
-      lng: 150.8938938
-    },
-    travel_mode: 'WALKING'
-  }
-]
-
 const MINI_IMAGE_POSITION = SCREEN_HEIGHT - 220 - 96
 const LCOATION_BUTTON_POSITION = SCREEN_HEIGHT - 220 - 66
 const ANIMATE_DURATION = 250
 
 class Footer extends React.PureComponent {
   static contextType = MapContext
-  static defaultProps = {
-    steps: fakeSteps
-  }
 
   miniImage_translateY = new Animated.Value(MINI_IMAGE_POSITION)
   locationButton_translateY = new Animated.Value(LCOATION_BUTTON_POSITION)
@@ -271,7 +186,6 @@ class Footer extends React.PureComponent {
         </Animated.View>
         <BottomDrawer
           _translateY={footer_translateY}
-          autoAnimate
           containerHeight={220}
           downDisplay={220 - 72}
           backgroundColor="#fff"
@@ -299,21 +213,103 @@ class Footer extends React.PureComponent {
       showSteps,
       distanceMatrix
     } = this.props
-    const { setShowSteps, footer_translateY, direction_state } = this.context
+    const {
+      setShowSteps,
+      footer_translateY,
+      direction_state,
+      header_translateY
+    } = this.context
     return (
-      <Animated.View
-        style={{
-          position: 'absolute',
-          top: footer_translateY
-        }}
-      >
-        <View
+      <React.Fragment>
+        {/* <Animated.View
+          style={{
+            position: 'absolute',
+            bottom: header_translateY,
+            left: 0,
+            right: 0
+          }}
+        >
+          <View
+            style={[
+              {
+                bottom: MARGIN_BOTTOM_STEPBOX + 12,
+                position: 'absolute',
+                right: 24,
+                zIndex: 0
+              }
+            ]}
+          >
+            <ButtonMyLocation
+              centered={centered}
+              _centerUserLocation={_centerUserLocation}
+            />
+          </View>
+          <View
+            style={[styles.showStepButton, { elevation: showSteps ? 20 : 0 }]}
+          >
+            <TouchableOpacity
+              style={[
+                showSteps ? styles.secondary_button : styles.button,
+                { marginVertical: 16, elevation: 0 }
+              ]}
+              onPress={() => {
+                setShowSteps(!showSteps)
+                this.drawer.toggleDrawerState()
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                {showSteps ? (
+                  <Text style={[styles.secondaryTitleButton]}>SHOW MAPS</Text>
+                ) : (
+                  <Text style={[styles.titleButton]}>SHOW STEPS</Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
+        </Animated.View> */}
+        <Animated.View
           style={[
             {
-              bottom: COLLAPSED_HEIGHT_STEPBOX + 12,
               position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 2,
+              transform: [{ translateY: footer_translateY }]
+            }
+          ]}
+        >
+          <View
+            style={[styles.showStepButton, { elevation: showSteps ? 20 : 0 }]}
+          >
+            <TouchableOpacity
+              style={[
+                showSteps ? styles.secondary_button : styles.button,
+                { marginVertical: 16, elevation: 0 }
+              ]}
+              onPress={() => {
+                setShowSteps(!showSteps)
+                this.drawer.toggleDrawerState()
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                {showSteps ? (
+                  <Text style={[styles.secondaryTitleButton]}>SHOW MAPS</Text>
+                ) : (
+                  <Text style={[styles.titleButton]}>SHOW STEPS</Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+        <Animated.View
+          style={[
+            {
+              position: 'absolute',
+              bottom: MARGIN_BOTTOM_STEPBOX + 12,
               right: 24,
-              zIndex: 0
+              zIndex: 0,
+              transform: [{ translateY: footer_translateY }]
             }
           ]}
         >
@@ -321,34 +317,11 @@ class Footer extends React.PureComponent {
             centered={centered}
             _centerUserLocation={_centerUserLocation}
           />
-        </View>
-        <View
-          style={[styles.showStepButton, { elevation: showSteps ? 20 : 0 }]}
-        >
-          <TouchableOpacity
-            style={[
-              showSteps ? styles.secondary_button : styles.button,
-              { marginVertical: 16, elevation: 0 }
-            ]}
-            onPress={() => {
-              setShowSteps(!showSteps)
-              this.drawer.toggleDrawerState()
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              {showSteps ? (
-                <Text style={[styles.secondaryTitleButton]}>SHOW MAPS</Text>
-              ) : (
-                <Text style={[styles.titleButton]}>SHOW STEPS</Text>
-              )}
-            </View>
-          </TouchableOpacity>
-        </View>
-
+        </Animated.View>
         <BottomDrawer
-          style={{ position: 'relative' }}
+          _translateY={footer_translateY}
           containerHeight={EXPANDED_HEIGHT_STEPBOX}
-          downDisplay={EXPANDED_HEIGHT_STEPBOX - COLLAPSED_HEIGHT_STEPBOX + 5}
+          downDisplay={EXPANDED_HEIGHT_STEPBOX - COLLAPSED_HEIGHT_STEPBOX}
           backgroundColor="transparent"
           startUp={false}
           roundedEdges={false}
@@ -375,25 +348,17 @@ class Footer extends React.PureComponent {
                 }}
               >
                 <Text style={styles.minuteStyle}>
-                  {/* {distanceMatrix && distanceMatrix[selectedMarker.id]
-                    ? distanceMatrix[selectedMarker.id].duration + ' min '
-                    : ''} */}
                   {`${direction_state.duration} min `}
                 </Text>
                 <Text style={styles.distance_grey}>
-                  (
-                  {/* {distanceMatrix && distanceMatrix[selectedMarker.id]
-                    ? formatDistance(distanceMatrix[selectedMarker.id].distance)
-                    : ''}
-                  ) */}
-                  {formatDistance(direction_state.distance)})
+                  ({formatDistance(direction_state.distance)})
                 </Text>
               </View>
               <StepList steps={steps} />
             </View>
           </View>
         </BottomDrawer>
-      </Animated.View>
+      </React.Fragment>
     )
   }
 
@@ -413,6 +378,16 @@ const mapStateToProps = getState => ({
   selectedMarker: getState.markerReducer.selectedMarker,
   distanceMatrix: getState.distanceReducer.distanceMatrix
 })
+
+// const mapStateToProps = getState => {
+//   const { distanceMatrix } = getState.distanceReducer
+//   const { markerMatrix } = getState.markerReducer
+//   const selectedMarker = markerMatrix['1986.058']
+//   return {
+//     selectedMarker,
+//     distanceMatrix
+//   }
+// }
 
 export default connect(
   mapStateToProps,

@@ -126,12 +126,7 @@ export const fetchUserDataThunk = (initialUserId = null) => {
       } catch (err) {
         console.log('Can not reload data user')
         dispatch(fetchUserDataRejected())
-        // resolve()
       }
-      // } else {
-      //   console.log('Can not reload data user')
-      //   dispatch(fetchUserDataRejected())
-      // }
       resolve()
     })
   }
@@ -163,14 +158,6 @@ export const thunkSignIn = () => {
             }
             dispatch(signInSuccesful(user))
             resolve()
-            // dispatch(fetchUserDataThunk(userId))
-            //   .then(() => {
-            //     resolve()
-            //   })
-            //   .catch(() => {
-            //     dispatch(signInRejected())
-            //     resolve()
-            //   })
           })
           .catch(e => {
             console.log('Can not sign in')
@@ -187,3 +174,5 @@ export const thunkSignIn = () => {
     })
   }
 }
+
+// clearData('auth')

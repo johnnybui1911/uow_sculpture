@@ -4,8 +4,7 @@ import { View, Dimensions, Animated } from 'react-native'
 import { DOWN_STATE, UP_STATE } from './state'
 
 import Animator from './Animator'
-
-const SCREEN_HEIGHT = Dimensions.get('window').height
+import { SCREEN_HEIGHT } from '../../assets/dimension'
 
 export default class BottomDrawer extends Component {
   static propTypes = {

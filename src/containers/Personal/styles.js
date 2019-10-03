@@ -3,7 +3,8 @@ import palette from '../../assets/palette'
 import {
   STATUS_BAR_HEIGHT,
   MIN_TABVIEW_HEIGHT,
-  BUTTON_HEIGHT
+  BUTTON_HEIGHT,
+  HEADER_BAR_MARGIN_TOP
 } from '../../assets/dimension'
 
 const shadowStyle = {
@@ -46,7 +47,8 @@ const box = {
   height: 30,
   backgroundColor: palette.secondaryColor,
   borderRadius: 12,
-  minWidth: 60
+  minWidth: 60,
+  alignSelf: 'center'
 }
 
 export default StyleSheet.create({
@@ -56,7 +58,7 @@ export default StyleSheet.create({
   },
   profileFixedContainer: { height: 400, backgroundColor: palette.primaryColor },
   headerContainer: {
-    marginTop: STATUS_BAR_HEIGHT,
+    marginTop: HEADER_BAR_MARGIN_TOP,
     alignItems: 'center',
     marginHorizontal: 24,
     marginBottom: 18,

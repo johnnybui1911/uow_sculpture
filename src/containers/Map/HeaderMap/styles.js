@@ -1,10 +1,13 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../../assets/palette'
-import { STATUS_BAR_HEIGHT } from '../../../assets/dimension'
+import {
+  STATUS_BAR_HEIGHT,
+  HEADER_BAR_MARGIN_TOP
+} from '../../../assets/dimension'
 
 export default StyleSheet.create({
   searchBoxContainer: {
-    marginTop: STATUS_BAR_HEIGHT,
+    marginTop: HEADER_BAR_MARGIN_TOP,
     zIndex: 1
   },
   formDirectionStyle: {
@@ -14,7 +17,7 @@ export default StyleSheet.create({
     width: '100%',
     maxHeight: 171,
     top: 0,
-    paddingTop: STATUS_BAR_HEIGHT + 12,
+    paddingTop: HEADER_BAR_MARGIN_TOP,
     zIndex: 1000
   },
   rowStyle: {

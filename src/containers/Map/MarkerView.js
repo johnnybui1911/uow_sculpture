@@ -30,7 +30,7 @@ class MarkerView extends React.PureComponent {
           zIndex={1}
           tracksViewChanges={false}
           coordinate={marker.coordinate}
-          onPress={() => this.props._onMarkerPressed(marker)}
+          onPress={() => this.props._onMarkerPressed(marker, true)}
         >
           <View
             style={{
@@ -51,7 +51,7 @@ class MarkerView extends React.PureComponent {
           zIndex={1}
           tracksViewChanges={false}
           coordinate={marker.coordinate}
-          onPress={() => this.props._onMarkerPressed(marker)}
+          onPress={() => this.props._onMarkerPressed(marker, true)}
         >
           <View
             style={{

@@ -10,6 +10,7 @@ import DescriptionCard from './DescriptionCard'
 import MapCard from './MapCard'
 import Header from './Header'
 import { _handleNotification } from '../../library/notificationTask'
+import BlackModal from '../../components/BlackModal/BlackModal'
 
 // const localItem = localData[0]
 
@@ -87,6 +88,7 @@ class DetailScreen extends React.PureComponent {
             </View>
           </ScrollView>
         ) : null}
+        {this.state.modalVisible && <BlackModal opacity={1} />}
       </SafeAreaView>
     )
   }

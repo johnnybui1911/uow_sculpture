@@ -1,9 +1,14 @@
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react'
-import { PanResponder, Animated, Dimensions, StyleSheet } from 'react-native'
+import {
+  PanResponder,
+  Animated,
+  Dimensions,
+  StyleSheet,
+  Platform
+} from 'react-native'
 import { DOWN_STATE, UP_STATE } from './state'
-
-const SCREEN_HEIGHT = Dimensions.get('window').height
-const SCREEN_WIDTH = Dimensions.get('window').width
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
 
 export default class Animator extends Component {
   constructor(props) {
@@ -40,7 +45,37 @@ export default class Animator extends Component {
   }
 
   render() {
-    return (
+    return Platform.OS === 'ios' ? (
+      <Animated.View
+        style={[
+          {
+            height: 0
+            // position: 'absolute',
+            // bottom: 0,
+            // backgroundColor: 'yellow'
+          },
+          { ...this.props.style },
+          this.props._translateY && { top: this.props._translateY }
+        ]}
+      >
+        <Animated.View
+          style={[
+            { ...this.position.getLayout(), left: 0 },
+            StyleSheet.flatten([
+              styles.animationContainer(
+                this.props.containerHeight,
+                this.props.backgroundColor
+              ),
+              styles.roundedEdges(this.props.roundedEdges),
+              styles.shadow(this.props.shadow)
+            ])
+          ]}
+          {...this._panResponder.panHandlers}
+        >
+          {this.props.children}
+        </Animated.View>
+      </Animated.View>
+    ) : (
       <Animated.View
         style={[
           { flex: 1, position: 'absolute' },
@@ -91,17 +126,7 @@ export default class Animator extends Component {
     ) {
       this._transitionTo(this.props.upPosition, this.props.onExpanded)
       this.props.onDrawerStateSet(UP_STATE)
-    }
-    // else if (
-    //   gesture.dy > -this.props.toggleThreshold &&
-    //   gesture.dy < 0 &&
-    //   this.props.currentPosition === this.props.downPosition
-    // ) {
-    //   console.log('back to collapsed')
-    //   this._transitionTo(this.props.downPosition, this.props.onCollapsed)
-    //   this.props.onDrawerStateSet(DOWN_STATE)
-    // }
-    else {
+    } else {
       this._resetPosition()
     }
   }

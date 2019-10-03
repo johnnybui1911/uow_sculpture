@@ -55,9 +55,6 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
             ) : (
               <React.Fragment>
                 <Text style={styles.distance}>
-                  {/* {distanceMatrix && distanceMatrix[selectedMarker.id]
-                    ? formatDistance(distanceMatrix[selectedMarker.id].distance)
-                    : ''} */}
                   {formatDistance(direction_state.distance)}
                 </Text>
                 <Text style={styles.title} numberOfLines={1}>
