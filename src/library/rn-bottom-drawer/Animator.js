@@ -77,8 +77,18 @@ export default class Animator extends Component {
       </Animated.View>
     ) : (
       <Animated.View
+        // style={[
+        //   { flex: 1, position: 'absolute' },
+        //   { ...this.props.style },
+        //   this.props._translateY && { top: this.props._translateY }
+        // ]}
         style={[
-          { flex: 1, position: 'absolute' },
+          {
+            height: 0
+            // position: 'absolute',
+            // bottom: 0,
+            // backgroundColor: 'yellow'
+          },
           { ...this.props.style },
           this.props._translateY && { top: this.props._translateY }
         ]}

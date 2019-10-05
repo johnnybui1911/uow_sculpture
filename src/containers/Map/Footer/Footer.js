@@ -271,10 +271,11 @@ class Footer extends React.PureComponent {
           style={[
             {
               position: 'absolute',
+              height: 76,
               bottom: 0,
               left: 0,
               right: 0,
-              zIndex: 2,
+              zIndex: 9,
               transform: [{ translateY: footer_translateY }]
             }
           ]}

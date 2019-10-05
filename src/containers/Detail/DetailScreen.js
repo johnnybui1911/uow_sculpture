@@ -50,12 +50,12 @@ class DetailScreen extends React.PureComponent {
   }
 
   _navigateToComment = () => {
-    const id = this.props.navigation.getParam('id', 2015.003)
+    const id = this.props.navigation.getParam('id', 1986.058)
     this.props.navigation.navigate('Comment', { id: id })
   }
 
   render() {
-    const id = this.props.navigation.getParam('id', 2015.003)
+    const id = this.props.navigation.getParam('id', 1986.058)
     const item = this.props.markerMatrix[id]
     const { imageList } = item
 

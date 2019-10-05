@@ -77,6 +77,13 @@ export const fetchDataThunk = () => {
               totalVisits,
               totalComments
             } = marker
+
+            const imageList = images.sort((a, b) => {
+              return (
+                new Date(b.created).getTime() - new Date(a.created).getTime()
+              )
+            })
+
             const newMarker = {
               id: accessionId,
               name,
@@ -92,12 +99,12 @@ export const fetchDataThunk = () => {
                 location: locationNotes,
                 creditLine
               },
-              photoURL: images.length === 0 ? null : images[0].url,
+              photoURL: imageList.length === 0 ? null : imageList[0].url,
               coordinate: {
                 latitude: parseFloat(latitude),
                 longitude: parseFloat(longitude)
               },
-              imageList: images,
+              imageList: imageList,
               distance: '',
               duration: '',
               likeCount: Number(totalLikes),

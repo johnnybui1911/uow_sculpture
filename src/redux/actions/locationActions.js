@@ -20,6 +20,8 @@ export const syncLocationThunk = () => {
       const { status } = await Permissions.askAsync(Permissions.LOCATION)
       if (status !== 'granted') {
         dispatch(syncLocationRejected())
+        console.log('Need Location Permission')
+        resolve()
       } else {
         await Location.watchPositionAsync(
           {
@@ -36,7 +38,7 @@ export const syncLocationThunk = () => {
             } else {
               dispatch(syncLocationRejected())
               console.log('error fetch location expo')
-              reject()
+              resolve()
             }
           }
         )

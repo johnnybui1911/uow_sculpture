@@ -367,8 +367,12 @@ export class MapScreen extends React.PureComponent {
         this.props.navigation.setParams({ showTab: false })
       }
       if (centerToMarker && !showDirection) {
-        const userRegion = { ...region, latitude, longitude }
-        this.map.animateToRegion(userRegion)
+        this.map.animateCamera({
+          center: {
+            latitude,
+            longitude
+          }
+        })
       }
       this.props.handleSelectMarker(marker)
       this.setState({
@@ -498,7 +502,6 @@ export class MapScreen extends React.PureComponent {
               }}
               onPress={this.toggleShowMapOnly}
               onRegionChangeComplete={region => {
-                // console.log(region)
                 this._handleRegionChangeComplete(region)
               }}
               initialRegion={region}

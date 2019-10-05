@@ -27,6 +27,7 @@ class MarkerView extends React.PureComponent {
     if (selectedMarker && marker.id === selectedMarker.id) {
       return (
         <Marker
+          identifier={marker.id}
           zIndex={1}
           tracksViewChanges={false}
           coordinate={marker.coordinate}
@@ -48,6 +49,7 @@ class MarkerView extends React.PureComponent {
     } else {
       return (
         <Marker
+          identifier={marker.id}
           zIndex={1}
           tracksViewChanges={false}
           coordinate={marker.coordinate}
