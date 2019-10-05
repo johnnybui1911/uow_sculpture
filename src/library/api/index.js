@@ -16,6 +16,7 @@ baseAxios.interceptors.request.use(
       // console.log('interceptor auth', auth0)
       let { token, refresh_token, expireDate } = auth0
       if (token) {
+        // console.log('has token')
         if (new Date() >= new Date(expireDate)) {
           // get new access token using refresh token
           const response = await axios({

@@ -29,17 +29,9 @@ const _signOut = async props => {
   })
 
   let logoutUrl = `${AUTH0_DOMAIN}/v2/logout?${queryString}`
-  if (props.user.userId.split('|')[0].includes('google')) {
+  if (!props.user.userId.split('|')[0].includes('auth0')) {
+    console.log('log out social!')
     logoutUrl = `${AUTH0_DOMAIN}/v2/logout?federated&${queryString}`
-  } else if (props.user.userId.split('|')[0].includes('facebook')) {
-    console.log('sign out facebook!')
-    const accessToken = JSON.parse(await AsyncStorage.getItem('auth')).token
-    const fbQueryString = toQueryString({
-      returnTo: `${AUTH0_DOMAIN}/logout?returnTo=${redirectUrl}`,
-      client_id: AUTH0_CLIENT_ID,
-      access_token: accessToken
-    })
-    logoutUrl = `${AUTH0_DOMAIN}/v2/logout?federated&${fbQueryString}`
   }
 
   const result = await WebBrowser.openBrowserAsync(logoutUrl)
