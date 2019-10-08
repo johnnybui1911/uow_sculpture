@@ -130,6 +130,7 @@ class CollectionScreen extends React.PureComponent {
             colors={[palette.primaryColorLight]}
             refreshing={refreshing}
             onRefresh={this._handleRefresh}
+            tintColor={palette.primaryColorLight}
           />
         }
         renderItem={this._renderItem}

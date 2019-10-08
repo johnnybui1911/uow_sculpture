@@ -50,6 +50,39 @@ const _signOut = async props => {
 
 const AboutScreen = props => {
   const { user } = props
+  const renderAccountName = () => {
+    const { userId } = user
+    if (userId.split('|')[0].includes('facebook')) {
+      return (
+        <View style={styles.accountNameView}>
+          <View style={{ flex: 1, padding: 20 }}>{icons.facebook}</View>
+          <View style={{ position: 'absolute', left: 60 }}>
+            <Text style={[styles.title, { fontSize: 16 }]}>
+              {user.username}
+            </Text>
+            <Text style={(styles.description, { fontSize: 12 })}>
+              Account name
+            </Text>
+          </View>
+        </View>
+      )
+    } else if (userId.split('|')[0].includes('google')) {
+      return (
+        <View style={styles.accountNameView}>
+          <View style={{ flex: 1, padding: 20 }}>{icons.google}</View>
+          <View style={{ position: 'absolute', left: 60 }}>
+            <Text style={[styles.title, { fontSize: 16 }]}>
+              {user.username}
+            </Text>
+            <Text style={(styles.description, { fontSize: 12 })}>
+              Account name
+            </Text>
+          </View>
+        </View>
+      )
+    }
+    return null
+  }
   return (
     <View
       style={{
@@ -58,15 +91,7 @@ const AboutScreen = props => {
       }}
     >
       <FeatureCard email={user.email} joinDate={user.joinDate} />
-      <View style={styles.accountNameView}>
-        <View style={{ flex: 1, padding: 20 }}>{icons.google}</View>
-        <View style={{ position: 'absolute', left: 60 }}>
-          <Text style={[styles.title, { fontSize: 16 }]}>{user.username}</Text>
-          <Text style={(styles.description, { fontSize: 12 })}>
-            Account name
-          </Text>
-        </View>
-      </View>
+      {renderAccountName()}
       <TouchableOpacity
         style={[
           styles.button,

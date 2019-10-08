@@ -1,16 +1,31 @@
 import React from 'react'
-import { View, TouchableWithoutFeedback, Text } from 'react-native'
+import {
+  View,
+  TouchableWithoutFeedback,
+  Text,
+  Platform,
+  StatusBar
+} from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
-import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import {
+  STATUS_BAR_HEIGHT,
+  HEADER_BAR_MARGIN_TOP
+} from '../../assets/dimension'
+
+export const MyStatusBar = ({ backgroundColor, ...props }) => (
+  <View style={[{ height: STATUS_BAR_HEIGHT, backgroundColor }]}>
+    <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+  </View>
+)
 
 export default withNavigation(
   ({ navigation, headerName, rightButton, leftButton, handleRightButton }) => {
     return (
       <View
         style={{
-          paddingTop: STATUS_BAR_HEIGHT + 12,
+          paddingTop: HEADER_BAR_MARGIN_TOP + 6,
           paddingHorizontal: 24,
           paddingBottom: 12,
           justifyContent: 'center',

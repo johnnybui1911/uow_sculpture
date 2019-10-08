@@ -1,5 +1,11 @@
 import React from 'react'
-import { View, Image, Text, TouchableWithoutFeedback } from 'react-native'
+import {
+  View,
+  Image,
+  Text,
+  TouchableWithoutFeedback,
+  Platform
+} from 'react-native'
 import { connect } from 'react-redux'
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu'
 import moment from 'moment'
@@ -22,12 +28,12 @@ const CommentItem = ({
 
   const editComment = () => {
     _handleEditComment()
-    hideMenu()
+    Platform.OS === 'android' && hideMenu()
   }
 
   const deleteComment = () => {
-    _openModal()
     hideMenu()
+    _openModal()
   }
 
   return (
@@ -41,7 +47,7 @@ const CommentItem = ({
       <View style={[]}>
         <Image
           source={{ uri: item.userImg }}
-          style={{ height: 40, width: 40, borderRadius: 40 }}
+          style={{ height: 40, width: 40, borderRadius: 40 / 2 }}
         />
       </View>
       <View
@@ -53,7 +59,8 @@ const CommentItem = ({
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'flex-end'
+            alignItems: 'flex-end',
+            paddingTop: 1
           }}
         >
           <Text style={[styles.title, { fontSize: 14, marginRight: 5 }]}>
@@ -89,34 +96,48 @@ const CommentItem = ({
       </View>
       {userId && userId === item.userId && (
         <View
-          style={{
-            alignItems: 'flex-end'
-            // marginRight: -12 // manual fix icons not align
-          }}
-        >
-          <Menu
-            ref={setMenuRef}
-            style={{}}
-            button={
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  _selectComment(item)
-                  showMenu()
-                }}
-              >
-                <View style={styles.socialIconStyle}>
-                  {icons.vertical_dots_light}
-                </View>
-              </TouchableWithoutFeedback>
+          style={
+            {
+              // alignItems: 'flex-end'
+              // marginRight: -12 // manual fix icons not align
+              // justifyContent: 'flex-start'
             }
-          >
-            <MenuItem textStyle={styles.menuText} onPress={editComment}>
-              Edit
-            </MenuItem>
-            <MenuItem textStyle={styles.menuText} onPress={deleteComment}>
-              Delete
-            </MenuItem>
-          </Menu>
+          }
+        >
+          {Platform.OS === 'ios' ? (
+            <TouchableWithoutFeedback
+              onPress={() => {
+                _selectComment(item)
+              }}
+            >
+              <View style={styles.socialIconStyle}>
+                {icons.vertical_dots_light}
+              </View>
+            </TouchableWithoutFeedback>
+          ) : (
+            <Menu
+              ref={setMenuRef}
+              button={
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    _selectComment(item)
+                    showMenu()
+                  }}
+                >
+                  <View style={styles.socialIconStyle}>
+                    {icons.vertical_dots_light}
+                  </View>
+                </TouchableWithoutFeedback>
+              }
+            >
+              <MenuItem textStyle={styles.menuText} onPress={editComment}>
+                Edit
+              </MenuItem>
+              <MenuItem textStyle={styles.menuText} onPress={deleteComment}>
+                Delete
+              </MenuItem>
+            </Menu>
+          )}
         </View>
       )}
     </View>

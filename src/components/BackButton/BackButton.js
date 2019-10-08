@@ -1,6 +1,7 @@
 import React from 'react'
-import { TouchableWithoutFeedback, View } from 'react-native'
+import { TouchableWithoutFeedback, View, Platform } from 'react-native'
 import { icons } from '../../assets/icons'
+import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
 
 export default ({ _goBack, style }) => {
   const BackButton = icons.back
@@ -9,9 +10,9 @@ export default ({ _goBack, style }) => {
       <View
         style={{
           position: 'absolute',
-          top: 56 - 24,
+          top: Platform.OS === 'ios' ? 8 : STATUS_BAR_HEIGHT + 8,
           padding: 24,
-          borderRadius: 50,
+          // borderRadius: 50,
           zIndex: 10
         }}
       >

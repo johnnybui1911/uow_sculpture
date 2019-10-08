@@ -19,7 +19,11 @@ import styles from '../Comment/styles'
 import ListHeader from '../../components/ListHeader/ListHeader'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../assets/dimension'
+import {
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
+  FULL_SCREEN_HEIGHT
+} from '../../assets/dimension'
 import baseAxios from '../../library/api'
 import { signInSuccesful } from '../../redux/actions'
 
@@ -163,7 +167,7 @@ class EditProfile extends React.PureComponent {
     const { isModalOpen } = this.state
     return (
       <Modal
-        deviceHeight={SCREEN_HEIGHT}
+        deviceHeight={FULL_SCREEN_HEIGHT}
         isVisible={isModalOpen}
         onBackdropPress={_closeModal}
         style={{

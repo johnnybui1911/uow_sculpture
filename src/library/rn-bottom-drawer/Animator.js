@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { DOWN_STATE, UP_STATE } from './state'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
+import { shadowIOS } from '../../assets/rootStyles'
 
 export default class Animator extends Component {
   constructor(props) {
@@ -184,9 +185,10 @@ const styles = {
   shadow: shadow => {
     return (
       shadow == true && {
-        shadowColor: '#CECDCD',
-        shadowRadius: 3,
-        shadowOpacity: 5
+        ...shadowIOS
+        // shadowColor: '#CECDCD',
+        // shadowRadius: 3,
+        // shadowOpacity: 5
         // elevation: 10
       }
     )

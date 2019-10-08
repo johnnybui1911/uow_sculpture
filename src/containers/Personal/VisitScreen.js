@@ -47,12 +47,17 @@ class VisitScreen extends React.PureComponent {
             sculpture: { accessionId, images, name },
             visitTime
           } = element
+
+          const imageList = images.sort((a, b) => {
+            return new Date(b.created).getTime() - new Date(a.created).getTime()
+          })
+
           return {
             visitId,
             userId,
             sculptureId: accessionId,
             sculptureName: name,
-            photoURL: images.length ? images[0].url : null,
+            photoURL: imageList.length ? imageList[0].url : null,
             submitDate: visitTime
           }
         })
@@ -144,6 +149,7 @@ class VisitScreen extends React.PureComponent {
             colors={[palette.primaryColorLight]}
             refreshing={refreshing}
             onRefresh={this._handleRefresh}
+            tintColor={palette.primaryColorLight}
           />
         }
         contentContainerStyle={{ paddingTop: 12 }}

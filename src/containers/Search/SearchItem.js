@@ -10,6 +10,7 @@ import formatDistance from '../../library/formatDistance'
 
 const SearchItem = ({
   item,
+  index,
   searchText,
   insertSearchItem,
   distanceMatrix,
@@ -46,7 +47,7 @@ const SearchItem = ({
       <TouchableHighlight
         underlayColor="#FAFAFA"
         onPress={() => onItemClick()}
-        style={{ paddingVertical: 5, flex: 1 }}
+        style={{ paddingVertical: 5, flex: 1, paddingTop: index === 0 ? 0 : 5 }}
       >
         <View
           style={{

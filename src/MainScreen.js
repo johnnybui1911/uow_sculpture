@@ -18,7 +18,8 @@ import {
 import {
   STATUS_BAR_HEIGHT,
   SCREEN_HEIGHT,
-  SCREEN_WIDTH
+  SCREEN_WIDTH,
+  FULL_SCREEN_HEIGHT
 } from './assets/dimension'
 import { AppContainer } from './navigations/AppStack'
 import IntroScreen from './containers/Introduction/IntroScreen'
@@ -75,7 +76,7 @@ class MainScreen extends React.PureComponent {
           />
         )}
         <Modal
-          deviceHeight={SCREEN_HEIGHT}
+          deviceHeight={FULL_SCREEN_HEIGHT}
           isVisible={this.state.isModalVisible}
           animationIn="zoomInDown"
           animationInTiming={500}

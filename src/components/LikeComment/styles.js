@@ -75,8 +75,8 @@ export default StyleSheet.create({
   },
   socialIconStyle: {
     width: 22,
-    paddingTop: Platform.OS === 'ios' ? 'auto' : 12,
-    paddingBottom: Platform.OS === 'ios' ? 'auto' : 12
+    paddingTop: Platform.OS === 'ios' ? 6 : 12,
+    paddingBottom: Platform.OS === 'ios' ? 6 : 12
     // borderColor: 'black',
     // borderWidth: 0.5
   },

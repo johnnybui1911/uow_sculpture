@@ -6,7 +6,8 @@ import {
   Text,
   Animated,
   Keyboard,
-  BackHandler
+  BackHandler,
+  Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -14,11 +15,13 @@ import SearchBox from '../../components/SearchButton/SearchBox'
 import { icons } from '../../assets/icons'
 import SearchItem from './SearchItem'
 import palette from '../../assets/palette'
+import { shadowIOS } from '../../assets/rootStyles'
 
 class SearchScreen extends React.PureComponent {
   state = {
     searchText: '',
-    refreshing: false
+    refreshing: false,
+    shadowSearchBox: false
   }
 
   scrollY = new Animated.Value(0)
@@ -58,6 +61,7 @@ class SearchScreen extends React.PureComponent {
     const centerToMarker = navigation.getParam('centerToMarker', false)
     return (
       <SearchItem
+        index={index}
         item={item}
         searchText={searchText}
         _onMarkerPressed={_onMarkerPressed}
@@ -91,7 +95,17 @@ class SearchScreen extends React.PureComponent {
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: this.scrollY } } }],
           {
-            useNativeDriver: true
+            useNativeDriver: true,
+            listener: event => {
+              if (Platform.OS === 'ios') {
+                const y = event.nativeEvent.contentOffset.y
+                if (y > 0 && !this.state.shadowSearchBox) {
+                  this.setState({ shadowSearchBox: true })
+                } else if (y <= 0 && this.state.shadowSearchBox) {
+                  this.setState({ shadowSearchBox: false })
+                }
+              }
+            }
           }
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -100,13 +114,16 @@ class SearchScreen extends React.PureComponent {
         showsVerticalScrollIndicator={false}
         refreshing={refreshing}
         onRefresh={this._handleRefresh}
+        keyboardDismissMode={Platform.OS === 'ios' ? 'on-drag' : 'none'}
         keyboardShouldPersistTaps="always"
-        contentContainerStyle={{
-          paddingVertical: 10
-          // borderWidth: 1,
-          // borderColor: palette.borderGreyColor,
-          // borderRadius: 4
-        }}
+        contentContainerStyle={
+          {
+            // paddingVertical: 10
+            // borderWidth: 1,
+            // borderColor: palette.borderGreyColor,
+            // borderRadius: 4
+          }
+        }
         ItemSeparatorComponent={() => (
           <View
             style={{
@@ -120,7 +137,9 @@ class SearchScreen extends React.PureComponent {
         )}
         ListHeaderComponent={() => {
           return searchText === '' ? (
-            <View style={{ flex: 1, paddingBottom: 5, paddingHorizontal: 10 }}>
+            <View
+              style={{ flex: 1, paddingVertical: 5, paddingHorizontal: 10 }}
+            >
               <Text style={styles.flatListHeader}>RECENT</Text>
             </View>
           ) : null
@@ -145,16 +164,6 @@ class SearchScreen extends React.PureComponent {
 
   render() {
     const { searchText } = this.state
-    const shadowStyle = {
-      elevation: 4,
-      shadowColor: '#000000',
-      shadowOffset: {
-        width: 0,
-        height: 3
-      },
-      shadowRadius: 5,
-      shadowOpacity: 0.1
-    }
 
     // shadow apply for search header box
     const shadowAnimation = this.scrollY.interpolate({
@@ -162,11 +171,25 @@ class SearchScreen extends React.PureComponent {
       outputRange: [-4, 4],
       extrapolate: 'clamp'
     })
-
+    // const checkShadow = shadowAnimation.__getValue() > 3
     return (
       <SafeAreaView style={styles.container}>
         <Animated.View
-          style={[styles.searchBoxContainer, { elevation: shadowAnimation }]}
+          style={[
+            styles.searchBoxContainer,
+            Platform.OS === 'android' ? { elevation: shadowAnimation } : null,
+            Platform.OS === 'ios' && {
+              shadowColor: '#000000',
+              shadowOffset: {
+                width: 0,
+                height: 3
+              },
+              shadowRadius: 2,
+              shadowOpacity: this.state.shadowSearchBox ? 0.15 : 0
+            }
+            // ? { ...shadowIOS }
+            // : null
+          ]}
         >
           <SearchBox
             flat

@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native'
 import palette from '../../assets/palette'
-import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import {
+  STATUS_BAR_HEIGHT,
+  HEADER_BAR_MARGIN_TOP
+} from '../../assets/dimension'
 
 const shadowStyle = {
   elevation: 4,
@@ -43,7 +46,7 @@ export default StyleSheet.create({
     backgroundColor: palette.backgroundColorWhite
   },
   searchBoxContainer: {
-    marginTop: STATUS_BAR_HEIGHT,
+    marginTop: HEADER_BAR_MARGIN_TOP,
     zIndex: 1000,
     backgroundColor: palette.backgroundColorWhite
   },

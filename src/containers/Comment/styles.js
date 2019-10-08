@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
-import { BUTTON_HEIGHT } from '../../assets/dimension'
+import { BUTTON_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
+import { shadowIOS } from '../../assets/rootStyles'
 
 const { width, height } = Dimensions.get('window')
 
@@ -185,6 +186,11 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     color: palette.primaryColorLight
   },
+  menuTextLg: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: palette.primaryColorLight
+  },
   box: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -196,5 +202,14 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: palette.primaryColorLight,
     borderRadius: 12
+  },
+  //menu IOS style
+  iosMenuStyle: {
+    // position: 'absolute',
+    // bottom: 0,
+    width: SCREEN_WIDTH,
+    backgroundColor: '#FFF',
+    // paddingHorizontal: 24,
+    ...shadowIOS
   }
 })

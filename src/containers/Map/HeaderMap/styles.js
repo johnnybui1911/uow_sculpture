@@ -4,6 +4,7 @@ import {
   STATUS_BAR_HEIGHT,
   HEADER_BAR_MARGIN_TOP
 } from '../../../assets/dimension'
+import { shadowIOS } from '../../../assets/rootStyles'
 
 export default StyleSheet.create({
   searchBoxContainer: {
@@ -18,7 +19,8 @@ export default StyleSheet.create({
     maxHeight: 171,
     top: 0,
     paddingTop: HEADER_BAR_MARGIN_TOP,
-    zIndex: 1000
+    zIndex: 1000,
+    ...shadowIOS
   },
   rowStyle: {
     flexDirection: 'row',

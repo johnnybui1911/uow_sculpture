@@ -14,6 +14,7 @@ import styles from './styles'
 import palette from '../../assets/palette'
 import images from '../../assets/images'
 import ProfileBox from './ProfileBox'
+import { HEADER_BAR_MARGIN_TOP } from '../../assets/dimension'
 
 const PersonalHeader = ({
   user,
@@ -34,17 +35,20 @@ const PersonalHeader = ({
     }
   }, [likeUserCount, isLoadingUser])
   return loggedIn ? (
-    <View style={styles.profileFixedContainer}>
+    <View style={[styles.profileFixedContainer]}>
       <ScrollView
+        // scrollEnabled={false}
+        scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
             colors={[palette.primaryColorLight]}
             refreshing={refreshing}
             onRefresh={_handleRefresh}
+            tintColor="#fff"
           />
         }
       >
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer]}>
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>Profile</Text>
           </View>

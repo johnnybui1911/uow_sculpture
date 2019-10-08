@@ -11,5 +11,6 @@ export default {
   facebookColor: '#3B5998',
   dividerColor: '#F4F4F6',
   borderGreyColor: '#D9D9D6',
+  highLightColor: '#FAFAFA',
   dividerColorNew: 'rgba(0,0,0,0.15)'
 }

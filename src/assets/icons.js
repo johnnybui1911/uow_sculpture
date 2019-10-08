@@ -23,6 +23,12 @@ export const DirectionIcon = maneuver => (
 const socialSize = 18
 
 export const icons = {
+  edit: (
+    <MaterialIcons name="edit" size={22} color={palette.primaryColorLight} />
+  ),
+  delete: (
+    <MaterialIcons name="delete" size={22} color={palette.primaryColorLight} />
+  ),
   check: ({ style }) => (
     <MaterialIcons
       name="check"
@@ -173,14 +179,26 @@ export const icons = {
   ),
   lock: <CustomIcon name="lock" size={24} color={palette.primaryColorLight} />,
   mail: <CustomIcon name="email" size={24} color={palette.primaryColorLight} />,
-  facebook: (
-    <CustomIcon
-      name="facebook"
-      size={24}
-      color={palette.backgroundColorWhite}
+  // facebook: (
+  //   <CustomIcon
+  //     name="facebook"
+  //     size={24}
+  //     color={palette.backgroundColorWhite}
+  //   />
+  // ),
+  google: (
+    <Image
+      source={require('./images/google.png')}
+      style={{ width: 24, height: 24 }}
     />
   ),
-  google: <Image source={require('./images/google.png')} />,
+  facebook: (
+    <Image
+      source={require('./images/facebook.png')}
+      style={{ width: 24, height: 24 }}
+      resizeMode="contain"
+    />
+  ),
   logo: <CustomIcon name="logo" size={120} color={palette.secondaryColor} />,
   one_dot: (
     <FontAwesome
@@ -195,7 +213,7 @@ export const icons = {
   ),
   vertical_dots_light: (
     <MaterialIcons
-      name="more-vert"
+      name="more-horiz"
       size={24}
       color={palette.primaryColorLight}
     />

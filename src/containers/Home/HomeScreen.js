@@ -93,6 +93,7 @@ class HomeScreen extends React.PureComponent {
               colors={[palette.primaryColorLight]}
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
+              tintColor={palette.primaryColorLight}
             />
           }
           showsVerticalScrollIndicator={false}

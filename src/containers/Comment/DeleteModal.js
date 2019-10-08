@@ -3,7 +3,7 @@ import Modal from 'react-native-modal'
 import { View, Text, TouchableHighlight } from 'react-native'
 import styles from './styles'
 import palette from '../../assets/palette'
-import { SCREEN_HEIGHT } from '../../assets/dimension'
+import { SCREEN_HEIGHT, FULL_SCREEN_HEIGHT } from '../../assets/dimension'
 
 const DeleteModal = ({ isModalOpen, _closeModal, _deleteComment }) => {
   return (
@@ -12,7 +12,7 @@ const DeleteModal = ({ isModalOpen, _closeModal, _deleteComment }) => {
       // animationInTiming={300}
       // animationOut="fadeOut"
       // animationOutTiming={300}
-      deviceHeight={SCREEN_HEIGHT}
+      deviceHeight={FULL_SCREEN_HEIGHT}
       isVisible={isModalOpen}
       onBackdropPress={_closeModal}
       style={{

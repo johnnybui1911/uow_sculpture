@@ -3,7 +3,9 @@ import { Provider } from 'react-redux'
 import { AppState } from 'react-native'
 import * as Font from 'expo-font'
 import * as Location from 'expo-location'
+import Constants from 'expo-constants'
 import { Notifications, AppLoading } from 'expo'
+import { setExpoStatusBarHeight } from 'react-navigation-collapsible'
 import MainScreen from './src/MainScreen'
 import stores from './src/redux/stores'
 import { registerForPushNotificationsAsync } from './src/library/notificationTask'
@@ -15,6 +17,8 @@ import {
   thunkSignIn,
   syncLocationThunk
 } from './src/redux/actions'
+
+setExpoStatusBarHeight(Constants.statusBarHeight)
 
 export default class App extends React.PureComponent {
   state = {

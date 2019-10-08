@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Animated,
-  Platform,
   Text,
   Image,
   TextInput,
@@ -12,7 +11,7 @@ import {
 import { SCREEN_WIDTH } from '../../assets/dimension'
 import palette from '../../assets/palette'
 
-const TEXT_INPUT_HEIGHT = Platform.OS === 'ios' ? 45 : 40
+const TEXT_INPUT_HEIGHT = 40
 
 const InputKeyboard = React.forwardRef(
   (
@@ -30,6 +29,9 @@ const InputKeyboard = React.forwardRef(
     },
     ref
   ) => {
+    const editCheck =
+      (selectedComment && selectedComment.text !== inputValue.trim()) ||
+      !selectedComment
     return (
       <View
         style={{
@@ -80,7 +82,7 @@ const InputKeyboard = React.forwardRef(
           >
             <TextInput
               ref={ref}
-              // autoFocus
+              autoFocus
               onContentSizeChange={e => {
                 const { height } = e.nativeEvent.contentSize
                 if (height < TEXT_INPUT_HEIGHT * 3)
@@ -106,8 +108,41 @@ const InputKeyboard = React.forwardRef(
               placeholderTextColor="rgb(110, 117, 125)"
               blurOnSubmit={false}
             />
-            {((selectedComment && selectedComment.text !== inputValue.trim()) ||
-              !selectedComment) && (
+            <TouchableWithoutFeedback
+              onPress={() => {
+                if (editCheck) {
+                  _onSubmit()
+                }
+              }}
+            >
+              {editing ? (
+                <View
+                  style={{
+                    alignSelf: 'flex-end',
+                    padding: 10
+                  }}
+                >
+                  <ActivityIndicator
+                    color={palette.primaryColorLight}
+                    size="small"
+                  />
+                </View>
+              ) : (
+                <Text
+                  style={{
+                    alignSelf: 'flex-end',
+                    padding: 10,
+                    fontFamily: 'Montserrat-Medium',
+                    fontSize: 14,
+                    color: palette.primaryColorLight,
+                    opacity: inputValue.trim() === '' || !editCheck ? 0 : 1
+                  }}
+                >
+                  {isEdit ? 'Edit' : 'Post'}
+                </Text>
+              )}
+            </TouchableWithoutFeedback>
+            {/* {editCheck && (
               <TouchableWithoutFeedback onPress={_onSubmit}>
                 {editing ? (
                   <View
@@ -136,7 +171,7 @@ const InputKeyboard = React.forwardRef(
                   </Text>
                 )}
               </TouchableWithoutFeedback>
-            )}
+            )} */}
           </Animated.View>
         </Animated.View>
       </View>

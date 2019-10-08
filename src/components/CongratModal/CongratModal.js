@@ -9,7 +9,11 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import Modal from 'react-native-modal'
-import { STATUS_BAR_HEIGHT, SCREEN_HEIGHT } from '../../assets/dimension'
+import {
+  STATUS_BAR_HEIGHT,
+  SCREEN_HEIGHT,
+  FULL_SCREEN_HEIGHT
+} from '../../assets/dimension'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
@@ -34,7 +38,7 @@ const CongratModal = ({
   return (
     <View>
       <Modal
-        deviceHeight={SCREEN_HEIGHT}
+        deviceHeight={FULL_SCREEN_HEIGHT}
         isVisible={isCongratModalVisible}
         animationIn="zoomInDown"
         animationInTiming={1000}

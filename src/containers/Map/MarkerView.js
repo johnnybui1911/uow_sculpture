@@ -29,19 +29,15 @@ class MarkerView extends React.PureComponent {
         <Marker
           identifier={marker.id}
           zIndex={1}
-          tracksViewChanges={false}
+          // tracksViewChanges={false}
           coordinate={marker.coordinate}
           onPress={() => this.props._onMarkerPressed(marker, true)}
         >
           <View
             style={{
-              // justifyContent: 'center',
-              // alignItems: 'center'
               paddingBottom: 5
             }}
           >
-            {/* <View style={[styles.oval_large_style, { opacity: 1 }]} />
-            <View style={[styles.oval_small_style, { opacity: 1 }]} /> */}
             {icons.marker}
           </View>
         </Marker>

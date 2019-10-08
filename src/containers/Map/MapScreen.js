@@ -329,7 +329,7 @@ export class MapScreen extends React.PureComponent {
             this.marker = marker
           }}
           tracksViewChanges={false}
-          style={{ zIndex: 2 }}
+          style={{ zIndex: 1 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
           onPress={this._centerUserLocation}

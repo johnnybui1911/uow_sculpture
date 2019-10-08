@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import {
@@ -5,6 +6,8 @@ import {
   View,
   Animated,
   RefreshControl,
+  ScrollView,
+  ActivityIndicator,
   PanResponder
 } from 'react-native'
 import LottieView from 'lottie-react-native'
@@ -20,8 +23,10 @@ import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
 import animations from '../../assets/animations'
 import { AuthHeader } from '../Auth/AuthScreen'
+import { Platform } from '@unimodules/core'
+import { shadowIOS } from '../../assets/rootStyles'
 
-const HEADER_HEIGHT = 400
+const HEADER_HEIGHT = 400 + 20
 const TAB_BAR_HEIGHT = 44
 const SCROLLABLE_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT // FIX LATER
 
@@ -31,7 +36,57 @@ const initialLayout = {
 }
 
 class PersonalScreen extends React.PureComponent {
+  _panResponder = PanResponder.create({
+    onMoveShouldSetResponderCapture: () => true,
+    onMoveShouldSetPanResponderCapture: () => true,
+
+    onPanResponderGrant: (e, gestureState) => {
+      this.state.scrollHeader.setOffset(this.state.scrollHeader.__getValue())
+      this.state.scrollHeader.setValue(0)
+    },
+
+    onPanResponderMove: (e, gestureState) => {
+      if (gestureState.dy > 0 && gestureState.dy <= 100) {
+        // console.log(gestureState)
+        this.state.scrollHeader.setValue(gestureState.dy)
+      }
+    },
+    onPanResponderRelease: (e, gestureState) => {
+      this.state.scrollHeader.flattenOffset()
+      const { refreshing } = this.state
+      if (!refreshing) {
+        if (gestureState.dy > 0 && gestureState.dy <= 80) {
+          Animated.timing(this.state.scrollHeader, {
+            toValue: 0
+          }).start()
+        } else {
+          this.setState({ refreshing: true }, () => {
+            // Animated.timing(this.state.scrollHeader, {
+            //   toValue: 0,
+            //   delay: 1000
+            // }).start(() => this.setState({ refreshing: false }))
+
+            this.props
+              .fetchDataThunk()
+              .then(() => {
+                Animated.timing(this.state.scrollHeader, {
+                  toValue: 0
+                }).start(() => this.setState({ refreshing: false }))
+              })
+              .catch(error => {
+                Animated.timing(this.state.scrollHeader, {
+                  toValue: 0
+                }).start(() => this.setState({ refreshing: false }))
+                console.log(error)
+              })
+          })
+        }
+      }
+    }
+  })
+
   state = {
+    scrollHeader: new Animated.Value(0),
     scrollY: new Animated.Value(0),
     index: 0,
     routes: [
@@ -83,13 +138,16 @@ class PersonalScreen extends React.PureComponent {
           zIndex: 1,
           overflow: 'hidden',
           elevation: 3,
+          ...shadowIOS,
           transform: [{ translateY: translateY }]
         }}
       >
-        <PersonalHeader
-          refreshing={this.state.refreshing}
-          _handleRefresh={this._handleRefresh}
-        />
+        <Animated.View {...this._panResponder.panHandlers}>
+          <PersonalHeader
+            refreshing={this.state.refreshing}
+            _handleRefresh={this._handleRefresh}
+          />
+        </Animated.View>
         <TabBar
           {...props}
           style={{
@@ -183,10 +241,10 @@ class PersonalScreen extends React.PureComponent {
             }
           }
         )}
-        onMomentumScrollBegin={event => {
-          routeKey !== 'ABOUT' && this._refresh(event.nativeEvent)
-        }}
-        // onMomentumScrollEnd={this._refresh}
+        // {...this._panResponder.panHandlers}
+        // onMomentumScrollBegin={event => {
+        //   routeKey !== 'ABOUT' && this._refresh(event.nativeEvent)
+        // }}
       >
         <View style={styles.tabViewStyle}>{content}</View>
       </Animated.ScrollView>
@@ -194,17 +252,44 @@ class PersonalScreen extends React.PureComponent {
   }
 
   _refresh = nativeEvent => {
-    var { velocity, contentOffset } = nativeEvent
-    if (contentOffset.y === 0 && velocity.y > 0 && !this.state.refreshing) {
-      this._handleRefresh()
+    // console.log(nativeEvent)
+    if (Platform.OS === 'ios') {
+      const { contentOffset } = nativeEvent
+      if (contentOffset.y <= 0) {
+        this._handleRefresh()
+      }
+    } else {
+      const { velocity, contentOffset } = nativeEvent
+      if (contentOffset.y === 0 && velocity.y > 0 && !this.state.refreshing) {
+        this._handleRefresh()
+      }
     }
   }
 
   render() {
     const { user, isLoadingUser } = this.props
     const { refreshing } = this.state
+
+    const translateHeaderY = this.state.scrollHeader.interpolate({
+      inputRange: [0, 100],
+      outputRange: [0, 100],
+      extrapolate: 'clamp'
+    })
     return (
       <SafeAreaView style={styles.container}>
+        <Animated.View
+          style={{
+            backgroundColor: palette.primaryColor,
+            height: translateHeaderY,
+            justifyContent: 'center',
+            alignContent: 'center'
+          }}
+        >
+          <ActivityIndicator
+            size="large"
+            color={palette.backgroundColorWhite}
+          />
+        </Animated.View>
         <TabView
           style={{ flex: 1 }}
           navigationState={this.state}

@@ -17,7 +17,8 @@ class Header extends React.PureComponent {
   state = {
     currentIndex: 0,
     imageList: [],
-    initialImageList: []
+    initialImageList: [],
+    imageLoading: true
   }
 
   componentDidMount = () => {
@@ -114,8 +115,13 @@ class Header extends React.PureComponent {
                           source={{ uri: image.url }}
                           resizeMode="cover"
                           style={styles.imageItem}
+                          onLoadEnd={() => {
+                            if (index === 1) {
+                              this.setState({ imageLoading: false })
+                            }
+                          }}
                         />
-                        <ImageOverlay />
+                        {!this.state.imageLoading && <ImageOverlay />}
                       </View>
                     </TouchableWithoutFeedback>
                   )

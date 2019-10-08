@@ -3,13 +3,14 @@ import palette from '../../assets/palette'
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT
+  STATUS_BAR_HEIGHT,
+  FULL_SCREEN_HEIGHT
 } from '../../assets/dimension'
 
 export default StyleSheet.create({
   container: {
     position: 'absolute',
-    height: SCREEN_HEIGHT,
+    height: FULL_SCREEN_HEIGHT,
     width: SCREEN_WIDTH,
     top: Platform.OS === 'ios' ? 0 : -STATUS_BAR_HEIGHT,
     backgroundColor: palette.primaryColor,
