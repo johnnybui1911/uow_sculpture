@@ -23,13 +23,21 @@ class CommentList extends React.PureComponent {
   // }
 
   _renderItem = ({ item }) => {
-    const { _openModal, _selectComment, _handleEditComment } = this.props
+    const {
+      _openModal,
+      _selectComment,
+      _handleEditComment,
+      isLoading,
+      editing
+    } = this.props
     return (
       <CommentItem
         item={item}
         _openModal={_openModal}
         _selectComment={_selectComment}
         _handleEditComment={_handleEditComment}
+        isLoading={isLoading}
+        editing={editing}
       />
     )
   }
@@ -96,7 +104,7 @@ class CommentList extends React.PureComponent {
   }
 
   render() {
-    const { comments, isLoading, _rejectEditComment } = this.props
+    const { comments, isLoading } = this.props
     return !comments.length && !isLoading ? (
       <NoResultScreen title="No comments" />
     ) : (
@@ -104,7 +112,6 @@ class CommentList extends React.PureComponent {
         onStartShouldSetResponderCapture={e => {
           const focusField = TextInput.State.currentlyFocusedField()
           if (focusField != null && e.nativeEvent.target != focusField) {
-            // _rejectEditComment()
             TextInput.State.blurTextInput(
               TextInput.State.currentlyFocusedField()
             )

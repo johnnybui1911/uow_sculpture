@@ -3,13 +3,9 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableWithoutFeedback,
   Keyboard,
   Animated,
-  ActivityIndicator,
-  BackHandler,
-  Platform,
-  TouchableOpacity
+  BackHandler
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -27,7 +23,6 @@ import DeleteModal from './DeleteModal'
 import ListHeader, { MyStatusBar } from '../../components/ListHeader/ListHeader'
 import { SCREEN_WIDTH } from '../../assets/dimension'
 import SignInButton from '../../components/SignIn/SignInButton'
-import BlackModal from '../../components/BlackModal/BlackModal'
 
 const TEXT_INPUT_HEIGHT = 40
 
@@ -43,7 +38,6 @@ class CommentScreen extends React.PureComponent {
     selectedComment: null,
     isEdit: false,
     editing: false,
-    isUndo: false,
     isOverflowOpen: false
   }
 
@@ -52,18 +46,18 @@ class CommentScreen extends React.PureComponent {
   keyboardHeight = new Animated.Value(0)
 
   _handleRefresh = () => {
-    this.setState({ refreshing: true, commentAfterId: null }, () => {
-      this._fetchCommentSculpture()
+    this.setState(
+      { refreshing: true, commentAfterId: null, isLoading: true },
+      () => {
+        this._fetchCommentSculpture()
+      }
+    )
+  }
+
+  _selectComment = (selectedComment, callback = () => {}) => {
+    this.setState({ selectedComment }, () => {
+      callback
     })
-  }
-
-  _selectComment = selectedComment => {
-    this.setState({ selectedComment })
-  }
-
-  _rejectEditComment = () => {
-    // this.setState({ selectedComment: null, isEdit: false })
-    // Keyboard.dismiss()
   }
 
   _openModal = () => {
@@ -76,11 +70,13 @@ class CommentScreen extends React.PureComponent {
 
   _handleEditComment = () => {
     const { comments, selectedComment } = this.state
-    const { text } = selectedComment
-    setTimeout(() => {
-      this.inputRef.current.focus()
-      this.setState({ inputValue: text, isEdit: true })
-    }, 600)
+    if (selectedComment) {
+      const { text } = selectedComment
+      setTimeout(() => {
+        this.inputRef.current.focus()
+        this.setState({ inputValue: text, isEdit: true })
+      }, 600)
+    }
   }
 
   _editComment = () => {
@@ -103,8 +99,8 @@ class CommentScreen extends React.PureComponent {
         setTimeout(() => {
           this.setState({
             isOverflowOpen: false,
-            isEdit: false,
-            selectedComment: null
+            isEdit: false
+            // selectedComment: null
           })
         }, 2000)
       })
@@ -118,16 +114,15 @@ class CommentScreen extends React.PureComponent {
 
   _deleteComment = () => {
     const { comments, selectedComment } = this.state
-    const { commentId } = selectedComment
-    this.setState({
-      isModalOpen: false,
-      isOverflowOpen: true,
-      comments: comments.filter(element => element.commentId !== commentId)
-    })
+    if (selectedComment) {
+      const { commentId } = selectedComment
+      this.setState({
+        isModalOpen: false,
+        isOverflowOpen: true,
+        comments: comments.filter(element => element.commentId !== commentId)
+      })
 
-    setTimeout(() => {
-      const { isUndo } = this.state
-      if (!isUndo) {
+      setTimeout(() => {
         baseAxios
           .delete(`comment/${commentId}`)
           .then(() => {
@@ -142,22 +137,11 @@ class CommentScreen extends React.PureComponent {
               this._fetchCommentSculpture()
             })
           })
-        this.setState({ isOverflowOpen: false, selectedComment: null })
-      } else {
-        this.setState({ isUndo: false, selectedComment: null })
-      }
-    }, 2000)
-  }
-
-  _handleUndo = () => {
-    console.log('undo')
-    const { selectedComment, comments } = this.state
-    if (selectedComment) {
-      this.setState({
-        comments: [selectedComment, ...comments],
-        isUndo: true,
-        isOverflowOpen: false
-      })
+        this.setState({
+          isOverflowOpen: false
+          // selectedComment: null
+        })
+      }, 2000)
     }
   }
 
@@ -197,8 +181,8 @@ class CommentScreen extends React.PureComponent {
   handleKeyboardDidHide = () => {
     this.setState({
       inputValue: '',
-      selectedComment: null
-      // , isEdit: false
+      isEdit: false
+      // selectedComment: null
     })
     Animated.timing(this.keyboardHeight, {
       duration: 1,
@@ -257,43 +241,25 @@ class CommentScreen extends React.PureComponent {
             ? [...this.state.comments, ...comments]
             : comments,
           isLoading: false,
-          // isEdit: false,
           editing: false,
-          refreshing: false,
-          // selectedComment: null,
-          isUndo: false
+          refreshing: false
         })
       })
       .catch(e => {
         console.log(e)
         this.setState({
           isLoading: true,
-          // isEdit: false,
           editing: false,
-          refreshing: false,
-          // selectedComment: null,
-          isUndo: false
+          refreshing: false
         })
       })
   }
 
-  // _resetUI = () => {
-  //   this.setState({
-  //     isLoading: true,
-  //     refreshing: false,
-  //     selectedComment: null,
-  //     isEdit: false,
-  //     editing: false,
-  //     isUndo: false,
-  //     isOverflowOpen: false
-  //   })
-  // }
-
   _onSubmit = () => {
     const sculptureId = this.props.navigation.getParam('id', 'unknown1')
     const { user } = this.props
-    const { inputValue, isEdit, selectedComment, comments } = this.state
-    if (isEdit) {
+    const { inputValue, isEdit, selectedComment } = this.state
+    if (isEdit && selectedComment) {
       const { text } = selectedComment
       if (inputValue.trim() !== text) {
         this._editComment()
@@ -349,7 +315,6 @@ class CommentScreen extends React.PureComponent {
       <SafeAreaView style={styles.container}>
         <ListHeader headerName="Comments" />
         <CommentList
-          _rejectEditComment={this._rejectEditComment}
           _handleLoadMore={this._handleLoadMore}
           refreshing={refreshing}
           _handleRefresh={this._handleRefresh}
@@ -359,6 +324,7 @@ class CommentScreen extends React.PureComponent {
           comments={comments}
           navigation={this.props.navigation}
           isLoading={isLoading}
+          editing={editing}
         />
         {loggedIn ? (
           <InputKeyboard
@@ -387,19 +353,6 @@ class CommentScreen extends React.PureComponent {
                     {isEdit ? 'Comment edited' : 'Comment deleted'}
                   </Text>
                 </View>
-                {/* {!isEdit && (
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      this._handleUndo()
-                    }}
-                  >
-                    <View>
-                      <Text style={[styles.menuText, { color: '#FFF' }]}>
-                        Undo
-                      </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                )} */}
               </View>
             )}
           </InputKeyboard>

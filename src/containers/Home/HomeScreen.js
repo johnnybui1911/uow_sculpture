@@ -24,6 +24,7 @@ import palette from '../../assets/palette'
 import animations from '../../assets/animations'
 import formatDistance from '../../library/formatDistance'
 import { SCREEN_WIDTH } from '../../assets/dimension'
+import { DEFAULT_PADDING } from '../../library/maps'
 
 const TRANSLATE_Y = 10
 
@@ -147,19 +148,19 @@ class HomeScreen extends React.PureComponent {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
-          marginTop: 12,
+          marginTop: DEFAULT_PADDING / 2,
           minHeight: 15
         }}
       >
         {nearbyData.map((item, index) => {
           const borderWidth = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
-            outputRange: [0, 2.5, 0],
+            outputRange: [0, 2, 0],
             extrapolate: 'clamp'
           })
           const dotSize = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
-            outputRange: [10, 12.5, 10],
+            outputRange: [8, 10, 8],
             extrapolate: 'clamp'
           })
           return (
@@ -172,7 +173,7 @@ class HomeScreen extends React.PureComponent {
                   borderRadius: 10,
                   marginHorizontal: 6,
                   backgroundColor: '#DCE0E9',
-                  borderColor: '#0047BB',
+                  borderColor: '#007BFA',
                   borderWidth: borderWidth
                 }
               ]}

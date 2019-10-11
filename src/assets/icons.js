@@ -228,6 +228,20 @@ export const icons = {
   micro: (
     <CustomIcon name="micro" size={20} color={palette.primaryColorLight} />
   ),
+  like_transparent: (
+    <Image
+      source={require('./images/like-transparent.png')}
+      style={{ width: 20, height: 17.5 }}
+      resizeMode="contain"
+    />
+  ),
+  like_fill_img: (
+    <Image
+      source={require('./images/like-fill.png')}
+      style={{ width: 20, height: 17.5 }}
+      resizeMode="contain"
+    />
+  ),
   like: (
     <CustomIcon
       name="heart-o"

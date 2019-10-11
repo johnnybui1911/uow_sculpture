@@ -26,8 +26,7 @@ const InputKeyboard = React.forwardRef(
       isEdit,
       editing,
       children,
-      selectedComment,
-      isSettingModalOpen
+      selectedComment
     },
     ref
   ) => {

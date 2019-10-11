@@ -272,6 +272,7 @@ class EditProfile extends React.PureComponent {
             )
           }
           handleRightButton={this._onSubmit}
+          leftButtonDisable={isLoading}
         />
         <ScrollView style={{ flex: 1 }}>
           <View

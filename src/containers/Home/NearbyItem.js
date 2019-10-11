@@ -153,7 +153,7 @@ class NearbyItem extends React.PureComponent {
             <View style={styles.nearbyItemDetail}>
               <TouchableWithoutFeedback onPress={this.onLikePress}>
                 <View style={[{ padding: 5, margin: -5 }]}>
-                  {item.likeId ? icons.like_fill_white : icons.like}
+                  {item.likeId ? icons.like_fill_img : icons.like_transparent}
                 </View>
               </TouchableWithoutFeedback>
             </View>

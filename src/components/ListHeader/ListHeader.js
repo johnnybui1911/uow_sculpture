@@ -21,7 +21,14 @@ export const MyStatusBar = ({ backgroundColor, ...props }) => (
 )
 
 export default withNavigation(
-  ({ navigation, headerName, rightButton, leftButton, handleRightButton }) => {
+  ({
+    navigation,
+    headerName,
+    rightButton,
+    leftButton,
+    handleRightButton,
+    leftButtonDisable = false
+  }) => {
     return (
       <View
         style={{
@@ -35,12 +42,19 @@ export default withNavigation(
           elevation: 2
         }}
       >
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            if (!leftButtonDisable) {
+              navigation.goBack()
+            }
+          }}
+        >
           <View
             style={{
               width: 50,
               justifyContent: 'center',
-              paddingBottom: 4 + 1
+              paddingBottom: 4 + 1,
+              opacity: leftButtonDisable ? 0.5 : 1
             }}
           >
             {leftButton ? leftButton : icons.back_blue({ size: 18 })}

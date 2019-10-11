@@ -185,9 +185,9 @@ class PersonalScreen extends React.PureComponent {
             }
           }
         )}
-        onMomentumScrollBegin={event => {
-          routeKey !== 'ABOUT' && this._refresh(event.nativeEvent)
-        }}
+        // onMomentumScrollBegin={event => {
+        //   routeKey !== 'ABOUT' && this._refresh(event.nativeEvent)
+        // }}
       >
         <View style={styles.tabViewStyle}>{content}</View>
       </Animated.ScrollView>

@@ -18,7 +18,9 @@ const CommentItem = ({
   _openModal,
   _selectComment,
   _handleEditComment,
-  userId
+  userId,
+  isLoading,
+  editing
 }) => {
   let menuRef = null
 
@@ -95,22 +97,19 @@ const CommentItem = ({
         </Text>
       </View>
       {userId && userId === item.userId && item.submitDate && (
-        <View
-          style={
-            {
-              // alignItems: 'flex-end'
-              // marginRight: -12 // manual fix icons not align
-              // justifyContent: 'flex-start'
-            }
-          }
-        >
+        <View>
           {Platform.OS === 'ios' ? (
             <TouchableWithoutFeedback
               onPress={() => {
-                _selectComment(item)
+                !isLoading && !editing && _selectComment(item)
               }}
             >
-              <View style={styles.socialIconStyle}>
+              <View
+                style={[
+                  styles.socialIconStyle,
+                  { opacity: isLoading || editing ? 0.5 : 1 }
+                ]}
+              >
                 {icons.vertical_dots_light}
               </View>
             </TouchableWithoutFeedback>
@@ -120,11 +119,17 @@ const CommentItem = ({
               button={
                 <TouchableWithoutFeedback
                   onPress={() => {
-                    _selectComment(item)
-                    showMenu()
+                    if (!isLoading && !editing) {
+                      _selectComment(item, showMenu())
+                    }
                   }}
                 >
-                  <View style={styles.socialIconStyle}>
+                  <View
+                    style={[
+                      styles.socialIconStyle,
+                      { opacity: isLoading || editing ? 0.5 : 1 }
+                    ]}
+                  >
                     {icons.vertical_dots_light}
                   </View>
                 </TouchableWithoutFeedback>

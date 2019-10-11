@@ -142,36 +142,6 @@ const InputKeyboard = React.forwardRef(
                 </Text>
               )}
             </TouchableWithoutFeedback>
-            {/* {editCheck && (
-              <TouchableWithoutFeedback onPress={_onSubmit}>
-                {editing ? (
-                  <View
-                    style={{
-                      alignSelf: 'flex-end',
-                      padding: 10
-                    }}
-                  >
-                    <ActivityIndicator
-                      color={palette.primaryColorLight}
-                      size="small"
-                    />
-                  </View>
-                ) : (
-                  <Text
-                    style={{
-                      alignSelf: 'flex-end',
-                      padding: 10,
-                      fontFamily: 'Montserrat-Medium',
-                      fontSize: 14,
-                      color: palette.primaryColorLight,
-                      opacity: inputValue.trim() === '' ? 0 : 1
-                    }}
-                  >
-                    {isEdit ? 'Edit' : 'Post'}
-                  </Text>
-                )}
-              </TouchableWithoutFeedback>
-            )} */}
           </Animated.View>
         </Animated.View>
       </View>
@@ -180,14 +150,3 @@ const InputKeyboard = React.forwardRef(
 )
 
 export default InputKeyboard
-
-{
-  /* <KeyboardAvoidingView
-        style={{
-        flex: 1,
-        position: 'absolute',
-        bottom: 0
-        }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    > */
-}

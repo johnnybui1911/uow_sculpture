@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
+import { DEFAULT_PADDING } from '../../assets/dimension'
 
 const shadowStyle = {
   elevation: 2,
@@ -64,7 +65,7 @@ export default StyleSheet.create({
     zIndex: 2
   },
   popularList: {
-    marginTop: PADDING * 2
+    marginTop: DEFAULT_PADDING
     // marginBottom: PADDING
   },
   imagePopularItem: {

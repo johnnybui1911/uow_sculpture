@@ -40,7 +40,7 @@ const PersonalHeader = ({
         <View style={{ flex: 1 }}>
           <Text style={styles.headerTitle}>Profile</Text>
         </View>
-        {userId.split('|')[0].includes('auth0') && (
+        {userId && userId.split('|')[0].includes('auth0') && (
           <TouchableOpacity
             style={styles.box}
             onPress={() => {

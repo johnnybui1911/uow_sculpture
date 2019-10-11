@@ -91,7 +91,7 @@ const AboutScreen = props => {
       }}
     >
       <FeatureCard email={user.email} joinDate={user.joinDate} />
-      {renderAccountName()}
+      {user.userId && renderAccountName()}
       <TouchableOpacity
         style={[
           styles.button,
