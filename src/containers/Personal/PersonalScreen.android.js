@@ -10,21 +10,19 @@ import {
 } from 'react-native'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
-import { TabView, TabBar, TabViewAnimated } from 'react-native-tab-view'
+import { TabView, TabBar } from 'react-native-tab-view'
 import styles from './styles'
 import palette from '../../assets/palette'
-import LikeScreen from './LikeScreen'
+import LikeScreen from './TabLike/LikeScreen'
 import AboutScreen from './AboutScreen'
-import CommentScreen from './CommentScreen'
+import CommentScreen from './TabComment/CommentScreen'
 import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
-import animations from '../../assets/animations'
-import { AuthHeader } from '../Auth/AuthScreen'
 
 const HEADER_HEIGHT = 400
 const TAB_BAR_HEIGHT = 44
-const SCROLLABLE_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT // FIX LATER
+const SCROLLABLE_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT
 
 const initialLayout = {
   height: 0,
@@ -223,10 +221,6 @@ class PersonalScreen extends React.PureComponent {
           renderScene={this._renderSence}
           onIndexChange={index => this.setState({ index })}
           initialLayout={initialLayout}
-
-          // position={this.tabViewPosition}
-          // lazy
-          // lazyPreloadDistance={0.5}
         />
       </SafeAreaView>
     )

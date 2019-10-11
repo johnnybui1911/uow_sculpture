@@ -328,7 +328,7 @@ export class MapScreen extends React.PureComponent {
           ref={marker => {
             this.marker = marker
           }}
-          tracksViewChanges={false}
+          // tracksViewChanges={false}
           style={{ zIndex: 1 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}

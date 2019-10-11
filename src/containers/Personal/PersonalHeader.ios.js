@@ -43,7 +43,9 @@ const PersonalHeader = ({
         {userId.split('|')[0].includes('auth0') && (
           <TouchableOpacity
             style={styles.box}
-            onPress={() => navigation.navigate('EditProfile')}
+            onPress={() => {
+              navigation.navigate('EditProfile')
+            }}
           >
             <Text style={styles.titleButton}>EDIT</Text>
           </TouchableOpacity>

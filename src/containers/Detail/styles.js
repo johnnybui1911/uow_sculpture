@@ -47,7 +47,10 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     zIndex: 10
   },
-  headerImage: {},
+  headerImage: {
+    width: width,
+    height: height * 0.4
+  },
   imageItem: {
     width: width,
     height: height * 0.4,

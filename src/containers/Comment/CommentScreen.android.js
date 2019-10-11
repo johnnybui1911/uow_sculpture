@@ -67,7 +67,7 @@ class CommentScreen extends React.PureComponent {
   }
 
   _openModal = () => {
-    this.setState({ isModalOpen: true })
+    this.setState({ isModalOpen: true, isEdit: false })
   }
 
   _closeModal = () => {
@@ -195,7 +195,11 @@ class CommentScreen extends React.PureComponent {
   }
 
   handleKeyboardDidHide = () => {
-    this.setState({ inputValue: '', selectedComment: null, isEdit: false })
+    this.setState({
+      inputValue: '',
+      selectedComment: null
+      // , isEdit: false
+    })
     Animated.timing(this.keyboardHeight, {
       duration: 1,
       toValue: 0
@@ -372,7 +376,7 @@ class CommentScreen extends React.PureComponent {
             {isOverflowOpen && (
               <View
                 style={{
-                  backgroundColor: 'rgba(0,71,187,0.8)',
+                  backgroundColor: 'rgba(0,71,187,1)',
                   paddingHorizontal: 24,
                   paddingVertical: 16,
                   flexDirection: 'row'
@@ -380,7 +384,7 @@ class CommentScreen extends React.PureComponent {
               >
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.menuText, { color: '#FFF' }]}>
-                    {isEdit ? 'Comment edited.' : 'Comment deleted.'}
+                    {isEdit ? 'Comment edited' : 'Comment deleted'}
                   </Text>
                 </View>
                 {/* {!isEdit && (

@@ -94,7 +94,7 @@ const CommentItem = ({
           {item.text}
         </Text>
       </View>
-      {userId && userId === item.userId && (
+      {userId && userId === item.userId && item.submitDate && (
         <View
           style={
             {

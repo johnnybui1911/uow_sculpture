@@ -21,7 +21,7 @@ export default function({ title }) {
         }
       }}
     >
-      <Text style={[styles.description, { fontSize: 22 }]}>{title}</Text>
+      <Text style={[styles.description, { fontSize: 18 }]}>{title}</Text>
     </View>
   )
 }

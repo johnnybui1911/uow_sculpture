@@ -14,8 +14,8 @@ const shadowStyle = {
 
 const WIDTH = Math.floor(Dimensions.get('window').width)
 const PADDING = 12
-const IMAGE_WIDTH = WIDTH - PADDING * 2
-const IMAGE_HEIGHT = IMAGE_WIDTH * 1.15
+export const IMAGE_WIDTH = WIDTH - PADDING * 2
+const IMAGE_HEIGHT = IMAGE_WIDTH * 1.05
 
 export default StyleSheet.create({
   container: {
@@ -23,7 +23,9 @@ export default StyleSheet.create({
     backgroundColor: palette.backgroundColorWhite
   },
   nearbyView: {
-    minHeight: IMAGE_HEIGHT + PADDING * 2
+    minHeight: IMAGE_HEIGHT + PADDING * 2,
+    alignItems: 'center',
+    marginBottom: 12
   },
   nearbyItemStyle: {
     // root container
@@ -32,7 +34,10 @@ export default StyleSheet.create({
     padding: PADDING,
     margin: PADDING,
     backgroundColor: palette.backgroundColorWhite,
-    borderRadius: 12
+    borderRadius: 12,
+    marginTop: 0,
+    marginBottom: PADDING * 2
+    // alignItems: 'center'
   },
   imageNearbyContainer: {
     flex: 1,
@@ -51,14 +56,15 @@ export default StyleSheet.create({
   },
   nearbyItemDetail: {
     position: 'absolute',
-    bottom: 0,
+    top: 24,
+    right: 24,
     flexDirection: 'row',
-    marginHorizontal: PADDING,
-    marginBottom: PADDING,
+    // marginHorizontal: PADDING,
+    // marginBottom: PADDING,
     zIndex: 2
   },
   popularList: {
-    marginTop: 16
+    marginTop: PADDING * 2
     // marginBottom: PADDING
   },
   imagePopularItem: {
@@ -82,14 +88,30 @@ export default StyleSheet.create({
   flatList: {
     marginTop: 9
   },
+
   title: {
-    fontSize: 26,
-    color: palette.backgroundColorWhite,
-    textShadowColor: '#474747',
-    textShadowOffset: { width: 0.5, height: 3 },
-    textShadowRadius: 5,
+    fontSize: 20,
+    color: palette.primaryColor,
     fontFamily: 'Montserrat-SemiBold'
   },
+  distance: {
+    fontSize: 14,
+    fontFamily: 'Montserrat-SemiBold',
+    color: palette.primaryColorLight
+  },
+  description: {
+    fontSize: 12,
+    color: palette.secondaryTypographyColor,
+    fontFamily: 'Montserrat-Medium'
+  },
+  // title: {
+  //   fontSize: 26,
+  //   color: palette.backgroundColorWhite,
+  //   textShadowColor: '#474747',
+  //   textShadowOffset: { width: 0.5, height: 3 },
+  //   textShadowRadius: 5,
+  //   fontFamily: 'Montserrat-SemiBold'
+  // },
   like: {
     fontSize: 16,
     color: palette.backgroundColorWhite,
@@ -121,5 +143,33 @@ export default StyleSheet.create({
     top: 0,
     bottom: 0,
     ...shadowStyle
+  },
+  fixedImageContentBox: {
+    position: 'absolute',
+    bottom: -PADDING,
+    width: IMAGE_WIDTH - PADDING * 6,
+    // height: 77,
+    backgroundColor: palette.backgroundColorWhite,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    elevation: 4,
+    borderRadius: 12,
+    alignSelf: 'center',
+    ...shadowStyle
+  },
+  dots: {
+    width: 10,
+    height: 10,
+    borderWidth: 2.5,
+    borderRadius: 5,
+    marginHorizontal: 6,
+    backgroundColor: '#DCE0E9',
+    borderColor: 'transparent'
+  },
+  activeDot: {
+    width: 12.5,
+    height: 12.5,
+    borderRadius: 6.25,
+    borderColor: palette.primaryColorLight
   }
 })

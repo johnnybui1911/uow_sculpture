@@ -98,7 +98,7 @@ class CommentList extends React.PureComponent {
   render() {
     const { comments, isLoading, _rejectEditComment } = this.props
     return !comments.length && !isLoading ? (
-      <NoResultScreen title="No comment" />
+      <NoResultScreen title="No comments" />
     ) : (
       <View
         onStartShouldSetResponderCapture={e => {

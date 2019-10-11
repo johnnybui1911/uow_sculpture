@@ -4,7 +4,9 @@ import {
   Text,
   View,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  FlatList,
+  Animated
 } from 'react-native'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
@@ -20,10 +22,81 @@ import { _handleNotification } from '../../library/notificationTask'
 import { fetchDataThunk } from '../../redux/actions'
 import palette from '../../assets/palette'
 import animations from '../../assets/animations'
+import formatDistance from '../../library/formatDistance'
+import { SCREEN_WIDTH } from '../../assets/dimension'
+
+const TRANSLATE_Y = 10
 
 class HomeScreen extends React.PureComponent {
   state = {
-    refreshing: false
+    refreshing: false,
+    crrNearbyIndex: 0,
+    opacityAnimation: new Animated.Value(1),
+    translateY: new Animated.Value(0)
+  }
+
+  setNearbyIndex = event => {
+    const { crrNearbyIndex } = this.state
+    const viewSize = event.nativeEvent.layoutMeasurement.width
+    const contentOffset = event.nativeEvent.contentOffset.x
+    const selectedIndex = Math.floor(contentOffset / viewSize)
+    this.setState({ crrNearbyIndex: selectedIndex })
+    // if (selectedIndex > crrNearbyIndex) {
+    //   Animated.sequence([
+    //     Animated.parallel([
+    //       Animated.timing(this.state.translateY, {
+    //         toValue: -TRANSLATE_Y,
+    //         duration: 100
+    //       }),
+    //       Animated.timing(this.state.opacityAnimation, {
+    //         toValue: 0,
+    //         duration: 250
+    //       })
+    //     ]),
+    //     Animated.timing(this.state.translateY, {
+    //       toValue: TRANSLATE_Y,
+    //       duration: 0
+    //     })
+    //   ]).start(() => {
+    //     this.setState({ crrNearbyIndex: selectedIndex }, () => {
+    //       this._animateToDefaultState()
+    //     })
+    //   })
+    // } else if (selectedIndex < crrNearbyIndex) {
+    //   Animated.sequence([
+    //     Animated.parallel([
+    //       Animated.timing(this.state.translateY, {
+    //         toValue: TRANSLATE_Y,
+    //         duration: 100
+    //       }),
+    //       Animated.timing(this.state.opacityAnimation, {
+    //         toValue: 0,
+    //         duration: 250
+    //       })
+    //     ]),
+    //     Animated.timing(this.state.translateY, {
+    //       toValue: -TRANSLATE_Y,
+    //       duration: 0
+    //     })
+    //   ]).start(() => {
+    //     this.setState({ crrNearbyIndex: selectedIndex }, () => {
+    //       this._animateToDefaultState()
+    //     })
+    //   })
+    // }
+  }
+
+  _animateToDefaultState = () => {
+    Animated.parallel([
+      Animated.timing(this.state.translateY, {
+        toValue: 0,
+        duration: 100
+      }),
+      Animated.timing(this.state.opacityAnimation, {
+        toValue: 1,
+        duration: 250
+      })
+    ]).start()
   }
 
   _onRefresh = () => {
@@ -48,6 +121,10 @@ class HomeScreen extends React.PureComponent {
   }
 
   _renderNearbyItem = ({ item, index }) => {
+    // const rotateDegAnimation = this.state.scrollAnimate.interpolate({
+    //   inputRange: [0, 1875],
+    //   outputRange: ['0deg', '10deg']
+    // })
     const { navigation } = this.props
     const props = { item, index, navigation }
     return <NearbyItem {...props} />
@@ -59,7 +136,56 @@ class HomeScreen extends React.PureComponent {
     return <PopularItem {...props} />
   }
 
+  scrollX = new Animated.Value(0)
+
+  _renderDots = nearbyData => {
+    const { crrNearbyIndex } = this.state
+    const dotPosition = Animated.divide(this.scrollX, SCREEN_WIDTH)
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'row',
+          marginTop: 12,
+          minHeight: 15
+        }}
+      >
+        {nearbyData.map((item, index) => {
+          const borderWidth = dotPosition.interpolate({
+            inputRange: [index - 1, index, index + 1],
+            outputRange: [0, 2.5, 0],
+            extrapolate: 'clamp'
+          })
+          const dotSize = dotPosition.interpolate({
+            inputRange: [index - 1, index, index + 1],
+            outputRange: [10, 12.5, 10],
+            extrapolate: 'clamp'
+          })
+          return (
+            <Animated.View
+              key={item.id}
+              style={[
+                {
+                  width: dotSize,
+                  height: dotSize,
+                  borderRadius: 10,
+                  marginHorizontal: 6,
+                  backgroundColor: '#DCE0E9',
+                  borderColor: '#0047BB',
+                  borderWidth: borderWidth
+                }
+              ]}
+            />
+          )
+        })}
+      </View>
+    )
+  }
+
   render() {
+    const { crrNearbyIndex, opacityAnimation, translateY } = this.state
+
     const { checkLoading, distanceMatrix, markerMatrix } = this.props
     let matrixData = []
     Object.entries(markerMatrix).forEach(([key, value]) => {
@@ -84,6 +210,8 @@ class HomeScreen extends React.PureComponent {
       })
       .slice(0, 10)
 
+    const crrNearby = nearbyData[crrNearbyIndex]
+
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView
@@ -100,27 +228,65 @@ class HomeScreen extends React.PureComponent {
         >
           <HeaderBar headerName="Home" />
           <View style={styles.nearbyView}>
-            <Text style={styles.listTitle}>Nearby Sculptures</Text>
+            <View style={{ alignSelf: 'flex-start' }}>
+              <Text style={styles.listTitle}>Nearby Sculptures</Text>
+            </View>
             {checkLoading || !distanceMatrix ? (
               <View style={[styles.nearbyItemStyle]}>
-                <View style={styles.imageNearbyContainer}>
+                {/* <View style={styles.imageNearbyContainer}>
                   <LottieView
                     source={animations.image_loading}
                     autoSize={false}
                     autoPlay
                     loop
                   />
-                </View>
-                {/* <Placeholder Animation={Fade}>
+                </View> */}
+                <Placeholder Animation={Fade}>
                   <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
-                </Placeholder> */}
+                </Placeholder>
               </View>
             ) : (
-              <NearbyList
+              // <NearbyList
+              //   data={nearbyData}
+              //   _renderItem={this._renderNearbyItem}
+              // />
+              <Animated.FlatList
+                horizontal
                 data={nearbyData}
-                _renderItem={this._renderNearbyItem}
+                keyExtractor={item => item.id.toString()}
+                renderItem={this._renderNearbyItem}
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                snapToAlignment="center"
+                onMomentumScrollEnd={this.setNearbyIndex}
+                onScroll={Animated.event([
+                  { nativeEvent: { contentOffset: { x: this.scrollX } } }
+                ])}
               />
             )}
+            {this._renderDots(nearbyData)}
+            {/* <View style={styles.fixedImageContentBox}>
+              <Animated.View
+                style={[
+                  {
+                    opacity: opacityAnimation,
+                    transform: [{ translateY: translateY }]
+                  }
+                ]}
+              >
+                <Text style={styles.distance}>
+                  {distanceMatrix && distanceMatrix[crrNearby.id]
+                    ? formatDistance(distanceMatrix[crrNearby.id].distance)
+                    : ''}
+                </Text>
+                <Text numberOfLines={2} style={styles.title}>
+                  {crrNearby.name}
+                </Text>
+                <Text style={[styles.description]}>
+                  {crrNearby.features.maker}
+                </Text>
+              </Animated.View>
+            </View> */}
           </View>
           <View style={[styles.popularList]}>
             <Text style={styles.listTitle}>Popular Sculptures</Text>

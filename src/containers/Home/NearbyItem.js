@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
-import styles from './styles'
+import styles, { IMAGE_WIDTH } from './styles'
 import { icons } from '../../assets/icons'
 import formatDistance from '../../library/formatDistance'
 import images from '../../assets/images'
@@ -33,7 +33,7 @@ class NearbyItem extends React.PureComponent {
     const { likeId } = item
     this.setState({ isPending: true })
     // this.animatedValue.setValue(1)
-    console.log(likeId)
+    // console.log(likeId)
     _unlike(markerId)
 
     baseAxios
@@ -131,7 +131,7 @@ class NearbyItem extends React.PureComponent {
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('Detail', { id: item.id })}
       >
-        <View style={styles.nearbyItemStyle}>
+        <View style={[styles.nearbyItemStyle]}>
           <View style={styles.imageNearbyContainer}>
             {!item.photoURL ? (
               <Image
@@ -151,38 +151,14 @@ class NearbyItem extends React.PureComponent {
             )}
             {this._renderOverlay()}
             <View style={styles.nearbyItemDetail}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'space-between'
-                }}
-              >
-                <Text style={styles.title}>
-                  {distanceMatrix && distanceMatrix[item.id]
-                    ? formatDistance(distanceMatrix[item.id].distance)
-                    : ''}
-                </Text>
-
-                <Text numberOfLines={2} style={styles.title}>
-                  {item.name}
-                </Text>
-              </View>
-              <View
-                style={{
-                  alignItems: 'center'
-                }}
-              >
-                <TouchableWithoutFeedback onPress={this.onLikePress}>
-                  <View style={[{ marginTop: 10, padding: 5 }]}>
-                    {item.likeId ? icons.like_fill_white : icons.like}
-                  </View>
-                </TouchableWithoutFeedback>
-                <Text style={[styles.like, { marginTop: 10 }]}>
-                  {item.likeCount}
-                </Text>
-              </View>
+              <TouchableWithoutFeedback onPress={this.onLikePress}>
+                <View style={[{ padding: 5, margin: -5 }]}>
+                  {item.likeId ? icons.like_fill_white : icons.like}
+                </View>
+              </TouchableWithoutFeedback>
             </View>
           </View>
+          <ContentBox item={item} distanceMatrix={distanceMatrix} />
         </View>
       </TouchableWithoutFeedback>
     )
@@ -205,3 +181,19 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withNavigation(NearbyItem))
+
+const ContentBox = ({ item, distanceMatrix }) => {
+  return (
+    <View style={styles.fixedImageContentBox}>
+      <Text style={styles.distance}>
+        {distanceMatrix && distanceMatrix[item.id]
+          ? formatDistance(distanceMatrix[item.id].distance)
+          : ''}
+      </Text>
+      <Text numberOfLines={2} style={styles.title}>
+        {item.name}
+      </Text>
+      <Text style={[styles.description]}>{item.features.maker}</Text>
+    </View>
+  )
+}

@@ -9,12 +9,12 @@ import {
 import { connect } from 'react-redux'
 import { withNavigation } from 'react-navigation'
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native'
-import images from '../../assets/images'
-import { icons } from '../../assets/icons'
-import styles from './styles'
-import palette from '../../assets/palette'
-import formatDistance from '../../library/formatDistance'
-import LikeComment from '../../components/LikeComment/LikeComment'
+import images from '../../../assets/images'
+import { icons } from '../../../assets/icons'
+import styles from '../styles'
+import palette from '../../../assets/palette'
+import formatDistance from '../../../library/formatDistance'
+import LikeComment from '../../../components/LikeComment/LikeComment'
 
 const CardItem = props => {
   const { id, index, isLoading = false, distanceMatrix, markerMatrix } = props

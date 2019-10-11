@@ -49,7 +49,7 @@ class VisitScreen extends React.PureComponent {
           } = element
 
           const imageList = images.sort((a, b) => {
-            return new Date(b.created).getTime() - new Date(a.created).getTime()
+            return new Date(a.created).getTime() - new Date(b.created).getTime()
           })
 
           return {
@@ -137,7 +137,7 @@ class VisitScreen extends React.PureComponent {
         })}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
-        style={[styles.flatList, { marginTop: -12 }]}
+        // style={[styles.flatList, { marginTop: -12 }]}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => (
           <DividerLight
@@ -155,7 +155,7 @@ class VisitScreen extends React.PureComponent {
         contentContainerStyle={{ paddingTop: 12 }}
       />
     ) : (
-      <NoResultScreen title="No visit" />
+      <NoResultScreen title="No visits" />
     )
   }
 

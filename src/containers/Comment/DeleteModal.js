@@ -26,17 +26,17 @@ const DeleteModal = ({ isModalOpen, _closeModal, _deleteComment }) => {
           backgroundColor: '#fff',
           borderRadius: 4,
           justifyContent: 'space-between',
-          padding: 24,
-          paddingBottom: 24 - 4
+          padding: 20,
+          paddingBottom: 20 - 4
         }}
       >
         <View>
-          <Text style={[styles.title]}>Delete comment</Text>
+          <Text style={[styles.title, { fontSize: 18 }]}>Delete comment</Text>
           <Text
             style={[
               styles.title,
               {
-                fontSize: 12,
+                fontSize: 14,
                 paddingTop: 4,
                 fontFamily: 'Montserrat-Medium'
               }

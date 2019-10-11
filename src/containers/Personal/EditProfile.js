@@ -8,7 +8,9 @@ import {
   Text,
   TouchableHighlight,
   TouchableWithoutFeedback,
-  ActivityIndicator
+  ActivityIndicator,
+  ActionSheetIOS,
+  Platform
 } from 'react-native'
 import { TextField } from 'react-native-material-textfield'
 import * as ImagePicker from 'expo-image-picker'
@@ -154,6 +156,26 @@ class EditProfile extends React.PureComponent {
     }
   }
 
+  _openActionSheet = () => {
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'Take Photo', 'Choose from Library'],
+        title: 'Change Profile Photo',
+        cancelButtonIndex: 0
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 1:
+            this._takePhoto()
+            break
+          case 2:
+            this._pickImage()
+            break
+        }
+      }
+    )
+  }
+
   _openModal = () => {
     this.setState({ isModalOpen: true })
   }
@@ -276,7 +298,11 @@ class EditProfile extends React.PureComponent {
                 resizeMode="cover"
               />
             </View>
-            <TouchableWithoutFeedback onPress={this._openModal}>
+            <TouchableWithoutFeedback
+              onPress={
+                Platform.OS === 'ios' ? this._openActionSheet : this._openModal
+              }
+            >
               <View style={{ paddingVertical: 15, paddingHorizontal: 8 }}>
                 <Text
                   style={[

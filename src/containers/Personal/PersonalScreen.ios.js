@@ -8,22 +8,26 @@ import {
   RefreshControl,
   ScrollView,
   ActivityIndicator,
-  PanResponder
+  PanResponder,
+  StyleSheet
 } from 'react-native'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
 import styles from './styles'
 import palette from '../../assets/palette'
-import LikeScreen from './LikeScreen'
+import LikeScreen from './TabLike/LikeScreen'
 import AboutScreen from './AboutScreen'
-import CommentScreen from './CommentScreen'
-import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import CommentScreen from './TabComment/CommentScreen'
+import {
+  SCREEN_WIDTH,
+  STATUS_BAR_HEIGHT,
+  DEFAULT_PADDING
+} from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
 import animations from '../../assets/animations'
 import { AuthHeader } from '../Auth/AuthScreen'
-import { Platform } from '@unimodules/core'
 import { shadowIOS } from '../../assets/rootStyles'
 
 const HEADER_HEIGHT = 400 + 20
@@ -38,7 +42,10 @@ const initialLayout = {
 class PersonalScreen extends React.PureComponent {
   _panResponder = PanResponder.create({
     onMoveShouldSetResponderCapture: () => true,
-    onMoveShouldSetPanResponderCapture: () => true,
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      return !(gestureState.dx === 0 && gestureState.dy === 0)
+    },
+    // onMoveShouldSetPanResponderCapture: () => true,
 
     onPanResponderGrant: (e, gestureState) => {
       this.state.scrollHeader.setOffset(this.state.scrollHeader.__getValue())
@@ -47,6 +54,57 @@ class PersonalScreen extends React.PureComponent {
 
     onPanResponderMove: (e, gestureState) => {
       if (gestureState.dy > 0 && gestureState.dy <= 100) {
+        // console.log(gestureState)
+        this.state.scrollHeader.setValue(gestureState.dy)
+      }
+    },
+    onPanResponderRelease: (e, gestureState) => {
+      this.state.scrollHeader.flattenOffset()
+      const { refreshing } = this.state
+      if (!refreshing) {
+        if (gestureState.dy > 0 && gestureState.dy <= 80) {
+          Animated.timing(this.state.scrollHeader, {
+            toValue: 0
+          }).start()
+        } else {
+          this.setState({ refreshing: true }, () => {
+            // Animated.timing(this.state.scrollHeader, {
+            //   toValue: 0,
+            //   delay: 1000
+            // }).start(() => this.setState({ refreshing: false }))
+
+            this.props
+              .fetchDataThunk()
+              .then(() => {
+                Animated.timing(this.state.scrollHeader, {
+                  toValue: 0
+                }).start(() => this.setState({ refreshing: false }))
+              })
+              .catch(error => {
+                Animated.timing(this.state.scrollHeader, {
+                  toValue: 0
+                }).start(() => this.setState({ refreshing: false }))
+                console.log(error)
+              })
+          })
+        }
+      }
+    }
+  })
+  _panResponderScrollView = PanResponder.create({
+    onMoveShouldSetResponderCapture: () => true,
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      const { scrollTop } = this.state
+      return !(gestureState.dx === 0 && gestureState.dy === 0) || scrollTop
+    },
+    onPanResponderGrant: (e, gestureState) => {
+      this.state.scrollHeader.setOffset(this.state.scrollHeader.__getValue())
+      this.state.scrollHeader.setValue(0)
+    },
+
+    onPanResponderMove: (e, gestureState) => {
+      const { scrollTop } = this.state
+      if (gestureState.dy > 0 && gestureState.dy <= 100 && scrollTop) {
         // console.log(gestureState)
         this.state.scrollHeader.setValue(gestureState.dy)
       }
@@ -94,7 +152,8 @@ class PersonalScreen extends React.PureComponent {
       { key: 'COMMENT', title: 'COMMENTS' },
       { key: 'ABOUT', title: 'ABOUT' }
     ],
-    refreshing: false
+    refreshing: false,
+    scrollTop: true
   }
 
   _handleRefresh = () => {
@@ -152,7 +211,9 @@ class PersonalScreen extends React.PureComponent {
           {...props}
           style={{
             backgroundColor: palette.backgroundColorWhite,
-            height: TAB_BAR_HEIGHT
+            height: TAB_BAR_HEIGHT,
+            borderBottomColor: palette.dividerColorNew,
+            borderBottomWidth: StyleSheet.hairlineWidth
           }}
           contentContainerStyle={{
             alignItems: 'center'
@@ -227,7 +288,7 @@ class PersonalScreen extends React.PureComponent {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingTop: HEADER_HEIGHT + TAB_BAR_HEIGHT
+          paddingTop: HEADER_HEIGHT + TAB_BAR_HEIGHT - DEFAULT_PADDING * 2
         }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
@@ -236,12 +297,17 @@ class PersonalScreen extends React.PureComponent {
             listener: event => {
               const y = event.nativeEvent.contentOffset.y
               if (this.state.index === tabToCheck) {
+                if (y > 0) {
+                  this.setState({ scrollTop: false })
+                } else {
+                  this.setState({ scrollTop: true })
+                }
                 this.alignScrollViews(routeKey, y)
               }
             }
           }
         )}
-        // {...this._panResponder.panHandlers}
+        {...this._panResponderScrollView.panHandlers}
         // onMomentumScrollBegin={event => {
         //   routeKey !== 'ABOUT' && this._refresh(event.nativeEvent)
         // }}
@@ -253,16 +319,9 @@ class PersonalScreen extends React.PureComponent {
 
   _refresh = nativeEvent => {
     // console.log(nativeEvent)
-    if (Platform.OS === 'ios') {
-      const { contentOffset } = nativeEvent
-      if (contentOffset.y <= 0) {
-        this._handleRefresh()
-      }
-    } else {
-      const { velocity, contentOffset } = nativeEvent
-      if (contentOffset.y === 0 && velocity.y > 0 && !this.state.refreshing) {
-        this._handleRefresh()
-      }
+    const { contentOffset } = nativeEvent
+    if (contentOffset.y <= 0) {
+      this._handleRefresh()
     }
   }
 
