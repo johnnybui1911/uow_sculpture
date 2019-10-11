@@ -289,7 +289,7 @@ class EditProfile extends React.PureComponent {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 100 / 2,
-                backgroundColor: palette.primaryColor,
+                backgroundColor: palette.secondaryTypographyColor,
                 overflow: 'hidden'
               }}
             >

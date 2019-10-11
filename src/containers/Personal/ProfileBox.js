@@ -4,6 +4,7 @@ import { withNavigation } from 'react-navigation'
 import palette from '../../assets/palette'
 import styles from './styles'
 import VerticalDivider from './VerticalDivider'
+import { SCREEN_WIDTH } from '../../assets/dimension'
 
 const ProfileBox = ({ likes, comments, visited, navigation }) => {
   return (

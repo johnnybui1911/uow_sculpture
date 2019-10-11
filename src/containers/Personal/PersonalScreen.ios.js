@@ -9,7 +9,9 @@ import {
   ScrollView,
   ActivityIndicator,
   PanResponder,
-  StyleSheet
+  StyleSheet,
+  Text,
+  Image
 } from 'react-native'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
@@ -22,17 +24,18 @@ import CommentScreen from './TabComment/CommentScreen'
 import {
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT,
-  DEFAULT_PADDING
+  DEFAULT_PADDING,
+  PROFILE_HEADER_HEIGHT,
+  PROFILE_TAB_BAR_HEIGHT,
+  SCROLLABLE_HEIGHT,
+  BOTTOM_TAB_BAR_HEIGHT,
+  MINI_HEADER_HEIGHT
 } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
 import animations from '../../assets/animations'
 import { AuthHeader } from '../Auth/AuthScreen'
 import { shadowIOS } from '../../assets/rootStyles'
-
-const HEADER_HEIGHT = 400 + 20
-const TAB_BAR_HEIGHT = 44
-const SCROLLABLE_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT // FIX LATER
 
 const initialLayout = {
   height: 0,
@@ -180,16 +183,29 @@ class PersonalScreen extends React.PureComponent {
   }
 
   _renderHeader = props => {
+    const { user } = this.props
     const translateY = this.state.scrollY.interpolate({
       inputRange: [0, SCROLLABLE_HEIGHT],
       outputRange: [0, -SCROLLABLE_HEIGHT],
       extrapolate: 'clamp'
     })
 
+    const opacityAnimate = this.state.scrollY.interpolate({
+      inputRange: [0, SCROLLABLE_HEIGHT / 2, SCROLLABLE_HEIGHT],
+      outputRange: [0, 0, 1],
+      extrapolate: 'clamp'
+    })
+
+    const opacityAnimateHide = this.state.scrollY.interpolate({
+      inputRange: [0, SCROLLABLE_HEIGHT / 1.6, SCROLLABLE_HEIGHT],
+      outputRange: [1, 0, 0],
+      extrapolate: 'clamp'
+    })
+
     return (
       <Animated.View
         style={{
-          backgroundColor: palette.primaryColor,
+          backgroundColor: palette.backgroundColorWhite,
           position: 'absolute',
           top: 0,
           left: 0,
@@ -200,8 +216,68 @@ class PersonalScreen extends React.PureComponent {
           ...shadowIOS,
           transform: [{ translateY: translateY }]
         }}
+        {...this._panResponder.panHandlers}
       >
-        <Animated.View {...this._panResponder.panHandlers}>
+        <Animated.View
+          style={{
+            opacity: opacityAnimate,
+            position: 'absolute',
+            bottom: PROFILE_TAB_BAR_HEIGHT,
+            left: 0,
+            right: 0,
+            backgroundColor: palette.backgroundColorWhite,
+            zIndex: 0,
+            height: PROFILE_HEADER_HEIGHT
+          }}
+        >
+          <View style={{ flex: 1 }} />
+          <Animated.View
+            style={{
+              height: MINI_HEADER_HEIGHT,
+              paddingHorizontal: 24,
+              alignItems: 'center',
+              flexDirection: 'row'
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <Animated.Text
+                style={[
+                  styles.title,
+                  {
+                    opacity: opacityAnimate
+                  }
+                ]}
+              >
+                {!user.username ? null : user.username}
+              </Animated.Text>
+            </View>
+            <View
+              style={{
+                width: 40,
+                alignItems: 'flex-end'
+              }}
+            >
+              <View
+                style={{
+                  height: 40,
+                  width: 40,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 40,
+                  backgroundColor: palette.secondaryTypographyColor,
+                  overflow: 'hidden'
+                }}
+              >
+                <Image
+                  source={{ uri: user.picture }}
+                  style={{ height: 40, width: 40 }}
+                  resizeMode="cover"
+                />
+              </View>
+            </View>
+          </Animated.View>
+        </Animated.View>
+        <Animated.View style={{ opacity: opacityAnimateHide }}>
           <PersonalHeader
             refreshing={this.state.refreshing}
             _handleRefresh={this._handleRefresh}
@@ -211,7 +287,7 @@ class PersonalScreen extends React.PureComponent {
           {...props}
           style={{
             backgroundColor: palette.backgroundColorWhite,
-            height: TAB_BAR_HEIGHT,
+            height: PROFILE_TAB_BAR_HEIGHT,
             borderBottomColor: palette.dividerColorNew,
             borderBottomWidth: StyleSheet.hairlineWidth
           }}
@@ -288,7 +364,7 @@ class PersonalScreen extends React.PureComponent {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingTop: HEADER_HEIGHT + TAB_BAR_HEIGHT - DEFAULT_PADDING * 2
+          paddingTop: PROFILE_HEADER_HEIGHT + PROFILE_TAB_BAR_HEIGHT
         }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
@@ -307,10 +383,7 @@ class PersonalScreen extends React.PureComponent {
             }
           }
         )}
-        {...this._panResponderScrollView.panHandlers}
-        // onMomentumScrollBegin={event => {
-        //   routeKey !== 'ABOUT' && this._refresh(event.nativeEvent)
-        // }}
+        // {...this._panResponderScrollView.panHandlers}
       >
         <View style={styles.tabViewStyle}>{content}</View>
       </Animated.ScrollView>

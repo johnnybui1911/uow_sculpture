@@ -6,15 +6,23 @@ import {
   Image,
   ScrollView,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  Modal,
+  TouchableWithoutFeedback
 } from 'react-native'
 import { connect } from 'react-redux'
 import { withNavigation } from 'react-navigation'
+import ImageViewer from 'react-native-image-zoom-viewer'
 import styles from './styles'
 import palette from '../../assets/palette'
 import images from '../../assets/images'
 import ProfileBox from './ProfileBox'
-import { HEADER_BAR_MARGIN_TOP } from '../../assets/dimension'
+import {
+  HEADER_BAR_MARGIN_TOP,
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT
+} from '../../assets/dimension'
+import { icons } from '../../assets/icons'
 
 const PersonalHeader = ({
   user,
@@ -34,15 +42,67 @@ const PersonalHeader = ({
       setLikeCount(likeUserCount)
     }
   }, [likeUserCount, isLoadingUser])
+
+  const [loadingImage, setLoadingImage] = React.useState(false)
+  const [modalVisible, setModalVisible] = React.useState(false)
+
   return loggedIn ? (
     <View style={[styles.profileFixedContainer]}>
+      <Modal visible={modalVisible} transparent>
+        <ImageViewer
+          imageUrls={[
+            {
+              url: user.picture,
+              height: SCREEN_WIDTH,
+              width: SCREEN_HEIGHT,
+              props: {
+                resizeMode: 'cover'
+              }
+            }
+          ]}
+          enableImageZoom
+          enableSwipeDown
+          onCancel={() => setModalVisible(false)}
+          renderIndicator={(currentIndex, allSize) => (
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                zIndex: 1
+              }}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'flex-end'
+                }}
+              >
+                <TouchableWithoutFeedback
+                  onPress={() => setModalVisible(false)}
+                >
+                  <View
+                    style={{
+                      padding: 24
+                    }}
+                  >
+                    {icons.close_w}
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
+          )}
+        />
+      </Modal>
       <View style={[styles.headerContainer]}>
         <View style={{ flex: 1 }}>
           <Text style={styles.headerTitle}>Profile</Text>
         </View>
         {userId && userId.split('|')[0].includes('auth0') && (
           <TouchableOpacity
-            style={styles.box}
+            style={[styles.box]}
             onPress={() => {
               navigation.navigate('EditProfile')
             }}
@@ -53,31 +113,33 @@ const PersonalHeader = ({
       </View>
       <View
         style={{
-          flex: 1,
+          flex: 2,
           alignItems: 'center',
-          justifyContent: 'center',
-          marginVertical: 15
+          justifyContent: 'center'
+          // paddingVertical: 15
         }}
       >
-        <View
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
           style={{
             height: 100,
             width: 100,
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 100 / 2,
-            backgroundColor: palette.primaryColor,
+            backgroundColor: palette.secondaryTypographyColor,
             overflow: 'hidden'
           }}
         >
-          <Image
-            source={{ uri: user.picture }}
-            style={{ height: 100, width: 100 }}
-            resizeMode="cover"
-          />
-        </View>
-
-        <View style={{ marginVertical: 15 }}>
+          <View>
+            <Image
+              source={{ uri: user.picture }}
+              style={{ height: 100, width: 100 }}
+              resizeMode="cover"
+            />
+          </View>
+        </TouchableOpacity>
+        <View style={{ marginTop: 15 }}>
           <Text
             style={[
               styles.title,

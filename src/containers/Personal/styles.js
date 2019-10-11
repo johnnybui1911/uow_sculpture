@@ -61,7 +61,7 @@ export default StyleSheet.create({
     marginTop: HEADER_BAR_MARGIN_TOP,
     alignItems: 'center',
     marginHorizontal: 24,
-    marginBottom: 18,
+    paddingBottom: 15,
     flexDirection: 'row'
   },
   tabViewStyle: {
