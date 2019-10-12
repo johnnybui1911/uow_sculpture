@@ -189,22 +189,46 @@ class PersonalScreen extends React.PureComponent {
     })
 
     const translateHeaderY = this.state.scrollY.interpolate({
-      inputRange: [SCROLLABLE_HEIGHT / 1.6, SCROLLABLE_HEIGHT],
+      inputRange: [260, SCROLLABLE_HEIGHT],
       outputRange: [0, -SCROLLABLE_HEIGHT],
       extrapolate: 'clamp'
     })
 
     const opacityAnimate = this.state.scrollY.interpolate({
-      inputRange: [0, SCROLLABLE_HEIGHT / 2, SCROLLABLE_HEIGHT],
+      inputRange: [0, 240, SCROLLABLE_HEIGHT],
       outputRange: [0, 0, 1],
       extrapolate: 'clamp'
     })
 
     const opacityAnimateHide = this.state.scrollY.interpolate({
-      inputRange: [0, SCROLLABLE_HEIGHT / 1.6, SCROLLABLE_HEIGHT],
-      outputRange: [1, 0, 0],
+      inputRange: [0, 210, 250],
+      outputRange: [1, 1, 0],
       extrapolate: 'clamp'
     })
+
+    // const translateY = this.state.scrollY.interpolate({
+    //   inputRange: [0, SCROLLABLE_HEIGHT],
+    //   outputRange: [0, -SCROLLABLE_HEIGHT],
+    //   extrapolate: 'clamp'
+    // })
+
+    // const translateHeaderY = this.state.scrollY.interpolate({
+    //   inputRange: [SCROLLABLE_HEIGHT / 1.6, SCROLLABLE_HEIGHT],
+    //   outputRange: [0, -SCROLLABLE_HEIGHT],
+    //   extrapolate: 'clamp'
+    // })
+
+    // const opacityAnimate = this.state.scrollY.interpolate({
+    //   inputRange: [0, SCROLLABLE_HEIGHT / 2, SCROLLABLE_HEIGHT],
+    //   outputRange: [0, 0, 1],
+    //   extrapolate: 'clamp'
+    // })
+
+    // const opacityAnimateHide = this.state.scrollY.interpolate({
+    //   inputRange: [0, SCROLLABLE_HEIGHT / 1.6, SCROLLABLE_HEIGHT],
+    //   outputRange: [1, 0, 0],
+    //   extrapolate: 'clamp'
+    // })
 
     return (
       <Animated.View

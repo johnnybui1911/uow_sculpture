@@ -7,7 +7,8 @@ import {
   Animated,
   Keyboard,
   BackHandler,
-  Platform
+  Platform,
+  TextInput
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -83,8 +84,6 @@ class SearchScreen extends React.PureComponent {
           item.features.maker.toLowerCase().indexOf(searchText.toLowerCase()) >
             -1
         )
-        // return (item.name.toLowerCase().slice(0, searchText.length) ===
-        // searchText.toLowerCase())
       })
     } else {
       data = recentSearchList
@@ -116,14 +115,6 @@ class SearchScreen extends React.PureComponent {
         onRefresh={this._handleRefresh}
         keyboardDismissMode={Platform.OS === 'ios' ? 'on-drag' : 'none'}
         keyboardShouldPersistTaps="always"
-        contentContainerStyle={
-          {
-            // paddingVertical: 10
-            // borderWidth: 1,
-            // borderColor: palette.borderGreyColor,
-            // borderRadius: 4
-          }
-        }
         ItemSeparatorComponent={() => (
           <View
             style={{
@@ -218,6 +209,14 @@ class SearchScreen extends React.PureComponent {
             flex: 1,
             paddingHorizontal: 24
           }}
+          onStartShouldSetResponderCapture={e => {
+            const focusField = TextInput.State.currentlyFocusedField()
+            if (focusField != null && e.nativeEvent.target != focusField) {
+              TextInput.State.blurTextInput(
+                TextInput.State.currentlyFocusedField()
+              )
+            }
+          }}
         >
           {this._renderList()}
         </View>
@@ -226,10 +225,19 @@ class SearchScreen extends React.PureComponent {
   }
 }
 
-const mapStateToProps = getState => ({
-  markers: getState.markerReducer.markers,
-  isLoading: getState.markerReducer.isLoading,
-  recentSearchList: getState.searchReducer.recentSearchList
-})
+const mapStateToProps = getState => {
+  const { markerMatrix, isLoading } = getState.markerReducer
+  const { recentSearchList } = getState.searchReducer
+  let markers = []
+  Object.entries(markerMatrix).forEach(([key, value]) => {
+    markers.push(value)
+  })
+
+  return {
+    markers,
+    isLoading,
+    recentSearchList
+  }
+}
 
 export default connect(mapStateToProps)(SearchScreen)

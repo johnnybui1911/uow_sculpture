@@ -78,7 +78,7 @@ class VisitScreen extends React.PureComponent {
     const { submitDate, photoURL, sculptureName, sculptureId } = item
     return (
       <TouchableHighlight
-        underlayColor="#FAFAFA"
+        underlayColor={palette.onPressColor}
         onPress={() =>
           this.props.navigation.navigate('Detail', { id: sculptureId })
         }
@@ -152,7 +152,7 @@ class VisitScreen extends React.PureComponent {
             tintColor={palette.primaryColorLight}
           />
         }
-        contentContainerStyle={{ paddingTop: 12 }}
+        // contentContainerStyle={{ paddingTop: 12 }}
       />
     ) : (
       <NoResultScreen title="No visits" />

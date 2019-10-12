@@ -277,7 +277,10 @@ class CommentScreen extends React.PureComponent {
         sculptureId,
         text: inputValue.trim()
       }
-      this.setState({ comments: [postingComment, ...this.state.comments] })
+      this.setState({
+        isLoading: true,
+        comments: [postingComment, ...this.state.comments]
+      })
       baseAxios
         .post('comment', {
           sculptureId,
@@ -320,7 +323,10 @@ class CommentScreen extends React.PureComponent {
       <View style={{ flex: 1 }}>
         <MyStatusBar backgroundColor="#FAFAFA" barStyle="dark-content" />
         <SafeAreaView style={styles.container}>
-          <ListHeader headerName="Comments" />
+          <ListHeader
+            headerName="Comments"
+            leftButtonDisable={isLoading || isOverflowOpen}
+          />
           <CommentList
             _handleLoadMore={this._handleLoadMore}
             refreshing={refreshing}

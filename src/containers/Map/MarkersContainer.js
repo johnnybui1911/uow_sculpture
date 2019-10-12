@@ -20,8 +20,16 @@ const MarkersContainer = ({ markers, _onMarkerPressed }) => {
   return null
 }
 
-const mapStateToProps = getState => ({
-  markers: getState.markerReducer.markers
-})
+const mapStateToProps = getState => {
+  const { markerMatrix } = getState.markerReducer
+  let markers = []
+  Object.entries(markerMatrix).forEach(([key, value]) => {
+    markers.push(value)
+  })
+
+  return {
+    markers
+  }
+}
 
 export default connect(mapStateToProps)(MarkersContainer)

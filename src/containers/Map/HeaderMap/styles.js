@@ -8,10 +8,10 @@ import { shadowIOS } from '../../../assets/rootStyles'
 
 export default StyleSheet.create({
   searchBoxContainer: {
-    marginTop:
-      Platform.OS === 'ios'
-        ? HEADER_BAR_MARGIN_TOP + 12
-        : HEADER_BAR_MARGIN_TOP,
+    marginTop: HEADER_BAR_MARGIN_TOP,
+    // Platform.OS === 'ios'
+    //   ? HEADER_BAR_MARGIN_TOP + 12
+    //   : HEADER_BAR_MARGIN_TOP,
     zIndex: 1
   },
   formDirectionStyle: {

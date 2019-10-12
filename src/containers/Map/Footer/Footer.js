@@ -196,7 +196,7 @@ class Footer extends React.PureComponent {
             this.slideIn()
           }}
         >
-          <MiniView />
+          <MiniView _navigateToDetail={this.props._navigateToDetail} />
         </BottomDrawer>
       </View>
     )

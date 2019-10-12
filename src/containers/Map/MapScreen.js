@@ -329,7 +329,7 @@ export class MapScreen extends React.PureComponent {
           ref={marker => {
             this.marker = marker
           }}
-          // tracksViewChanges={false}
+          tracksViewChanges={false}
           style={{ zIndex: 1 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={this.userCoordinate}
@@ -458,7 +458,7 @@ export class MapScreen extends React.PureComponent {
     const { setShowDirection, setShowSteps, animate, animateHide } = this
     if (region) {
       return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           {/* <MyStatusBar backgroundColor="transparent" /> */}
           <MapContext.Provider
             value={{
@@ -536,7 +536,7 @@ export class MapScreen extends React.PureComponent {
               _centerUserLocation={this._centerUserLocation}
             />
           </MapContext.Provider>
-        </View>
+        </SafeAreaView>
       )
     }
 

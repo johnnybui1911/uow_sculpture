@@ -5,6 +5,7 @@ import palette from '../../assets/palette'
 import styles from './styles'
 import VerticalDivider from './VerticalDivider'
 import { SCREEN_WIDTH } from '../../assets/dimension'
+import { RectButton } from 'react-native-gesture-handler'
 
 const ProfileBox = ({ likes, comments, visited, navigation }) => {
   return (
@@ -22,7 +23,7 @@ const ProfileBox = ({ likes, comments, visited, navigation }) => {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'row',
-          marginHorizontal: 16,
+          marginHorizontal: 24,
           borderRadius: 12
         }}
       >
@@ -64,26 +65,38 @@ const ProfileBox = ({ likes, comments, visited, navigation }) => {
           </Text>
         </View>
         <VerticalDivider />
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Visit')}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center'
-            }}
-          >
-            <Text style={[styles.title, { color: palette.primaryColorLight }]}>
-              {visited}
-            </Text>
-            <Text
-              style={[
-                styles.description,
-                { fontSize: 11, color: palette.primaryColor }
-              ]}
+        {/* <TouchableWithoutFeedback onPress={() => navigation.navigate('Visit')}> */}
+        <View
+          style={{
+            flex: 1
+          }}
+        >
+          <RectButton onPress={() => navigation.navigate('Visit')}>
+            <View
+              accessible
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%'
+              }}
             >
-              VISITED
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+              <Text
+                style={[styles.title, { color: palette.primaryColorLight }]}
+              >
+                {visited}
+              </Text>
+              <Text
+                style={[
+                  styles.description,
+                  { fontSize: 11, color: palette.primaryColor }
+                ]}
+              >
+                VISITED
+              </Text>
+            </View>
+          </RectButton>
+        </View>
+        {/* </TouchableWithoutFeedback> */}
       </View>
     </View>
   )

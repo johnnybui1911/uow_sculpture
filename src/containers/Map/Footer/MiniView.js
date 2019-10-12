@@ -18,6 +18,7 @@ import formatDistance from '../../../library/formatDistance'
 import LikeComment from '../../../components/LikeComment/LikeComment'
 import { selectMarker } from '../../../redux/actions'
 import palette from '../../../assets/palette'
+import { BorderlessButton, RectButton } from 'react-native-gesture-handler'
 
 const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
   const { setShowDirection, direction_state } = React.useContext(MapContext)
@@ -54,7 +55,7 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
               </View>
             ) : (
               <React.Fragment>
-                <Text style={styles.distance}>
+                <Text accessible style={styles.distance}>
                   {formatDistance(direction_state.distance)}
                 </Text>
                 <Text style={styles.title} numberOfLines={1}>

@@ -56,7 +56,7 @@ class MainScreen extends React.PureComponent {
   render() {
     const { isCongratModalVisible } = this.state
     return (
-      <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
         {Platform.OS === 'android' ? (
           <StatusBar
             barStyle="light-content"
@@ -96,7 +96,7 @@ class MainScreen extends React.PureComponent {
           isCongratModalVisible={isCongratModalVisible}
           closeModal={this._closeModal}
         />
-      </View>
+      </SafeAreaView>
     )
   }
 }

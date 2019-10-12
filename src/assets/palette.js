@@ -12,5 +12,6 @@ export default {
   dividerColor: '#F4F4F6',
   borderGreyColor: '#D9D9D6',
   highLightColor: '#FAFAFA',
-  dividerColorNew: 'rgba(0,0,0,0.15)'
+  dividerColorNew: 'rgba(0,0,0,0.15)',
+  onPressColor: '#F2F2F2'
 }

@@ -29,9 +29,11 @@ class CommentScreen extends React.PureComponent {
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => (
-          <DividerLight style={{ backgroundColor: 'rgba(0,0,0,0.15)' }} />
+          <DividerLight
+            style={{ backgroundColor: 'rgba(0,0,0,0.15)', marginVertical: 0 }}
+          />
         )}
-        contentContainerStyle={{ padding: 24 }}
+        contentContainerStyle={{ paddingVertical: 12 }}
       />
     )
   }
