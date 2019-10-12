@@ -11,27 +11,14 @@ import styles from '../styles'
 import CardItem from './CardItem'
 
 class LikeScreen extends React.PureComponent {
-  state = {
-    likeList: []
-  }
-
-  componentDidMount = () => {
-    const { likeList } = this.props
-    this.setState({
-      likeList: likeList.sort((a, b) => {
-        return new Date(b.likedTime).getTime() - new Date(a.likedTime).getTime()
-      })
-    })
-  }
-
   _renderItem = ({ item, index }) => {
     return <CardItem id={item.sculptureId} index={index} />
   }
 
   _renderList = () => {
-    const { likeList } = this.state
+    const { likeList } = this.props
     return (
-      <Animated.FlatList
+      <FlatList
         data={likeList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}

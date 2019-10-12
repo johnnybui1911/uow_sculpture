@@ -17,13 +17,13 @@ const PersonalStack = createStackNavigator(
   {
     Personal: {
       screen: PersonalScreen
-    },
-    Visit: {
-      screen: VisitScreen
-    },
-    EditProfile: {
-      screen: EditProfile
     }
+    // Visit: {
+    //   screen: VisitScreen
+    // },
+    // EditProfile: {
+    //   screen: EditProfile
+    // }
   },
   {
     headerMode: 'none',

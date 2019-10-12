@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 import palette from '../../../assets/palette'
 import {
   STATUS_BAR_HEIGHT,
@@ -8,7 +8,10 @@ import { shadowIOS } from '../../../assets/rootStyles'
 
 export default StyleSheet.create({
   searchBoxContainer: {
-    marginTop: HEADER_BAR_MARGIN_TOP,
+    marginTop:
+      Platform.OS === 'ios'
+        ? HEADER_BAR_MARGIN_TOP + 12
+        : HEADER_BAR_MARGIN_TOP,
     zIndex: 1
   },
   formDirectionStyle: {

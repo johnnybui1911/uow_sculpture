@@ -49,9 +49,13 @@ const authReducer = (state = initialState, action) => {
         commentId,
         content,
         user: { userId, picture },
-        sculpture: { accessionId, images },
+        sculpture: { accessionId, images, name },
         updatedTime
       } = comment
+
+      const imageList = images.sort((a, b) => {
+        return new Date(a.created).getTime() - new Date(b.created).getTime()
+      })
 
       const addComment = {
         commentId,
@@ -59,7 +63,8 @@ const authReducer = (state = initialState, action) => {
         userId,
         userImg: picture,
         sculptureId: accessionId,
-        photoURL: images.length ? images[0].url : null,
+        sculptureName: name,
+        photoURL: images.length ? imageList[0].url : null,
         submitDate: updatedTime
       }
 
@@ -79,16 +84,26 @@ const authReducer = (state = initialState, action) => {
 
     case EDIT_COMMENT: {
       const { comment } = action.payload
-      const { commentId, content, updatedTime } = comment
+      const { commentId, content } = comment
       const { commentList } = state
 
-      const editedComment = commentList.find(
-        element => element.commentId === commentId
-      )
-      editedComment.text = content
-      editedComment.submitDate = updatedTime
+      // const editedComment = commentList.find(
+      //   element => element.commentId === commentId
+      // )
+      // editedComment.text = content
+      // console.log(commentList)
 
-      return { ...state, commentList: [...commentList] }
+      const newList = commentList.map(element => {
+        if (element.commentId === commentId) {
+          return {
+            ...element,
+            text: content
+          }
+        }
+        return element
+      })
+
+      return { ...state, commentList: newList }
     }
 
     case LIKE: {

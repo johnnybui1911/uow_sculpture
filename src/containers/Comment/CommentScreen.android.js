@@ -38,7 +38,8 @@ class CommentScreen extends React.PureComponent {
     selectedComment: null,
     isEdit: false,
     editing: false,
-    isOverflowOpen: false
+    isOverflowOpen: false,
+    isDelete: false
   }
 
   inputRef = React.createRef()
@@ -81,7 +82,7 @@ class CommentScreen extends React.PureComponent {
 
   _editComment = () => {
     const { comments, selectedComment, inputValue } = this.state
-    this.setState({ editing: true })
+    this.setState({ editing: true, isLoading: true })
 
     baseAxios
       .patch('comment', {
@@ -119,7 +120,9 @@ class CommentScreen extends React.PureComponent {
       this.setState({
         isModalOpen: false,
         isOverflowOpen: true,
-        comments: comments.filter(element => element.commentId !== commentId)
+        isDelete: true,
+        comments: comments.filter(element => element.commentId !== commentId),
+        isLoading: true
       })
 
       setTimeout(() => {
@@ -138,7 +141,8 @@ class CommentScreen extends React.PureComponent {
             })
           })
         this.setState({
-          isOverflowOpen: false
+          isOverflowOpen: false,
+          isDelete: false
           // selectedComment: null
         })
       }, 2000)
@@ -272,7 +276,10 @@ class CommentScreen extends React.PureComponent {
         sculptureId,
         text: inputValue.trim()
       }
-      this.setState({ comments: [postingComment, ...this.state.comments] })
+      this.setState({
+        isLoading: true,
+        comments: [postingComment, ...this.state.comments]
+      })
       baseAxios
         .post('comment', {
           sculptureId,
@@ -303,17 +310,22 @@ class CommentScreen extends React.PureComponent {
       editing,
       refreshing,
       isOverflowOpen,
-      selectedComment
+      selectedComment,
+      isDelete
     } = this.state
     const {
       user: { picture },
       loggedIn
     } = this.props
+
     return (
       // <View style={{ flex: 1 }}>
       //   <MyStatusBar backgroundColor="#FAFAFA" barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <ListHeader headerName="Comments" />
+        <ListHeader
+          headerName="Comments"
+          leftButtonDisable={isLoading || isOverflowOpen}
+        />
         <CommentList
           _handleLoadMore={this._handleLoadMore}
           refreshing={refreshing}
@@ -350,7 +362,7 @@ class CommentScreen extends React.PureComponent {
               >
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.menuText, { color: '#FFF' }]}>
-                    {isEdit ? 'Comment edited' : 'Comment deleted'}
+                    {!isDelete ? 'Comment edited' : 'Comment deleted'}
                   </Text>
                 </View>
               </View>

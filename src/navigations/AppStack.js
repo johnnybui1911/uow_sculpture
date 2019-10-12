@@ -3,6 +3,8 @@ import DetailScreen from '../containers/Detail/DetailScreen'
 import TabNavigator from './TabNavigator'
 import CommentScreen from '../containers/Comment/CommentScreen'
 import SearchScreen from '../containers/Search/SearchScreen'
+import VisitScreen from '../containers/Personal/VisitScreen'
+import EditProfile from '../containers/Personal/EditProfile'
 
 const AppStack = createStackNavigator(
   {
@@ -17,6 +19,12 @@ const AppStack = createStackNavigator(
     },
     Search: {
       screen: SearchScreen
+    },
+    Visit: {
+      screen: VisitScreen
+    },
+    EditProfile: {
+      screen: EditProfile
     }
   },
   {

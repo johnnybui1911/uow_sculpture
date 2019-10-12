@@ -88,17 +88,23 @@ export const fetchUserDataThunk = (initialUserId = null) => {
             commentId,
             content,
             user: { userId, picture },
-            sculpture: { accessionId, images },
-            updatedTime
+            sculpture: { accessionId, images, name },
+            createdTime
           } = element
+
+          const imageList = images.sort((a, b) => {
+            return new Date(a.created).getTime() - new Date(b.created).getTime()
+          })
+
           return {
             commentId,
             text: content,
             userId,
             userImg: picture,
             sculptureId: accessionId,
-            photoURL: images.length ? images[0].url : null,
-            submitDate: updatedTime
+            sculptureName: name,
+            photoURL: imageList.length ? imageList[0].url : null,
+            submitDate: createdTime
           }
         })
         const formatVisitList = visitList.map(element => {
@@ -108,11 +114,16 @@ export const fetchUserDataThunk = (initialUserId = null) => {
             sculpture: { accessionId, images },
             visitTime
           } = element
+
+          const imageList = images.sort((a, b) => {
+            return new Date(a.created).getTime() - new Date(b.created).getTime()
+          })
+
           return {
             visitId,
             userId,
             sculptureId: accessionId,
-            photoURL: images.length ? images[0].url : null,
+            photoURL: imageList.length ? imageList[0].url : null,
             submitDate: visitTime
           }
         })

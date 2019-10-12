@@ -9,20 +9,20 @@ export const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO //0.004
 export const USER_LATITUDE = -34.4071659
 export const USER_LONGITUDE = 150.877994
 
-export const DEFAULT_PADDING = 12
-Platform.OS === 'android'
-  ? {
-      top: SCREEN_HEIGHT * 0.8,
-      bottom: SCREEN_HEIGHT * 0.8,
-      left: SCREEN_WIDTH / 4,
-      right: SCREEN_WIDTH / 4
-    }
-  : {
-      top: 40,
-      bottom: 40,
-      left: 40,
-      right: 40
-    }
+export const DEFAULT_EDGE_PADDING =
+  Platform.OS === 'android'
+    ? {
+        top: SCREEN_HEIGHT * 0.8,
+        bottom: SCREEN_HEIGHT * 0.8,
+        left: SCREEN_WIDTH / 4,
+        right: SCREEN_WIDTH / 4
+      }
+    : {
+        top: 40,
+        bottom: 40,
+        left: 40,
+        right: 40
+      }
 
 export const INITIAL_REGION = {
   latitude: LATITUDE,

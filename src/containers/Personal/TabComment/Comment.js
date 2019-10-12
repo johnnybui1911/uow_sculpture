@@ -34,7 +34,9 @@ const Comment = ({ item, username }) => {
           paddingLeft: 12
         }}
       >
-        <Text style={[styles.title, { fontSize: 14 }]}>{username}</Text>
+        <Text style={[styles.title, { fontSize: 14 }]}>
+          {item.sculptureName}
+        </Text>
         <Text
           style={[
             styles.description_cmt,

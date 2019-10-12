@@ -23,8 +23,7 @@ import { fetchDataThunk } from '../../redux/actions'
 import palette from '../../assets/palette'
 import animations from '../../assets/animations'
 import formatDistance from '../../library/formatDistance'
-import { SCREEN_WIDTH } from '../../assets/dimension'
-import { DEFAULT_PADDING } from '../../library/maps'
+import { SCREEN_WIDTH, DEFAULT_PADDING } from '../../assets/dimension'
 
 const TRANSLATE_Y = 10
 

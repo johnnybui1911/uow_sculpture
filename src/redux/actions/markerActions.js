@@ -99,7 +99,7 @@ export const fetchDataThunk = () => {
                 location: locationNotes,
                 creditLine
               },
-              photoURL: imageList.length === 0 ? null : imageList[0].url,
+              photoURL: !imageList.length ? null : imageList[0].url,
               coordinate: {
                 latitude: parseFloat(latitude),
                 longitude: parseFloat(longitude)

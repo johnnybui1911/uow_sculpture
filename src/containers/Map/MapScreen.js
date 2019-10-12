@@ -21,7 +21,7 @@ import {
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
   URL_TEMPLATE,
-  DEFAULT_PADDING,
+  DEFAULT_EDGE_PADDING,
   LATITUDE,
   LONGITUDE,
   DISTANCE_MATRIX_API,
@@ -48,6 +48,7 @@ import {
 } from '../../redux/actions'
 import SearchView from '../../components/SearchButton/SearchView'
 import { compareCoordinate } from '../../library/compareCoordinate'
+import { MyStatusBar } from '../../components/ListHeader/ListHeader'
 
 export class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
@@ -424,7 +425,7 @@ export class MapScreen extends React.PureComponent {
 
   _fitToCoordinate = coordinates => {
     this.map.fitToCoordinates(coordinates, {
-      edgePadding: DEFAULT_PADDING,
+      edgePadding: DEFAULT_EDGE_PADDING,
       animated: true
     })
   }
@@ -457,7 +458,8 @@ export class MapScreen extends React.PureComponent {
     const { setShowDirection, setShowSteps, animate, animateHide } = this
     if (region) {
       return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
+          {/* <MyStatusBar backgroundColor="transparent" /> */}
           <MapContext.Provider
             value={{
               case1_footer_translateY,
@@ -534,7 +536,7 @@ export class MapScreen extends React.PureComponent {
               _centerUserLocation={this._centerUserLocation}
             />
           </MapContext.Provider>
-        </SafeAreaView>
+        </View>
       )
     }
 

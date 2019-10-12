@@ -11,7 +11,8 @@ import {
   PanResponder,
   StyleSheet,
   Text,
-  Image
+  Image,
+  StatusBar
 } from 'react-native'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
@@ -23,8 +24,6 @@ import AboutScreen from './AboutScreen'
 import CommentScreen from './TabComment/CommentScreen'
 import {
   SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT,
-  DEFAULT_PADDING,
   PROFILE_HEADER_HEIGHT,
   PROFILE_TAB_BAR_HEIGHT,
   SCROLLABLE_HEIGHT,
@@ -33,9 +32,8 @@ import {
 } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
-import animations from '../../assets/animations'
-import { AuthHeader } from '../Auth/AuthScreen'
 import { shadowIOS } from '../../assets/rootStyles'
+import CollapsibleHeader from './CollapsibleHeader'
 
 const initialLayout = {
   height: 0,
@@ -190,6 +188,12 @@ class PersonalScreen extends React.PureComponent {
       extrapolate: 'clamp'
     })
 
+    const translateHeaderY = this.state.scrollY.interpolate({
+      inputRange: [SCROLLABLE_HEIGHT / 1.6, SCROLLABLE_HEIGHT],
+      outputRange: [0, -SCROLLABLE_HEIGHT],
+      extrapolate: 'clamp'
+    })
+
     const opacityAnimate = this.state.scrollY.interpolate({
       inputRange: [0, SCROLLABLE_HEIGHT / 2, SCROLLABLE_HEIGHT],
       outputRange: [0, 0, 1],
@@ -205,7 +209,7 @@ class PersonalScreen extends React.PureComponent {
     return (
       <Animated.View
         style={{
-          backgroundColor: palette.backgroundColorWhite,
+          backgroundColor: palette.primaryColor,
           position: 'absolute',
           top: 0,
           left: 0,
@@ -218,66 +222,13 @@ class PersonalScreen extends React.PureComponent {
         }}
         {...this._panResponder.panHandlers}
       >
+        <CollapsibleHeader user={user} opacityAnimate={opacityAnimate} />
         <Animated.View
           style={{
-            opacity: opacityAnimate,
-            position: 'absolute',
-            bottom: PROFILE_TAB_BAR_HEIGHT,
-            left: 0,
-            right: 0,
-            backgroundColor: palette.backgroundColorWhite,
-            zIndex: 0,
-            height: PROFILE_HEADER_HEIGHT
+            opacity: opacityAnimateHide,
+            transform: [{ translateY: translateHeaderY }]
           }}
         >
-          <View style={{ flex: 1 }} />
-          <Animated.View
-            style={{
-              height: MINI_HEADER_HEIGHT,
-              paddingHorizontal: 24,
-              alignItems: 'center',
-              flexDirection: 'row'
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Animated.Text
-                style={[
-                  styles.title,
-                  {
-                    opacity: opacityAnimate
-                  }
-                ]}
-              >
-                {!user.username ? null : user.username}
-              </Animated.Text>
-            </View>
-            <View
-              style={{
-                width: 40,
-                alignItems: 'flex-end'
-              }}
-            >
-              <View
-                style={{
-                  height: 40,
-                  width: 40,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 40,
-                  backgroundColor: palette.secondaryTypographyColor,
-                  overflow: 'hidden'
-                }}
-              >
-                <Image
-                  source={{ uri: user.picture }}
-                  style={{ height: 40, width: 40 }}
-                  resizeMode="cover"
-                />
-              </View>
-            </View>
-          </Animated.View>
-        </Animated.View>
-        <Animated.View style={{ opacity: opacityAnimateHide }}>
           <PersonalHeader
             refreshing={this.state.refreshing}
             _handleRefresh={this._handleRefresh}
