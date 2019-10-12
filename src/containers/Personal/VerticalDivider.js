@@ -1,16 +1,16 @@
-import React from "react";
-import { View } from "react-native";
-import palette from "../../assets/palette";
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
+import palette from '../../assets/palette'
 
 const VerticalDivider = () => (
   <View
     style={{
       height: 40,
-      backgroundColor: palette.dividerColor,
-      width: 1,
+      backgroundColor: palette.dividerColorNew,
+      width: StyleSheet.hairlineWidth,
       marginVertical: 20
     }}
   />
-);
+)
 
-export default VerticalDivider;
+export default VerticalDivider

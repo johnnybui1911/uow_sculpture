@@ -16,13 +16,16 @@ import palette from '../../assets/palette'
 import LikeScreen from './TabLike/LikeScreen'
 import AboutScreen from './AboutScreen'
 import CommentScreen from './TabComment/CommentScreen'
-import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
+import {
+  SCREEN_WIDTH,
+  STATUS_BAR_HEIGHT,
+  SCROLLABLE_HEIGHT,
+  PROFILE_HEADER_HEIGHT,
+  PROFILE_TAB_BAR_HEIGHT
+} from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
-
-const HEADER_HEIGHT = 400
-const TAB_BAR_HEIGHT = 44
-const SCROLLABLE_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT
+import CollapsibleHeader from './CollapsibleHeader'
 
 const initialLayout = {
   height: 0,
@@ -67,12 +70,30 @@ class PersonalScreen extends React.PureComponent {
   }
 
   _renderHeader = props => {
+    const { user } = this.props
     const translateY = this.state.scrollY.interpolate({
       inputRange: [0, SCROLLABLE_HEIGHT],
       outputRange: [0, -SCROLLABLE_HEIGHT],
       extrapolate: 'clamp'
     })
 
+    const translateHeaderY = this.state.scrollY.interpolate({
+      inputRange: [260, SCROLLABLE_HEIGHT],
+      outputRange: [0, -SCROLLABLE_HEIGHT],
+      extrapolate: 'clamp'
+    })
+
+    const opacityAnimate = this.state.scrollY.interpolate({
+      inputRange: [0, 240, SCROLLABLE_HEIGHT],
+      outputRange: [0, 0, 1],
+      extrapolate: 'clamp'
+    })
+
+    const opacityAnimateHide = this.state.scrollY.interpolate({
+      inputRange: [0, 210, 250],
+      outputRange: [1, 1, 0],
+      extrapolate: 'clamp'
+    })
     return (
       <Animated.View
         style={{
@@ -87,15 +108,24 @@ class PersonalScreen extends React.PureComponent {
           transform: [{ translateY: translateY }]
         }}
       >
-        <PersonalHeader
-          refreshing={this.state.refreshing}
-          _handleRefresh={this._handleRefresh}
-        />
+        <CollapsibleHeader user={user} opacityAnimate={opacityAnimate} />
+        <Animated.View
+          style={{
+            opacity: opacityAnimateHide,
+            transform: [{ translateY: translateHeaderY }]
+          }}
+        >
+          <PersonalHeader
+            refreshing={this.state.refreshing}
+            _handleRefresh={this._handleRefresh}
+          />
+        </Animated.View>
         <TabBar
           {...props}
           style={{
             backgroundColor: palette.backgroundColorWhite,
-            height: TAB_BAR_HEIGHT
+            height: PROFILE_TAB_BAR_HEIGHT,
+            elevation: 0
           }}
           pressColor={palette.secondaryTypographyColor}
           contentContainerStyle={{
@@ -171,7 +201,7 @@ class PersonalScreen extends React.PureComponent {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingTop: HEADER_HEIGHT + TAB_BAR_HEIGHT
+          paddingTop: PROFILE_HEADER_HEIGHT + PROFILE_TAB_BAR_HEIGHT
         }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
