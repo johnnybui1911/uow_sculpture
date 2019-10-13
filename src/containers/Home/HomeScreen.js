@@ -5,8 +5,10 @@ import {
   View,
   ScrollView,
   RefreshControl,
+  StatusBar,
+  Animated,
   FlatList,
-  Animated
+  Platform
 } from 'react-native'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
@@ -24,6 +26,7 @@ import palette from '../../assets/palette'
 import animations from '../../assets/animations'
 import formatDistance from '../../library/formatDistance'
 import { SCREEN_WIDTH, DEFAULT_PADDING } from '../../assets/dimension'
+import { NavigationEvents } from 'react-navigation'
 
 const TRANSLATE_Y = 10
 
@@ -214,6 +217,13 @@ class HomeScreen extends React.PureComponent {
 
     return (
       <SafeAreaView style={styles.container}>
+        {Platform.OS === 'ios' && (
+          <NavigationEvents
+            onDidFocus={() => {
+              StatusBar.setBarStyle('dark-content')
+            }}
+          />
+        )}
         <ScrollView
           scrollEnabled={checkLoading || !distanceMatrix ? false : true}
           refreshControl={
@@ -250,7 +260,7 @@ class HomeScreen extends React.PureComponent {
               //   data={nearbyData}
               //   _renderItem={this._renderNearbyItem}
               // />
-              <Animated.FlatList
+              <FlatList
                 horizontal
                 data={nearbyData}
                 keyExtractor={item => item.id.toString()}

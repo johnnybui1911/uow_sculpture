@@ -174,7 +174,7 @@ class VisitScreen extends React.PureComponent {
   render() {
     const { isLoading } = this.state
     return (
-      <View style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container}>
         <ListHeader headerName="Visits" />
         {isLoading ? (
           <View
@@ -189,7 +189,7 @@ class VisitScreen extends React.PureComponent {
         ) : (
           this._renderList()
         )}
-      </View>
+      </SafeAreaView>
     )
   }
 }

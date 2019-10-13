@@ -21,11 +21,12 @@ import {
 import baseAxios from '../../library/api'
 import InputKeyboard from './InputKeyboard'
 import DeleteModal from './DeleteModal'
-import ListHeader, { MyStatusBar } from '../../components/ListHeader/ListHeader'
+import ListHeader from '../../components/ListHeader/ListHeader'
 import { SCREEN_WIDTH, FULL_SCREEN_HEIGHT } from '../../assets/dimension'
 import SignInButton from '../../components/SignIn/SignInButton'
 import { icons } from '../../assets/icons'
 import { Divider } from '../../components'
+import palette from '../../assets/palette'
 
 const TEXT_INPUT_HEIGHT = 40
 
@@ -320,146 +321,143 @@ class CommentScreen extends React.PureComponent {
       loggedIn
     } = this.props
     return (
-      <View style={{ flex: 1 }}>
-        <MyStatusBar backgroundColor="#FAFAFA" barStyle="dark-content" />
-        <SafeAreaView style={styles.container}>
-          <ListHeader
-            headerName="Comments"
-            leftButtonDisable={isLoading || isOverflowOpen}
-          />
-          <CommentList
-            _handleLoadMore={this._handleLoadMore}
-            refreshing={refreshing}
-            _handleRefresh={this._handleRefresh}
-            _handleEditComment={this._handleEditComment}
-            _selectComment={this._selectComment}
-            _openModal={this._openModal}
-            comments={comments}
-            navigation={this.props.navigation}
-            isLoading={isLoading}
-            editing={editing}
-          />
-          <Modal
-            animationIn="slideInUp"
-            animationInTiming={500}
-            animationOut="slideOutDown"
-            animationOutTiming={500}
-            deviceHeight={FULL_SCREEN_HEIGHT}
-            isVisible={isSettingModalOpen}
-            onBackdropPress={this._closeSettingModal}
-            style={{
-              justifyContent: 'flex-end',
-              margin: 0
-            }}
-          >
-            <View style={styles.iosMenuStyle}>
-              <TouchableHighlight
-                underlayColor="#FAFAFA"
-                onPress={() => {
-                  this._handleEditComment()
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingVertical: 16,
-                    paddingHorizontal: 24
-                  }}
-                >
-                  <View style={{ width: 50 }}>{icons.edit}</View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.menuTextLg}>Edit</Text>
-                  </View>
-                </View>
-              </TouchableHighlight>
-              <Divider styles={{ marginVertical: 0 }} />
-              <TouchableHighlight
-                underlayColor="#FAFAFA"
-                onPress={() => {
-                  this.setState({ isSettingModalOpen: false }, () => {
-                    setTimeout(() => {
-                      this.setState({ isModalOpen: true })
-                    }, 600)
-                  })
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingVertical: 16,
-                    paddingHorizontal: 24
-                  }}
-                >
-                  <View style={{ width: 50 }}>{icons.delete}</View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.menuTextLg}>Delete</Text>
-                  </View>
-                </View>
-              </TouchableHighlight>
-            </View>
-          </Modal>
-          {loggedIn ? (
-            <InputKeyboard
-              keyboardHeight={this.keyboardHeight}
-              isEdit={isEdit}
-              editing={editing}
-              ref={this.inputRef}
-              picture={picture}
-              inputHeight={inputHeight}
-              inputValue={inputValue}
-              _onSubmit={this._onSubmit}
-              handleChangeText={this.handleChangeText}
-              selectedComment={selectedComment}
-              isSettingModalOpen={isSettingModalOpen}
-            >
-              {isOverflowOpen && (
-                <View
-                  style={{
-                    backgroundColor: 'rgba(0,71,187,0.9)',
-                    paddingHorizontal: 24,
-                    paddingVertical: 16,
-                    flexDirection: 'row'
-                  }}
-                >
-                  <View style={{ flex: 1 }}>
-                    <Text style={[styles.menuText, { color: '#FFF' }]}>
-                      {!isDelete ? 'Comment edited.' : 'Comment deleted.'}
-                    </Text>
-                  </View>
-                </View>
-              )}
-            </InputKeyboard>
-          ) : (
-            <View
-              style={{
-                backgroundColor: '#fff',
-                alignItems: 'center',
-                position: 'absolute',
-                width: SCREEN_WIDTH,
-                elevation: 20,
-                bottom: 0
+      <SafeAreaView style={styles.container}>
+        <ListHeader
+          headerName="Comments"
+          leftButtonDisable={isLoading || isOverflowOpen}
+        />
+        <CommentList
+          _handleLoadMore={this._handleLoadMore}
+          refreshing={refreshing}
+          _handleRefresh={this._handleRefresh}
+          _handleEditComment={this._handleEditComment}
+          _selectComment={this._selectComment}
+          _openModal={this._openModal}
+          comments={comments}
+          navigation={this.props.navigation}
+          isLoading={isLoading}
+          editing={editing}
+        />
+        <Modal
+          animationIn="slideInUp"
+          animationInTiming={500}
+          animationOut="slideOutDown"
+          animationOutTiming={500}
+          deviceHeight={FULL_SCREEN_HEIGHT}
+          isVisible={isSettingModalOpen}
+          onBackdropPress={this._closeSettingModal}
+          style={{
+            justifyContent: 'flex-end',
+            margin: 0
+          }}
+        >
+          <View style={styles.iosMenuStyle}>
+            <TouchableHighlight
+              underlayColor="#FAFAFA"
+              onPress={() => {
+                this._handleEditComment()
               }}
             >
-              <Text
-                style={[
-                  styles.title,
-                  { fontSize: 14, marginBottom: 12, marginTop: 10 }
-                ]}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 16,
+                  paddingHorizontal: 24
+                }}
               >
-                Sign in to comment
-              </Text>
-              <SignInButton />
-            </View>
-          )}
-          <DeleteModal
-            isModalOpen={isModalOpen}
-            _closeModal={this._closeModal}
-            _deleteComment={this._deleteComment}
-          />
-        </SafeAreaView>
-      </View>
+                <View style={{ width: 50 }}>{icons.edit}</View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.menuTextLg}>Edit</Text>
+                </View>
+              </View>
+            </TouchableHighlight>
+            <Divider styles={{ marginVertical: 0 }} />
+            <TouchableHighlight
+              underlayColor="#FAFAFA"
+              onPress={() => {
+                this.setState({ isSettingModalOpen: false }, () => {
+                  setTimeout(() => {
+                    this.setState({ isModalOpen: true })
+                  }, 600)
+                })
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 16,
+                  paddingHorizontal: 24
+                }}
+              >
+                <View style={{ width: 50 }}>{icons.delete}</View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.menuTextLg}>Delete</Text>
+                </View>
+              </View>
+            </TouchableHighlight>
+          </View>
+        </Modal>
+        {loggedIn ? (
+          <InputKeyboard
+            keyboardHeight={this.keyboardHeight}
+            isEdit={isEdit}
+            editing={editing}
+            ref={this.inputRef}
+            picture={picture}
+            inputHeight={inputHeight}
+            inputValue={inputValue}
+            _onSubmit={this._onSubmit}
+            handleChangeText={this.handleChangeText}
+            selectedComment={selectedComment}
+            isSettingModalOpen={isSettingModalOpen}
+          >
+            {isOverflowOpen && (
+              <View
+                style={{
+                  backgroundColor: 'rgba(0,71,187,0.9)',
+                  paddingHorizontal: 24,
+                  paddingVertical: 16,
+                  flexDirection: 'row'
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.menuText, { color: '#FFF' }]}>
+                    {!isDelete ? 'Comment edited.' : 'Comment deleted.'}
+                  </Text>
+                </View>
+              </View>
+            )}
+          </InputKeyboard>
+        ) : (
+          <View
+            style={{
+              backgroundColor: '#fff',
+              alignItems: 'center',
+              position: 'absolute',
+              width: SCREEN_WIDTH,
+              elevation: 20,
+              bottom: 0
+            }}
+          >
+            <Text
+              style={[
+                styles.title,
+                { fontSize: 14, marginBottom: 12, marginTop: 10 }
+              ]}
+            >
+              Sign in to comment
+            </Text>
+            <SignInButton />
+          </View>
+        )}
+        <DeleteModal
+          isModalOpen={isModalOpen}
+          _closeModal={this._closeModal}
+          _deleteComment={this._deleteComment}
+        />
+      </SafeAreaView>
     )
   }
 }

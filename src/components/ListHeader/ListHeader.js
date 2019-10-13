@@ -13,6 +13,7 @@ import {
   STATUS_BAR_HEIGHT,
   HEADER_BAR_MARGIN_TOP
 } from '../../assets/dimension'
+import CustomStatusBar from '../CustomStatusBar'
 
 export const MyStatusBar = ({ backgroundColor, ...props }) => (
   <View style={[{ height: STATUS_BAR_HEIGHT, backgroundColor }]}>
@@ -30,65 +31,68 @@ export default withNavigation(
     leftButtonDisable = false
   }) => {
     return (
-      <View
-        style={{
-          paddingTop: HEADER_BAR_MARGIN_TOP + 6,
-          paddingHorizontal: 24,
-          paddingBottom: 12,
-          justifyContent: 'center',
-          flexDirection: 'row',
-          backgroundColor: '#FAFAFA',
-          // marginBottom: 12,
-          elevation: 2
-        }}
-      >
-        <TouchableWithoutFeedback
-          onPress={() => {
-            if (!leftButtonDisable) {
-              navigation.goBack()
-            }
-          }}
-        >
-          <View
-            style={{
-              width: 50,
-              justifyContent: 'center',
-              paddingBottom: 4 + 1,
-              opacity: leftButtonDisable ? 0.5 : 1
-            }}
-          >
-            {leftButton ? leftButton : icons.back_blue({ size: 18 })}
-          </View>
-        </TouchableWithoutFeedback>
+      <React.Fragment>
+        <CustomStatusBar />
         <View
           style={{
-            flex: 1,
-            paddingBottom: 3
-            // alignItems: 'center'
+            paddingTop: HEADER_BAR_MARGIN_TOP + 6,
+            paddingHorizontal: 24,
+            paddingBottom: 12,
+            justifyContent: 'center',
+            flexDirection: 'row',
+            backgroundColor: palette.backgroundTabColor,
+            // marginBottom: 12,
+            elevation: 2
           }}
         >
-          <Text
-            style={{
-              fontSize: 18,
-              color: palette.primaryTypographyColor,
-              fontFamily: 'Montserrat-Medium'
+          <TouchableWithoutFeedback
+            onPress={() => {
+              if (!leftButtonDisable) {
+                navigation.goBack()
+              }
             }}
           >
-            {headerName}
-          </Text>
-        </View>
-        <TouchableWithoutFeedback onPress={() => handleRightButton()}>
+            <View
+              style={{
+                width: 50,
+                justifyContent: 'center',
+                paddingBottom: 4 + 1,
+                opacity: leftButtonDisable ? 0.5 : 1
+              }}
+            >
+              {leftButton ? leftButton : icons.back_blue({ size: 18 })}
+            </View>
+          </TouchableWithoutFeedback>
           <View
             style={{
-              width: 50,
-              justifyContent: 'center',
-              alignItems: 'flex-end'
+              flex: 1,
+              paddingBottom: 3
+              // alignItems: 'center'
             }}
           >
-            {rightButton}
+            <Text
+              style={{
+                fontSize: 18,
+                color: palette.primaryTypographyColor,
+                fontFamily: 'Montserrat-Medium'
+              }}
+            >
+              {headerName}
+            </Text>
           </View>
-        </TouchableWithoutFeedback>
-      </View>
+          <TouchableWithoutFeedback onPress={() => handleRightButton()}>
+            <View
+              style={{
+                width: 50,
+                justifyContent: 'center',
+                alignItems: 'flex-end'
+              }}
+            >
+              {rightButton}
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </React.Fragment>
     )
   }
 )

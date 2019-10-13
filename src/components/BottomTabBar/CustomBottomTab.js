@@ -3,10 +3,12 @@ import {
   View,
   TouchableWithoutFeedback,
   Keyboard,
-  Dimensions
+  Dimensions,
+  StyleSheet
 } from 'react-native'
 import { CustomIcon } from '../../assets/icons'
 import palette from '../../assets/palette'
+import { SCREEN_WIDTH, BOTTOM_TAB_BAR_HEIGHT } from '../../assets/dimension'
 
 const iconTab = ['home', 'map', 'list', 'personal']
 
@@ -53,10 +55,10 @@ class CustomBottomTab extends React.PureComponent {
     return isVisible ? (
       <View
         style={{
-          borderTopWidth: 0.5,
-          borderTopColor: palette.backgroundColorGrey,
-          height: 50,
-          width: Dimensions.get('window').width,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderTopColor: palette.onPressColor,
+          height: BOTTOM_TAB_BAR_HEIGHT,
+          width: SCREEN_WIDTH,
           flexDirection: 'row'
         }}
       >

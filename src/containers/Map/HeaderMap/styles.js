@@ -21,9 +21,19 @@ export default StyleSheet.create({
     width: '100%',
     maxHeight: 171,
     top: 0,
-    paddingTop: HEADER_BAR_MARGIN_TOP,
+    paddingTop:
+      Platform.OS === 'ios'
+        ? HEADER_BAR_MARGIN_TOP + STATUS_BAR_HEIGHT
+        : HEADER_BAR_MARGIN_TOP,
     zIndex: 1000,
     ...shadowIOS
+  },
+  searchBoxAbsoluteStyle: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 20 : 0,
+    left: 0,
+    right: 0,
+    zIndex: 1
   },
   rowStyle: {
     flexDirection: 'row',

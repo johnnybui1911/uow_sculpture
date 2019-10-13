@@ -30,7 +30,7 @@ const inputBox = {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.backgroundColorGrey
+    backgroundColor: palette.backgroundColorWhite
   },
   header: { height: HEADER_HEIGHT, backgroundColor: palette.primaryColor },
   title: {

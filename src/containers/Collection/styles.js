@@ -42,7 +42,7 @@ const imageContainer = {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.backgroundColorGrey
+    backgroundColor: palette.backgroundColorWhite
   },
   flatList: {
     flex: 1

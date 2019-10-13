@@ -27,7 +27,8 @@ import palette from './assets/palette'
 import { icons } from './assets/icons'
 import CongratModal from './components/CongratModal/CongratModal'
 import { storeData, getData, clearData } from './library/asyncStorage'
-import { MyStatusBar } from './components/ListHeader/ListHeader'
+
+const MainView = Platform.OS === 'ios' ? View : SafeAreaView
 
 // clearData('intro')
 class MainScreen extends React.PureComponent {
@@ -56,7 +57,7 @@ class MainScreen extends React.PureComponent {
   render() {
     const { isCongratModalVisible } = this.state
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <MainView style={{ flex: 1 }}>
         {Platform.OS === 'android' ? (
           <StatusBar
             barStyle="light-content"
@@ -96,7 +97,7 @@ class MainScreen extends React.PureComponent {
           isCongratModalVisible={isCongratModalVisible}
           closeModal={this._closeModal}
         />
-      </SafeAreaView>
+      </MainView>
     )
   }
 }

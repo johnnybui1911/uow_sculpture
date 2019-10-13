@@ -94,6 +94,12 @@ class PersonalScreen extends React.PureComponent {
       outputRange: [1, 1, 0],
       extrapolate: 'clamp'
     })
+
+    const scaleImageAnimation = this.state.scrollY.interpolate({
+      inputRange: [0, 240, SCROLLABLE_HEIGHT],
+      outputRange: [0, 0.5, 1],
+      extrapolate: 'clamp'
+    })
     return (
       <Animated.View
         style={{
@@ -108,7 +114,11 @@ class PersonalScreen extends React.PureComponent {
           transform: [{ translateY: translateY }]
         }}
       >
-        <CollapsibleHeader user={user} opacityAnimate={opacityAnimate} />
+        <CollapsibleHeader
+          user={user}
+          opacityAnimate={opacityAnimate}
+          scaleImageAnimation={scaleImageAnimation}
+        />
         <Animated.View
           style={{
             opacity: opacityAnimateHide,

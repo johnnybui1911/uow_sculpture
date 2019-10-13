@@ -4,7 +4,8 @@ import {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
   STATUS_BAR_HEIGHT,
-  BUTTON_HEIGHT
+  BUTTON_HEIGHT,
+  FULL_SCREEN_HEIGHT
 } from '../../assets/dimension'
 
 const shadowStyle = {
@@ -21,13 +22,13 @@ const shadowStyle = {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.backgroundColorGrey
+    backgroundColor: palette.backgroundColorWhite
   },
   mapStyle: {
     flex: 1,
     position: 'absolute',
     bottom: 0,
-    height: SCREEN_HEIGHT,
+    height: FULL_SCREEN_HEIGHT,
     width: SCREEN_WIDTH
   },
   title: {

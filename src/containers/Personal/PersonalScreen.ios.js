@@ -14,6 +14,17 @@ import {
   Image,
   StatusBar
 } from 'react-native'
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator
+} from 'react-native-indicators'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
@@ -28,12 +39,16 @@ import {
   PROFILE_TAB_BAR_HEIGHT,
   SCROLLABLE_HEIGHT,
   BOTTOM_TAB_BAR_HEIGHT,
-  MINI_HEADER_HEIGHT
+  MINI_HEADER_HEIGHT,
+  STATUS_BAR_HEIGHT
 } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
 import { shadowIOS } from '../../assets/rootStyles'
 import CollapsibleHeader from './CollapsibleHeader'
+import CustomStatusBar from '../../components/CustomStatusBar'
+import { NavigationEvents } from 'react-navigation'
+import animations from '../../assets/animations'
 
 const initialLayout = {
   height: 0,
@@ -54,9 +69,11 @@ class PersonalScreen extends React.PureComponent {
     },
 
     onPanResponderMove: (e, gestureState) => {
-      if (gestureState.dy > 0 && gestureState.dy <= 100) {
+      const { scrollTop } = this.state
+      if (gestureState.dy > 0 && gestureState.dy <= 100 && scrollTop) {
         // console.log(gestureState)
         this.state.scrollHeader.setValue(gestureState.dy)
+        this.state.loadingAnimate.setValue(gestureState.dy)
       }
     },
     onPanResponderRelease: (e, gestureState) => {
@@ -68,17 +85,27 @@ class PersonalScreen extends React.PureComponent {
             toValue: 0
           }).start()
         } else {
+          // this.state.loadingAnimate.setValue(0)
           this.setState({ refreshing: true }, () => {
             // Animated.timing(this.state.scrollHeader, {
             //   toValue: 0,
             //   delay: 1000
             // }).start(() => this.setState({ refreshing: false }))
 
+            Animated.loop(
+              Animated.sequence([
+                Animated.timing(this.state.loadingAnimate, {
+                  toValue: 100,
+                  duration: 1000
+                })
+              ])
+            ).start()
             this.props
               .fetchDataThunk()
               .then(() => {
                 Animated.timing(this.state.scrollHeader, {
-                  toValue: 0
+                  toValue: 0,
+                  delay: 2000
                 }).start(() => this.setState({ refreshing: false }))
               })
               .catch(error => {
@@ -145,6 +172,7 @@ class PersonalScreen extends React.PureComponent {
   })
 
   state = {
+    loadingAnimate: new Animated.Value(0),
     scrollHeader: new Animated.Value(0),
     scrollY: new Animated.Value(0),
     index: 0,
@@ -154,7 +182,8 @@ class PersonalScreen extends React.PureComponent {
       { key: 'ABOUT', title: 'ABOUT' }
     ],
     refreshing: false,
-    scrollTop: true
+    scrollTop: true,
+    showMiniHeader: false
   }
 
   _handleRefresh = () => {
@@ -206,6 +235,12 @@ class PersonalScreen extends React.PureComponent {
       extrapolate: 'clamp'
     })
 
+    const scaleImageAnimation = this.state.scrollY.interpolate({
+      inputRange: [0, 240, SCROLLABLE_HEIGHT],
+      outputRange: [0, 0.5, 1],
+      extrapolate: 'clamp'
+    })
+
     // const translateY = this.state.scrollY.interpolate({
     //   inputRange: [0, SCROLLABLE_HEIGHT],
     //   outputRange: [0, -SCROLLABLE_HEIGHT],
@@ -246,7 +281,11 @@ class PersonalScreen extends React.PureComponent {
         }}
         {...this._panResponder.panHandlers}
       >
-        <CollapsibleHeader user={user} opacityAnimate={opacityAnimate} />
+        <CollapsibleHeader
+          user={user}
+          opacityAnimate={opacityAnimate}
+          scaleImageAnimation={scaleImageAnimation}
+        />
         <Animated.View
           style={{
             opacity: opacityAnimateHide,
@@ -353,6 +392,11 @@ class PersonalScreen extends React.PureComponent {
                 } else {
                   this.setState({ scrollTop: true })
                 }
+                if (y > 250) {
+                  this.setState({ showMiniHeader: true })
+                } else {
+                  this.setState({ showMiniHeader: false })
+                }
                 this.alignScrollViews(routeKey, y)
               }
             }
@@ -375,15 +419,50 @@ class PersonalScreen extends React.PureComponent {
 
   render() {
     const { user, isLoadingUser } = this.props
-    const { refreshing } = this.state
+    const { showMiniHeader, refreshing } = this.state
+
+    const loadingAnimation = this.state.loadingAnimate.interpolate({
+      inputRange: [0, 100],
+      outputRange: [0, 1],
+      extrapolate: 'clamp'
+    })
 
     const translateHeaderY = this.state.scrollHeader.interpolate({
       inputRange: [0, 100],
       outputRange: [0, 100],
       extrapolate: 'clamp'
     })
+
+    const opacityAnimateHide = this.state.scrollY.interpolate({
+      inputRange: [240, SCROLLABLE_HEIGHT],
+      outputRange: [1, 0],
+      extrapolate: 'clamp'
+    })
     return (
       <SafeAreaView style={styles.container}>
+        <NavigationEvents
+          onWillFocus={() => {
+            StatusBar.setBarStyle('light-content')
+          }}
+          onWillBlur={() => {
+            StatusBar.setBarStyle('dark-content')
+          }}
+        />
+        <StatusBar
+          barStyle={showMiniHeader ? 'dark-content' : 'light-content'}
+        />
+        <Animated.View
+          style={{
+            height: STATUS_BAR_HEIGHT,
+            backgroundColor: palette.primaryColor,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            opacity: opacityAnimateHide,
+            zIndex: 2
+          }}
+        />
         <Animated.View
           style={{
             backgroundColor: palette.primaryColor,
@@ -392,10 +471,22 @@ class PersonalScreen extends React.PureComponent {
             alignContent: 'center'
           }}
         >
-          <ActivityIndicator
+          <LottieView
+            source={animations.header_loading}
+            progress={loadingAnimation}
+          />
+          {/* <SkypeIndicator
+            color="white"
+            // count={2}
+            animating={false}
+            hidesWhenStopped={false}
+          /> */}
+          {/* <ActivityIndicator
             size="large"
             color={palette.backgroundColorWhite}
-          />
+            hidesWhenStopped={false}
+            animating={false}
+          /> */}
         </Animated.View>
         <TabView
           style={{ flex: 1 }}

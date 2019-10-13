@@ -116,14 +116,12 @@ class Header extends React.Component {
       } else {
         return (
           <Animated.View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              transform: [{ translateY: header_translateY }],
-              zIndex: 1
-            }}
+            style={[
+              styles.searchBoxAbsoluteStyle,
+              {
+                transform: [{ translateY: header_translateY }]
+              }
+            ]}
           >
             <View style={[styles.searchBoxContainer]}>
               {this.props.children}

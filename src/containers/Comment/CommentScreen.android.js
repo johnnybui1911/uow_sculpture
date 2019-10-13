@@ -20,7 +20,7 @@ import {
 import baseAxios from '../../library/api'
 import InputKeyboard from './InputKeyboard'
 import DeleteModal from './DeleteModal'
-import ListHeader, { MyStatusBar } from '../../components/ListHeader/ListHeader'
+import ListHeaderfrom '../../components/ListHeader/ListHeader'
 import { SCREEN_WIDTH } from '../../assets/dimension'
 import SignInButton from '../../components/SignIn/SignInButton'
 
@@ -319,8 +319,6 @@ class CommentScreen extends React.PureComponent {
     } = this.props
 
     return (
-      // <View style={{ flex: 1 }}>
-      //   <MyStatusBar backgroundColor="#FAFAFA" barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
         <ListHeader
           headerName="Comments"
@@ -396,7 +394,6 @@ class CommentScreen extends React.PureComponent {
           _deleteComment={this._deleteComment}
         />
       </SafeAreaView>
-      // </View>
     )
   }
 }

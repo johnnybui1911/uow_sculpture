@@ -48,7 +48,6 @@ import {
 } from '../../redux/actions'
 import SearchView from '../../components/SearchButton/SearchView'
 import { compareCoordinate } from '../../library/compareCoordinate'
-import { MyStatusBar } from '../../components/ListHeader/ListHeader'
 
 export class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
@@ -459,7 +458,6 @@ export class MapScreen extends React.PureComponent {
     if (region) {
       return (
         <SafeAreaView style={styles.container}>
-          {/* <MyStatusBar backgroundColor="transparent" /> */}
           <MapContext.Provider
             value={{
               case1_footer_translateY,

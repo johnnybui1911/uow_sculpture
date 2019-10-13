@@ -8,7 +8,7 @@ import {
   PROFILE_HEADER_HEIGHT
 } from '../../assets/dimension'
 
-const CollapsibleHeader = ({ user, opacityAnimate }) => {
+const CollapsibleHeader = ({ user, opacityAnimate, scaleImageAnimation }) => {
   return (
     <Animated.View
       style={{
@@ -31,7 +31,32 @@ const CollapsibleHeader = ({ user, opacityAnimate }) => {
           flexDirection: 'row'
         }}
       >
-        <View style={{ flex: 1 }}>
+        <View
+          style={{
+            width: 40
+          }}
+        >
+          <Animated.View
+            style={{
+              height: 40,
+              width: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 40,
+              backgroundColor: palette.secondaryTypographyColor,
+              overflow: 'hidden',
+              transform: [{ scale: scaleImageAnimation }],
+              opacity: opacityAnimate
+            }}
+          >
+            <Image
+              source={{ uri: user.picture }}
+              style={{ height: 40, width: 40 }}
+              resizeMode="cover"
+            />
+          </Animated.View>
+        </View>
+        <View style={{ flex: 1, paddingLeft: 12 }}>
           <Animated.Text
             style={[
               styles.title,
@@ -42,30 +67,6 @@ const CollapsibleHeader = ({ user, opacityAnimate }) => {
           >
             {!user.username ? null : user.username}
           </Animated.Text>
-        </View>
-        <View
-          style={{
-            width: 40,
-            alignItems: 'flex-end'
-          }}
-        >
-          <View
-            style={{
-              height: 40,
-              width: 40,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 40,
-              backgroundColor: palette.secondaryTypographyColor,
-              overflow: 'hidden'
-            }}
-          >
-            <Image
-              source={{ uri: user.picture }}
-              style={{ height: 40, width: 40 }}
-              resizeMode="cover"
-            />
-          </View>
         </View>
       </Animated.View>
     </Animated.View>

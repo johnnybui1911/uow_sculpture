@@ -8,6 +8,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Modal,
+  StatusBar,
   TouchableWithoutFeedback
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -23,6 +24,7 @@ import {
   SCREEN_HEIGHT
 } from '../../assets/dimension'
 import { icons } from '../../assets/icons'
+import BlackModal from '../../components/BlackModal/BlackModal'
 
 const PersonalHeader = ({
   user,
@@ -46,8 +48,19 @@ const PersonalHeader = ({
   const [loadingImage, setLoadingImage] = React.useState(false)
   const [modalVisible, setModalVisible] = React.useState(false)
 
+  const openImageViewer = () => {
+    setModalVisible(true)
+    StatusBar.setBarStyle('dark-content')
+  }
+
+  const closeImageViewer = () => {
+    setModalVisible(false)
+    StatusBar.setBarStyle('light-content')
+  }
+
   return loggedIn ? (
     <View style={[styles.profileFixedContainer]}>
+      {modalVisible && <BlackModal opacity={1} />}
       <Modal visible={modalVisible} transparent>
         <ImageViewer
           imageUrls={[
@@ -62,7 +75,7 @@ const PersonalHeader = ({
           ]}
           enableImageZoom
           enableSwipeDown
-          onCancel={() => setModalVisible(false)}
+          onCancel={closeImageViewer}
           renderIndicator={(currentIndex, allSize) => (
             <View
               style={{
@@ -80,9 +93,7 @@ const PersonalHeader = ({
                   alignItems: 'flex-end'
                 }}
               >
-                <TouchableWithoutFeedback
-                  onPress={() => setModalVisible(false)}
-                >
+                <TouchableWithoutFeedback onPress={closeImageViewer}>
                   <View
                     style={{
                       padding: 24
@@ -120,7 +131,7 @@ const PersonalHeader = ({
         }}
       >
         <TouchableOpacity
-          onPress={() => setModalVisible(true)}
+          onPress={openImageViewer}
           style={{
             height: 100,
             width: 100,

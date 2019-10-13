@@ -26,7 +26,7 @@ const dot = {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.backgroundColorGrey
+    backgroundColor: palette.backgroundColorWhite
   },
   closeButton: {
     position: 'absolute',
