@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, View, Text, Image } from 'react-native'
+import { Animated, View, Text, Image, Platform } from 'react-native'
 import palette from '../../assets/palette'
 import styles from './styles'
 import {
@@ -36,25 +36,41 @@ const CollapsibleHeader = ({ user, opacityAnimate, scaleImageAnimation }) => {
             width: 40
           }}
         >
-          <Animated.View
-            style={{
-              height: 40,
-              width: 40,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 40,
-              backgroundColor: palette.secondaryTypographyColor,
-              overflow: 'hidden',
-              transform: [{ scale: scaleImageAnimation }],
-              opacity: opacityAnimate
-            }}
-          >
-            <Image
+          {Platform.OS === 'ios' ? (
+            <Animated.View
+              style={{
+                height: 40,
+                width: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 40,
+                backgroundColor: palette.secondaryTypographyColor,
+                overflow: 'hidden',
+                transform: [{ scale: scaleImageAnimation }],
+                opacity: opacityAnimate
+              }}
+            >
+              <Image
+                source={{ uri: user.picture }}
+                style={{
+                  height: 40,
+                  width: 40
+                }}
+                resizeMode="cover"
+              />
+            </Animated.View>
+          ) : (
+            <Animated.Image
               source={{ uri: user.picture }}
-              style={{ height: 40, width: 40 }}
-              resizeMode="cover"
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 20,
+                transform: [{ scale: scaleImageAnimation }],
+                opacity: opacityAnimate
+              }}
             />
-          </Animated.View>
+          )}
         </View>
         <View style={{ flex: 1, paddingLeft: 12 }}>
           <Animated.Text

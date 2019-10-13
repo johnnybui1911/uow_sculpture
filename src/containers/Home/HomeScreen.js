@@ -12,7 +12,12 @@ import {
 } from 'react-native'
 import { Notifications } from 'expo'
 import { connect } from 'react-redux'
-import { Placeholder, PlaceholderMedia, Fade } from 'rn-placeholder'
+import {
+  Placeholder,
+  PlaceholderMedia,
+  Fade,
+  PlaceholderLine
+} from 'rn-placeholder'
 import LottieView from 'lottie-react-native'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
@@ -254,6 +259,13 @@ class HomeScreen extends React.PureComponent {
                 <Placeholder Animation={Fade}>
                   <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
                 </Placeholder>
+                <View style={styles.fixedImageContentBox}>
+                  <Placeholder Animation={Fade} style={{ paddingTop: 12 }}>
+                    <PlaceholderLine width={20} />
+                    <PlaceholderLine width={60} />
+                    <PlaceholderLine width={40} />
+                  </Placeholder>
+                </View>
               </View>
             ) : (
               // <NearbyList

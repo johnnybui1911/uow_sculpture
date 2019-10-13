@@ -4,17 +4,19 @@ import Constants from 'expo-constants'
 // console.log(Dimensions.get('screen').height)
 // console.log(Dimensions.get('window').height)
 export const DEFAULT_PADDING = 12
-const checkHeight =
-  Dimensions.get('window').height < Dimensions.get('screen').height
+// const checkHeight =
+//   Dimensions.get('window').height < Dimensions.get('screen').height
 
-export const FULL_SCREEN_HEIGHT = Dimensions.get('screen').height
+export const FULL_SCREEN_HEIGHT = Math.floor(Dimensions.get('screen').height)
 
-export const STATUS_BAR_HEIGHT =
-  Platform.OS === 'ios'
-    ? 20
-    : Constants.statusBarHeight === 0
-    ? Constants.statusBarHeight
-    : 24
+const ANDROID_STATUS_BAR =
+  StatusBar.currentHeight === 0 ? 24 : StatusBar.currentHeight
+
+export const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 20 : ANDROID_STATUS_BAR
+
+export const DEVICE_HAS_NOTCH =
+  Platform.OS === 'android' && STATUS_BAR_HEIGHT > 24
+
 export const SCREEN_HEIGHT =
   Platform.OS === 'android'
     ? FULL_SCREEN_HEIGHT
@@ -22,6 +24,7 @@ export const SCREEN_HEIGHT =
       //   ? FULL_SCREEN_HEIGHT
       //   : Dimensions.get('window').height // - STATUS_BAR_HEIGHT
       FULL_SCREEN_HEIGHT - 20
+
 export const SCREEN_WIDTH = Dimensions.get('window').width
 export const HEADER_AUTH = 209
 export const BOTTOM_TAB_BAR_HEIGHT = 50

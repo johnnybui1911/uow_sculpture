@@ -62,7 +62,10 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
                   {selectedMarker.name}
                 </Text>
                 <View style={{}}>
-                  <Text numberOfLines={2} style={styles.description}>
+                  <Text
+                    numberOfLines={2}
+                    style={[styles.description, { marginTop: 5 }]}
+                  >
                     {selectedMarker.description.location}
                   </Text>
                 </View>

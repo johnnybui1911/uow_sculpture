@@ -4,7 +4,7 @@ import { View, Dimensions, Animated } from 'react-native'
 import { DOWN_STATE, UP_STATE } from './state'
 
 import Animator from './Animator'
-import { SCREEN_HEIGHT } from '../../assets/dimension'
+import { SCREEN_HEIGHT, DEVICE_HAS_NOTCH } from '../../assets/dimension'
 
 export default class BottomDrawer extends Component {
   static propTypes = {
@@ -65,7 +65,7 @@ export default class BottomDrawer extends Component {
   }
 
   static defaultProps = {
-    offset: 0,
+    offset: DEVICE_HAS_NOTCH ? 12 : 0,
     startUp: true,
     backgroundColor: '#ffffff',
     roundedEdges: true,

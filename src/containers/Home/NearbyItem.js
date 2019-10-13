@@ -1,21 +1,15 @@
 /* eslint-disable react/sort-comp */
 import React from 'react'
-import {
-  View,
-  Text,
-  Image,
-  TouchableWithoutFeedback,
-  Animated
-} from 'react-native'
+import { View, Image, TouchableWithoutFeedback, Animated } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { connect } from 'react-redux'
 import styles, { IMAGE_WIDTH } from './styles'
 import { icons } from '../../assets/icons'
-import formatDistance from '../../library/formatDistance'
 import images from '../../assets/images'
 import { _like, _unlike } from '../../redux/actions'
 import baseAxios from '../../library/api'
 import { _setLikeId } from '../../redux/actions/markerActions'
+import ContentBox from './ContentBox'
 
 class NearbyItem extends React.PureComponent {
   constructor(props) {
@@ -181,19 +175,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withNavigation(NearbyItem))
-
-const ContentBox = ({ item, distanceMatrix }) => {
-  return (
-    <View style={styles.fixedImageContentBox}>
-      <Text style={styles.distance}>
-        {distanceMatrix && distanceMatrix[item.id]
-          ? formatDistance(distanceMatrix[item.id].distance)
-          : ''}
-      </Text>
-      <Text numberOfLines={2} style={styles.title}>
-        {item.name}
-      </Text>
-      <Text style={[styles.description]}>{item.features.maker}</Text>
-    </View>
-  )
-}
