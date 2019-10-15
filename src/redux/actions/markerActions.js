@@ -121,7 +121,7 @@ export const fetchDataThunk = () => {
           await dispatch(fetchUserDataThunk())
           await dispatch(fetchDistanceMatrix(userCoordinate, newData))
           resolve({ data: newData })
-          // geofencingRegion(newData)
+          geofencingRegion(newData)
         })
         .catch(e => {
           console.log(e.message)

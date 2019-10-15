@@ -78,40 +78,47 @@ class PersonalScreen extends React.PureComponent {
     },
     onPanResponderRelease: (e, gestureState) => {
       this.state.scrollHeader.flattenOffset()
+      console.log(gestureState)
       const { refreshing } = this.state
       if (!refreshing) {
-        if (gestureState.dy > 0 && gestureState.dy <= 80) {
-          Animated.timing(this.state.scrollHeader, {
-            toValue: 0
-          }).start()
+        if (
+          (gestureState.dy > 0 && gestureState.dy <= 80) ||
+          gestureState.dy < 0
+        ) {
+          Animated.parallel([
+            Animated.timing(this.state.loadingAnimate, {
+              toValue: 0,
+              duration: 800
+            }),
+            Animated.timing(this.state.scrollHeader, {
+              toValue: 0,
+              duration: 500
+            })
+          ]).start()
         } else {
           // this.state.loadingAnimate.setValue(0)
           this.setState({ refreshing: true }, () => {
-            // Animated.timing(this.state.scrollHeader, {
-            //   toValue: 0,
-            //   delay: 1000
-            // }).start(() => this.setState({ refreshing: false }))
+            this.animation.play()
 
-            Animated.loop(
-              Animated.sequence([
-                Animated.timing(this.state.loadingAnimate, {
-                  toValue: 100,
-                  duration: 1000
-                })
-              ])
-            ).start()
             this.props
               .fetchDataThunk()
               .then(() => {
                 Animated.timing(this.state.scrollHeader, {
                   toValue: 0,
-                  delay: 2000
-                }).start(() => this.setState({ refreshing: false }))
+                  duration: 500
+                }).start(() => {
+                  // this.animation.reset()
+                  this.setState({ refreshing: false })
+                })
               })
               .catch(error => {
                 Animated.timing(this.state.scrollHeader, {
-                  toValue: 0
-                }).start(() => this.setState({ refreshing: false }))
+                  toValue: 0,
+                  duration: 500
+                }).start(() => {
+                  // this.animation.reset()
+                  this.setState({ refreshing: false })
+                })
                 console.log(error)
               })
           })
@@ -442,7 +449,9 @@ class PersonalScreen extends React.PureComponent {
       <SafeAreaView style={styles.container}>
         <NavigationEvents
           onWillFocus={() => {
-            StatusBar.setBarStyle('light-content')
+            StatusBar.setBarStyle(
+              showMiniHeader ? 'dark-content' : 'light-content'
+            )
           }}
           onWillBlur={() => {
             StatusBar.setBarStyle('dark-content')
@@ -472,6 +481,9 @@ class PersonalScreen extends React.PureComponent {
           }}
         >
           <LottieView
+            ref={animation => {
+              this.animation = animation
+            }}
             source={animations.header_loading}
             progress={loadingAnimation}
           />

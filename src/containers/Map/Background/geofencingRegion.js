@@ -10,11 +10,13 @@ export default async (data = []) => {
   } = await Permissions.askAsync(Permissions.LOCATION)
 
   if (status !== 'granted') {
+    console.log('Not granted')
     return
   }
 
   if (Platform.OS === 'ios') {
     if (ios !== 'always') {
+      console.log('Ios not always')
       return
     }
   }
@@ -27,7 +29,7 @@ export default async (data = []) => {
         return {
           identifier: `${id}-${name}`,
           ...coordinate,
-          radius: 45
+          radius: 15
         }
       })
 

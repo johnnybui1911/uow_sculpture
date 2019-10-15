@@ -22,7 +22,8 @@ import {
   BOTTOM_TAB_BAR_HEIGHT,
   COLLAPSED_HEIGHT_STEPBOX,
   EXPANDED_HEIGHT_STEPBOX,
-  MARGIN_BOTTOM_STEPBOX
+  MARGIN_BOTTOM_STEPBOX,
+  NAVIGATION_BAR_HEIGHT
 } from '../../../assets/dimension'
 import images from '../../../assets/images'
 import { MapContext } from '../context/MapContext'
@@ -30,8 +31,9 @@ import formatDistance from '../../../library/formatDistance'
 import palette from '../../../assets/palette'
 import { selectMarker } from '../../../redux/actions'
 
-const MINI_IMAGE_POSITION = SCREEN_HEIGHT - 220 - 96
-const LCOATION_BUTTON_POSITION = SCREEN_HEIGHT - 220 - 66
+const MINI_IMAGE_POSITION = SCREEN_HEIGHT - 220 - 96 - NAVIGATION_BAR_HEIGHT
+const LCOATION_BUTTON_POSITION =
+  SCREEN_HEIGHT - 220 - 66 - NAVIGATION_BAR_HEIGHT
 const ANIMATE_DURATION = 250
 
 class Footer extends React.PureComponent {
@@ -185,6 +187,7 @@ class Footer extends React.PureComponent {
           />
         </Animated.View>
         <BottomDrawer
+          offset={NAVIGATION_BAR_HEIGHT}
           _translateY={footer_translateY}
           containerHeight={220}
           downDisplay={220 - 72}
@@ -221,52 +224,6 @@ class Footer extends React.PureComponent {
     } = this.context
     return (
       <React.Fragment>
-        {/* <Animated.View
-          style={{
-            position: 'absolute',
-            bottom: header_translateY,
-            left: 0,
-            right: 0
-          }}
-        >
-          <View
-            style={[
-              {
-                bottom: MARGIN_BOTTOM_STEPBOX + 12,
-                position: 'absolute',
-                right: 24,
-                zIndex: 0
-              }
-            ]}
-          >
-            <ButtonMyLocation
-              centered={centered}
-              _centerUserLocation={_centerUserLocation}
-            />
-          </View>
-          <View
-            style={[styles.showStepButton, { elevation: showSteps ? 20 : 0 }]}
-          >
-            <TouchableOpacity
-              style={[
-                showSteps ? styles.secondary_button : styles.button,
-                { marginVertical: 16, elevation: 0 }
-              ]}
-              onPress={() => {
-                setShowSteps(!showSteps)
-                this.drawer.toggleDrawerState()
-              }}
-            >
-              <View style={{ flex: 1 }}>
-                {showSteps ? (
-                  <Text style={[styles.secondaryTitleButton]}>SHOW MAPS</Text>
-                ) : (
-                  <Text style={[styles.titleButton]}>SHOW STEPS</Text>
-                )}
-              </View>
-            </TouchableOpacity>
-          </View>
-        </Animated.View> */}
         <Animated.View
           style={[
             {
@@ -322,7 +279,11 @@ class Footer extends React.PureComponent {
         <BottomDrawer
           _translateY={footer_translateY}
           containerHeight={EXPANDED_HEIGHT_STEPBOX}
-          downDisplay={EXPANDED_HEIGHT_STEPBOX - COLLAPSED_HEIGHT_STEPBOX}
+          downDisplay={
+            EXPANDED_HEIGHT_STEPBOX -
+            COLLAPSED_HEIGHT_STEPBOX -
+            NAVIGATION_BAR_HEIGHT
+          }
           backgroundColor="transparent"
           startUp={false}
           roundedEdges={false}

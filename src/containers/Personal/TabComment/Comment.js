@@ -5,16 +5,18 @@ import moment from 'moment'
 import styles from '../styles'
 import palette from '../../../assets/palette'
 import images from '../../../assets/images'
+import { RectButton } from 'react-native-gesture-handler'
 
 const Comment = ({ item, navigation }) => {
   const { text, submitDate, photoURL } = item
   return (
-    <TouchableHighlight
-      underlayColor={palette.onPressColor}
+    <RectButton
+      // underlayColor={palette.onPressColor}
       onPress={() => navigation.navigate('Detail', { id: item.sculptureId })}
       style={{ paddingHorizontal: 24, paddingVertical: 12 }}
     >
       <View
+        accessible
         style={{
           flex: 1,
           flexDirection: 'row',
@@ -64,7 +66,7 @@ const Comment = ({ item, navigation }) => {
           </Text>
         </View>
       </View>
-    </TouchableHighlight>
+    </RectButton>
   )
 }
 

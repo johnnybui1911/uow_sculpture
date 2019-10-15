@@ -35,7 +35,7 @@ const InputKeyboard = React.forwardRef(
       !selectedComment
     return (
       <KeyboardAvoidingView
-        keyboardVerticalOffset={20}
+        // keyboardVerticalOffset={20}
         style={{
           position: 'absolute',
           bottom: 0,
