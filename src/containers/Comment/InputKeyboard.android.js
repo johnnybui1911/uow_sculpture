@@ -43,15 +43,15 @@ const InputKeyboard = React.forwardRef(
         {children}
         <Animated.View
           style={{
-            // position: 'absolute',
-            // bottom: 0,
+            position: 'absolute',
+            bottom: 0,
             width: SCREEN_WIDTH,
             backgroundColor: palette.backgroundColorWhite,
             elevation: 10,
             flexDirection: 'row',
             alignItems: 'center',
-            paddingHorizontal: 24
-            // paddingBottom: keyboardHeight
+            paddingHorizontal: 24,
+            paddingBottom: keyboardHeight
           }}
         >
           <Image

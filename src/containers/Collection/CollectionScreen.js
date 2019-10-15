@@ -108,6 +108,11 @@ class CollectionScreen extends React.PureComponent {
               </View>
             )
           }}
+          getItemLayout={(data, index) => ({
+            length: 162,
+            offset: 162 * index,
+            index
+          })}
         />
       )
     }
