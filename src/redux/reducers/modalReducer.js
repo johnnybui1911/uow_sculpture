@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -33,7 +34,10 @@ const modalReducer = (state = initialState, action) => {
         enteredMarkers.forEach(element => {
           const { id, name } = element
           _sendLocalNotification({
-            title: `Congratulations! You have visited ${name}.`,
+            title:
+              Platform.OS === 'ios'
+                ? `You have visited ${name}.`
+                : `Congratulations! You have visited ${name}.`,
             body: 'Tap to view more details',
             data: {
               screen: 'Detail',

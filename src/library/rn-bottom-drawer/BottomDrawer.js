@@ -4,7 +4,11 @@ import { View, Dimensions, Animated } from 'react-native'
 import { DOWN_STATE, UP_STATE } from './state'
 
 import Animator from './Animator'
-import { SCREEN_HEIGHT, DEVICE_HAS_NOTCH } from '../../assets/dimension'
+import {
+  SCREEN_HEIGHT,
+  DEVICE_HAS_NOTCH,
+  HAS_ANDROID_NAVIGATION_BAR
+} from '../../assets/dimension'
 
 export default class BottomDrawer extends Component {
   static propTypes = {
@@ -65,7 +69,7 @@ export default class BottomDrawer extends Component {
   }
 
   static defaultProps = {
-    offset: DEVICE_HAS_NOTCH ? 12 : 0,
+    offset: 0,
     startUp: true,
     backgroundColor: '#ffffff',
     roundedEdges: true,
@@ -176,9 +180,10 @@ export default class BottomDrawer extends Component {
   }
 
   _calculateDownPosition(upPosition, downDisplay) {
+    const fixHeight = DEVICE_HAS_NOTCH ? 12 : 0
     return {
       x: 0,
-      y: upPosition.y + downDisplay
+      y: upPosition.y + downDisplay - fixHeight
     }
   }
 }

@@ -4,7 +4,10 @@
     "slug": "ExpoUOWS",
     "scheme": "uow-sculptures",
     "privacy": "public",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "35.0.0",
+    "notification": {
+      "iosDisplayInForeground": true
+    },
     "ios": {
       "bundleIdentifier": "com.UOW.UOWSculptures",
       "supportsTablet": true,
@@ -12,7 +15,10 @@
         "googleMapsApiKey": "AIzaSyCoajIyj5wpNXJuemJ3PgozbhiyXA0rIac"
       },
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"]
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
       }
     },
     "android": {
@@ -24,7 +30,11 @@
       },
       "googleServicesFile": "./google-services.json"
     },
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -37,6 +47,8 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": [
+      "**/*"
+    ]
   }
 }

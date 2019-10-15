@@ -98,7 +98,7 @@ class CommentList extends React.PureComponent {
           paddingVertical: 6
         }}
       >
-        <ActivityIndicator color={palette.primaryColorLight} size="large" />
+        <ActivityIndicator color={palette.primaryColorLight} size="small" />
       </View>
     )
   }

@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
@@ -18,7 +19,6 @@ import formatDistance from '../../../library/formatDistance'
 import LikeComment from '../../../components/LikeComment/LikeComment'
 import { selectMarker } from '../../../redux/actions'
 import palette from '../../../assets/palette'
-import { BorderlessButton, RectButton } from 'react-native-gesture-handler'
 
 const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
   const { setShowDirection, direction_state } = React.useContext(MapContext)
@@ -55,24 +55,28 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
               </View>
             ) : (
               <React.Fragment>
-                <Text accessible style={styles.distance}>
+                <Text style={[styles.distance]}>
                   {formatDistance(direction_state.distance)}
                 </Text>
-                <Text style={styles.title} numberOfLines={1}>
-                  {selectedMarker.name}
-                </Text>
+                <View
+                  style={{
+                    paddingBottom: 5,
+                    marginTop: Platform.OS === 'ios' ? 0 : -5
+                  }}
+                >
+                  <Text style={styles.title} numberOfLines={1}>
+                    {selectedMarker.name}
+                  </Text>
+                </View>
                 <View style={{}}>
-                  <Text
-                    numberOfLines={2}
-                    style={[styles.description, { marginTop: 5 }]}
-                  >
+                  <Text numberOfLines={2} style={[styles.description]}>
                     {selectedMarker.description.location}
                   </Text>
                 </View>
-                <Divider styles={{ marginVertical: 12 }} />
+                {/* <Divider styles={{ marginVertical: 12 }} /> */}
                 <LikeComment
                   markerId={selectedMarker.id}
-                  style={{ marginBottom: -12 }}
+                  style={{ marginBottom: -12, paddingTop: 12 }}
                 />
               </React.Fragment>
             )}

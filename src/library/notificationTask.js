@@ -99,7 +99,11 @@ export const _handleNotification = (
   _resetUI = null
 ) => {
   // console.log(notification)
-  if (notification.origin === 'selected' && notification.data) {
+  if (
+    (notification.origin === 'selected' ||
+      (Platform.OS === 'ios' && notification.origin === 'received')) &&
+    notification.data
+  ) {
     if (notification.actionId === 'archive') {
       Notifications.dismissNotificationAsync(notification.notificationId)
     } else {

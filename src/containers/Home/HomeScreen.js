@@ -49,49 +49,6 @@ class HomeScreen extends React.PureComponent {
     const contentOffset = event.nativeEvent.contentOffset.x
     const selectedIndex = Math.floor(contentOffset / viewSize)
     this.setState({ crrNearbyIndex: selectedIndex })
-    // if (selectedIndex > crrNearbyIndex) {
-    //   Animated.sequence([
-    //     Animated.parallel([
-    //       Animated.timing(this.state.translateY, {
-    //         toValue: -TRANSLATE_Y,
-    //         duration: 100
-    //       }),
-    //       Animated.timing(this.state.opacityAnimation, {
-    //         toValue: 0,
-    //         duration: 250
-    //       })
-    //     ]),
-    //     Animated.timing(this.state.translateY, {
-    //       toValue: TRANSLATE_Y,
-    //       duration: 0
-    //     })
-    //   ]).start(() => {
-    //     this.setState({ crrNearbyIndex: selectedIndex }, () => {
-    //       this._animateToDefaultState()
-    //     })
-    //   })
-    // } else if (selectedIndex < crrNearbyIndex) {
-    //   Animated.sequence([
-    //     Animated.parallel([
-    //       Animated.timing(this.state.translateY, {
-    //         toValue: TRANSLATE_Y,
-    //         duration: 100
-    //       }),
-    //       Animated.timing(this.state.opacityAnimation, {
-    //         toValue: 0,
-    //         duration: 250
-    //       })
-    //     ]),
-    //     Animated.timing(this.state.translateY, {
-    //       toValue: -TRANSLATE_Y,
-    //       duration: 0
-    //     })
-    //   ]).start(() => {
-    //     this.setState({ crrNearbyIndex: selectedIndex }, () => {
-    //       this._animateToDefaultState()
-    //     })
-    //   })
-    // }
   }
 
   _animateToDefaultState = () => {
@@ -129,10 +86,6 @@ class HomeScreen extends React.PureComponent {
   }
 
   _renderNearbyItem = ({ item, index }) => {
-    // const rotateDegAnimation = this.state.scrollAnimate.interpolate({
-    //   inputRange: [0, 1875],
-    //   outputRange: ['0deg', '10deg']
-    // })
     const { navigation } = this.props
     const props = { item, index, navigation }
     return <NearbyItem {...props} />
@@ -248,14 +201,6 @@ class HomeScreen extends React.PureComponent {
             </View>
             {checkLoading || !distanceMatrix ? (
               <View style={[styles.nearbyItemStyle]}>
-                {/* <View style={styles.imageNearbyContainer}>
-                  <LottieView
-                    source={animations.image_loading}
-                    autoSize={false}
-                    autoPlay
-                    loop
-                  />
-                </View> */}
                 <Placeholder Animation={Fade}>
                   <PlaceholderMedia size="100%" style={{ borderRadius: 12 }} />
                 </Placeholder>
@@ -287,28 +232,6 @@ class HomeScreen extends React.PureComponent {
               />
             )}
             {this._renderDots(nearbyData)}
-            {/* <View style={styles.fixedImageContentBox}>
-              <Animated.View
-                style={[
-                  {
-                    opacity: opacityAnimation,
-                    transform: [{ translateY: translateY }]
-                  }
-                ]}
-              >
-                <Text style={styles.distance}>
-                  {distanceMatrix && distanceMatrix[crrNearby.id]
-                    ? formatDistance(distanceMatrix[crrNearby.id].distance)
-                    : ''}
-                </Text>
-                <Text numberOfLines={2} style={styles.title}>
-                  {crrNearby.name}
-                </Text>
-                <Text style={[styles.description]}>
-                  {crrNearby.features.maker}
-                </Text>
-              </Animated.View>
-            </View> */}
           </View>
           <View style={[styles.popularList]}>
             <Text style={styles.listTitle}>Popular Sculptures</Text>

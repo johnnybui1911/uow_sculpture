@@ -1,5 +1,6 @@
 import * as TaskManager from 'expo-task-manager'
 import * as Location from 'expo-location'
+import { Platform } from 'react-native'
 import {
   _sendPushNotification,
   _sendLocalNotification
@@ -15,7 +16,7 @@ TaskManager.defineTask(BACKGROUND_LOCATION_TASK, ({ data, error }) => {
   }
   if (data) {
     const { locations } = data
-    console.log('Background Update Location: ', locations)
+    // console.log('Background Update Location: ', locations)
   }
 })
 
@@ -33,7 +34,10 @@ TaskManager.defineTask(
     const id = identifier.slice(0, identifier.indexOf('-'))
     if (eventType === Location.GeofencingEventType.Enter) {
       _sendLocalNotification({
-        title: `Congratulations! You have visited ${name}.`,
+        title:
+          Platform.OS === 'ios'
+            ? `You have visited ${name}.`
+            : `Congratulations! You have visited ${name}.`,
         body: 'Tap to view more details',
         data: {
           screen: 'Detail',
@@ -49,7 +53,7 @@ TaskManager.defineTask(
       //     screen: 'Map'
       //   }
       // })
-      console.log("You've left region:", region)
+      // console.log("You've left region:", region)
     }
   }
 )

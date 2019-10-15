@@ -103,7 +103,7 @@ class PersonalScreen extends React.PureComponent {
     return (
       <Animated.View
         style={{
-          backgroundColor: palette.primaryColor,
+          backgroundColor: palette.backgroundColorWhite,
           position: 'absolute',
           top: 0,
           left: 0,

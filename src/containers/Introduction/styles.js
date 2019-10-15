@@ -4,7 +4,8 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   STATUS_BAR_HEIGHT,
-  FULL_SCREEN_HEIGHT
+  FULL_SCREEN_HEIGHT,
+  NAVIGATION_BAR_HEIGHT
 } from '../../assets/dimension'
 
 export default StyleSheet.create({
@@ -17,7 +18,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    paddingHorizontal: 6
+    paddingHorizontal: 6,
+    paddingBottom: NAVIGATION_BAR_HEIGHT
   },
   title: {
     fontSize: 30,

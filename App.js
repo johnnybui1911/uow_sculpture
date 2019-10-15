@@ -15,6 +15,10 @@ import {
   thunkSignIn,
   syncLocationThunk
 } from './src/redux/actions'
+import {
+  SafeAreaProvider,
+  SafeAreaConsumer
+} from 'react-native-safe-area-context'
 
 export default class App extends React.PureComponent {
   state = {
@@ -24,7 +28,7 @@ export default class App extends React.PureComponent {
   }
 
   componentDidMount = async () => {
-    // AppState.addEventListener('change', this._handleAppStateChange)
+    AppState.addEventListener('change', this._handleAppStateChange)
     // this._notificationSubscription = await Notifications.addListener(
     //   this._handleNotification
     // )
@@ -73,7 +77,7 @@ export default class App extends React.PureComponent {
       console.log('App has come to the foreground!')
     } else if (nextAppState.match(/inactive|background/)) {
       await syncLocationBackground()
-      await geofencingRegion()
+      // await geofencingRegion()
       console.log('App is going to background')
     }
 
@@ -102,7 +106,9 @@ export default class App extends React.PureComponent {
     }
     return (
       <Provider store={stores}>
-        <MainScreen />
+        <SafeAreaProvider>
+          <MainScreen />
+        </SafeAreaProvider>
       </Provider>
     )
   }

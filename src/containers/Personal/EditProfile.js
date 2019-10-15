@@ -300,6 +300,7 @@ class EditProfile extends React.PureComponent {
               />
             </View>
             <TouchableWithoutFeedback
+              disabled={isLoading}
               onPress={
                 Platform.OS === 'ios' ? this._openActionSheet : this._openModal
               }
@@ -329,6 +330,7 @@ class EditProfile extends React.PureComponent {
               onSubmitEditing={this._onSubmitUsername}
               error={errors.username}
               errorColor={palette.secondaryColor}
+              disabled={isLoading}
             />
           </View>
         </ScrollView>

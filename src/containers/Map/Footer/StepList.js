@@ -4,7 +4,10 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import styles from '../styles'
 import StepBox from './StepBox'
 import { icons } from '../../../assets/icons'
-import { COLLAPSED_HEIGHT_STEPBOX } from '../../../assets/dimension'
+import {
+  COLLAPSED_HEIGHT_STEPBOX,
+  NAVIGATION_BAR_HEIGHT
+} from '../../../assets/dimension'
 
 const StepList = ({ steps, selectedMarker }) => {
   return (
@@ -12,7 +15,9 @@ const StepList = ({ steps, selectedMarker }) => {
       <View style={styles.topBorderStep} />
       <ScrollView
         // style={{ marginBottom: 160 }} // fix later
-        contentContainerStyle={{ paddingBottom: COLLAPSED_HEIGHT_STEPBOX }}
+        contentContainerStyle={{
+          paddingBottom: COLLAPSED_HEIGHT_STEPBOX + NAVIGATION_BAR_HEIGHT
+        }}
         showsVerticalScrollIndicator={false}
       >
         <TouchableOpacity activeOpacity={1}>
