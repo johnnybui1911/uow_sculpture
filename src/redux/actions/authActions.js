@@ -1,5 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
+import { Alert } from 'react-native'
 import {
   SIGN_IN_REJECTED,
   SIGN_IN_SUCCESSFULL,
@@ -134,11 +135,12 @@ export const fetchUserDataThunk = (initialUserId = null) => {
             visitList: formatVisitList
           })
         )
+        resolve()
       } catch (err) {
         console.log('Can not reload data user')
         dispatch(fetchUserDataRejected())
+        resolve()
       }
-      resolve()
     })
   }
 }
@@ -177,10 +179,10 @@ export const thunkSignIn = () => {
             resolve()
           })
       } else {
-        resolve()
         console.log('Can not sign in because no data')
         clearData('auth')
         dispatch(signInRejected())
+        resolve()
       }
     })
   }

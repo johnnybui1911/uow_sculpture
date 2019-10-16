@@ -27,6 +27,7 @@ import SignInButton from '../../components/SignIn/SignInButton'
 import { icons } from '../../assets/icons'
 import { Divider } from '../../components'
 import palette from '../../assets/palette'
+import { shadowIOS } from '../../assets/rootStyles'
 
 const TEXT_INPUT_HEIGHT = 40
 
@@ -416,7 +417,7 @@ class CommentScreen extends React.PureComponent {
             {isOverflowOpen && (
               <View
                 style={{
-                  backgroundColor: 'rgba(0,71,187,0.9)',
+                  backgroundColor: palette.alertModalCommentColor,
                   paddingHorizontal: 24,
                   paddingVertical: 16,
                   flexDirection: 'row'
@@ -438,6 +439,8 @@ class CommentScreen extends React.PureComponent {
               position: 'absolute',
               width: SCREEN_WIDTH,
               elevation: 20,
+              ...shadowIOS,
+              shadowOpacity: 0.2,
               bottom: 0
             }}
           >

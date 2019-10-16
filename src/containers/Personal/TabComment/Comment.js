@@ -25,7 +25,11 @@ const Comment = ({ item, navigation }) => {
       >
         <View style={[]}>
           <Image
-            source={photoURL ? { uri: photoURL } : images.empty_image}
+            source={
+              photoURL
+                ? { uri: photoURL, cache: 'force-cache' }
+                : images.empty_image
+            }
             style={{
               width: 60,
               height: 60,

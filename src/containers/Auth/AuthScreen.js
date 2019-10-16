@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { SafeAreaView, View, StatusBar } from 'react-native'
 import { connect } from 'react-redux'
 import Svg, { Ellipse } from 'react-native-svg'
 import styles from './styles'
@@ -8,6 +8,7 @@ import { icons } from '../../assets/icons'
 import SignInScreen from './SignInScreen'
 import { SCREEN_WIDTH } from '../../assets/dimension'
 import { NavigationEvents } from 'react-navigation'
+import CustomStatusBar from '../../components/CustomStatusBar'
 
 const HEADER_HEIGHT = 209
 
@@ -48,11 +49,16 @@ class AuthScreen extends React.PureComponent {
       >
         <NavigationEvents
           onDidFocus={() => {
+            StatusBar.setBarStyle('light-content')
             if (this.props.loggedIn) {
               this.props.navigation.navigate('Personal')
             }
           }}
+          onWillBlur={() => {
+            StatusBar.setBarStyle('dark-content')
+          }}
         />
+        <CustomStatusBar backgroundColor={palette.primaryColor} />
         <AuthHeader />
         <SignInScreen navigation={this.props.navigation} />
       </SafeAreaView>

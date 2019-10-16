@@ -32,26 +32,37 @@ const InputKeyboard = React.forwardRef(
     const editCheck =
       (selectedComment && selectedComment.text !== inputValue.trim()) ||
       !selectedComment
+
+    const translateY = inputHeight.interpolate({
+      inputRange: [
+        TEXT_INPUT_HEIGHT,
+        TEXT_INPUT_HEIGHT * 2,
+        TEXT_INPUT_HEIGHT * 3
+      ],
+      outputRange: [0, -TEXT_INPUT_HEIGHT, -TEXT_INPUT_HEIGHT * 2],
+      extrapolate: 'clamp'
+    })
     return (
-      <View
+      <Animated.View
         style={{
           position: 'absolute',
-          bottom: 0,
-          width: SCREEN_WIDTH
+          top: keyboardHeight,
+          width: SCREEN_WIDTH,
+          minHeight: 60,
+          transform: [{ translateY: translateY }],
+          zIndex: 2,
+          elevation: 2
         }}
       >
-        {children}
         <Animated.View
           style={{
-            position: 'absolute',
-            bottom: 0,
             width: SCREEN_WIDTH,
             backgroundColor: palette.backgroundColorWhite,
             elevation: 10,
             flexDirection: 'row',
             alignItems: 'center',
-            paddingHorizontal: 24,
-            paddingBottom: keyboardHeight
+            paddingHorizontal: 24
+            // paddingBottom: keyboardHeight
           }}
         >
           <Image
@@ -73,7 +84,7 @@ const InputKeyboard = React.forwardRef(
               justifyContent: 'center',
               alignItems: 'center',
               marginVertical: 10,
-              marginLeft: 7,
+              marginLeft: 12, // 7
               height: inputHeight,
               backgroundColor: '#F2F3F5',
               borderRadius: 16,
@@ -82,10 +93,10 @@ const InputKeyboard = React.forwardRef(
           >
             <TextInput
               ref={ref}
-              autoFocus
+              // autoFocus
               onContentSizeChange={e => {
                 const { height } = e.nativeEvent.contentSize
-                if (height < TEXT_INPUT_HEIGHT * 3)
+                if (height <= TEXT_INPUT_HEIGHT * 3)
                   Animated.timing(inputHeight, {
                     toValue: height,
                     duration: 100
@@ -144,7 +155,7 @@ const InputKeyboard = React.forwardRef(
             </TouchableWithoutFeedback>
           </Animated.View>
         </Animated.View>
-      </View>
+      </Animated.View>
     )
   }
 )

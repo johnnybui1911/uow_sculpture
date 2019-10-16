@@ -1,6 +1,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { AppState } from 'react-native'
+import { AppState, Alert } from 'react-native'
+import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
 import * as Location from 'expo-location'
 import { Notifications, AppLoading } from 'expo'
@@ -15,10 +16,17 @@ import {
   thunkSignIn,
   syncLocationThunk
 } from './src/redux/actions'
-import {
-  SafeAreaProvider,
-  SafeAreaConsumer
-} from 'react-native-safe-area-context'
+import images, { imageCacheList } from './src/assets/images'
+
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image)
+    } else {
+      return Asset.fromModule(image).downloadAsync()
+    }
+  })
+}
 
 export default class App extends React.PureComponent {
   state = {
@@ -57,8 +65,9 @@ export default class App extends React.PureComponent {
       'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
       'Font-Name': require('./assets/icons/icomoon.ttf')
     })
+    const imageAssets = cacheImages([...imageCacheList])
 
-    await Promise.all([fetchData, loadFont])
+    await Promise.all([fetchData, loadFont, ...imageAssets])
   }
 
   // FIXME: BACKGROUND NOT WORKING IN IOS EXPO APP
@@ -67,17 +76,17 @@ export default class App extends React.PureComponent {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
-        BACKGROUND_LOCATION_TASK
-      )
-      if (backgroundSync) {
-        await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)
-        console.log('Stop syncing Background')
-      }
+      // const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
+      //   BACKGROUND_LOCATION_TASK
+      // )
+      // if (backgroundSync) {
+      //   await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)
+      //   console.log('Stop syncing Background')
+      // }
       console.log('App has come to the foreground!')
+      stores.dispatch(syncLocationThunk())
     } else if (nextAppState.match(/inactive|background/)) {
-      await syncLocationBackground()
-      // await geofencingRegion()
+      // await syncLocationBackground()
       console.log('App is going to background')
     }
 
@@ -106,9 +115,9 @@ export default class App extends React.PureComponent {
     }
     return (
       <Provider store={stores}>
-        <SafeAreaProvider>
-          <MainScreen />
-        </SafeAreaProvider>
+        {/* <SafeAreaProvider> */}
+        <MainScreen />
+        {/* </SafeAreaProvider> */}
       </Provider>
     )
   }

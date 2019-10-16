@@ -19,7 +19,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 6,
-    paddingBottom: NAVIGATION_BAR_HEIGHT
+    paddingBottom: NAVIGATION_BAR_HEIGHT + 12
   },
   title: {
     fontSize: 30,

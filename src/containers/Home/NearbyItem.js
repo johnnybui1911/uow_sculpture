@@ -138,7 +138,7 @@ class NearbyItem extends React.PureComponent {
               />
             ) : (
               <Image
-                source={{ uri: item.photoURL }}
+                source={{ uri: item.photoURL, cache: 'force-cache' }}
                 resizeMode="cover"
                 style={styles.imageNearbyItem}
               />

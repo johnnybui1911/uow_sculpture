@@ -7,8 +7,12 @@ import {
   Text,
   TouchableOpacity,
   Animated,
-  BackHandler
+  BackHandler,
+  Linking,
+  AlertIOS,
+  Alert
 } from 'react-native'
+import * as Permissions from 'expo-permissions'
 import MapView, { UrlTile, Marker, AnimatedRegion } from 'react-native-maps'
 import LottieView from 'lottie-react-native'
 import * as Location from 'expo-location'
@@ -48,6 +52,7 @@ import {
 } from '../../redux/actions'
 import SearchView from '../../components/SearchButton/SearchView'
 import { compareCoordinate } from '../../library/compareCoordinate'
+import { _alertLocationPermission } from '../../redux/actions/locationActions'
 
 export class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
@@ -70,7 +75,7 @@ export class MapScreen extends React.PureComponent {
         longitudeDelta: LONGITUDE_DELTA
       },
       steps: [],
-      centered: true,
+      centered: false,
       searchText: '',
       errorMessage: '',
 
@@ -213,11 +218,13 @@ export class MapScreen extends React.PureComponent {
     }
   }
 
-  userCoordinate = new AnimatedRegion({
-    ...this.props.initialUserCoordinate,
-    latitudeDelta: 0,
-    longitudeDelta: 0
-  })
+  userCoordinate = this.props.initialUserCoordinate
+    ? new AnimatedRegion({
+        ...this.props.initialUserCoordinate,
+        latitudeDelta: 0,
+        longitudeDelta: 0
+      })
+    : null
 
   subscribeLocation = null
 
@@ -256,21 +263,37 @@ export class MapScreen extends React.PureComponent {
   }
 
   _getLocationAsync = async () => {
-    this.subscribeLocation = await Location.watchPositionAsync(
-      {
-        accuracy: Location.Accuracy.Highest,
-        timeInterval: 1,
-        distanceInterval: 1 // 1 because in map, want to show smooth animation
-      },
-      loc => {
-        if (loc.timestamp) {
-          const { latitude, longitude } = loc.coords
-          this.userCoordinate.timing({ latitude, longitude }).start()
-        } else {
-          this.setState({ errorMessage: 'Problems on update location' })
+    const { status } = await Permissions.askAsync(Permissions.LOCATION)
+    if (status !== 'granted') {
+      Platform.OS === 'ios' && _alertLocationPermission()
+      console.log('Need Location Permission')
+    } else {
+      console.log('Grant Permission')
+      this.subscribeLocation = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.Highest,
+          timeInterval: 1,
+          distanceInterval: 1 // 1 because in map, want to show smooth animation
+        },
+        loc => {
+          if (loc.timestamp) {
+            const { latitude, longitude } = loc.coords
+            if (this.userCoordinate) {
+              this.userCoordinate.timing({ latitude, longitude }).start()
+            } else {
+              this.userCoordinate = new AnimatedRegion({
+                latitude,
+                longitude,
+                latitudeDelta: 0,
+                longitudeDelta: 0
+              })
+            }
+          } else {
+            this.setState({ errorMessage: 'Problems on update location' })
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   _resetUI = () => {

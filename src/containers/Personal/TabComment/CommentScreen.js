@@ -12,7 +12,11 @@ class CommentScreen extends React.PureComponent {
   }
 
   _renderItem = ({ item }) => {
-    return <Comment item={item} />
+    const { markerMatrix } = this.props
+    const { sculptureId } = item
+    const marker = markerMatrix[sculptureId]
+    const commentItem = { ...item, photoURL: marker.photoURL }
+    return <Comment item={commentItem} />
   }
 
   _renderList = () => {
@@ -39,6 +43,7 @@ class CommentScreen extends React.PureComponent {
   }
 
   render() {
+    // console.log(this.props.commentList)
     return <View style={{ flex: 1 }}>{this._renderList()}</View>
   }
 }

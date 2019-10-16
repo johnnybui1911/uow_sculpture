@@ -36,13 +36,14 @@ export default withNavigation(
         <View
           style={{
             paddingTop: HEADER_BAR_MARGIN_TOP + 6,
-            paddingHorizontal: 24,
+            // paddingHorizontal: 24,
             paddingBottom: 12,
             justifyContent: 'center',
             flexDirection: 'row',
             backgroundColor: palette.backgroundTabColor,
             // marginBottom: 12,
-            elevation: 2
+            elevation: 1,
+            zIndex: 1
           }}
         >
           <TouchableWithoutFeedback
@@ -57,7 +58,8 @@ export default withNavigation(
                 width: 50,
                 justifyContent: 'center',
                 paddingBottom: 4 + 1,
-                opacity: leftButtonDisable ? 0.5 : 1
+                opacity: leftButtonDisable ? 0.5 : 1,
+                paddingLeft: 24
               }}
             >
               {leftButton ? leftButton : icons.back_blue({ size: 18 })}
@@ -85,7 +87,8 @@ export default withNavigation(
               style={{
                 width: 50,
                 justifyContent: 'center',
-                alignItems: 'flex-end'
+                alignItems: 'flex-end',
+                paddingRight: 24
               }}
             >
               {rightButton}
