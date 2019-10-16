@@ -27,6 +27,8 @@ import palette from './assets/palette'
 import { icons } from './assets/icons'
 import CongratModal from './components/CongratModal/CongratModal'
 import { storeData, getData, clearData } from './library/asyncStorage'
+import { SafeAreaConsumer } from 'react-native-safe-area-context';
+
 
 const MainView = Platform.OS === 'ios' ? View : SafeAreaView
 
@@ -66,6 +68,12 @@ class MainScreen extends React.PureComponent {
           />
         ) : null}
         <AppContainer />
+        <SafeAreaConsumer>
+        {insets => {
+          console.log(insets)
+        return <View style={{ paddingBottom: insets.bottom }} />
+        }}
+      </SafeAreaConsumer>
         {this.state.isModalVisible && (
           <View
             style={{

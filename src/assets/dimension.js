@@ -1,8 +1,8 @@
 import { Platform, Dimensions, StatusBar } from 'react-native'
 import Constants from 'expo-constants'
 
-// console.log(Dimensions.get('screen').height)
-// console.log(Dimensions.get('window').height)
+console.log(Dimensions.get('screen').height)
+console.log(Dimensions.get('window').height)
 export const DEFAULT_PADDING = 12
 // const checkHeight =
 //   Dimensions.get('window').height < Dimensions.get('screen').height

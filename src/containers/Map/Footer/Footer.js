@@ -326,30 +326,30 @@ class Footer extends React.PureComponent {
 
   render() {
     const { selectedMarker, showDirection } = this.props
-    if (selectedMarker) {
-      return showDirection
-        ? this._renderDirectionFooter()
-        : this._renderMarkerFooter()
-    }
+    // if (selectedMarker) {
+    //   return showDirection
+    //     ? this._renderDirectionFooter()
+    //     : this._renderMarkerFooter()
+    // }
 
-    return this._renderLocationButton()
+    return this._renderMarkerFooter()
   }
 }
 
-const mapStateToProps = getState => ({
-  selectedMarker: getState.markerReducer.selectedMarker,
-  distanceMatrix: getState.distanceReducer.distanceMatrix
-})
+// const mapStateToProps = getState => ({
+//   selectedMarker: getState.markerReducer.selectedMarker,
+//   distanceMatrix: getState.distanceReducer.distanceMatrix
+// })
 
-// const mapStateToProps = getState => {
-//   const { distanceMatrix } = getState.distanceReducer
-//   const { markerMatrix } = getState.markerReducer
-//   const selectedMarker = markerMatrix['1986.058']
-//   return {
-//     selectedMarker,
-//     distanceMatrix
-//   }
-// }
+const mapStateToProps = getState => {
+  const { distanceMatrix } = getState.distanceReducer
+  const { markerMatrix } = getState.markerReducer
+  const selectedMarker = markerMatrix['1986.058']
+  return {
+    selectedMarker,
+    distanceMatrix
+  }
+}
 
 export default connect(
   mapStateToProps,
