@@ -17,6 +17,7 @@ import {
   syncLocationThunk
 } from './src/redux/actions'
 import images, { imageCacheList } from './src/assets/images'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function cacheImages(images) {
   return images.map(image => {
@@ -115,9 +116,9 @@ export default class App extends React.PureComponent {
     }
     return (
       <Provider store={stores}>
-        {/* <SafeAreaProvider> */}
+        <SafeAreaProvider>
         <MainScreen />
-        {/* </SafeAreaProvider> */}
+        </SafeAreaProvider>
       </Provider>
     )
   }

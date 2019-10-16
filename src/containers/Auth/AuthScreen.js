@@ -44,9 +44,7 @@ export const AuthHeader = () => (
 class AuthScreen extends React.PureComponent {
   render() {
     return (
-      <SafeAreaView
-        style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
-      >
+      <React.Fragment>
         <NavigationEvents
           onDidFocus={() => {
             StatusBar.setBarStyle('light-content')
@@ -58,10 +56,17 @@ class AuthScreen extends React.PureComponent {
             StatusBar.setBarStyle('dark-content')
           }}
         />
-        <CustomStatusBar backgroundColor={palette.primaryColor} />
-        <AuthHeader />
-        <SignInScreen navigation={this.props.navigation} />
-      </SafeAreaView>
+        <SafeAreaView
+          style={{ flex: 0, backgroundColor: palette.primaryColor }}
+        />
+        <SafeAreaView
+          style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
+        >
+          <CustomStatusBar backgroundColor={palette.primaryColor} />
+          <AuthHeader />
+          <SignInScreen navigation={this.props.navigation} />
+        </SafeAreaView>
+      </React.Fragment>
     )
   }
 }

@@ -40,7 +40,7 @@ const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {
             }}
           >
             <SwipeButton />
-            {direction_state.isDistanceLoading ? (
+            {!direction_state.isDistanceLoading ? (
               <View
                 style={{
                   flex: 1,

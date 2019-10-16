@@ -19,7 +19,7 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     elevation: 4,
     width: '100%',
-    maxHeight: 171,
+    maxHeight: 200, // 171,
     top: 0,
     paddingTop:
       Platform.OS === 'ios'

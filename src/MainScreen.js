@@ -70,7 +70,7 @@ class MainScreen extends React.PureComponent {
         <AppContainer />
         <SafeAreaConsumer>
         {insets => {
-          console.log(insets)
+          // console.log(insets)
         return <View style={{ paddingBottom: insets.bottom }} />
         }}
       </SafeAreaConsumer>

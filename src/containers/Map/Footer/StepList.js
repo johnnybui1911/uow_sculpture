@@ -9,14 +9,14 @@ import {
   NAVIGATION_BAR_HEIGHT
 } from '../../../assets/dimension'
 
-const StepList = ({ steps, selectedMarker }) => {
+const StepList = ({ steps, selectedMarker, fixHeight=0 }) => {
   return (
     <View>
       <View style={styles.topBorderStep} />
       <ScrollView
         // style={{ marginBottom: 160 }} // fix later
         contentContainerStyle={{
-          paddingBottom: COLLAPSED_HEIGHT_STEPBOX + NAVIGATION_BAR_HEIGHT
+          paddingBottom: COLLAPSED_HEIGHT_STEPBOX + fixHeight
         }}
         showsVerticalScrollIndicator={false}
       >

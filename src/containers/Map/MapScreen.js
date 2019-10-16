@@ -53,6 +53,7 @@ import {
 import SearchView from '../../components/SearchButton/SearchView'
 import { compareCoordinate } from '../../library/compareCoordinate'
 import { _alertLocationPermission } from '../../redux/actions/locationActions'
+import { SafeAreaConsumer } from 'react-native-safe-area-view'
 
 export class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
@@ -545,8 +546,13 @@ export class MapScreen extends React.PureComponent {
                 _fitToCoordinate={this._fitToCoordinate}
               />
             </MapView>
+            <SafeAreaConsumer>
+              {insets => {
+                const FIX_NOTCH_BOTTOM = insets.bottom > 0 ? insets.bottom + STATUS_BAR_HEIGHT : 0
+                return(
             <Footer
               ref={this._footerRef}
+              fix_notch_height = {FIX_NOTCH_BOTTOM}
               showSteps={showSteps}
               showDirection={showDirection}
               showMapOnly={showMapOnly}
@@ -556,6 +562,9 @@ export class MapScreen extends React.PureComponent {
               _navigateToDetail={this._navigateToDetail}
               _centerUserLocation={this._centerUserLocation}
             />
+                )
+              }}
+            </SafeAreaConsumer>
           </MapContext.Provider>
         </SafeAreaView>
       )

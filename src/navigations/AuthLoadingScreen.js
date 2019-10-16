@@ -20,9 +20,7 @@ class AuthLoadingScreen extends React.PureComponent {
   }
   render() {
     return (
-      <SafeAreaView
-        style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
-      >
+      <React.Fragment>
         <NavigationEvents
           onWillFocus={() => {
             StatusBar.setBarStyle('light-content')
@@ -31,12 +29,20 @@ class AuthLoadingScreen extends React.PureComponent {
             StatusBar.setBarStyle('dark-content')
           }}
         />
-        <CustomStatusBar backgroundColor={palette.primaryColor} />
-        <AuthHeader />
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <LottieView source={animations.loadingPersonal} autoPlay auto />
-        </View>
-      </SafeAreaView>
+        <SafeAreaView
+          style={{ flex: 0, backgroundColor: palette.primaryColor }}
+        />
+
+        <SafeAreaView
+          style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
+        >
+          <CustomStatusBar backgroundColor={palette.primaryColor} />
+          <AuthHeader />
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <LottieView source={animations.loadingPersonal} autoPlay auto />
+          </View>
+        </SafeAreaView>
+      </React.Fragment>
     )
   }
 }

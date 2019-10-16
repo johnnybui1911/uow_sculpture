@@ -6,7 +6,6 @@ export const DEFAULT_PADDING = 12
 //   Dimensions.get('window').height < Dimensions.get('screen').height
 const ANDROID_STATUS_BAR =
   StatusBar.currentHeight === 0 ? 24 : StatusBar.currentHeight
-
 export const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 20 : ANDROID_STATUS_BAR
 // console.log(STATUS_BAR_HEIGHT)
 // console.log(Dimensions.get('screen').height)
@@ -27,7 +26,7 @@ export const FIX_KEYBOARD_HEIGHT = FIX_HEIGHT > 0 ? FIX_HEIGHT : 0
 export const FULL_SCREEN_HEIGHT = Dimensions.get('screen').height
 export const FULL_WINDOW_HEIGHT = Dimensions.get('window').height
 
-export const HAS_ANDROID_NAVIGATION_BAR = 0
+export const HAS_ANDROID_NAVIGATION_BAR = false
 // (Platform.OS === 'android' &&
 //   Math.round(FULL_SCREEN_HEIGHT - FULL_WINDOW_HEIGHT) >= 48 &&
 //   ANDROID_STATUS_BAR < 48) ||

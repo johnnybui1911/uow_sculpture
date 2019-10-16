@@ -399,7 +399,7 @@ class PersonalScreen extends React.PureComponent {
                 } else {
                   this.setState({ scrollTop: true })
                 }
-                if (y > 250) {
+                if (y > SCROLLABLE_HEIGHT - 10) {
                   this.setState({ showMiniHeader: true })
                 } else {
                   this.setState({ showMiniHeader: false })
@@ -445,8 +445,9 @@ class PersonalScreen extends React.PureComponent {
       outputRange: [1, 0],
       extrapolate: 'clamp'
     })
+
     return (
-      <SafeAreaView style={styles.container}>
+      <React.Fragment>
         <NavigationEvents
           onWillFocus={() => {
             StatusBar.setBarStyle(
@@ -460,62 +461,58 @@ class PersonalScreen extends React.PureComponent {
         <StatusBar
           barStyle={showMiniHeader ? 'dark-content' : 'light-content'}
         />
-        <Animated.View
+        <SafeAreaView
           style={{
-            height: STATUS_BAR_HEIGHT,
-            backgroundColor: palette.primaryColor,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            opacity: opacityAnimateHide,
-            zIndex: 2
+            flex: 0,
+            backgroundColor: showMiniHeader ? '#fff' : palette.primaryColor
           }}
         />
-        <Animated.View
-          style={{
-            backgroundColor: palette.primaryColor,
-            height: translateHeaderY,
-            justifyContent: 'center',
-            alignContent: 'center'
-          }}
-        >
-          <LottieView
-            ref={animation => {
-              this.animation = animation
+        <SafeAreaView style={styles.container}>
+          {/* <Animated.View
+            style={{
+              height: STATUS_BAR_HEIGHT,
+              backgroundColor: palette.primaryColor,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              opacity: opacityAnimateHide,
+              zIndex: 2
             }}
-            source={animations.header_loading}
-            progress={loadingAnimation}
+          /> */}
+          <Animated.View
+            style={{
+              backgroundColor: palette.primaryColor,
+              height: translateHeaderY,
+              justifyContent: 'center',
+              alignContent: 'center'
+            }}
+          >
+            <LottieView
+              ref={animation => {
+                this.animation = animation
+              }}
+              source={animations.header_loading}
+              progress={loadingAnimation}
+            />
+          </Animated.View>
+          <TabView
+            style={{ flex: 1 }}
+            navigationState={this.state}
+            renderTabBar={this._renderHeader}
+            renderScene={this._renderSence}
+            onIndexChange={index => {
+              // if (index === 2) {
+              //   this._AboutScreenScrollV
+              //     .getNode()
+              //     .scrollTo({ x: 0, y: 0, animated: true })
+              // }
+              this.setState({ index })
+            }}
+            initialLayout={initialLayout}
           />
-          {/* <SkypeIndicator
-            color="white"
-            // count={2}
-            animating={false}
-            hidesWhenStopped={false}
-          /> */}
-          {/* <ActivityIndicator
-            size="large"
-            color={palette.backgroundColorWhite}
-            hidesWhenStopped={false}
-            animating={false}
-          /> */}
-        </Animated.View>
-        <TabView
-          style={{ flex: 1 }}
-          navigationState={this.state}
-          renderTabBar={this._renderHeader}
-          renderScene={this._renderSence}
-          onIndexChange={index => {
-            // if (index === 2) {
-            //   this._AboutScreenScrollV
-            //     .getNode()
-            //     .scrollTo({ x: 0, y: 0, animated: true })
-            // }
-            this.setState({ index })
-          }}
-          initialLayout={initialLayout}
-        />
-      </SafeAreaView>
+        </SafeAreaView>
+      </React.Fragment>
     )
   }
 }

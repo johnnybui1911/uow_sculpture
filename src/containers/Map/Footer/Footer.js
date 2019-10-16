@@ -30,26 +30,55 @@ import { MapContext } from '../context/MapContext'
 import formatDistance from '../../../library/formatDistance'
 import palette from '../../../assets/palette'
 import { selectMarker } from '../../../redux/actions'
+import { SafeAreaConsumer } from 'react-native-safe-area-context';
 
 const MINI_IMAGE_POSITION = SCREEN_HEIGHT - 220 - 96 - NAVIGATION_BAR_HEIGHT
 const LCOATION_BUTTON_POSITION =
   SCREEN_HEIGHT - 220 - 66 - NAVIGATION_BAR_HEIGHT
 const ANIMATE_DURATION = 250
 
+const FAKE_STEP = [
+  {
+    distance: {
+      text: '0.1 km',
+      value: 106
+    },
+    duration: {
+      text: '1 min',
+      value: 78
+    },
+    end_location: {
+      lat: -34.4117182,
+      lng: 150.8927918
+    },
+    html_instructions: 'Head <b>west</b> on <b>Exeter Ave</b>',
+    polyline: {
+      points: 'p``qEym~w[AD]hBAF?F?B@F@FRfA'
+    },
+    start_location: {
+      lat: -34.4117659,
+      lng: 150.8938938
+    },
+    travel_mode: 'WALKING'
+  },
+]
+
+
 class Footer extends React.PureComponent {
   static contextType = MapContext
 
-  miniImage_translateY = new Animated.Value(MINI_IMAGE_POSITION)
-  locationButton_translateY = new Animated.Value(LCOATION_BUTTON_POSITION)
+  miniImage_translateY = new Animated.Value(MINI_IMAGE_POSITION - this.props.fix_notch_height )
+  locationButton_translateY = new Animated.Value(LCOATION_BUTTON_POSITION - this.props.fix_notch_height)
 
   slideIn = () => {
+    const {fix_notch_height} = this.props
     Animated.parallel([
       Animated.timing(this.miniImage_translateY, {
-        toValue: MINI_IMAGE_POSITION,
+        toValue: MINI_IMAGE_POSITION - fix_notch_height,
         duration: ANIMATE_DURATION
       }),
       Animated.timing(this.locationButton_translateY, {
-        toValue: LCOATION_BUTTON_POSITION,
+        toValue: LCOATION_BUTTON_POSITION  - fix_notch_height,
         duration: ANIMATE_DURATION
       })
     ]).start()
@@ -117,8 +146,13 @@ class Footer extends React.PureComponent {
   _renderMarkerFooter = () => {
     const { centered, _centerUserLocation, selectedMarker } = this.props
     const { footer_translateY } = this.context
-    return (
-      <View>
+    return ( <SafeAreaConsumer>
+      {insets => {
+        console.log(insets)
+        const NOTCH_BOTTOM_HEIGHT = insets.bottom
+        const FIX_HEIGHT = NOTCH_BOTTOM_HEIGHT > 0 ? NOTCH_BOTTOM_HEIGHT + STATUS_BAR_HEIGHT : 0
+        return (
+    <View>
         <TouchableWithoutFeedback
           onPress={() =>
             this.props.navigation.navigate('Detail', {
@@ -187,7 +221,7 @@ class Footer extends React.PureComponent {
           />
         </Animated.View>
         <BottomDrawer
-          offset={NAVIGATION_BAR_HEIGHT}
+          offset={FIX_HEIGHT}
           _translateY={footer_translateY}
           containerHeight={220}
           downDisplay={220 - 72}
@@ -202,6 +236,9 @@ class Footer extends React.PureComponent {
           <MiniView _navigateToDetail={this.props._navigateToDetail} />
         </BottomDrawer>
       </View>
+        )
+      }}
+      </SafeAreaConsumer>
     )
   }
 
@@ -223,7 +260,13 @@ class Footer extends React.PureComponent {
       header_translateY
     } = this.context
     return (
-      <React.Fragment>
+      <SafeAreaConsumer>
+      {insets => {
+        console.log(insets)
+        const NOTCH_BOTTOM_HEIGHT = insets.bottom
+        const FIX_HEIGHT = NOTCH_BOTTOM_HEIGHT > 0 ? NOTCH_BOTTOM_HEIGHT + STATUS_BAR_HEIGHT : 0
+      return(
+        <React.Fragment>
         <Animated.View
           style={[
             {
@@ -281,8 +324,7 @@ class Footer extends React.PureComponent {
           containerHeight={EXPANDED_HEIGHT_STEPBOX}
           downDisplay={
             EXPANDED_HEIGHT_STEPBOX -
-            COLLAPSED_HEIGHT_STEPBOX -
-            NAVIGATION_BAR_HEIGHT
+            COLLAPSED_HEIGHT_STEPBOX  - FIX_HEIGHT
           }
           backgroundColor="transparent"
           startUp={false}
@@ -316,40 +358,44 @@ class Footer extends React.PureComponent {
                   ({formatDistance(direction_state.distance)})
                 </Text>
               </View>
-              <StepList steps={steps} />
+              <StepList steps={steps} fixHeight={FIX_HEIGHT} />
             </View>
           </View>
         </BottomDrawer>
       </React.Fragment>
+        )
+      }}
+    </SafeAreaConsumer>
+      
     )
   }
 
   render() {
     const { selectedMarker, showDirection } = this.props
-    // if (selectedMarker) {
-    //   return showDirection
-    //     ? this._renderDirectionFooter()
-    //     : this._renderMarkerFooter()
-    // }
+    if (selectedMarker) {
+      return showDirection
+        ? this._renderDirectionFooter()
+        : this._renderMarkerFooter()
+    }
 
-    return this._renderMarkerFooter()
+    return this._renderLocationButton()
   }
 }
 
-// const mapStateToProps = getState => ({
-//   selectedMarker: getState.markerReducer.selectedMarker,
-//   distanceMatrix: getState.distanceReducer.distanceMatrix
-// })
+const mapStateToProps = getState => ({
+  selectedMarker: getState.markerReducer.selectedMarker,
+  distanceMatrix: getState.distanceReducer.distanceMatrix
+})
 
-const mapStateToProps = getState => {
-  const { distanceMatrix } = getState.distanceReducer
-  const { markerMatrix } = getState.markerReducer
-  const selectedMarker = markerMatrix['1986.058']
-  return {
-    selectedMarker,
-    distanceMatrix
-  }
-}
+// const mapStateToProps = getState => {
+//   const { distanceMatrix } = getState.distanceReducer
+//   const { markerMatrix } = getState.markerReducer
+//   const selectedMarker = markerMatrix['1986.058']
+//   return {
+//     selectedMarker,
+//     distanceMatrix
+//   }
+// }
 
 export default connect(
   mapStateToProps,
