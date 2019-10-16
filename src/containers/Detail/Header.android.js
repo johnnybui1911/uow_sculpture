@@ -14,6 +14,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../assets/dimension'
 import ImageViewerModal from './ImageViewerModal'
 import ImageOverlay from '../../components/ImageOverlay.js/ImageOverlay'
 import BackButton from '../../components/BackButton/BackButton'
+import { withNavigation } from 'react-navigation'
 
 const activeDot = <View style={activeDot} />
 
@@ -54,7 +55,7 @@ class Header extends React.PureComponent {
       }
     })
     const { currentIndex } = this.state
-    const { modalVisible, setModalVisible } = this.props
+    const { modalVisible, setModalVisible, disable = false } = this.props
     return (
       <View style={styles.headerImage}>
         {imageList.length > 0 ? (
@@ -111,16 +112,18 @@ class Header extends React.PureComponent {
         )}
 
         <BackButton
+          disable={disable}
           _goBack={this._goBack}
           style={
             imageList.length > 0
               ? { color: 'white' }
               : { color: '#3A3A3A', opacity: 0.7 }
           }
+          opacity={disable ? 0.7 : 1}
         />
       </View>
     )
   }
 }
 
-export default Header
+export default withNavigation(Header)

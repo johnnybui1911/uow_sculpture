@@ -72,7 +72,8 @@ class SignInScreen extends React.PureComponent {
       scope: 'openid email offline_access',
       audience: 'https://uowac-api.herokuapp.com',
       code_challenge: this.state.challenge,
-      code_challenge_method: 'S256'
+      code_challenge_method: 'S256',
+      prompt: 'login'
     })
 
     const authUrl = `${AUTH0_DOMAIN}/authorize?` + queryParams

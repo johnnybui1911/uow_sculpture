@@ -1,11 +1,13 @@
 import React from 'react'
-import { View, SafeAreaView } from 'react-native'
+import { View, SafeAreaView, StatusBar } from 'react-native'
 import { connect } from 'react-redux'
 import LottieView from 'lottie-react-native'
 import { AuthHeader } from '../containers/Auth/AuthScreen'
 import animations from '../assets/animations'
 import { getData } from '../library/asyncStorage'
 import palette from '../assets/palette'
+import CustomStatusBar from '../components/CustomStatusBar'
+import { NavigationEvents } from 'react-navigation'
 
 class AuthLoadingScreen extends React.PureComponent {
   componentDidMount = () => {
@@ -21,6 +23,15 @@ class AuthLoadingScreen extends React.PureComponent {
       <SafeAreaView
         style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
       >
+        <NavigationEvents
+          onWillFocus={() => {
+            StatusBar.setBarStyle('light-content')
+          }}
+          onWillBlur={() => {
+            StatusBar.setBarStyle('dark-content')
+          }}
+        />
+        <CustomStatusBar backgroundColor={palette.primaryColor} />
         <AuthHeader />
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <LottieView source={animations.loadingPersonal} autoPlay auto />

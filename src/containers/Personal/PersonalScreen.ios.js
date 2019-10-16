@@ -78,7 +78,7 @@ class PersonalScreen extends React.PureComponent {
     },
     onPanResponderRelease: (e, gestureState) => {
       this.state.scrollHeader.flattenOffset()
-      console.log(gestureState)
+      // console.log(gestureState)
       const { refreshing } = this.state
       if (!refreshing) {
         if (
@@ -505,7 +505,14 @@ class PersonalScreen extends React.PureComponent {
           navigationState={this.state}
           renderTabBar={this._renderHeader}
           renderScene={this._renderSence}
-          onIndexChange={index => this.setState({ index })}
+          onIndexChange={index => {
+            // if (index === 2) {
+            //   this._AboutScreenScrollV
+            //     .getNode()
+            //     .scrollTo({ x: 0, y: 0, animated: true })
+            // }
+            this.setState({ index })
+          }}
           initialLayout={initialLayout}
         />
       </SafeAreaView>

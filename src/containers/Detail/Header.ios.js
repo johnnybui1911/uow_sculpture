@@ -93,7 +93,7 @@ class Header extends React.PureComponent {
                 <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
                   <View>
                     <Image
-                      source={{ uri: imageList[0].url }}
+                      source={{ uri: imageList[0].url, cache: 'force-cache' }}
                       resizeMode="cover"
                       style={styles.imageItem}
                       onLoadEnd={() => {
@@ -130,7 +130,7 @@ class Header extends React.PureComponent {
                       >
                         <View>
                           <Image
-                            source={{ uri: image.url }}
+                            source={{ uri: image.url, cache: 'force-cache' }}
                             resizeMode="cover"
                             style={styles.imageItem}
                             onLoadEnd={() => {

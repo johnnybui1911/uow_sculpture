@@ -30,7 +30,7 @@ import { storeData, getData, clearData } from './library/asyncStorage'
 
 const MainView = Platform.OS === 'ios' ? View : SafeAreaView
 
-clearData('intro')
+// clearData('intro')
 class MainScreen extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -46,7 +46,7 @@ class MainScreen extends React.PureComponent {
   }
 
   _swipeUpIntro = () => {
-    // storeData('intro', 'intro')
+    storeData('intro', 'intro')
     this.setState({ isModalVisible: false })
   }
 

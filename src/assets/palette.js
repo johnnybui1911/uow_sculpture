@@ -13,5 +13,6 @@ export default {
   borderGreyColor: '#D9D9D6',
   highLightColor: '#FAFAFA',
   dividerColorNew: 'rgba(0,0,0,0.15)',
-  onPressColor: '#F2F2F2'
+  onPressColor: '#F2F2F2',
+  alertModalCommentColor: 'rgba(12,35,64,0.9)'
 }

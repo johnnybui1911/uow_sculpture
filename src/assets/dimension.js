@@ -1,8 +1,6 @@
 import { Platform, Dimensions, StatusBar } from 'react-native'
 import Constants from 'expo-constants'
 
-// console.log(Dimensions.get('screen').height)
-// console.log(Dimensions.get('window').height)
 export const DEFAULT_PADDING = 12
 // const checkHeight =
 //   Dimensions.get('window').height < Dimensions.get('screen').height
@@ -10,15 +8,29 @@ const ANDROID_STATUS_BAR =
   StatusBar.currentHeight === 0 ? 24 : StatusBar.currentHeight
 
 export const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 20 : ANDROID_STATUS_BAR
+// console.log(STATUS_BAR_HEIGHT)
+// console.log(Dimensions.get('screen').height)
+// console.log(Dimensions.get('window').height)
+// console.log(
+//   Constants.deviceName,
+//   Dimensions.get('screen').height -
+//     Dimensions.get('window').height -
+//     STATUS_BAR_HEIGHT
+// )
 
-export const FULL_SCREEN_HEIGHT = Math.round(Dimensions.get('screen').height)
-export const FULL_WINDOW_HEIGHT = Math.round(Dimensions.get('window').height)
+const FIX_HEIGHT =
+  Dimensions.get('screen').height -
+  Dimensions.get('window').height -
+  STATUS_BAR_HEIGHT
+export const FIX_KEYBOARD_HEIGHT = FIX_HEIGHT > 0 ? FIX_HEIGHT : 0
 
-export const HAS_ANDROID_NAVIGATION_BAR =
-  Platform.OS === 'android' && FULL_SCREEN_HEIGHT - FULL_WINDOW_HEIGHT >= 48
-// &&
-// ANDROID_STATUS_BAR < 48
-//   ||
+export const FULL_SCREEN_HEIGHT = Dimensions.get('screen').height
+export const FULL_WINDOW_HEIGHT = Dimensions.get('window').height
+
+export const HAS_ANDROID_NAVIGATION_BAR = 0
+// (Platform.OS === 'android' &&
+//   Math.round(FULL_SCREEN_HEIGHT - FULL_WINDOW_HEIGHT) >= 48 &&
+//   ANDROID_STATUS_BAR < 48) ||
 // (Platform.OS === 'android' &&
 //   ANDROID_STATUS_BAR >= 48 &&
 //   FULL_SCREEN_HEIGHT - FULL_WINDOW_HEIGHT >= 48 * 2)

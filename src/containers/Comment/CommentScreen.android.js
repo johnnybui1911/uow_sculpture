@@ -5,7 +5,9 @@ import {
   Text,
   Keyboard,
   Animated,
-  BackHandler
+  BackHandler,
+  Image,
+  TextInput
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from './styles'
@@ -20,9 +22,18 @@ import {
 import baseAxios from '../../library/api'
 import InputKeyboard from './InputKeyboard'
 import DeleteModal from './DeleteModal'
-import { SCREEN_WIDTH } from '../../assets/dimension'
+import {
+  SCREEN_WIDTH,
+  FIX_KEYBOARD_HEIGHT,
+  FULL_SCREEN_HEIGHT,
+  STATUS_BAR_HEIGHT,
+  FULL_WINDOW_HEIGHT
+} from '../../assets/dimension'
 import SignInButton from '../../components/SignIn/SignInButton'
 import ListHeader from '../../components/ListHeader/ListHeader'
+import Modal from 'react-native-modal'
+import BlackModal from '../../components/BlackModal/BlackModal'
+import Header from '../Detail/Header.android'
 
 const TEXT_INPUT_HEIGHT = 40
 
@@ -39,12 +50,18 @@ class CommentScreen extends React.PureComponent {
     isEdit: false,
     editing: false,
     isOverflowOpen: false,
-    isDelete: false
+    isDelete: false,
+    isKeyboardOpenModal: false,
+    modalVisible: false
   }
 
   inputRef = React.createRef()
 
-  keyboardHeight = new Animated.Value(0)
+  keyboardHeight = new Animated.Value(FULL_SCREEN_HEIGHT)
+
+  setModalVisible = modalVisible => {
+    this.setState({ modalVisible })
+  }
 
   _handleRefresh = () => {
     this.setState(
@@ -69,11 +86,22 @@ class CommentScreen extends React.PureComponent {
     this.setState({ isModalOpen: false, selectedComment: null })
   }
 
+  _focusTextInput = () => {
+    this.setState({ isKeyboardOpenModal: true })
+    this.inputRef.current.focus()
+  }
+
+  _blurTextInput = () => {
+    this.setState({ isKeyboardOpenModal: false })
+    this.inputRef.current.blur()
+  }
+
   _handleEditComment = () => {
     const { comments, selectedComment } = this.state
     if (selectedComment) {
       const { text } = selectedComment
       setTimeout(() => {
+        this.setState({ isKeyboardOpenModal: true })
         this.inputRef.current.focus()
         this.setState({ inputValue: text, isEdit: true })
       }, 600)
@@ -176,21 +204,24 @@ class CommentScreen extends React.PureComponent {
   }
 
   handleKeyboardDidShow = event => {
+    // console.log('keyboard height:', event.endCoordinates.height)
+    const keyboardHeight = event.endCoordinates.height
     Animated.timing(this.keyboardHeight, {
       duration: 1,
-      toValue: event.endCoordinates.height
+      toValue: FULL_WINDOW_HEIGHT - keyboardHeight - 60 + 1
     }).start()
   }
 
   handleKeyboardDidHide = () => {
     this.setState({
       inputValue: '',
-      isEdit: false
+      isEdit: false,
+      isKeyboardOpenModal: false
       // selectedComment: null
     })
     Animated.timing(this.keyboardHeight, {
       duration: 1,
-      toValue: 0
+      toValue: FULL_SCREEN_HEIGHT
     }).start()
   }
 
@@ -311,20 +342,32 @@ class CommentScreen extends React.PureComponent {
       refreshing,
       isOverflowOpen,
       selectedComment,
-      isDelete
+      isDelete,
+      isKeyboardOpenModal
     } = this.state
     const {
       user: { picture },
       loggedIn
     } = this.props
+    const id = this.props.navigation.getParam('id', 'unknown1')
+    const item = this.props.markerMatrix[id]
+    const { imageList } = item
 
     return (
       <SafeAreaView style={styles.container}>
-        <ListHeader
-          headerName="Comments"
-          leftButtonDisable={isLoading || isOverflowOpen}
+        <BlackModal
+          isVisible={isKeyboardOpenModal}
+          onPress={this._blurTextInput}
+        />
+        <Header
+          modalVisible={this.state.modalVisible}
+          setModalVisible={this.setModalVisible}
+          item={item}
+          imageList={imageList}
+          disable={isLoading || isOverflowOpen}
         />
         <CommentList
+          _focusTextInput={this._focusTextInput}
           _handleLoadMore={this._handleLoadMore}
           refreshing={refreshing}
           _handleRefresh={this._handleRefresh}
@@ -335,7 +378,28 @@ class CommentScreen extends React.PureComponent {
           navigation={this.props.navigation}
           isLoading={isLoading}
           editing={editing}
+          loggedIn={loggedIn}
         />
+
+        {isOverflowOpen && (
+          <View
+            style={{
+              backgroundColor: palette.alertModalCommentColor,
+              paddingHorizontal: 24,
+              paddingVertical: 16,
+              flexDirection: 'row',
+              top: FULL_WINDOW_HEIGHT * 0.4,
+              position: 'absolute',
+              zIndex: 10
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.menuText, { color: '#FFF' }]}>
+                {!isDelete ? 'Comment edited' : 'Comment deleted'}
+              </Text>
+            </View>
+          </View>
+        )}
         {loggedIn ? (
           <InputKeyboard
             keyboardHeight={this.keyboardHeight}
@@ -348,24 +412,7 @@ class CommentScreen extends React.PureComponent {
             _onSubmit={this._onSubmit}
             handleChangeText={this.handleChangeText}
             selectedComment={selectedComment}
-          >
-            {isOverflowOpen && (
-              <View
-                style={{
-                  backgroundColor: 'rgba(0,71,187,1)',
-                  paddingHorizontal: 24,
-                  paddingVertical: 16,
-                  flexDirection: 'row'
-                }}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.menuText, { color: '#FFF' }]}>
-                    {!isDelete ? 'Comment edited' : 'Comment deleted'}
-                  </Text>
-                </View>
-              </View>
-            )}
-          </InputKeyboard>
+          />
         ) : (
           <View
             style={{

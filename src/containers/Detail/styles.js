@@ -1,8 +1,15 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import palette from '../../assets/palette'
-import { BUTTON_HEIGHT } from '../../assets/dimension'
+import {
+  BUTTON_HEIGHT,
+  SCREEN_WIDTH,
+  FULL_WINDOW_HEIGHT
+} from '../../assets/dimension'
 
-const { width, height } = Dimensions.get('window')
+// const { width, height } = Dimensions.get('window')
+
+const width = SCREEN_WIDTH
+const height = FULL_WINDOW_HEIGHT
 
 const shadowStyle = {
   elevation: 4,
