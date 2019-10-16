@@ -5,6 +5,9 @@ import {
   _sendPushNotification,
   _sendLocalNotification
 } from '../../../library/notificationTask'
+import baseAxios from '../../../library/api'
+import store from '../../../redux/stores'
+import { VISIT } from '../../../assets/actionTypes'
 
 export const BACKGROUND_LOCATION_TASK = 'BACKGROUND_LOCATION_TASK'
 export const GEOFENCING_TASK = 'GEOFENCING_TASK'
@@ -44,7 +47,27 @@ TaskManager.defineTask(
           id
         }
       })
-      console.log("You've entered region:", region)
+
+      const { user } = store.getState().authReducer
+      const { markerMatrix } = store.getState().markerReducer
+      if (user.userId) {
+        if (!markerMatrix[id].isVisited) {
+          baseAxios
+            .post('visit', {
+              sculptureId: id
+            })
+            .then(res => {
+              console.log(res.data)
+            })
+            .catch(e => console.log('Can not visit'))
+        }
+        const marker = {
+          id
+        }
+        store.dispatch({ type: VISIT, enteredMarkers: [marker] })
+      }
+
+      console.log("You've enter region:", region)
     } else if (eventType === Location.GeofencingEventType.Exit) {
       // _sendLocalNotification({
       //   title: `Left ${name}`,

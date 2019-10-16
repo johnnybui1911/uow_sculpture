@@ -52,6 +52,7 @@ export const registerForPushNotificationsAsync = async () => {
 }
 
 export const _sendLocalNotification = async notiMessage => {
+  // console.log('send notification')
   await Notifications.presentLocalNotificationAsync({
     // categoryId: 'NOTI_ACTION',
     ios: {

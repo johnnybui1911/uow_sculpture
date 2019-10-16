@@ -132,11 +132,20 @@ class SignInScreen extends React.PureComponent {
   render() {
     const { isLoading } = this.state
     return isLoading ? (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
+      <View
+        style={{ flex: 1, justifyContent: 'center', backgroundColor: '#fff' }}
+      >
         <LottieView source={animations.loadingPersonal} autoPlay auto />
       </View>
     ) : (
-      <View style={{ flex: 1, justifyContent: 'center', marginTop: 80 }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          paddingTop: 80,
+          backgroundColor: '#fff'
+        }}
+      >
         <View
           style={{
             marginVertical: 30,

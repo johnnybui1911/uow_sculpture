@@ -4,17 +4,17 @@ import { Platform } from 'react-native'
 import { BACKGROUND_LOCATION_TASK } from './TaskManager'
 
 export default async () => {
-  const {
-    status,
-    permissions: { Location: ios }
-  } = await Permissions.askAsync(Permissions.LOCATION)
+  const { status, permissions } = await Permissions.askAsync(
+    Permissions.LOCATION
+  )
 
   if (status !== 'granted') {
     return
   }
 
   if (Platform.OS === 'ios') {
-    if (ios !== 'always') {
+    if (permissions.location.ios.scope !== 'always') {
+      console.log('Ios not always')
       return
     }
   }

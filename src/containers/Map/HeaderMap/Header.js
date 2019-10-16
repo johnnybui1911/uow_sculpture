@@ -136,7 +136,8 @@ class Header extends React.Component {
           >
             <SafeAreaConsumer>
               {insets => {
-                const FIX_NOTCH_HEADER = insets.top > 20 ? insets.top - 20 : 0
+                const FIX_NOTCH_HEADER =
+                  Platform.OS === 'ios' && insets.top > 20 ? insets.top - 20 : 0
                 return (
                   <View
                     style={[

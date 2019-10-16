@@ -4,7 +4,8 @@ import {
   TouchableWithoutFeedback,
   Image,
   Text,
-  ScrollView
+  ScrollView,
+  StatusBar
 } from 'react-native'
 import styles from './styles'
 import images from '../../assets/images'
@@ -68,7 +69,7 @@ class Header extends React.PureComponent {
       return {
         url: item.url,
         height: SCREEN_HEIGHT,
-        width: SCREEN_WIDTH,
+        width: SCREEN_WIDTH * 0.95,
         props: {
           resizeMode: 'contain'
         }
@@ -90,7 +91,12 @@ class Header extends React.PureComponent {
 
             <View style={{ width: '100%' }}>
               {imageList.length === 1 ? (
-                <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setModalVisible(true)
+                    StatusBar.setHidden(true)
+                  }}
+                >
                   <View>
                     <Image
                       source={{ uri: imageList[0].url, cache: 'force-cache' }}
@@ -126,7 +132,10 @@ class Header extends React.PureComponent {
                     return (
                       <TouchableWithoutFeedback
                         key={index}
-                        onPress={() => setModalVisible(true)}
+                        onPress={() => {
+                          setModalVisible(true)
+                          StatusBar.setHidden(true)
+                        }}
                       >
                         <View>
                           <Image

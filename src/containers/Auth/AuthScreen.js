@@ -6,7 +6,7 @@ import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import SignInScreen from './SignInScreen'
-import { SCREEN_WIDTH } from '../../assets/dimension'
+import { SCREEN_WIDTH, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import { NavigationEvents } from 'react-navigation'
 import CustomStatusBar from '../../components/CustomStatusBar'
 
@@ -44,7 +44,9 @@ export const AuthHeader = () => (
 class AuthScreen extends React.PureComponent {
   render() {
     return (
-      <React.Fragment>
+      <SafeAreaView
+        style={[{ flex: 1, backgroundColor: palette.primaryColor }]}
+      >
         <NavigationEvents
           onDidFocus={() => {
             StatusBar.setBarStyle('light-content')
@@ -56,17 +58,19 @@ class AuthScreen extends React.PureComponent {
             StatusBar.setBarStyle('dark-content')
           }}
         />
-        <SafeAreaView
-          style={{ flex: 0, backgroundColor: palette.primaryColor }}
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            height: 200,
+            top: 0,
+            backgroundColor: palette.primaryColor
+          }}
         />
-        <SafeAreaView
-          style={[{ flex: 1, backgroundColor: palette.backgroundColorWhite }]}
-        >
-          <CustomStatusBar backgroundColor={palette.primaryColor} />
-          <AuthHeader />
-          <SignInScreen navigation={this.props.navigation} />
-        </SafeAreaView>
-      </React.Fragment>
+        <AuthHeader />
+        <SignInScreen navigation={this.props.navigation} />
+      </SafeAreaView>
     )
   }
 }

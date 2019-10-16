@@ -72,54 +72,6 @@ export const fetchDistanceMatrix = userCoordinate => {
       }
       dispatch(fetchDistanceSuccessful(distanceMatrix))
     }
-
-    // destinations.length > 0 &&
-    //   userCoordinate &&
-    //   axios
-    //     .get(
-    //       `${DISTANCE_MATRIX_API}&origins=${userCoordinate.latitude},${userCoordinate.longitude}&destinations=${destinations}&key=${GOOGLE_MAPS_APIKEY}`
-    //     )
-    //     .then(response => {
-    //       return response.data
-    //     })
-    //     .then(mapData => {
-    //       const distance_duration_array = mapData.rows[0].elements
-    //       const distanceMatrix = {}
-    //       let enteredMarkers = []
-    //       data.forEach((marker, index) => {
-    //         const { distance, duration } = distance_duration_array[index]
-    //         const { id } = marker
-    //         distanceMatrix[id] = {
-    //           id,
-    //           distance: distance.value,
-
-    //           duration: Math.floor(duration.value / 60)
-    //         }
-    //         if (distance.value <= 20) {
-    //           enteredMarkers = [
-    //             ...enteredMarkers,
-    //             {
-    //               id,
-    //               name: marker.name,
-    //               coordinate: marker.coordinate,
-    //               photoURL: marker.photoURL
-    //             }
-    //           ]
-    //         }
-    //       })
-
-    //       return { distanceMatrix, enteredMarkers }
-    //     })
-    //     .then(({ distanceMatrix, enteredMarkers }) => {
-    //       if (enteredMarkers.length > 0) {
-    //         dispatch(handleVisitThunk(enteredMarkers))
-    //       }
-    //       dispatch(fetchDistanceSuccessful(distanceMatrix))
-    //     })
-    //     .catch(error => {
-    //       console.log(error)
-    //       dispatch(fetchDistanceRejected())
-    //     })
   }
 }
 

@@ -9,7 +9,8 @@ import {
   ActivityIndicator,
   Modal,
   StatusBar,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import { withNavigation } from 'react-navigation'
@@ -21,10 +22,12 @@ import ProfileBox from './ProfileBox'
 import {
   HEADER_BAR_MARGIN_TOP,
   SCREEN_WIDTH,
-  SCREEN_HEIGHT
+  SCREEN_HEIGHT,
+  STATUS_BAR_HEIGHT
 } from '../../assets/dimension'
 import { icons } from '../../assets/icons'
 import BlackModal from '../../components/BlackModal/BlackModal'
+import { useSafeArea } from 'react-native-safe-area-view'
 
 const PersonalHeader = ({
   user,
@@ -51,12 +54,16 @@ const PersonalHeader = ({
   const openImageViewer = () => {
     setModalVisible(true)
     StatusBar.setBarStyle('dark-content')
+    StatusBar.setHidden(true)
   }
 
   const closeImageViewer = () => {
     setModalVisible(false)
     StatusBar.setBarStyle('light-content')
+    StatusBar.setHidden(false)
   }
+
+  const insets = useSafeArea()
 
   return loggedIn ? (
     <View style={[styles.profileFixedContainer]}>
@@ -66,8 +73,8 @@ const PersonalHeader = ({
           imageUrls={[
             {
               url: user.picture,
-              height: SCREEN_WIDTH,
-              width: SCREEN_HEIGHT,
+              // height: SCREEN_HEIGHT,
+              // width: SCREEN_WIDTH,
               props: {
                 resizeMode: 'cover'
               }
@@ -80,7 +87,10 @@ const PersonalHeader = ({
             <View
               style={{
                 position: 'absolute',
-                top: 0,
+                top:
+                  Platform.OS === 'ios' && insets.top > 20
+                    ? STATUS_BAR_HEIGHT
+                    : 0,
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
                 alignItems: 'center',

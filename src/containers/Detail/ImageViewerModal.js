@@ -1,8 +1,17 @@
 import React from 'react'
-import { View, Modal, TouchableWithoutFeedback, Text } from 'react-native'
+import {
+  View,
+  Modal,
+  TouchableWithoutFeedback,
+  Text,
+  Platform,
+  StatusBar
+} from 'react-native'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import styles from './styles'
 import { icons } from '../../assets/icons'
+import { useSafeArea } from 'react-native-safe-area-view'
+import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
 
 const ImageViewerModal = ({
   imageSlide,
@@ -11,6 +20,11 @@ const ImageViewerModal = ({
   currentIndex,
   setCurrentIndex
 }) => {
+  const insets = useSafeArea()
+  const closeModal = () => {
+    setModalVisible(false)
+    Platform.OS === 'ios' && StatusBar.setHidden(false)
+  }
   return (
     <View style={{ ...styles.blackFullscreen, zIndex: modalVisible ? 1 : -10 }}>
       <Modal visible={modalVisible} transparent>
@@ -19,7 +33,10 @@ const ImageViewerModal = ({
             <View
               style={{
                 position: 'absolute',
-                top: 0,
+                top:
+                  Platform.OS === 'ios' && insets.top > 20
+                    ? STATUS_BAR_HEIGHT
+                    : 0,
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
                 alignItems: 'center',
@@ -39,9 +56,7 @@ const ImageViewerModal = ({
                   alignItems: 'flex-end'
                 }}
               >
-                <TouchableWithoutFeedback
-                  onPress={() => setModalVisible(false)}
-                >
+                <TouchableWithoutFeedback onPress={closeModal}>
                   <View
                     style={{
                       padding: 24
@@ -55,7 +70,7 @@ const ImageViewerModal = ({
           )}
           enableImageZoom
           enableSwipeDown
-          onCancel={() => setModalVisible(false)}
+          onCancel={closeModal}
           // saveToLocalByLongPress
           // onSave={url => console.log(`Save photo url: ${url}`)}
           // menuContext={{ saveToLocal: 'Save photo', cancel: 'Cancel' }}

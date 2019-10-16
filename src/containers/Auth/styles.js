@@ -32,7 +32,11 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: palette.backgroundColorWhite
   },
-  header: { height: HEADER_HEIGHT, backgroundColor: palette.primaryColor },
+  header: {
+    height: HEADER_HEIGHT,
+    backgroundColor: palette.primaryColor,
+    zIndex: 10
+  },
   title: {
     fontSize: 30,
     color: palette.primaryColor,

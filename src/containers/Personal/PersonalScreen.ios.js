@@ -447,7 +447,7 @@ class PersonalScreen extends React.PureComponent {
     })
 
     return (
-      <React.Fragment>
+      <SafeAreaView style={styles.container}>
         <NavigationEvents
           onWillFocus={() => {
             StatusBar.setBarStyle(
@@ -461,58 +461,41 @@ class PersonalScreen extends React.PureComponent {
         <StatusBar
           barStyle={showMiniHeader ? 'dark-content' : 'light-content'}
         />
-        <SafeAreaView
-          style={{
-            flex: 0,
-            backgroundColor: showMiniHeader ? '#fff' : palette.primaryColor
-          }}
+        <CustomStatusBar
+          backgroundColor={showMiniHeader ? '#fff' : palette.primaryColor}
         />
-        <SafeAreaView style={styles.container}>
-          {/* <Animated.View
-            style={{
-              height: STATUS_BAR_HEIGHT,
-              backgroundColor: palette.primaryColor,
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              opacity: opacityAnimateHide,
-              zIndex: 2
+        <Animated.View
+          style={{
+            backgroundColor: palette.primaryColor,
+            height: translateHeaderY,
+            justifyContent: 'center',
+            alignContent: 'center'
+          }}
+        >
+          <LottieView
+            ref={animation => {
+              this.animation = animation
             }}
-          /> */}
-          <Animated.View
-            style={{
-              backgroundColor: palette.primaryColor,
-              height: translateHeaderY,
-              justifyContent: 'center',
-              alignContent: 'center'
-            }}
-          >
-            <LottieView
-              ref={animation => {
-                this.animation = animation
-              }}
-              source={animations.header_loading}
-              progress={loadingAnimation}
-            />
-          </Animated.View>
-          <TabView
-            style={{ flex: 1 }}
-            navigationState={this.state}
-            renderTabBar={this._renderHeader}
-            renderScene={this._renderSence}
-            onIndexChange={index => {
-              // if (index === 2) {
-              //   this._AboutScreenScrollV
-              //     .getNode()
-              //     .scrollTo({ x: 0, y: 0, animated: true })
-              // }
-              this.setState({ index })
-            }}
-            initialLayout={initialLayout}
+            source={animations.header_loading}
+            progress={loadingAnimation}
           />
-        </SafeAreaView>
-      </React.Fragment>
+        </Animated.View>
+        <TabView
+          style={{ flex: 1 }}
+          navigationState={this.state}
+          renderTabBar={this._renderHeader}
+          renderScene={this._renderSence}
+          onIndexChange={index => {
+            // if (index === 2) {
+            //   this._AboutScreenScrollV
+            //     .getNode()
+            //     .scrollTo({ x: 0, y: 0, animated: true })
+            // }
+            this.setState({ index })
+          }}
+          initialLayout={initialLayout}
+        />
+      </SafeAreaView>
     )
   }
 }

@@ -17,7 +17,7 @@ import {
   syncLocationThunk
 } from './src/redux/actions'
 import images, { imageCacheList } from './src/assets/images'
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 function cacheImages(images) {
   return images.map(image => {
@@ -77,13 +77,13 @@ export default class App extends React.PureComponent {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      // const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
-      //   BACKGROUND_LOCATION_TASK
-      // )
-      // if (backgroundSync) {
-      //   await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)
-      //   console.log('Stop syncing Background')
-      // }
+      const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
+        BACKGROUND_LOCATION_TASK
+      )
+      if (backgroundSync) {
+        await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)
+        console.log('Stop syncing Background')
+      }
       console.log('App has come to the foreground!')
       stores.dispatch(syncLocationThunk())
     } else if (nextAppState.match(/inactive|background/)) {
@@ -117,7 +117,7 @@ export default class App extends React.PureComponent {
     return (
       <Provider store={stores}>
         <SafeAreaProvider>
-        <MainScreen />
+          <MainScreen />
         </SafeAreaProvider>
       </Provider>
     )
