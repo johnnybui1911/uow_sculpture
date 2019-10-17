@@ -10,6 +10,7 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native'
+import NetInfo from '@react-native-community/netinfo'
 import Modal from 'react-native-modal'
 import { connect } from 'react-redux'
 import {
@@ -31,6 +32,7 @@ import { icons } from './assets/icons'
 import CongratModal from './components/CongratModal/CongratModal'
 import { storeData, getData, clearData } from './library/asyncStorage'
 import { SafeAreaConsumer } from 'react-native-safe-area-context'
+import ErrorScreen from './navigations/ErrorScreen'
 
 const MainView = Platform.OS === 'ios' ? View : SafeAreaView
 
@@ -40,13 +42,34 @@ class MainScreen extends React.PureComponent {
     super(props)
     this.state = {
       isModalVisible: false,
-      isCongratModalVisible: false
+      isCongratModalVisible: false,
+      isNetworkConnect: true
     }
+  }
+  resetData = async () => {
+    const { thunkSignIn, fetchDataThunk, syncLocationThunk } = this.props
+    await thunkSignIn()
+    await fetchDataThunk()
+    await syncLocationThunk()
   }
 
   componentDidMount = async () => {
     const intro = await getData('intro')
     this.setState({ isModalVisible: intro ? false : true })
+    this.unsubscribeNetwork = NetInfo.addEventListener(state => {
+      // console.log('Connection type', state.type)
+      console.log('Is connected?', state.isConnected)
+      this.setState(prevState => {
+        if (!prevState.isNetworkConnect && state.isConnected) {
+          this.resetData()
+        }
+        return { isNetworkConnect: state.isConnected }
+      })
+    })
+  }
+
+  componentWillUnmount = () => {
+    this.unsubscribeNetwork()
   }
 
   _swipeUpIntro = () => {
@@ -59,7 +82,7 @@ class MainScreen extends React.PureComponent {
   }
 
   render() {
-    const { isCongratModalVisible } = this.state
+    const { isCongratModalVisible, isNetworkConnect } = this.state
     return (
       <MainView style={{ flex: 1 }}>
         {Platform.OS === 'android' ? (
@@ -69,7 +92,8 @@ class MainScreen extends React.PureComponent {
             translucent
           />
         ) : null}
-        <AppContainer />
+        {isNetworkConnect ? <AppContainer /> : <ErrorScreen />}
+
         <SafeAreaConsumer>
           {insets => {
             return <View style={{ paddingBottom: insets.bottom }} />

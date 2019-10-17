@@ -146,38 +146,42 @@ export const fetchUserDataThunk = (initialUserId = null) => {
 }
 
 export const thunkSignIn = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
       const auth = await getData('auth')
+      const { user } = getState().authReducer
       if (auth) {
-        baseAxios
-          .get('user/me')
-          .then(res => {
-            // console.log(res.data)
-            const {
-              userId,
-              name,
-              email,
-              joinDate,
-              picture,
-              nickname
-            } = res.data
-            const user = {
-              userId,
-              username: userId.includes('auth0') ? nickname : name,
-              email,
-              joinDate,
-              picture
-            }
-            dispatch(signInSuccesful(user))
-            resolve()
-          })
-          .catch(e => {
-            console.log('Can not sign in')
-            dispatch(signInRejected())
-            // clearData('auth')
-            resolve()
-          })
+        if (!user.userId) {
+          console.log('Fetch User')
+          baseAxios
+            .get('user/me')
+            .then(res => {
+              // console.log(res.data)
+              const {
+                userId,
+                name,
+                email,
+                joinDate,
+                picture,
+                nickname
+              } = res.data
+              const user = {
+                userId,
+                username: userId.includes('auth0') ? nickname : name,
+                email,
+                joinDate,
+                picture
+              }
+              dispatch(signInSuccesful(user))
+              resolve()
+            })
+            .catch(e => {
+              console.log('Can not sign in')
+              dispatch(signInRejected())
+              // clearData('auth')
+              resolve()
+            })
+        }
       } else {
         console.log('Can not sign in because no data')
         clearData('auth')

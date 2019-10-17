@@ -22,6 +22,7 @@ import baseAxios from '../../library/api'
 import InputKeyboard from './InputKeyboard'
 import DeleteModal from './DeleteModal'
 import ListHeader from '../../components/ListHeader/ListHeader'
+import { SafeAreaConsumer } from 'react-native-safe-area-view'
 import { SCREEN_WIDTH, FULL_SCREEN_HEIGHT } from '../../assets/dimension'
 import SignInButton from '../../components/SignIn/SignInButton'
 import { icons } from '../../assets/icons'
@@ -352,53 +353,65 @@ class CommentScreen extends React.PureComponent {
             margin: 0
           }}
         >
-          <View style={styles.iosMenuStyle}>
-            <TouchableHighlight
-              underlayColor="#FAFAFA"
-              onPress={() => {
-                this._handleEditComment()
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 16,
-                  paddingHorizontal: 24
-                }}
-              >
-                <View style={{ width: 50 }}>{icons.edit}</View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.menuTextLg}>Edit</Text>
+          <SafeAreaConsumer>
+            {insets => {
+              const FIX_BOTTOM_NOTCH = insets.bottom
+              return (
+                <View
+                  style={[
+                    styles.iosMenuStyle,
+                    { paddingBottom: FIX_BOTTOM_NOTCH }
+                  ]}
+                >
+                  <TouchableHighlight
+                    underlayColor="#FAFAFA"
+                    onPress={() => {
+                      this._handleEditComment()
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 16,
+                        paddingHorizontal: 24
+                      }}
+                    >
+                      <View style={{ width: 50 }}>{icons.edit}</View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.menuTextLg}>Edit</Text>
+                      </View>
+                    </View>
+                  </TouchableHighlight>
+                  <Divider styles={{ marginVertical: 0 }} />
+                  <TouchableHighlight
+                    underlayColor="#FAFAFA"
+                    onPress={() => {
+                      this.setState({ isSettingModalOpen: false }, () => {
+                        setTimeout(() => {
+                          this.setState({ isModalOpen: true })
+                        }, 600)
+                      })
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 16,
+                        paddingHorizontal: 24
+                      }}
+                    >
+                      <View style={{ width: 50 }}>{icons.delete}</View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.menuTextLg}>Delete</Text>
+                      </View>
+                    </View>
+                  </TouchableHighlight>
                 </View>
-              </View>
-            </TouchableHighlight>
-            <Divider styles={{ marginVertical: 0 }} />
-            <TouchableHighlight
-              underlayColor="#FAFAFA"
-              onPress={() => {
-                this.setState({ isSettingModalOpen: false }, () => {
-                  setTimeout(() => {
-                    this.setState({ isModalOpen: true })
-                  }, 600)
-                })
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 16,
-                  paddingHorizontal: 24
-                }}
-              >
-                <View style={{ width: 50 }}>{icons.delete}</View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.menuTextLg}>Delete</Text>
-                </View>
-              </View>
-            </TouchableHighlight>
-          </View>
+              )
+            }}
+          </SafeAreaConsumer>
         </Modal>
         {loggedIn ? (
           <InputKeyboard

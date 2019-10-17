@@ -8,7 +8,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
 import * as Location from 'expo-location'
-import NetInfo from '@react-native-community/netinfo'
 import { AppLoading } from 'expo'
 import MainScreen from './src/MainScreen'
 import stores from './src/redux/stores'
@@ -43,10 +42,6 @@ export default class App extends React.PureComponent {
 
   componentDidMount = async () => {
     AppState.addEventListener('change', this._handleAppStateChange)
-    this.unsubscribeNetwork = NetInfo.addEventListener(state => {
-      console.log('Connection type', state.type)
-      console.log('Is connected?', state.isConnected)
-    })
     // this._notificationSubscription = await Notifications.addListener(
     //   this._handleNotification
     // )
@@ -64,7 +59,6 @@ export default class App extends React.PureComponent {
 
   componentWillUnmount = () => {
     AppState.removeEventListener('change', this._handleAppStateChange)
-    this.unsubscribeNetwork()
   }
 
   _loadDataAsync = async () => {
@@ -95,7 +89,7 @@ export default class App extends React.PureComponent {
         console.log('Stop syncing Background')
       }
       console.log('App has come to the foreground!')
-      stores.dispatch(syncLocationThunk())
+      // stores.dispatch(syncLocationThunk())
     } else if (nextAppState.match(/inactive|background/)) {
       // await syncLocationBackground()
       console.log('App is going to background')

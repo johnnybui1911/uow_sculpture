@@ -55,7 +55,7 @@ export const syncLocationThunk = () => {
       const { status } = await Permissions.askAsync(Permissions.LOCATION)
       if (status !== 'granted') {
         dispatch(syncLocationRejected())
-        _alertLocationPermission()
+        Platform.OS === 'ios' && _alertLocationPermission()
         console.log('Need Location Permission')
         reject()
       } else {
@@ -79,6 +79,21 @@ export const syncLocationThunk = () => {
               }
             }
           )
+        } else {
+          console.log('Get current location')
+          const loc = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Highest
+          })
+          if (loc.timestamp) {
+            const { latitude, longitude } = loc.coords
+            dispatch(syncLocationSuccessful({ latitude, longitude }))
+            dispatch(fetchDistanceMatrix(loc.coords))
+            resolve()
+          } else {
+            dispatch(syncLocationRejected())
+            console.log('error fetch location expo')
+            reject()
+          }
         }
       }
     })

@@ -188,7 +188,7 @@ class VisitScreen extends React.PureComponent {
               paddingTop: 12
             }}
           >
-            <ActivityIndicator color={palette.primaryColorLight} size="large" />
+            <ActivityIndicator color={palette.primaryColorLight} size="small" />
           </View>
         ) : (
           this._renderList()

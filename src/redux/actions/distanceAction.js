@@ -29,19 +29,12 @@ export const fetchDistanceRejected = () => {
 
 export const fetchDistanceMatrix = userCoordinate => {
   return (dispatch, getState) => {
-    // let userCoordinate = userCoord
-    // if (!userCoord) {
-    //   userCoordinate = getState().locationReducer.userCoordinate
-    // }
-    const { markers } = getState().markerReducer
+    const { markerMatrix } = getState().markerReducer
+    let markers = []
+    Object.entries(markerMatrix).forEach(([key, value]) => {
+      markers.push(value)
+    })
     const data = markers.filter(item => item.coordinate.latitude)
-
-    // let destinations = ''
-    // data.forEach(marker => {
-    //   const { latitude, longitude } = marker.coordinate
-    //   destinations += `${latitude}%2C${longitude}%7C`
-    // })
-
     if (userCoordinate) {
       const distanceMatrix = {}
       let enteredMarkers = []
