@@ -1,10 +1,15 @@
+/*
+Nam Hoang Bui - 5520125 - UOW Sculptures
+*/
 import React from 'react'
 import { Provider } from 'react-redux'
-import { AppState, Alert } from 'react-native'
+import { AppState } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
 import * as Location from 'expo-location'
-import { Notifications, AppLoading } from 'expo'
+import NetInfo from '@react-native-community/netinfo'
+import { AppLoading } from 'expo'
 import MainScreen from './src/MainScreen'
 import stores from './src/redux/stores'
 import { registerForPushNotificationsAsync } from './src/library/notificationTask'
@@ -16,8 +21,7 @@ import {
   thunkSignIn,
   syncLocationThunk
 } from './src/redux/actions'
-import images, { imageCacheList } from './src/assets/images'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { imageCacheList } from './src/assets/images'
 
 function cacheImages(images) {
   return images.map(image => {
@@ -33,11 +37,16 @@ export default class App extends React.PureComponent {
   state = {
     isReady: false,
     appState: AppState.currentState,
-    notification: {}
+    notification: {},
+    isConnected: false
   }
 
   componentDidMount = async () => {
     AppState.addEventListener('change', this._handleAppStateChange)
+    this.unsubscribeNetwork = NetInfo.addEventListener(state => {
+      console.log('Connection type', state.type)
+      console.log('Is connected?', state.isConnected)
+    })
     // this._notificationSubscription = await Notifications.addListener(
     //   this._handleNotification
     // )
@@ -55,6 +64,7 @@ export default class App extends React.PureComponent {
 
   componentWillUnmount = () => {
     AppState.removeEventListener('change', this._handleAppStateChange)
+    this.unsubscribeNetwork()
   }
 
   _loadDataAsync = async () => {

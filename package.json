@@ -12,6 +12,7 @@
     "@valdio/react-native-scrollable-tabview": "^0.8.12",
     "axios": "^0.19.0",
     "expo": "^35.0.0",
+    "expo-asset": "~7.0.0",
     "expo-constants": "~7.0.0",
     "expo-crypto": "~7.0.0",
     "expo-font": "~7.0.0",
@@ -22,7 +23,7 @@
     "expo-random": "~7.0.0",
     "expo-task-manager": "~7.0.0",
     "expo-web-browser": "~7.0.0",
-    "haversine-distance": "^1.1.4",
+    "haversine-distance": "^1.1.6",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
     "lottie-react-native": "~2.6.1",
@@ -57,7 +58,8 @@
     "rn-bottom-drawer": "^1.4.3",
     "rn-placeholder": "^3.0.0",
     "to-querystring": "^1.1.0",
-    "expo-asset": "~7.0.0"
+    "expo-intent-launcher": "~7.0.0",
+    "@react-native-community/netinfo": "~3.2.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
