@@ -9,17 +9,14 @@ import {
   Image
 } from 'react-native'
 import { connect } from 'react-redux'
-import { withNavigation } from 'react-navigation'
+import { SafeAreaConsumer } from 'react-native-safe-area-context'
 import BottomDrawer from '../../../library/rn-bottom-drawer/BottomDrawer'
 import { SwipeButton, ButtonMyLocation } from '../../../components'
 import styles from '../styles'
 import StepList from './StepList'
 import MiniView from './MiniView'
 import {
-  SCREEN_WIDTH,
   SCREEN_HEIGHT,
-  STATUS_BAR_HEIGHT,
-  BOTTOM_TAB_BAR_HEIGHT,
   COLLAPSED_HEIGHT_STEPBOX,
   EXPANDED_HEIGHT_STEPBOX,
   MARGIN_BOTTOM_STEPBOX,
@@ -29,56 +26,31 @@ import images from '../../../assets/images'
 import { MapContext } from '../context/MapContext'
 import formatDistance from '../../../library/formatDistance'
 import palette from '../../../assets/palette'
-import { selectMarker } from '../../../redux/actions'
-import { SafeAreaConsumer } from 'react-native-safe-area-context';
 
 const MINI_IMAGE_POSITION = SCREEN_HEIGHT - 220 - 96 - NAVIGATION_BAR_HEIGHT
 const LCOATION_BUTTON_POSITION =
   SCREEN_HEIGHT - 220 - 66 - NAVIGATION_BAR_HEIGHT
 const ANIMATE_DURATION = 250
 
-const FAKE_STEP = [
-  {
-    distance: {
-      text: '0.1 km',
-      value: 106
-    },
-    duration: {
-      text: '1 min',
-      value: 78
-    },
-    end_location: {
-      lat: -34.4117182,
-      lng: 150.8927918
-    },
-    html_instructions: 'Head <b>west</b> on <b>Exeter Ave</b>',
-    polyline: {
-      points: 'p``qEym~w[AD]hBAF?F?B@F@FRfA'
-    },
-    start_location: {
-      lat: -34.4117659,
-      lng: 150.8938938
-    },
-    travel_mode: 'WALKING'
-  },
-]
-
-
 class Footer extends React.PureComponent {
   static contextType = MapContext
 
-  miniImage_translateY = new Animated.Value(MINI_IMAGE_POSITION - this.props.fix_notch_height )
-  locationButton_translateY = new Animated.Value(LCOATION_BUTTON_POSITION - this.props.fix_notch_height)
+  miniImage_translateY = new Animated.Value(
+    MINI_IMAGE_POSITION - this.props.fix_notch_height
+  )
+  locationButton_translateY = new Animated.Value(
+    LCOATION_BUTTON_POSITION - this.props.fix_notch_height
+  )
 
   slideIn = () => {
-    const {fix_notch_height} = this.props
+    const { fix_notch_height } = this.props
     Animated.parallel([
       Animated.timing(this.miniImage_translateY, {
         toValue: MINI_IMAGE_POSITION - fix_notch_height,
         duration: ANIMATE_DURATION
       }),
       Animated.timing(this.locationButton_translateY, {
-        toValue: LCOATION_BUTTON_POSITION  - fix_notch_height,
+        toValue: LCOATION_BUTTON_POSITION - fix_notch_height,
         duration: ANIMATE_DURATION
       })
     ]).start()
@@ -100,7 +72,6 @@ class Footer extends React.PureComponent {
   _collapseStepList = () => {
     const { setShowSteps } = this.context
     setShowSteps(false)
-    console.log('Collapsed')
     this.drawer.closeBottomDrawer()
   }
 
@@ -144,15 +115,15 @@ class Footer extends React.PureComponent {
 
   // FIXME: fix bottom drawer
   _renderMarkerFooter = () => {
-    const { centered, _centerUserLocation, selectedMarker } = this.props
+    const {
+      centered,
+      _centerUserLocation,
+      selectedMarker,
+      fix_notch_height
+    } = this.props
     const { footer_translateY } = this.context
-    return ( <SafeAreaConsumer>
-      {insets => {
-        console.log(insets)
-        const NOTCH_BOTTOM_HEIGHT = insets.bottom
-        const FIX_HEIGHT = NOTCH_BOTTOM_HEIGHT > 0 ? NOTCH_BOTTOM_HEIGHT + STATUS_BAR_HEIGHT : 0
-        return (
-    <View>
+    return (
+      <View>
         <TouchableWithoutFeedback
           onPress={() =>
             this.props.navigation.navigate('Detail', {
@@ -221,7 +192,7 @@ class Footer extends React.PureComponent {
           />
         </Animated.View>
         <BottomDrawer
-          offset={FIX_HEIGHT}
+          offset={fix_notch_height}
           _translateY={footer_translateY}
           containerHeight={220}
           downDisplay={220 - 72}
@@ -236,9 +207,6 @@ class Footer extends React.PureComponent {
           <MiniView _navigateToDetail={this.props._navigateToDetail} />
         </BottomDrawer>
       </View>
-        )
-      }}
-      </SafeAreaConsumer>
     )
   }
 
@@ -248,25 +216,13 @@ class Footer extends React.PureComponent {
     const {
       centered,
       _centerUserLocation,
-      selectedMarker,
       steps,
       showSteps,
-      distanceMatrix
+      fix_notch_height
     } = this.props
-    const {
-      setShowSteps,
-      footer_translateY,
-      direction_state,
-      header_translateY
-    } = this.context
+    const { setShowSteps, footer_translateY, direction_state } = this.context
     return (
-      <SafeAreaConsumer>
-      {insets => {
-        console.log(insets)
-        const NOTCH_BOTTOM_HEIGHT = insets.bottom
-        const FIX_HEIGHT = NOTCH_BOTTOM_HEIGHT > 0 ? NOTCH_BOTTOM_HEIGHT + STATUS_BAR_HEIGHT : 0
-      return(
-        <React.Fragment>
+      <React.Fragment>
         <Animated.View
           style={[
             {
@@ -324,7 +280,8 @@ class Footer extends React.PureComponent {
           containerHeight={EXPANDED_HEIGHT_STEPBOX}
           downDisplay={
             EXPANDED_HEIGHT_STEPBOX -
-            COLLAPSED_HEIGHT_STEPBOX  - FIX_HEIGHT
+            COLLAPSED_HEIGHT_STEPBOX -
+            fix_notch_height
           }
           backgroundColor="transparent"
           startUp={false}
@@ -338,7 +295,11 @@ class Footer extends React.PureComponent {
           ref={ref => (this.drawer = ref)}
         >
           <View
-            style={{ height: EXPANDED_HEIGHT_STEPBOX, zIndex: 1, elevation: 9 }}
+            style={{
+              height: EXPANDED_HEIGHT_STEPBOX,
+              zIndex: 1,
+              elevation: 9
+            }}
           >
             <View style={styles.stepsContainer}>
               <SwipeButton />
@@ -358,15 +319,11 @@ class Footer extends React.PureComponent {
                   ({formatDistance(direction_state.distance)})
                 </Text>
               </View>
-              <StepList steps={steps} fixHeight={FIX_HEIGHT} />
+              <StepList steps={steps} fixHeight={fix_notch_height} />
             </View>
           </View>
         </BottomDrawer>
       </React.Fragment>
-        )
-      }}
-    </SafeAreaConsumer>
-      
     )
   }
 

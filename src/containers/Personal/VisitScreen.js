@@ -6,21 +6,20 @@ import {
   Image,
   Text,
   ActivityIndicator,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
   RefreshControl
 } from 'react-native'
 import { connect } from 'react-redux'
+import { RectButton } from 'react-native-gesture-handler'
 import moment from 'moment'
 import styles from './styles'
 import images from '../../assets/images'
 import DividerLight from '../../components/Divider/DividerLight'
-import { MIN_TABVIEW_HEIGHT, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import baseAxios from '../../library/api'
 import ListHeader from '../../components/ListHeader/ListHeader'
 import NoResultScreen from '../../components/NoResult/NoResultScreen'
+
 class VisitScreen extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -43,7 +42,7 @@ class VisitScreen extends React.PureComponent {
         const resData = res.data.map(element => {
           const {
             visitId,
-            user: { userId, picture },
+            user: { userId },
             sculpture: { accessionId, images, name },
             visitTime
           } = element
@@ -74,21 +73,20 @@ class VisitScreen extends React.PureComponent {
   }
 
   _renderItem = ({ item }) => {
-    const { username } = this.props
     const { submitDate, photoURL, sculptureName, sculptureId } = item
     return (
-      <TouchableHighlight
-        underlayColor={palette.onPressColor}
+      <RectButton
         onPress={() =>
           this.props.navigation.navigate('Detail', { id: sculptureId })
         }
-        style={{ paddingHorizontal: 24, paddingVertical: 12 }}
       >
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            paddingHorizontal: 24,
+            paddingVertical: 12
           }}
         >
           <View style={[]}>
@@ -126,7 +124,7 @@ class VisitScreen extends React.PureComponent {
             </Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </RectButton>
     )
   }
 
@@ -141,7 +139,6 @@ class VisitScreen extends React.PureComponent {
         })}
         keyExtractor={(item, index) => index.toString()}
         renderItem={this._renderItem}
-        // style={[styles.flatList, { marginTop: -12 }]}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => (
           <DividerLight
@@ -156,7 +153,6 @@ class VisitScreen extends React.PureComponent {
             tintColor={palette.primaryColorLight}
           />
         }
-        // contentContainerStyle={{ paddingTop: 12 }}
       />
     ) : (
       <NoResultScreen title="No visits" />

@@ -1,40 +1,19 @@
-import React from 'react'
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Animated,
-  Image,
-  ScrollView
-} from 'react-native'
+import React, { useEffect } from 'react'
+import { View, Text, Image } from 'react-native'
 import { connect } from 'react-redux'
 import Modal from 'react-native-modal'
-import {
-  STATUS_BAR_HEIGHT,
-  SCREEN_HEIGHT,
-  FULL_SCREEN_HEIGHT
-} from '../../assets/dimension'
+import { FULL_SCREEN_HEIGHT } from '../../assets/dimension'
 import styles from './styles'
 import palette from '../../assets/palette'
 import { icons } from '../../assets/icons'
 import { CLOSE_MODAL } from '../../assets/actionTypes'
-import animations from '../../assets/animations'
 import images from '../../assets/images'
-import BlackModal from '../BlackModal/BlackModal'
 
 const CongratModal = ({
   isCongratModalVisible,
   _closeModal,
   enteredMarkers
 }) => {
-  const progressAnimation = new Animated.Value(0)
-  const _animateCeleb = () => {
-    progressAnimation.setValue(0)
-    Animated.timing(progressAnimation, {
-      toValue: 1,
-      duration: 5000
-    }).start()
-  }
   return (
     <View>
       <Modal
@@ -49,28 +28,18 @@ const CongratModal = ({
         }}
         style={{
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          margin: 0
         }}
       >
-        {/* <LottieView
-                ref={animation => {
-                  this.animation = animation
-                }}
-                style={{
-                  zIndex: 99,
-                  elevation: 20,
-                  transform: [{ scale: (1.1, 1.4) }]
-                }}
-                source={animations.confetti}
-                progress={this.progressAnimation}
-              /> */}
         <View
           style={{
-            // zIndex: 900,
+            zIndex: 900,
             backgroundColor: '#fff',
             borderRadius: 26,
-            // minHeight: 200,
-            width: 260,
+            minHeight: 280,
+            minWidth: 300,
+            maxWidth: 320,
             justifyContent: 'center',
             alignItems: 'center'
             // elevation: 10
@@ -98,12 +67,13 @@ const CongratModal = ({
               You have visited
             </Text>
           </View>
-          <ScrollView
-            horizontal
-            style={{ padding: 16 }}
-            // contentContainerStyle={{ paddingLeft: 12 }}
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row'
+            }}
           >
-            {enteredMarkers.map(item => {
+            {enteredMarkers.slice(0, 2).map(item => {
               const { photoURL, id, name } = item
               return (
                 <View
@@ -147,7 +117,6 @@ const CongratModal = ({
                       />
                     </View>
                   )}
-
                   <View
                     style={{
                       // paddingBottom: 7,
@@ -170,7 +139,7 @@ const CongratModal = ({
                 </View>
               )
             })}
-          </ScrollView>
+          </View>
         </View>
       </Modal>
     </View>

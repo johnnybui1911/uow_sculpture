@@ -3,7 +3,8 @@ export default {
   chosen_marker: require('./images/chosen-marker.png'),
   trophy: require('./images/trophy.png'),
   empty_image: require('./images/no-image.png'),
-  no_internet: require('./images/no-internet.png')
+  no_internet: require('./images/no-internet.png'),
+  no_location: require('./images/not-location.png')
 }
 
 export const imageCacheList = [
@@ -18,5 +19,6 @@ export const imageCacheList = [
   require('./images/no-image.png'),
   require('./images/user-location-sm.png'),
   require('./images/user-location.png'),
-  require('./images/no-internet.png')
+  require('./images/no-internet.png'),
+  require('./images/not-location.png')
 ]

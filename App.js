@@ -14,7 +14,10 @@ import stores from './src/redux/stores'
 import { registerForPushNotificationsAsync } from './src/library/notificationTask'
 import syncLocationBackground from './src/containers/Map/Background/syncLocationBackground'
 import geofencingRegion from './src/containers/Map/Background/geofencingRegion'
-import { BACKGROUND_LOCATION_TASK } from './src/containers/Map/Background/TaskManager'
+import {
+  BACKGROUND_LOCATION_TASK,
+  GEOFENCING_TASK
+} from './src/containers/Map/Background/TaskManager'
 import {
   fetchDataThunk,
   thunkSignIn,
@@ -36,8 +39,8 @@ export default class App extends React.PureComponent {
   state = {
     isReady: false,
     appState: AppState.currentState,
-    notification: {},
-    isConnected: false
+    locationAccess: false,
+    dataFetchStatus: true
   }
 
   componentDidMount = async () => {
@@ -61,9 +64,7 @@ export default class App extends React.PureComponent {
     AppState.removeEventListener('change', this._handleAppStateChange)
   }
 
-  _loadDataAsync = async () => {
-    await stores.dispatch(thunkSignIn())
-    const fetchData = stores.dispatch(fetchDataThunk())
+  _loadDataAsync = () => {
     const loadFont = Font.loadAsync({
       'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
       'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
@@ -72,7 +73,7 @@ export default class App extends React.PureComponent {
     })
     const imageAssets = cacheImages([...imageCacheList])
 
-    await Promise.all([fetchData, loadFont, ...imageAssets])
+    return Promise.all([loadFont, ...imageAssets])
   }
 
   // FIXME: BACKGROUND NOT WORKING IN IOS EXPO APP
@@ -81,15 +82,20 @@ export default class App extends React.PureComponent {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
-        BACKGROUND_LOCATION_TASK
-      )
-      if (backgroundSync) {
-        await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)
-        console.log('Stop syncing Background')
-      }
       console.log('App has come to the foreground!')
-      // stores.dispatch(syncLocationThunk())
+      try {
+        await stores.dispatch(syncLocationThunk())
+        this.setState({ locationAccess: true })
+      } catch (e) {
+        this.setState({ locationAccess: false })
+      }
+
+      // const geofencingTask = await Location.hasStartedGeofencingAsync(
+      //   GEOFENCING_TASK
+      // )
+      // if (geofencingTask) {
+      // Location.stopGeofencingAsync(GEOFENCING_TASK)
+      // }
     } else if (nextAppState.match(/inactive|background/)) {
       // await syncLocationBackground()
       console.log('App is going to background')
@@ -104,13 +110,20 @@ export default class App extends React.PureComponent {
   }
 
   render() {
-    if (!this.state.isReady) {
+    const { locationAccess, isReady, dataFetchStatus } = this.state
+    if (!isReady) {
       return (
         <AppLoading
           startAsync={this._loadDataAsync}
           onFinish={async () => {
-            await stores.dispatch(syncLocationThunk())
-            this.setState({ isReady: true })
+            await stores.dispatch(thunkSignIn())
+            await stores.dispatch(fetchDataThunk())
+            try {
+              await stores.dispatch(syncLocationThunk())
+              this.setState({ isReady: true, locationAccess: true })
+            } catch (e) {
+              this.setState({ isReady: true, locationAccess: false })
+            }
           }}
           onError={() => {
             console.log('Error')
@@ -121,7 +134,10 @@ export default class App extends React.PureComponent {
     return (
       <Provider store={stores}>
         <SafeAreaProvider>
-          <MainScreen />
+          <MainScreen
+            locationAccess={locationAccess}
+            dataFetchStatus={dataFetchStatus}
+          />
         </SafeAreaProvider>
       </Provider>
     )

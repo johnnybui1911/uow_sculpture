@@ -33,6 +33,7 @@ import CongratModal from './components/CongratModal/CongratModal'
 import { storeData, getData, clearData } from './library/asyncStorage'
 import { SafeAreaConsumer } from 'react-native-safe-area-context'
 import ErrorScreen from './navigations/ErrorScreen'
+import LocationError from './navigations/LocationError'
 
 const MainView = Platform.OS === 'ios' ? View : SafeAreaView
 
@@ -81,8 +82,20 @@ class MainScreen extends React.PureComponent {
     this.setState({ isCongratModalVisible: false })
   }
 
+  _renderScreen = () => {
+    const { isNetworkConnect } = this.state
+    const { locationAccess } = this.props
+    if (isNetworkConnect && locationAccess) {
+      return <AppContainer />
+    } else if (isNetworkConnect && !locationAccess) {
+      return <LocationError />
+    } else {
+      return <ErrorScreen />
+    }
+  }
+
   render() {
-    const { isCongratModalVisible, isNetworkConnect } = this.state
+    const { isCongratModalVisible } = this.state
     return (
       <MainView style={{ flex: 1 }}>
         {Platform.OS === 'android' ? (
@@ -92,8 +105,7 @@ class MainScreen extends React.PureComponent {
             translucent
           />
         ) : null}
-        {isNetworkConnect ? <AppContainer /> : <ErrorScreen />}
-
+        {this._renderScreen()}
         <SafeAreaConsumer>
           {insets => {
             return <View style={{ paddingBottom: insets.bottom }} />

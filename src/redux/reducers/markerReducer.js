@@ -18,7 +18,6 @@ import baseAxios from '../../library/api'
 
 const initialState = {
   markerMatrix: {},
-  markers: [],
   selectedMarker: null,
   isLoading: true,
   isLoadingUser: false
@@ -28,7 +27,7 @@ const markerReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_DATA_SUCCESSFUL: {
       const { data, isLoading } = action.payload
-      const { markerMatrix } = state
+      const markerMatrix = {}
       data.forEach(element => {
         const { id } = element
         markerMatrix[id] = {
@@ -40,7 +39,6 @@ const markerReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading,
-        markers: data,
         markerMatrix: { ...markerMatrix },
         isLoadingUser: false
       }

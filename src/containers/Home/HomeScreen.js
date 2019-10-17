@@ -18,18 +18,14 @@ import {
   Fade,
   PlaceholderLine
 } from 'rn-placeholder'
-import LottieView from 'lottie-react-native'
 import styles from './styles'
 import HeaderBar from '../../components/Header/HeaderBar'
-import NearbyList from './NearbyList'
 import PopularList from './PopularList'
 import NearbyItem from './NearbyItem'
 import PopularItem from './PopularItem'
 import { _handleNotification } from '../../library/notificationTask'
 import { fetchDataThunk } from '../../redux/actions'
 import palette from '../../assets/palette'
-import animations from '../../assets/animations'
-import formatDistance from '../../library/formatDistance'
 import { SCREEN_WIDTH, DEFAULT_PADDING } from '../../assets/dimension'
 import { NavigationEvents } from 'react-navigation'
 
@@ -38,30 +34,8 @@ const TRANSLATE_Y = 10
 class HomeScreen extends React.PureComponent {
   state = {
     refreshing: false,
-    crrNearbyIndex: 0,
     opacityAnimation: new Animated.Value(1),
     translateY: new Animated.Value(0)
-  }
-
-  setNearbyIndex = event => {
-    const { crrNearbyIndex } = this.state
-    const viewSize = event.nativeEvent.layoutMeasurement.width
-    const contentOffset = event.nativeEvent.contentOffset.x
-    const selectedIndex = Math.floor(contentOffset / viewSize)
-    this.setState({ crrNearbyIndex: selectedIndex })
-  }
-
-  _animateToDefaultState = () => {
-    Animated.parallel([
-      Animated.timing(this.state.translateY, {
-        toValue: 0,
-        duration: 100
-      }),
-      Animated.timing(this.state.opacityAnimation, {
-        toValue: 1,
-        duration: 250
-      })
-    ]).start()
   }
 
   _onRefresh = () => {
@@ -69,6 +43,7 @@ class HomeScreen extends React.PureComponent {
       this.props
         .fetchDataThunk()
         .then(() => {
+          this.scrollX.setValue(0)
           this.setState({ refreshing: false })
         })
         .catch(() => this.setState({ refreshing: false }))
@@ -100,7 +75,6 @@ class HomeScreen extends React.PureComponent {
   scrollX = new Animated.Value(0)
 
   _renderDots = nearbyData => {
-    const { crrNearbyIndex } = this.state
     const dotPosition = Animated.divide(this.scrollX, SCREEN_WIDTH)
     return (
       <View
@@ -145,8 +119,6 @@ class HomeScreen extends React.PureComponent {
   }
 
   render() {
-    const { crrNearbyIndex, opacityAnimation, translateY } = this.state
-
     const { checkLoading, distanceMatrix, markerMatrix } = this.props
     let matrixData = []
     Object.entries(markerMatrix).forEach(([key, value]) => {
@@ -170,8 +142,6 @@ class HomeScreen extends React.PureComponent {
         return itemB.visitCount - itemA.visitCount
       })
       .slice(0, 10)
-
-    const crrNearby = nearbyData[crrNearbyIndex]
 
     return (
       <SafeAreaView style={styles.container}>
@@ -225,7 +195,6 @@ class HomeScreen extends React.PureComponent {
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled
                 snapToAlignment="center"
-                onMomentumScrollEnd={this.setNearbyIndex}
                 onScroll={Animated.event([
                   { nativeEvent: { contentOffset: { x: this.scrollX } } }
                 ])}

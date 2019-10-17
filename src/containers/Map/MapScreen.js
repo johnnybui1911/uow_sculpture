@@ -39,10 +39,7 @@ import { icons } from '../../assets/icons'
 import palette from '../../assets/palette'
 import { getData } from '../../library/asyncStorage'
 import { SCREEN_HEIGHT, STATUS_BAR_HEIGHT } from '../../assets/dimension'
-import {
-  _sendLocalNotification,
-  _handleNotification
-} from '../../library/notificationTask'
+import { _handleNotification } from '../../library/notificationTask'
 import animations from '../../assets/animations'
 import { MapContext } from './context/MapContext'
 import {
@@ -496,27 +493,37 @@ export class MapScreen extends React.PureComponent {
               direction_state
             }}
           >
-            <Header
-              showSteps={showSteps}
-              showDirection={showDirection}
-              showMapOnly={showMapOnly}
-              searchText={searchText}
-              _handleSearch={this._handleSearch}
-              _onClosePressed={this._onClosePressed}
-              _onMarkerPressed={this._onMarkerPressed}
-            >
-              <SearchView
-                searchText={searchText}
-                _onClosePressed={this._onClosePressed}
-                navigateTo={() => {
-                  this.props.navigation.navigate('Search', {
-                    _onMarkerPressed: this._onMarkerPressed,
-                    searchText: this.state.searchText,
-                    centerToMarker: true
-                  })
-                }}
-              />
-            </Header>
+            <SafeAreaConsumer>
+              {insets => {
+                const FIX_NOTCH_HEADER =
+                  Platform.OS === 'ios' && insets.top > 20 ? insets.top - 20 : 0
+                return (
+                  <Header
+                    fix_notch_height={FIX_NOTCH_HEADER}
+                    showSteps={showSteps}
+                    showDirection={showDirection}
+                    showMapOnly={showMapOnly}
+                    searchText={searchText}
+                    _handleSearch={this._handleSearch}
+                    _onClosePressed={this._onClosePressed}
+                    _onMarkerPressed={this._onMarkerPressed}
+                  >
+                    <SearchView
+                      searchText={searchText}
+                      _onClosePressed={this._onClosePressed}
+                      navigateTo={() => {
+                        this.props.navigation.navigate('Search', {
+                          _onMarkerPressed: this._onMarkerPressed,
+                          searchText: this.state.searchText,
+                          centerToMarker: true
+                        })
+                      }}
+                    />
+                  </Header>
+                )
+              }}
+            </SafeAreaConsumer>
+
             <MapView
               style={styles.mapStyle}
               mapType={Platform.OS === 'android' ? 'none' : 'standard'}
@@ -548,20 +555,21 @@ export class MapScreen extends React.PureComponent {
             </MapView>
             <SafeAreaConsumer>
               {insets => {
-                const FIX_NOTCH_BOTTOM = insets.bottom > 0 ? insets.bottom + STATUS_BAR_HEIGHT : 0
-                return(
-            <Footer
-              ref={this._footerRef}
-              fix_notch_height = {FIX_NOTCH_BOTTOM}
-              showSteps={showSteps}
-              showDirection={showDirection}
-              showMapOnly={showMapOnly}
-              steps={steps}
-              centered={centered}
-              navigation={this.props.navigation}
-              _navigateToDetail={this._navigateToDetail}
-              _centerUserLocation={this._centerUserLocation}
-            />
+                const FIX_NOTCH_BOTTOM =
+                  insets.bottom > 0 ? insets.bottom + STATUS_BAR_HEIGHT : 0
+                return (
+                  <Footer
+                    ref={this._footerRef}
+                    fix_notch_height={FIX_NOTCH_BOTTOM}
+                    showSteps={showSteps}
+                    showDirection={showDirection}
+                    showMapOnly={showMapOnly}
+                    steps={steps}
+                    centered={centered}
+                    navigation={this.props.navigation}
+                    _navigateToDetail={this._navigateToDetail}
+                    _centerUserLocation={this._centerUserLocation}
+                  />
                 )
               }}
             </SafeAreaConsumer>
