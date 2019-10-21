@@ -1,3 +1,8 @@
+/**
+ * Description: Step List Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
@@ -9,7 +14,7 @@ import {
   NAVIGATION_BAR_HEIGHT
 } from '../../../assets/dimension'
 
-const StepList = ({ steps, selectedMarker, fixHeight=0 }) => {
+const StepList = ({ steps, selectedMarker, fixHeight = 0 }) => {
   return (
     <View>
       <View style={styles.topBorderStep} />

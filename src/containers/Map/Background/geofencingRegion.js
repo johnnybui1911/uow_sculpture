@@ -1,3 +1,8 @@
+/**
+ * Description:  Geofencing Task
+ * Author: Nam Bui
+ **/
+
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { Platform } from 'react-native'
@@ -5,27 +10,6 @@ import { GEOFENCING_TASK } from './TaskManager'
 import stores from '../../../redux/stores'
 
 export default async (data = []) => {
-  // const { status, permissions } = await Permissions.askAsync(
-  //   Permissions.LOCATION
-  // )
-  // if (status !== 'granted') {
-  //   console.log('Not granted')
-  //   return
-  // }
-
-  // if (Platform.OS === 'ios') {
-  //   if (permissions.location.ios.scope !== 'always') {
-  //     console.log('Ios not always')
-  //     return
-  //   }
-  // }
-
-  // const { markerMatrix } = stores.getState().markerReducer
-  // let data = []
-
-  // Object.entries(markerMatrix).forEach(([key, value]) => {
-  //   data.push(value)
-  // })
   if (data !== []) {
     const regionArray = data
       .filter(item => item.coordinate.latitude)

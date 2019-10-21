@@ -1,3 +1,8 @@
+/**
+ * Description: Comment Screen (IOS platform)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   SafeAreaView,

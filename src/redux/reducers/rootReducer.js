@@ -1,3 +1,8 @@
+/**
+ * Description: Redux Root Reducer
+ * Author: Nam Bui
+ **/
+
 import { combineReducers } from 'redux'
 import markerReducer from './markerReducer'
 import authReducer from './authReducer'

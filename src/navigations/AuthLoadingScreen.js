@@ -1,3 +1,8 @@
+/**
+ * Description: Authorization Loadgin Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, SafeAreaView, StatusBar, Platform } from 'react-native'
 import { NavigationEvents } from 'react-navigation'

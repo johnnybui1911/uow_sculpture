@@ -1,3 +1,8 @@
+/**
+ * Description: Collapsible Header Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { Animated, View, Text, Image, Platform } from 'react-native'
 import palette from '../../assets/palette'

@@ -1,3 +1,8 @@
+/**
+ * Description: Header Direction Form component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, TextInput, Text, TouchableWithoutFeedback } from 'react-native'
 import { withNavigation } from 'react-navigation'

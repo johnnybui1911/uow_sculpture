@@ -1,3 +1,8 @@
+/**
+ * Description: Detail Map Container
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import { withNavigation } from 'react-navigation'

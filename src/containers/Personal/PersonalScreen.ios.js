@@ -1,3 +1,8 @@
+/**
+ * Description: Personal Screen (IOS platform)
+ * Author: Nam Bui
+ **/
+
 /* eslint-disable react/sort-comp */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
@@ -5,29 +10,14 @@ import {
   SafeAreaView,
   View,
   Animated,
-  RefreshControl,
-  ScrollView,
-  ActivityIndicator,
   PanResponder,
   StyleSheet,
-  Text,
-  Image,
   StatusBar
 } from 'react-native'
-import {
-  BallIndicator,
-  BarIndicator,
-  DotIndicator,
-  MaterialIndicator,
-  PacmanIndicator,
-  PulseIndicator,
-  SkypeIndicator,
-  UIActivityIndicator,
-  WaveIndicator
-} from 'react-native-indicators'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
 import { TabView, TabBar } from 'react-native-tab-view'
+import { NavigationEvents } from 'react-navigation'
 import styles from './styles'
 import palette from '../../assets/palette'
 import LikeScreen from './TabLike/LikeScreen'
@@ -37,17 +27,13 @@ import {
   SCREEN_WIDTH,
   PROFILE_HEADER_HEIGHT,
   PROFILE_TAB_BAR_HEIGHT,
-  SCROLLABLE_HEIGHT,
-  BOTTOM_TAB_BAR_HEIGHT,
-  MINI_HEADER_HEIGHT,
-  STATUS_BAR_HEIGHT
+  SCROLLABLE_HEIGHT
 } from '../../assets/dimension'
 import PersonalHeader from './PersonalHeader'
 import { fetchUserDataThunk, fetchDataThunk } from '../../redux/actions'
 import { shadowIOS } from '../../assets/rootStyles'
 import CollapsibleHeader from './CollapsibleHeader'
 import CustomStatusBar from '../../components/CustomStatusBar'
-import { NavigationEvents } from 'react-navigation'
 import animations from '../../assets/animations'
 
 const initialLayout = {

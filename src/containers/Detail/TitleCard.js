@@ -1,3 +1,8 @@
+/**
+ * Description: Detail Title Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'

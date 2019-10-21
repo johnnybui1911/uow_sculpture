@@ -1,3 +1,8 @@
+/**
+ * Description: SignIn Button Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import LottieView from 'lottie-react-native'

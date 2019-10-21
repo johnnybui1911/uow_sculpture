@@ -1,3 +1,8 @@
+/**
+ * Description: Congratulation Modal (When enter the Sculpture Region)
+ * Author: Nam Bui
+ **/
+
 import React, { useEffect } from 'react'
 import { View, Text, Image } from 'react-native'
 import { connect } from 'react-redux'

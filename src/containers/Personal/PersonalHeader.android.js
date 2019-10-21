@@ -1,3 +1,8 @@
+/**
+ * Description: Personal Header Component (Android platform)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   Text,
@@ -12,9 +17,7 @@ import { connect } from 'react-redux'
 import { withNavigation } from 'react-navigation'
 import styles from './styles'
 import palette from '../../assets/palette'
-import images from '../../assets/images'
 import ProfileBox from './ProfileBox'
-import { HEADER_BAR_MARGIN_TOP } from '../../assets/dimension'
 
 const PersonalHeader = ({
   user,

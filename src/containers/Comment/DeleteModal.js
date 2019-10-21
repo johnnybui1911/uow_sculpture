@@ -1,3 +1,8 @@
+/**
+ * Description: Delete Modal
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import Modal from 'react-native-modal'
 import { View, Text, TouchableHighlight } from 'react-native'
@@ -8,10 +13,6 @@ import { SCREEN_HEIGHT, FULL_SCREEN_HEIGHT } from '../../assets/dimension'
 const DeleteModal = ({ isModalOpen, _closeModal, _deleteComment }) => {
   return (
     <Modal
-      // animationIn="fadeIn"
-      // animationInTiming={300}
-      // animationOut="fadeOut"
-      // animationOutTiming={300}
       deviceHeight={FULL_SCREEN_HEIGHT}
       isVisible={isModalOpen}
       onBackdropPress={_closeModal}

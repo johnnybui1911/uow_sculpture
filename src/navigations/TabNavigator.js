@@ -1,3 +1,8 @@
+/**
+ * Description: Main Tab Navigator
+ * Author: Nam Bui
+ **/
+
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import CollectionScreen from '../containers/Collection/CollectionScreen'
 import MapScreen from '../containers/Map/MapScreen'

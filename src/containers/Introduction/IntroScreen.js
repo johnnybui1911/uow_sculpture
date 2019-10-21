@@ -1,3 +1,8 @@
+/**
+ * Description: Introduction Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { Text, View } from 'react-native'
 import styles from './styles'

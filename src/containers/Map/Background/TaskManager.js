@@ -1,3 +1,8 @@
+/**
+ * Description: Define Task Manager for Geofencing and Background Location Update tasks
+ * Author: Nam Bui
+ **/
+
 import * as TaskManager from 'expo-task-manager'
 import * as Location from 'expo-location'
 import { Platform } from 'react-native'

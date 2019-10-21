@@ -1,3 +1,8 @@
+/**
+ * Description: Comment Item Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Image, Text, TouchableHighlight } from 'react-native'
 import { withNavigation } from 'react-navigation'

@@ -1,18 +1,19 @@
+/**
+ * Description: Map Screen
+ * Author: Nam Bui
+ **/
+
 /* eslint-disable react/sort-comp */
 import React from 'react'
 import {
   SafeAreaView,
   View,
   Platform,
-  Text,
-  TouchableOpacity,
   Animated,
-  BackHandler,
-  Linking,
-  AlertIOS,
-  Alert
+  BackHandler
 } from 'react-native'
 import * as Permissions from 'expo-permissions'
+import { SafeAreaConsumer } from 'react-native-safe-area-view'
 import MapView, { UrlTile, Marker, AnimatedRegion } from 'react-native-maps'
 import LottieView from 'lottie-react-native'
 import * as Location from 'expo-location'
@@ -20,7 +21,6 @@ import { Notifications } from 'expo'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import styles from './styles'
-import images from '../../assets/images'
 import {
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
@@ -36,8 +36,6 @@ import MarkersContainer from './MarkersContainer'
 import Direction from './Direction'
 import Header from './HeaderMap/Header'
 import { icons } from '../../assets/icons'
-import palette from '../../assets/palette'
-import { getData } from '../../library/asyncStorage'
 import { SCREEN_HEIGHT, STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import { _handleNotification } from '../../library/notificationTask'
 import animations from '../../assets/animations'
@@ -50,7 +48,6 @@ import {
 import SearchView from '../../components/SearchButton/SearchView'
 import { compareCoordinate } from '../../library/compareCoordinate'
 import { _alertLocationPermission } from '../../redux/actions/locationActions'
-import { SafeAreaConsumer } from 'react-native-safe-area-view'
 
 export class MapScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {

@@ -1,3 +1,8 @@
+/**
+ * Description: Keyboard Fixed TextField (Android platform)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   Animated,

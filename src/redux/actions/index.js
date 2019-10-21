@@ -1,3 +1,8 @@
+/**
+ * Description: Reduc Root Actions
+ * Author: Nam Bui
+ **/
+
 import { thunkSignIn, signInSuccesful, fetchUserDataThunk } from './authActions'
 import { syncLocationThunk } from './locationActions'
 import { insertSearchItem, storeAsyncSearch } from './searchActions'

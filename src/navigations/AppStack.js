@@ -1,3 +1,8 @@
+/**
+ * Description: Root Application Stack Navigator
+ * Author: Nam Bui
+ **/
+
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import DetailScreen from '../containers/Detail/DetailScreen'
 import TabNavigator from './TabNavigator'

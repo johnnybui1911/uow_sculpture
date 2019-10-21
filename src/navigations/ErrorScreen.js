@@ -1,3 +1,8 @@
+/**
+ * Description: Network Error Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'

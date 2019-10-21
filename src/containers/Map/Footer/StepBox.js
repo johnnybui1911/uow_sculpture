@@ -1,3 +1,8 @@
+/**
+ * Description: Step Box Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text } from 'react-native'
 import numeral from 'numeral'

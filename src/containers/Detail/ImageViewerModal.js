@@ -1,3 +1,8 @@
+/**
+ * Description: Image Viewer Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   View,

@@ -1,3 +1,8 @@
+/**
+ * Description: No Result Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import palette from '../../assets/palette'

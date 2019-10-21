@@ -1,3 +1,8 @@
+/**
+ * Description: Personal Comment Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, FlatList } from 'react-native'
 import { connect } from 'react-redux'

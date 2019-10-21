@@ -1,3 +1,8 @@
+/**
+ * Description: Search Box Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, TextInput, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'

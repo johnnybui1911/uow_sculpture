@@ -1,4 +1,8 @@
-/* eslint-disable react/sort-comp */
+/**
+ * Description: Nearby Sculpture Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Image, TouchableWithoutFeedback, Animated } from 'react-native'
 import { withNavigation } from 'react-navigation'

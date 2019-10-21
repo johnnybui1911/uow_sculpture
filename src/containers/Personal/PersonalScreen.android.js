@@ -1,3 +1,8 @@
+/**
+ * Description: Personal Screen (Android platform)
+ * Author: Nam Bui
+ **/
+
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import {

@@ -1,3 +1,8 @@
+/**
+ * Description: Custom Black Modal Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, TouchableWithoutFeedback } from 'react-native'
 import { SCREEN_HEIGHT } from '../../assets/dimension'

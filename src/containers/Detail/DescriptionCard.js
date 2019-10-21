@@ -1,3 +1,8 @@
+/**
+ * Description: Description Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text } from 'react-native'
 import Divider from '../../components/Divider/Divider'

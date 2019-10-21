@@ -1,3 +1,8 @@
+/**
+ * Description: Popular Sculpture Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native'
 import styles from './styles'

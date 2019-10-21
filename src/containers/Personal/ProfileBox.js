@@ -1,10 +1,14 @@
+/**
+ * Description: Profile Box Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
-import { View, Text, TouchableWithoutFeedback } from 'react-native'
+import { View, Text } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import palette from '../../assets/palette'
 import styles from './styles'
 import VerticalDivider from './VerticalDivider'
-import { SCREEN_WIDTH } from '../../assets/dimension'
 import { RectButton } from 'react-native-gesture-handler'
 
 const ProfileBox = ({ likes, comments, visited, navigation }) => {

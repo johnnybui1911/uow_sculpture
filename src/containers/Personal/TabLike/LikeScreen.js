@@ -1,11 +1,10 @@
+/**
+ * Description: Like Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
-import {
-  SafeAreaView,
-  View,
-  FlatList,
-  RefreshControl,
-  Animated
-} from 'react-native'
+import { FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
 import CardItem from './CardItem'

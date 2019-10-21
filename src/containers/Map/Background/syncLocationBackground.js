@@ -1,3 +1,8 @@
+/**
+ * Description:  Background Location Update Task
+ * Author: Nam Bui
+ **/
+
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { Platform } from 'react-native'

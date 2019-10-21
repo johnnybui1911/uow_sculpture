@@ -1,3 +1,8 @@
+/**
+ * Description: Like and Comment Button Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, TouchableWithoutFeedback, Animated, Text } from 'react-native'
 import { withNavigation } from 'react-navigation'

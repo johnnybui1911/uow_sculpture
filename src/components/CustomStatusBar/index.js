@@ -1,3 +1,8 @@
+/**
+ * Description: Custom Status Bar for IOS (Iphone X, 11 and Iphone <= 8)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Platform } from 'react-native'
 import { STATUS_BAR_HEIGHT } from '../../assets/dimension'

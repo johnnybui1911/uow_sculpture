@@ -1,3 +1,8 @@
+/**
+ * Description: Set of Markers on MapScreen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { connect } from 'react-redux'
 import MarkerView from './MarkerView'

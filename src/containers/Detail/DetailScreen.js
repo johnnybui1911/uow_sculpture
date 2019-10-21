@@ -1,3 +1,8 @@
+/**
+ * Description: Detail Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { SafeAreaView, View, ScrollView, BackHandler } from 'react-native'
 import { connect } from 'react-redux'

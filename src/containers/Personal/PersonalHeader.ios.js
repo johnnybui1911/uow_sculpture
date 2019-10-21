@@ -1,33 +1,29 @@
+/**
+ * Description: Personal Header Component (IOS platform)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   Text,
   View,
   TouchableOpacity,
   Image,
-  ScrollView,
-  RefreshControl,
-  ActivityIndicator,
   Modal,
   StatusBar,
   TouchableWithoutFeedback,
   Platform
 } from 'react-native'
+import { useSafeArea } from 'react-native-safe-area-view'
 import { connect } from 'react-redux'
 import { withNavigation } from 'react-navigation'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import styles from './styles'
 import palette from '../../assets/palette'
-import images from '../../assets/images'
 import ProfileBox from './ProfileBox'
-import {
-  HEADER_BAR_MARGIN_TOP,
-  SCREEN_WIDTH,
-  SCREEN_HEIGHT,
-  STATUS_BAR_HEIGHT
-} from '../../assets/dimension'
+import { STATUS_BAR_HEIGHT } from '../../assets/dimension'
 import { icons } from '../../assets/icons'
 import BlackModal from '../../components/BlackModal/BlackModal'
-import { useSafeArea } from 'react-native-safe-area-view'
 
 const PersonalHeader = ({
   user,

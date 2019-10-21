@@ -1,3 +1,8 @@
+/**
+ * Description: Middle Dividers
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import palette from '../../assets/palette'

@@ -1,3 +1,8 @@
+/**
+ * Description: Authorization Screen (Sign In / Sign Up)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { SafeAreaView, View, StatusBar, Platform } from 'react-native'
 import { NavigationEvents } from 'react-navigation'

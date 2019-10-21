@@ -1,3 +1,8 @@
+/**
+ * Description: Nearby Sculpture List Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { FlatList, View } from 'react-native'
 import styles from './styles'

@@ -1,7 +1,11 @@
+/**
+ * Description: Keyboard Fixed TextField (IOS platform)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   Animated,
-  Platform,
   Text,
   Image,
   TextInput,

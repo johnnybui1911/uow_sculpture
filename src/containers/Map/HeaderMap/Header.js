@@ -1,3 +1,8 @@
+/**
+ * Description: Header Component of MapScreen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   View,

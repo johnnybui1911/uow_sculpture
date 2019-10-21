@@ -1,3 +1,8 @@
+/**
+ * Description: Footer Content Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   Text,

@@ -1,3 +1,8 @@
+/**
+ * Description: Detail Header Component (IOS Platform)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   View,

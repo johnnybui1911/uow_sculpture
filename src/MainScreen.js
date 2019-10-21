@@ -1,6 +1,8 @@
-/*
-Nam Hoang Bui - 5520125 - UOW Sculptures
-*/
+/**
+ * Description: Main Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   Platform,

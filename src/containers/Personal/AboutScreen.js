@@ -1,3 +1,8 @@
+/**
+ * Description: About Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { Text, View, TouchableOpacity, AsyncStorage } from 'react-native'
 import { withNavigation } from 'react-navigation'

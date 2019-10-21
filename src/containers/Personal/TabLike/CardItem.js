@@ -1,3 +1,8 @@
+/**
+ * Description: Liked Sculpture Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   Placeholder,

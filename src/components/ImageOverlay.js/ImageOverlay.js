@@ -1,3 +1,8 @@
+/**
+ * Description: Image Overlay Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'

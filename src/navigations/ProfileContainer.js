@@ -1,3 +1,8 @@
+/**
+ * Description: Authorization Switch Navigator
+ * Author: Nam Bui
+ **/
+
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
 import { connect } from 'react-redux'
 import PersonalScreen from '../containers/Personal/PersonalScreen'

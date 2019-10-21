@@ -1,3 +1,8 @@
+/**
+ * Description: Image Viewer Component (Android platform)
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Modal, TouchableWithoutFeedback, Text } from 'react-native'
 import ImageViewer from 'react-native-image-zoom-viewer'

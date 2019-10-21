@@ -1,3 +1,8 @@
+/**
+ * Description: Comment Item Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   View,

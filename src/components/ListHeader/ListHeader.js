@@ -1,3 +1,8 @@
+/**
+ * Description: Custom Header for Comment and Visit Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   View,

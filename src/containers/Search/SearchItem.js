@@ -1,3 +1,8 @@
+/**
+ * Description: Search Item Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View, Text, TouchableHighlight } from 'react-native'
 import { withNavigation } from 'react-navigation'

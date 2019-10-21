@@ -1,3 +1,8 @@
+/**
+ * Description: Edit Profile Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { connect } from 'react-redux'
 import {

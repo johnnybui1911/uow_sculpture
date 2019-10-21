@@ -1,3 +1,8 @@
+/**
+ * Description: Footer Component of MapScreen
+ * Author: Nam Bui
+ **/
+
 /* eslint-disable react/jsx-key */
 import React from 'react'
 import {

@@ -1,3 +1,8 @@
+/**
+ * Description: Home Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import {
   SafeAreaView,

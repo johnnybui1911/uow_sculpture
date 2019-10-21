@@ -1,3 +1,8 @@
+/**
+ * Description: Custom Marker on Map Screen
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { View } from 'react-native'
 import { Marker } from 'react-native-maps'

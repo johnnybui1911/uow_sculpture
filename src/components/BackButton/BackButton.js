@@ -1,3 +1,8 @@
+/**
+ * Description: Custom Back Button
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { TouchableWithoutFeedback, View, Platform } from 'react-native'
 import { icons } from '../../assets/icons'

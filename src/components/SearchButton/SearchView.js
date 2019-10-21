@@ -1,3 +1,8 @@
+/**
+ * Description: Search View Component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { TouchableWithoutFeedback, View, Text } from 'react-native'
 import { withNavigation } from 'react-navigation'

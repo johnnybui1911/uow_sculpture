@@ -1,23 +1,17 @@
-/*
-Nam Hoang Bui - 5520125 - UOW Sculptures
-*/
+/**
+ * Description: Root Application component
+ * Author: Nam Bui
+ **/
+
 import React from 'react'
 import { Provider } from 'react-redux'
 import { AppState } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
-import * as Location from 'expo-location'
 import { AppLoading } from 'expo'
 import MainScreen from './src/MainScreen'
 import stores from './src/redux/stores'
-import { registerForPushNotificationsAsync } from './src/library/notificationTask'
-import syncLocationBackground from './src/containers/Map/Background/syncLocationBackground'
-import geofencingRegion from './src/containers/Map/Background/geofencingRegion'
-import {
-  BACKGROUND_LOCATION_TASK,
-  GEOFENCING_TASK
-} from './src/containers/Map/Background/TaskManager'
 import {
   fetchDataThunk,
   thunkSignIn,
@@ -45,19 +39,6 @@ export default class App extends React.PureComponent {
 
   componentDidMount = async () => {
     AppState.addEventListener('change', this._handleAppStateChange)
-    // this._notificationSubscription = await Notifications.addListener(
-    //   this._handleNotification
-    // )
-    // await syncLocationBackground()
-    // await geofencingRegion()
-    // stop background sync when open app
-    // const backgroundSync = await Location.hasStartedLocationUpdatesAsync(
-    //   BACKGROUND_LOCATION_TASK
-    // )
-    // if (backgroundSync) {
-    //   await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)
-    //   console.log('Stop syncing Background')
-    // }
   }
 
   componentWillUnmount = () => {
@@ -89,15 +70,7 @@ export default class App extends React.PureComponent {
       } catch (e) {
         this.setState({ locationAccess: false })
       }
-
-      // const geofencingTask = await Location.hasStartedGeofencingAsync(
-      //   GEOFENCING_TASK
-      // )
-      // if (geofencingTask) {
-      // Location.stopGeofencingAsync(GEOFENCING_TASK)
-      // }
     } else if (nextAppState.match(/inactive|background/)) {
-      // await syncLocationBackground()
       console.log('App is going to background')
     }
 
