@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { OPEN_MODAL, CLOSE_MODAL } from '../../assets/actionTypes'
 import { _sendLocalNotification } from '../../library/notificationTask'
 
@@ -22,20 +23,20 @@ const modalReducer = (state = initialState, action) => {
       if (check === oldMarkers.length && oldMarkers.length) {
         return { ...state, isCongratModalVisible: false }
       } else {
-        // enteredMarkers.forEach(element => {
-        //   const { id, name } = element
-        //   _sendLocalNotification({
-        //     title:
-        //       Platform.OS === 'ios'
-        //         ? `You have visited ${name}.`
-        //         : `Congratulations! You have visited ${name}.`,
-        //     body: 'Tap to view more details',
-        //     data: {
-        //       screen: 'Detail',
-        //       id
-        //     }
-        //   })
-        // })
+        enteredMarkers.forEach(element => {
+          const { id, name } = element
+          _sendLocalNotification({
+            title:
+              Platform.OS === 'ios'
+                ? `You have visited ${name}.`
+                : `Congratulations! You have visited ${name}.`,
+            body: 'Tap to view more details',
+            data: {
+              screen: 'Detail',
+              id
+            }
+          })
+        })
         return { ...state, isCongratModalVisible: true, enteredMarkers }
       }
     }

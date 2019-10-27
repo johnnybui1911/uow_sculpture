@@ -8,21 +8,15 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
-  TouchableWithoutFeedback,
   ActivityIndicator,
   Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
-import images from '../../../assets/images'
-import { icons } from '../../../assets/icons'
-import { Divider, SwipeButton } from '../../../components'
-import { SCREEN_WIDTH } from '../../../assets/dimension'
+import { SwipeButton } from '../../../components'
 import { MapContext } from '../context/MapContext'
 import formatDistance from '../../../library/formatDistance'
 import LikeComment from '../../../components/LikeComment/LikeComment'
-import { selectMarker } from '../../../redux/actions'
 import palette from '../../../assets/palette'
 
 const MiniView = ({ selectedMarker, distanceMatrix, _navigateToDetail }) => {

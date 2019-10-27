@@ -10,7 +10,9 @@ import {
   View,
   Platform,
   Animated,
-  BackHandler
+  BackHandler,
+  Easing,
+  StyleSheet
 } from 'react-native'
 import * as Permissions from 'expo-permissions'
 import { SafeAreaConsumer } from 'react-native-safe-area-view'
@@ -48,8 +50,9 @@ import {
 import SearchView from '../../components/SearchButton/SearchView'
 import { compareCoordinate } from '../../library/compareCoordinate'
 import { _alertLocationPermission } from '../../redux/actions/locationActions'
+import palette from '../../assets/palette'
 
-export class MapScreen extends React.PureComponent {
+export class MapScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       tabBarVisible: navigation.getParam('showTab', true)
@@ -59,11 +62,10 @@ export class MapScreen extends React.PureComponent {
   constructor(props) {
     super(props)
     this._footerRef = React.createRef()
-    const { initialUserCoordinate } = this.props
     this.state = {
+      userLocationAnimation: new Animated.Value(1),
       showMapOnly: false,
       region: {
-        // ...initialUserCoordinate,
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
@@ -72,13 +74,6 @@ export class MapScreen extends React.PureComponent {
       steps: [],
       centered: false,
       searchText: '',
-      errorMessage: '',
-
-      // loading fetch data
-      isDataLoading: true,
-      // modalState
-      isModalVisible: false,
-
       showSteps: false,
       showDirection: false,
       case1_footer_translateY: new Animated.Value(-SCREEN_HEIGHT),
@@ -195,8 +190,16 @@ export class MapScreen extends React.PureComponent {
     }, 500)
   }
 
+  // shouldComponentUpdate(nextProps) {
+  //   const nextSelectedMarker = nextProps.selectedMarker || {}
+  //   const selectedMarker = this.props.selectedMarker || {}
+
+  //   return selectedMarker.id !== nextSelectedMarker.id
+  // }
+
   componentDidUpdate = () => {
     this._handleNavigateFromDetail()
+    // console.log('updateMap')
   }
 
   componentWillUnmount = () => {
@@ -223,7 +226,8 @@ export class MapScreen extends React.PureComponent {
 
   subscribeLocation = null
 
-  loopAnimate = new Animated.Value(0.2)
+  loopAnimate = new Animated.Value(0)
+  pulseLoader = new Animated.Value(0)
 
   _handleBackPress = () => {
     const { selectedMarker } = this.props
@@ -250,8 +254,22 @@ export class MapScreen extends React.PureComponent {
     Animated.loop(
       Animated.sequence([
         Animated.timing(this.loopAnimate, {
-          toValue: 0.8,
-          duration: 7000
+          toValue: 3,
+          duration: 3000
+        }),
+        Animated.timing(this.loopAnimate, {
+          toValue: 0,
+          duration: 3000
+        })
+      ])
+    ).start()
+
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(this.pulseLoader, {
+          toValue: 1,
+          duration: 2000,
+          easing: Easing.in
         })
       ])
     ).start()
@@ -297,8 +315,6 @@ export class MapScreen extends React.PureComponent {
         steps: [],
         centered: false,
         searchText: '',
-        isModalVisible: false,
-
         showSteps: false,
         showDirection: false
       })
@@ -340,6 +356,23 @@ export class MapScreen extends React.PureComponent {
   }
 
   _renderUserLocation = () => {
+    const maxSizePulse = 70
+    const dotSize = this.loopAnimate.interpolate({
+      inputRange: [0, 3],
+      outputRange: [1, 0.6]
+    })
+
+    const sizeAnim = this.pulseLoader.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, maxSizePulse],
+      extrapolate: 'clamp'
+    })
+
+    const opacityAnim = this.pulseLoader.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0]
+    })
+
     if (this.userCoordinate) {
       return (
         <Marker.Animated
@@ -352,16 +385,47 @@ export class MapScreen extends React.PureComponent {
           coordinate={this.userCoordinate}
           onPress={this._centerUserLocation}
         >
-          <View style={{ padding: 15 }}>
-            {icons.user_location}
-            <LottieView
+          <View
+            style={{
+              width: 80,
+              height: 80,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Animated.View
               style={{
-                zIndex: -1,
-                elevation: 0
+                width: sizeAnim,
+                height: sizeAnim,
+                // borderColor: palette.primaryColorLight,
+                // borderWidth: 4 * StyleSheet.hairlineWidth,
+                borderRadius: maxSizePulse,
+                backgroundColor: 'rgba(0, 71, 187, 0.6)',
+                opacity: opacityAnim,
+                position: 'absolute'
               }}
-              progress={this.loopAnimate}
-              source={animations.beacon}
             />
+            <View
+              style={{
+                zIndex: 1,
+                width: 20,
+                height: 20,
+                borderRadius: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: palette.backgroundColorWhite
+              }}
+            >
+              <Animated.View
+                style={{
+                  width: 16,
+                  height: 16,
+                  borderRadius: 16,
+                  backgroundColor: palette.primaryColorLight,
+                  transform: [{ scale: dotSize }]
+                }}
+              />
+            </View>
           </View>
         </Marker.Animated>
       )
@@ -432,7 +496,7 @@ export class MapScreen extends React.PureComponent {
     }).start(() => {
       this.props.navigation.setParams({ showTab: true })
       this.props.handleUnselectMarker()
-      this.setState({ searchText: '', showDirection: false })
+      this.setState({ searchText: '' })
     })
   }
 

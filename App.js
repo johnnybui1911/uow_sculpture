@@ -6,6 +6,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { AppState } from 'react-native'
+import * as Location from 'expo-location'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
@@ -18,6 +19,8 @@ import {
   syncLocationThunk
 } from './src/redux/actions'
 import { imageCacheList } from './src/assets/images'
+import geofencingRegion from './src/containers/Map/Background/geofencingRegion'
+import { GEOFENCING_TASK } from './src/containers/Map/Background/TaskManager'
 
 function cacheImages(images) {
   return images.map(image => {
@@ -70,8 +73,19 @@ export default class App extends React.PureComponent {
       } catch (e) {
         this.setState({ locationAccess: false })
       }
+
+      /* Just using for publishing app */
+      const checkGeofencing = await Location.hasStartedGeofencingAsync(
+        GEOFENCING_TASK
+      )
+      if (checkGeofencing) {
+        console.log('Stop geofencing')
+        await Location.stopGeofencingAsync(GEOFENCING_TASK)
+      }
+      /* ----------------------------------- */
     } else if (nextAppState.match(/inactive|background/)) {
       console.log('App is going to background')
+      geofencingRegion()
     }
 
     this.setState({ appState: nextAppState })

@@ -4,73 +4,79 @@
  **/
 
 import React from 'react'
-import { View } from 'react-native'
+import { View, Platform } from 'react-native'
 import { Marker } from 'react-native-maps'
 import { connect } from 'react-redux'
 import styles from './styles'
 import { icons } from '../../assets/icons'
 
-class MarkerView extends React.PureComponent {
+class MarkerView extends React.Component {
   constructor(props) {
     super(props)
   }
 
-  _renderMarkerImage = () => {
+  shouldComponentUpdate(nextProps) {
+    const nextSelectedMarker = nextProps.selectedMarker || {}
+    const selectedMarker = this.props.selectedMarker || {}
+    const { marker } = this.props
+
+    return (
+      marker.id === nextSelectedMarker.id ||
+      (selectedMarker.id === marker.id &&
+        selectedMarker.id !== nextSelectedMarker.id)
+    )
+  }
+
+  // componentDidUpdate = () => {
+  //   console.log('updateMarker')
+  // }
+
+  renderMarker = () => {
     const { marker, selectedMarker } = this.props
-    if (selectedMarker) {
-      if (marker.id !== selectedMarker.id) {
-        return <View style={styles.unselected_marker} />
-      }
-      return icons.chosen_marker
+    if (selectedMarker && marker.id === selectedMarker.id) {
+      return (
+        <View
+          style={{
+            paddingBottom: 5
+          }}
+        >
+          {icons.marker}
+        </View>
+      )
     } else {
-      return icons.marker
+      return (
+        <View
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: 30,
+            backgroundColor: 'rgba(167,164,164,0.3)',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <View style={styles.unselected_marker} />
+        </View>
+      )
     }
   }
 
   render() {
     const { marker, selectedMarker } = this.props
-    if (selectedMarker && marker.id === selectedMarker.id) {
-      return (
-        <Marker
-          identifier={marker.id}
-          zIndex={2}
-          // tracksViewChanges={false}
-          coordinate={marker.coordinate}
-          onPress={() => this.props._onMarkerPressed(marker, true)}
-        >
-          <View
-            style={{
-              paddingBottom: 5
-            }}
-          >
-            {icons.marker}
-          </View>
-        </Marker>
-      )
-    } else {
-      return (
-        <Marker
-          identifier={marker.id}
-          zIndex={2}
-          // tracksViewChanges={false}
-          coordinate={marker.coordinate}
-          onPress={() => this.props._onMarkerPressed(marker, true)}
-        >
-          <View
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: 30,
-              backgroundColor: 'rgba(167,164,164,0.3)',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <View style={styles.unselected_marker} />
-          </View>
-        </Marker>
-      )
-    }
+    const checkOnPressMarker =
+      (selectedMarker && marker.id === selectedMarker.id) ||
+      Platform.OS === 'ios'
+    return (
+      <Marker
+        identifier={marker.id}
+        zIndex={2}
+        tracksViewChanges={checkOnPressMarker ? true : false}
+        coordinate={marker.coordinate}
+        onPress={() => this.props._onMarkerPressed(marker, true)}
+      >
+        {this.renderMarker()}
+      </Marker>
+    )
   }
 }
 

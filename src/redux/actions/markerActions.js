@@ -117,7 +117,7 @@ export const fetchDataThunk = () => {
         })
         .then(async newData => {
           const { userCoordinate } = getState().locationReducer
-          geofencingRegion(newData)
+          // geofencingRegion(newData)
           dispatch(fetchDataSuccessful(newData))
           await dispatch(fetchUserDataThunk())
           dispatch(fetchDistanceMatrix(userCoordinate, newData))

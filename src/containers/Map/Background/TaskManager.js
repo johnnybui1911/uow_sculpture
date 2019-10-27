@@ -11,7 +11,7 @@ import {
   _sendLocalNotification
 } from '../../../library/notificationTask'
 import baseAxios from '../../../library/api'
-import store from '../../../redux/stores'
+import stores from '../../../redux/stores'
 import { VISIT } from '../../../assets/actionTypes'
 
 export const BACKGROUND_LOCATION_TASK = 'BACKGROUND_LOCATION_TASK'
@@ -41,20 +41,23 @@ TaskManager.defineTask(
     const name = identifier.slice(identifier.indexOf('-') + 1)
     const id = identifier.slice(0, identifier.indexOf('-'))
     if (eventType === Location.GeofencingEventType.Enter) {
-      _sendLocalNotification({
-        title:
-          Platform.OS === 'ios'
-            ? `You have visited ${name}.`
-            : `Congratulations! You have visited ${name}.`,
-        body: 'Tap to view more details',
-        data: {
-          screen: 'Detail',
-          id
-        }
-      })
+      const { enteredMarkers } = stores.getState().modalReducer
+      if (!enteredMarkers.filter(item => item.id === id).length) {
+        _sendLocalNotification({
+          title:
+            Platform.OS === 'ios'
+              ? `You have visited ${name}.`
+              : `Congratulations! You have visited ${name}.`,
+          body: 'Tap to view more details',
+          data: {
+            screen: 'Detail',
+            id
+          }
+        })
+      }
 
-      const { user } = store.getState().authReducer
-      const { markerMatrix } = store.getState().markerReducer
+      const { user } = stores.getState().authReducer
+      const { markerMatrix } = stores.getState().markerReducer
       if (user.userId) {
         if (!markerMatrix[id].isVisited) {
           baseAxios
@@ -69,7 +72,7 @@ TaskManager.defineTask(
         const marker = {
           id
         }
-        store.dispatch({ type: VISIT, enteredMarkers: [marker] })
+        stores.dispatch({ type: VISIT, enteredMarkers: [marker] })
       }
 
       console.log("You've enter region:", region)

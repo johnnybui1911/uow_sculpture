@@ -9,7 +9,13 @@ import { Platform } from 'react-native'
 import { GEOFENCING_TASK } from './TaskManager'
 import stores from '../../../redux/stores'
 
-export default async (data = []) => {
+export default async (rootData = []) => {
+  /* Just for publish app, in real app, will geofencing in both foreground and background, not using stores.getState */
+  const markerMatrix = stores.getState().markerReducer.markerMatrix
+  let data = []
+  Object.entries(markerMatrix).forEach(([key, value]) => {
+    data.push(value)
+  })
   if (data !== []) {
     const regionArray = data
       .filter(item => item.coordinate.latitude)
