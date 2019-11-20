@@ -512,12 +512,14 @@ export class MapScreen extends React.Component {
   }
 
   toggleShowMapOnly = () => {
-    this.setState(prevState => ({
-      showMapOnly: !prevState.showMapOnly
-    }))
-    if (!this.props.selectedMarker) {
-      const showTab = this.props.navigation.getParam('showTab', true)
-      this.props.navigation.setParams({ showTab: !showTab })
+    if (Platform.OS !== 'ios') {
+      this.setState(prevState => ({
+        showMapOnly: !prevState.showMapOnly
+      }))
+      if (!this.props.selectedMarker) {
+        const showTab = this.props.navigation.getParam('showTab', true)
+        this.props.navigation.setParams({ showTab: !showTab })
+      }
     }
   }
 

@@ -34,13 +34,15 @@ import palette from '../../assets/palette'
 import { SCREEN_WIDTH, DEFAULT_PADDING } from '../../assets/dimension'
 import { NavigationEvents } from 'react-navigation'
 
-const TRANSLATE_Y = 10
-
 class HomeScreen extends React.PureComponent {
   state = {
-    refreshing: false,
-    opacityAnimation: new Animated.Value(1),
-    translateY: new Animated.Value(0)
+    refreshing: false
+  }
+
+  componentDidMount = () => {
+    this._notificationSubscription = Notifications.addListener(notification =>
+      _handleNotification(notification, this.props.navigation)
+    )
   }
 
   _onRefresh = () => {
@@ -53,12 +55,6 @@ class HomeScreen extends React.PureComponent {
         })
         .catch(() => this.setState({ refreshing: false }))
     })
-  }
-
-  componentDidMount = () => {
-    this._notificationSubscription = Notifications.addListener(notification =>
-      _handleNotification(notification, this.props.navigation)
-    )
   }
 
   _navigateToDetail = item => {
@@ -188,10 +184,6 @@ class HomeScreen extends React.PureComponent {
                 </View>
               </View>
             ) : (
-              // <NearbyList
-              //   data={nearbyData}
-              //   _renderItem={this._renderNearbyItem}
-              // />
               <FlatList
                 horizontal
                 data={nearbyData}

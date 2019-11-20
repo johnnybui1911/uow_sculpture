@@ -54,61 +54,61 @@ export const syncLocationThunk = () => {
   return (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
       const { userCoordinate } = getState().locationReducer
-      // const { status } = await Permissions.askAsync(Permissions.LOCATION)
-      // if (status !== 'granted') {
-      //   dispatch(syncLocationRejected())
-      //   Platform.OS === 'ios' && _alertLocationPermission()
-      //   console.log('Need Location Permission')
-      //   reject()
-      // } else {
-      if (!userCoordinate) {
-        console.log('Watch location')
-        try {
-          await Location.watchPositionAsync(
-            {
-              accuracy: Location.Accuracy.Highest,
-              timeInterval: 1,
-              distanceInterval: 10
-            },
-            loc => {
-              if (loc.timestamp) {
-                const { latitude, longitude } = loc.coords
-                dispatch(syncLocationSuccessful({ latitude, longitude }))
-                dispatch(fetchDistanceMatrix(loc.coords))
-                resolve()
-              } else {
-                dispatch(syncLocationRejected())
-                console.log('error fetch location expo')
-                reject()
-              }
-            }
-          )
-        } catch (e) {
-          console.log('Not allow Location Permission')
-          reject()
-        }
+      const { status } = await Permissions.askAsync(Permissions.LOCATION)
+      if (status !== 'granted') {
+        dispatch(syncLocationRejected())
+        Platform.OS === 'ios' && _alertLocationPermission()
+        console.log('Need Location Permission')
+        reject()
       } else {
-        console.log('Get current location')
-        try {
-          const loc = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.Highest
-          })
-          if (loc.timestamp) {
-            const { latitude, longitude } = loc.coords
-            dispatch(syncLocationSuccessful({ latitude, longitude }))
-            dispatch(fetchDistanceMatrix(loc.coords))
-            resolve()
-          } else {
-            dispatch(syncLocationRejected())
-            console.log('error fetch location expo')
+        if (!userCoordinate) {
+          console.log('Watch location')
+          try {
+            await Location.watchPositionAsync(
+              {
+                accuracy: Location.Accuracy.Highest,
+                timeInterval: 1,
+                distanceInterval: 10
+              },
+              loc => {
+                if (loc.timestamp) {
+                  const { latitude, longitude } = loc.coords
+                  dispatch(syncLocationSuccessful({ latitude, longitude }))
+                  dispatch(fetchDistanceMatrix(loc.coords))
+                  resolve()
+                } else {
+                  dispatch(syncLocationRejected())
+                  console.log('error fetch location expo')
+                  reject()
+                }
+              }
+            )
+          } catch (e) {
+            console.log('Not allow Location Permission')
             reject()
           }
-        } catch (e) {
-          console.log('Not allow Location Permission')
-          reject()
+        } else {
+          console.log('Get current location')
+          try {
+            const loc = await Location.getCurrentPositionAsync({
+              accuracy: Location.Accuracy.Highest
+            })
+            if (loc.timestamp) {
+              const { latitude, longitude } = loc.coords
+              dispatch(syncLocationSuccessful({ latitude, longitude }))
+              dispatch(fetchDistanceMatrix(loc.coords))
+              resolve()
+            } else {
+              dispatch(syncLocationRejected())
+              console.log('error fetch location expo')
+              reject()
+            }
+          } catch (e) {
+            console.log('Not allow Location Permission')
+            reject()
+          }
         }
       }
-      // }
     })
   }
 }

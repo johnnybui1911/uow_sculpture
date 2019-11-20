@@ -110,7 +110,13 @@ class MainScreen extends React.PureComponent {
         {this._renderScreen()}
         <SafeAreaConsumer>
           {insets => {
-            return <View style={{ paddingBottom: insets.bottom }} />
+            return (
+              <View
+                style={{
+                  paddingBottom: Platform.OS === 'ios' ? insets.bottom : 0
+                }}
+              />
+            )
           }}
         </SafeAreaConsumer>
         {this.state.isModalVisible && (

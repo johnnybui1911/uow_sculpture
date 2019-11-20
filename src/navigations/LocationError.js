@@ -34,7 +34,8 @@ const LocationError = ({ resetData }) => {
       <Text
         style={{
           ...styles.title,
-          marginBottom: 12
+          marginBottom: 12,
+          textAlign: 'center'
         }}
       >
         {`We Can't Find Your Location`}

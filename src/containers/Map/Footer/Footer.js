@@ -93,6 +93,14 @@ class Footer extends React.PureComponent {
     ) {
       const { animate } = this.context
       animate()
+      if (!this.props.selectedMarker) {
+        this.miniImage_translateY.setValue(
+          MINI_IMAGE_POSITION - this.props.fix_notch_height
+        )
+        this.locationButton_translateY.setValue(
+          LCOATION_BUTTON_POSITION - this.props.fix_notch_height
+        )
+      }
     }
   }
 
