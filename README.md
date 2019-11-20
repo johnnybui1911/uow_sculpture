@@ -12,14 +12,18 @@ __Preview__
 <img src="https://i.imgur.com/ABNdaix.png" width="225"/>
 <img src="https://i.imgur.com/Tccr8He.png" width="225"/>
 <img src="https://i.imgur.com/PDWLzPI.png" width="225"/>
-  
 </p>
 
+[Google Play Store](https://play.google.com/store/apps/details?id=com.UOW.UOWSculptures)
+
+
+A multi-functional mobile application for users to browse information about University of Wollongong Art Collection (UOWAC) outdoor sculptures. 
+
 __Core features__
-* Viewing and searching the sculptures, their detailed information, and location
-* Integrated map (Open Street Map)
-* Social features including signing in by Facebook, Google
-* Sending notifications when the user visits the sculpture and showing the navigation path.
+* User-friendly interface with integrated map and navigation to help users enjoy the outdoor sculptures with no difficulties.
+* Explore the most trending sculpture in University of Wollongong.
+* Easily sign in via social login (Google and Facebook) to share what you think
+* Get real-time push notifications when you visit outdoor sculptures.
 
 ## Getting started
 
@@ -27,21 +31,20 @@ __Prerequisites__
 
 __Installation__
 1. ```npm install```
-2. ```npm start ```
-3. Run it on devices or simulators see your app
+2. ```expo start ```
+3. Run it on devices or simulators to see your app
 
 ## Tech/framework used
 __Built with__
 * [React Native](https://facebook.github.io/react-native/)
 * [Expo](https://expo.io)
+* [Redux](https://redux.js.org/)
 
 ## Authors and contributors
 * Nam Hoang Bui
 * Chu Chi Hieu
-* Long Hung Nguyen
-* Quang Minh Nguyen
 
 ## License
 MIT License
 
-Copyright (c) 2018 Nam Hoang Bui
+Copyright (c) 2019 Nam Hoang Bui
