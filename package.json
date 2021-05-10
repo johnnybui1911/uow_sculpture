@@ -27,7 +27,7 @@
     "expo-web-browser": "~7.0.0",
     "haversine-distance": "^1.1.6",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lottie-react-native": "~2.6.1",
     "moment": "^2.24.0",
     "nanoid": "^2.1.1",
