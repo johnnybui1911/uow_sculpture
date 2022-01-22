@@ -30,7 +30,7 @@
     "lodash": "^4.17.15",
     "lottie-react-native": "~2.6.1",
     "moment": "^2.24.0",
-    "nanoid": "^2.1.1",
+    "nanoid": "^3.1.31",
     "numeral": "^2.0.6",
     "prop-types": "^15.7.2",
     "qs": "^6.8.0",
