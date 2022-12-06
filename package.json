@@ -33,7 +33,7 @@
     "nanoid": "^2.1.1",
     "numeral": "^2.0.6",
     "prop-types": "^15.7.2",
-    "qs": "^6.8.0",
+    "qs": "^6.9.7",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
